@@ -14,7 +14,7 @@ BINDING_HEADER_ALATALENTEMU_HEADER = "<\124cff00ff00alaTalentEmu\124r>天赋模�
 
 L.Locale = "zhCN";
 
-L.Emu = "模拟器 BY ALA";
+L.Emu = "模拟器";
 L.OK = "确定";
 L.Cancel = "取消";
 L.Search = "搜索";
@@ -57,6 +57,8 @@ L.nextRank = "下一等级";
 L.maxRank = "最高等级";
 L.reqPoints = "%d/%d点%s";
 
+L.resizable_border_TRUE = "拖动窗口边缘可改变大小";
+L.resizable_border_FALSE = "禁止拖动窗口边缘来改变大小";
 L.SetWinStyle_BLZ = "设置窗口为暴雪风格";
 L.SetWinStyle_ALA = "设置窗口为扁平化风格";
 L.SetSingleFrame_True = "设置为单窗口显示";

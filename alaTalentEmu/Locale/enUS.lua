@@ -57,6 +57,8 @@ L.nextRank = "Next Rank";
 L.maxRank = "Top Rank";
 L.reqPoints = "%d/%d in %s";
 
+L.resizable_border_TRUE = "Drag border to resize";
+L.resizable_border_FALSE = "Disable dragging border";
 L.SetWinStyle_BLZ = "Set to blz style";
 L.SetWinStyle_ALA = "Set to flat style";
 L.SetSingleFrame_True = "Single Window";

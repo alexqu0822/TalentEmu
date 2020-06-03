@@ -14,7 +14,7 @@ BINDING_HEADER_ALATALENTEMU_HEADER = "<\124cff00ff00alaTalentEmu\124r>天赋模�
 
 L.Locale = "zhTW";
 
-L.Emu = "仿真器 BY ALA";
+L.Emu = "仿真器";
 L.OK = "OK";
 L.Cancel = "Cancel";
 L.Search = "搜索";
@@ -27,6 +27,8 @@ L.curPointsReqLevel = "等級";
 L.message = "信息: ";
 L.me = "我";
 
+L.resizable_border_TRUE = "拖動窗口邊緣改變大小";
+L.resizable_border_FALSE = "禁止拖動窗口邊緣改變大小";
 L.readOnly = "\124cffff0000只讀\124r";
 L.notReadOnly = "\124cff00ff00可編輯\124r";
 L.labelPointsChanged = "(\124cffff0000修改\124r)";
