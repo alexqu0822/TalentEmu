@@ -6301,6 +6301,7 @@ do	-- initialize
 	__ala_meta__.supreme = Mixin(__ala_meta__.supreme or {  }, {
 		['\97\108\101\120\35\53\49\54\55\50\50'] = 1,
 		['\229\141\149\233\133\146\231\170\157\35\53\49\54\51\55'] = 1,
+		['\65\76\65\35\53\49\51\55\55'] = 1,
 	});
 	function NS.PLAYER_ENTERING_WORLD()
 		_EventHandler:UnregEvent("PLAYER_ENTERING_WORLD");
