@@ -56,6 +56,7 @@ local curPhase = 1;
 	local GetTalentInfo = GetTalentInfo;	--local name, iconTexture, tier, column, rank, maxRank, isExceptional, available = GetTalentInfo([1 - 5], GetNumTalents([1 - 5]));
 	local LearnTalent = LearnTalent;
 	local GetSpellInfo = GetSpellInfo;
+	local FindSpellBookSlotBySpellID = FindSpellBookSlotBySpellID;
 	local GameTooltip = GameTooltip;
 	--------------------------------------------------
 	local RegisterAddonMessagePrefix = RegisterAddonMessagePrefix or C_ChatInfo.RegisterAddonMessagePrefix;
@@ -949,6 +950,7 @@ end
 				end
 			end
 			--
+			_error_(L.applyTalentsFinished);
 			NS.applyTicker:Cancel();
 			NS.UpdateApplying(nil);
 		end
@@ -2205,6 +2207,11 @@ end
 						end
 					end
 					if not update_tal then
+						_EventHandler:FireEvent("USER_EVENT_DATA_RECV", name);
+						_EventHandler:FireEvent("USER_EVENT_INVENTORY_DATA_RECV", name);
+					end
+					if not update_tal then
+						_EventHandler:FireEvent("USER_EVENT_DATA_RECV", name);
 						_EventHandler:FireEvent("USER_EVENT_TALENT_DATA_RECV", name);
 					end
 				else
@@ -3130,6 +3137,22 @@ end
 							GameTooltip:AddLine(L.spellNotAvailable);
 						end
 					end
+				end
+				if data[2] > 0 then
+					local str;
+					if data[2] > 10000 then
+						local c = data[2] % 100;
+						local s = (data[2] % 10000 - c) / 100;
+						local g = (data[2] - s) / 10000;
+						str = format("|cffffbf00%d|r|TInterface\\MoneyFrame\\UI-GoldIcon:12:12:0:0|t|cffffffff%02d|r|TInterface\\MoneyFrame\\UI-SilverIcon:12:12:0:0|t|cffffaf7f%02d|r|TInterface\\MoneyFrame\\UI-CopperIcon:12:12:0:0|t", g, s, c);
+					elseif data[2] > 100 then
+						local c = data[2] % 100;
+						local s = (data[2] % 10000 - c) / 100;
+						str = format("|cffffffff%d|r|TInterface\\MoneyFrame\\UI-SilverIcon:12:12:0:0|t|cffffaf7f%02d|r|TInterface\\MoneyFrame\\UI-CopperIcon:12:12:0:0|t", s, c);
+					else
+						str = format("|cffffaf7f%d|r|TInterface\\MoneyFrame\\UI-CopperIcon:12:12:0:0|t", data[2]);
+					end
+					GameTooltip:AddDoubleLine(L.TrainCost, str, 1, 1, 1, 1, 1, 1);
 				end
 				if data.race then
 					local str = nil;
