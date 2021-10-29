@@ -1019,7 +1019,7 @@ NS._spellDB_P = {
 		{ name = "复仇圣印", { 64, 31801, 67000, }, },
 		{ name = "复仇之怒", { 70, 31884, 130000, }, race = "HUMAN|DWARF|NIGHTELF|GNOME|DRAENEI", },
 		{ name = "殉难圣印", { 70, 348700, 67000, }, race = "HUMAN|DWARF|NIGHTELF|GNOME|DRAENEI", },
-		{ name = "腐蚀之怒", { 70, 348704, 130000, }, race = "ORC|SCOURGE|TAUREN|TROLL|BLOODELF", },
+		{ name = "腐蚀圣印", { 70, 348704, 130000, }, race = "ORC|SCOURGE|TAUREN|TROLL|BLOODELF", },
 		{ name = "鲜血圣印", { 70, 31892, 67000, }, race = "ORC|SCOURGE|TAUREN|TROLL|BLOODELF", },
 		{ name = "十字军打击", { -1, 35395, 0, }, talent = true, },
 		{ name = "神启", { -1, 31842, 0, }, talent = true, },
