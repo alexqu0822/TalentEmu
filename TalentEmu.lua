@@ -69,7 +69,6 @@ function NS:MergeGlobal(DB)
 	DB._GlobalAssign = _GlobalAssign;
 end
 
-local curPhase = 1;
 ----------------------------------------------------------------------------------------------------upvalue
 	----------------------------------------------------------------------------------------------------LUA
 	local hooksecurefunc = hooksecurefunc;
@@ -6747,7 +6746,7 @@ do	-- initialize
 					end
 				end
 				for i = #v, 1, -1 do
-					if v[i][4] and v[i][4] > curPhase then
+					if v[i][4] and v[i][4] > NS.CUR_PHASE then
 						tremove(v, i);
 					end
 				end

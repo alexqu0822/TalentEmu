@@ -25,6 +25,7 @@ NS.BUILD = "BCC";
 NS.MAX_NUM_TIER = 9;
 NS.MAX_NUM_COL = 4;
 NS.MAX_NUM_TALENTS = 36;
+NS.CUR_PHASE = 4;
 --
 NS._classTab = {
 	DRUID =
