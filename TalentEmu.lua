@@ -7017,8 +7017,10 @@ do	-- initialize
 	});
 	function NS.PLAYER_ENTERING_WORLD()
 		_EventHandler:UnregEvent("PLAYER_ENTERING_WORLD");
+		if not NS.initializeddb then
+			NS.ADDON_LOADED(ADDON);
+		end
 		if not NS.initialized then
-			modify_saved_var();
 			SET.supreme = not not __ala_meta__.supreme[__ala_meta__.CPlayerTAG];
 			SET.credible = not not select(2, GetAddOnInfo('\33\33\33\49\54\51\85\73\33\33\33'));
 			if SET.supreme then
@@ -7029,6 +7031,16 @@ do	-- initialize
 		end
 	end
 	_EventHandler:RegEvent("PLAYER_ENTERING_WORLD");
+	function NS.ADDON_LOADED(addon)
+		if addon == ADDON then
+			_EventHandler:UnregEvent("ADDON_LOADED");
+			if not NS.initializeddb then
+				NS.initializeddb = true;
+				modify_saved_var();
+			end
+		end
+	end
+	_EventHandler:RegEvent("ADDON_LOADED");
 end
 
 do	-- SLASH and _G
