@@ -6,6 +6,7 @@ local _G = _G;
 local __ala_meta__ = _G.__ala_meta__;
 local uireimp = __ala_meta__.uireimp;
 local __emulib = __ala_meta__.__emulib;
+local autostyle = __ala_meta__.autostyle;
 
 local ADDON, NS = ...;
 __ala_meta__.emu = NS;
@@ -103,6 +104,7 @@ end
 	local GetRealmName = GetRealmName;
 	local GetNumTalents = GetNumTalents;	--local numTalents = GetNumTalents([1 - 5])
 	local GetTalentInfo = GetTalentInfo;	--local name, iconTexture, tier, column, rank, maxRank, isExceptional, available = GetTalentInfo([1 - 5], GetNumTalents([1 - 5]));
+	local GetTalentTabInfo = GetTalentTabInfo;
 	local LearnTalent = LearnTalent;
 	local GetSpellInfo = GetSpellInfo;
 	local GetItemInfo = GetItemInfo;
@@ -823,6 +825,11 @@ NS:BuildEnv("emu");
 				for id = NS.applyingTalentIndex, #talentSet do
 					if TryLearn(specIndex, id, talentSet, DB) then
 						NS.applyingTalentIndex = id;
+						local num =
+								(select(3, GetTalentTabInfo(1)) or 0) +
+								(select(3, GetTalentTabInfo(2)) or 0) +
+								(select(3, GetTalentTabInfo(3)) or 0);
+						NS.applyingMainFrame.applyTalentsProgress:SetText(num .. "/" .. NS.applyingTotal);
 						return;
 					end
 				end
@@ -833,19 +840,26 @@ NS:BuildEnv("emu");
 				for id = 1, #talentSet do
 					if TryLearn(specIndex, id, talentSet, DB) then
 						NS.applyingTalentIndex = id;
+						local num =
+								(select(3, GetTalentTabInfo(1)) or 0) +
+								(select(3, GetTalentTabInfo(2)) or 0) +
+								(select(3, GetTalentTabInfo(3)) or 0);
+						NS.applyingMainFrame.applyTalentsProgress:SetText(num .. "/" .. NS.applyingTotal);
 						return;
 					end
 				end
 			end
 			--
 			_error_(L.applyTalentsFinished);
+			NS.applyingMainFrame.applyTalentsProgress:SetText(nil);
 			NS.applyTicker:Cancel();
 			NS.UpdateApplying(nil);
 		end
-		function NS.processApplyTalents(mainFrame)
+		function NS.processApplyTalents(mainFrame, total)
 			NS.UpdateApplying(mainFrame);
 			NS.applyingSpecIndex = 1;
 			NS.applyingTalentIndex = 1;
+			NS.applyingTotal = total;
 			NS.applyTicker = C_Timer.NewTicker(0.1, NS.tickerApplyTalents);
 		end
 	end
@@ -1839,9 +1853,10 @@ NS:BuildEnv("emu");
 		local ADDON_MSG_QUERY_TALENTS_ = __emulib.ADDON_MSG_QUERY_TALENTS_;
 		local ADDON_MSG_REPLY_TALENTS_ = __emulib.ADDON_MSG_REPLY_TALENTS_;
 		--	old version compatibility
-		local ADDON_MSG_QUERY_EQUIPMENTS_ = __emulib.ADDON_MSG_QUERY_EQUIPMENTS_;
-		local ADDON_MSG_REPLY_EQUIPMENTS_ = __emulib.ADDON_MSG_REPLY_EQUIPMENTS_;
-		local ADDON_MSG_REPLY_ADDON_PACK_ = __emulib.ADDON_MSG_REPLY_ADDON_PACK_;
+		local ADDON_MSG_QUERY_EQUIPMENTS_1 = __emulib.ADDON_MSG_QUERY_EQUIPMENTS_1;
+		local ADDON_MSG_REPLY_EQUIPMENTS_1 = __emulib.ADDON_MSG_REPLY_EQUIPMENTS_1;
+		local ADDON_MSG_REPLY_EQUIPMENTS_2 = __emulib.ADDON_MSG_REPLY_EQUIPMENTS_2;
+		local ADDON_MSG_REPLY_ADDON_PACK_1 = __emulib.ADDON_MSG_REPLY_ADDON_PACK_1;
 		--------------------------------------------------
 		function NS.push_recv_msg(code, sender, GUID, title, colored_title)
 			for i = 1, #NS.recv_msg do
@@ -1968,7 +1983,7 @@ NS:BuildEnv("emu");
 							_EventHandler:FireEvent("USER_EVENT_TALENT_DATA_RECV", name);
 						end
 					end
-				elseif control_code == ADDON_MSG_REPLY_EQUIPMENTS or control_code == ADDON_MSG_REPLY_EQUIPMENTS_ then 
+				elseif control_code == ADDON_MSG_REPLY_EQUIPMENTS or control_code == ADDON_MSG_REPLY_EQUIPMENTS_1 or control_code == ADDON_MSG_REPLY_EQUIPMENTS_2 then
 					local code = strsub(msg, ADDON_MSG_CONTROL_CODE_LEN + 1, - 1);
 					-- queryCache
 					-- NS.specializedMainFrameInspect
@@ -1991,7 +2006,7 @@ NS:BuildEnv("emu");
 							_EventHandler:FireEvent("USER_EVENT_INVENTORY_DATA_RECV", name);
 						end
 					end
-				elseif control_code == ADDON_MSG_REPLY_ADDON_PACK or control_code == ADDON_MSG_REPLY_ADDON_PACK_ then
+				elseif control_code == ADDON_MSG_REPLY_ADDON_PACK or control_code == ADDON_MSG_REPLY_ADDON_PACK_1 then
 					local cache = NS.queryCache[name];
 					if cache == nil then
 						cache = {  };
@@ -2079,7 +2094,7 @@ NS:BuildEnv("emu");
 						end
 						if update_inv then
 							SendAddonMessage(ADDON_PREFIX, ADDON_MSG_QUERY_EQUIPMENTS, "WHISPER", target);
-							SendAddonMessage(ADDON_PREFIX, ADDON_MSG_QUERY_EQUIPMENTS_, "WHISPER", target);
+							SendAddonMessage(ADDON_PREFIX, ADDON_MSG_QUERY_EQUIPMENTS_1, "WHISPER", target);
 						end
 					end
 					for _, val in next, extern.addon do
@@ -2209,6 +2224,7 @@ NS:BuildEnv("emu");
 				end
 				local talentFrames = mainFrame.talentFrames;
 				local canApply = true;
+				local total = 0;
 				for specIndex = 1, 3 do
 					local talentSet = talentFrames[specIndex].talentSet;
 					local db = talentFrames[specIndex].db;
@@ -2223,13 +2239,14 @@ NS:BuildEnv("emu");
 							canApply = false;
 							break;
 						end
+						total = total + talentSet[id];
 					end
 					if not canApply then
 						break;
 					end
 				end
 				if canApply then
-					NS.processApplyTalents(mainFrame);
+					NS.processApplyTalents(mainFrame, total);
 				else
 					_error_(L["CANNOT APPLY : TALENTS IN CONFLICT."]);
 				end
@@ -4252,6 +4269,10 @@ NS:BuildEnv("emu");
 					applyTalentsButton.information = L.applyTalentsButton;
 					applyTalentsButton.mainFrame = mainFrame;
 					mainFrame.applyTalentsButton = applyTalentsButton;
+					applyTalentsButton.Progress = applyTalentsButton:CreateFontString(nil, "ARTWORK");
+					applyTalentsButton.Progress:SetFont(ui_style.frameFont, ui_style.frameFontSizeSmall, ui_style.frameFontOutline);
+					applyTalentsButton.Progress:SetPoint("LEFT", applyTalentsButton, "RIGHT", 4, 0);
+					mainFrame.applyTalentsProgress = applyTalentsButton.Progress;
 
 					local editBox = CreateFrame("EDITBOX", nil, mainFrame);
 					editBox:SetSize(ui_style.editBoxXSize, ui_style.editBoxYSize);
@@ -4505,6 +4526,7 @@ NS:BuildEnv("emu");
 			mainFrame:SetScript("OnSizeChanged", OnSizeChanged);
 			mainFrame:SetScript("OnShow", function(self)
 					OnSizeChanged(self, self:GetWidth(), self:GetHeight());
+					self.applyTalentsProgress:SetText(nil);
 				end
 			);
 			mainFrame:SetScript("OnHide", function(self)
@@ -7430,6 +7452,9 @@ end
 					button:SetScript("OnLeave", Info_OnLeave);
 					button.information = L.TalentFrameCallButton;
 					PlayerTalentFrame.__TalentEmuCall = button;
+					if autostyle ~= nil then
+						autostyle:AddReskinObject(button);
+					end
 				end
 
 				if self then
