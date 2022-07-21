@@ -61,6 +61,8 @@ L.reqPoints = "%d/%d in %s";
 
 L.level_60 = "Lv60 Talents. |cffff0000And ReloadUI.|r";
 L.level_70 = "Lv70 Talents. |cffff0000And ReloadUI.|r";
+L.autoShowEquipmentList_TRUE = "Show Equipment List Automatically";
+L.autoShowEquipmentList_FALSE = "Show Equipment List Manually";
 L.minimap_TRUE = "Show DBIcon";
 L.minimap_FALSE = "Hide DBIcon";
 L.resizable_border_TRUE = "Enable Draging border to resize";

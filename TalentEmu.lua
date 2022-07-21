@@ -176,6 +176,8 @@ end
 	local LOCALE = GetLocale();
 	--------------------------------------------------
 	local NUM_POINTS_NEXT_TIER = 5;
+	local THROTTLE_TALENT = 1;
+	local THROTTLE_EQUIPMENT = 15;
 	local DATA_VALIDITY = 30;
 	--------------------------------------------------
 	local ui_style = {
@@ -441,10 +443,11 @@ NS.recv_msg = {  };
 NS.custom_event_meta = {  };
 NS.callback = {  };
 NS.chatfilter = {  };
+NS.recacheequipment = {  };
 NS.INSPECT_WAIT_TIME = 10;
 NS.TOOLTIP_UPDATE_DELAY = 0.02;
 
-local SET, VAR = nil, nil;
+local SET, VAR, LOOT = nil, nil, nil;
 
 local _EventHandler = CreateFrame("FRAME");
 do	--	EventHandler
@@ -1804,14 +1807,14 @@ NS:BuildEnv("emu");
 			end
 		end
 
-		function NS.EmuSub_TalentDataRecv(name)
+		function NS.EmuSub_TalentDataRecv(name, iscomm)
 			local cache = NS.queryCache[name];
 			if cache ~= nil then
-				local readOnly = false;
-				if name ~= __ala_meta__.CPlayerName then
-					readOnly = true;
-				end
 				if NS.POPUP_ON_RECV[name] then
+					local readOnly = false;
+					if name ~= __ala_meta__.CPlayerName then
+						readOnly = true;
+					end
 					local specializedMainFrame = NS.specializedMainFrameInspect[name];
 					if specializedMainFrame then
 						if specializedMainFrame[2]:IsShown() and specializedMainFrame[1] - GetTime() <= NS.INSPECT_WAIT_TIME then
@@ -1826,12 +1829,16 @@ NS:BuildEnv("emu");
 				NS.POPUP_ON_RECV[name] = nil;
 			end
 		end
-		function NS.EmuSub_InventoryDataRecv(name)
+		function NS.EmuSub_InventoryDataRecv(name, iscomm)
 			if not SET.show_equipment then return; end
 			local meta = NS.winMan_GetSpecializedMeta(name);
 			if meta then
 				for i = 2, #meta do
 					meta[i].objects.equipmentButton:Show();
+					if iscomm and SET.autoShowEquipmentList then
+						meta[i].equipmentFrameContainer:Show();
+						NS.Emu_SetEquipments(meta[i].equipmentContainer, NS.queryCache[name]);
+					end
 				end
 			end
 		end
@@ -1980,7 +1987,10 @@ NS:BuildEnv("emu");
 							cache.data = data;
 							cache.level = level;
 							_EventHandler:FireEvent("USER_EVENT_DATA_RECV", name);
-							_EventHandler:FireEvent("USER_EVENT_TALENT_DATA_RECV", name);
+							_EventHandler:FireEvent("USER_EVENT_TALENT_DATA_RECV", name, true);
+							if cache.time_inv ~= nil and time() - cache.time_inv < DATA_VALIDITY then
+								_EventHandler:FireEvent("USER_EVENT_INVENTORY_DATA_RECV", name, true);
+							end
 						end
 					end
 				elseif control_code == ADDON_MSG_REPLY_EQUIPMENTS or control_code == ADDON_MSG_REPLY_EQUIPMENTS_1 or control_code == ADDON_MSG_REPLY_EQUIPMENTS_2 then
@@ -2003,7 +2013,7 @@ NS:BuildEnv("emu");
 						end
 						if __emulib.DecodeEquipmentData(cache, code) then
 							_EventHandler:FireEvent("USER_EVENT_DATA_RECV", name);
-							_EventHandler:FireEvent("USER_EVENT_INVENTORY_DATA_RECV", name);
+							_EventHandler:FireEvent("USER_EVENT_INVENTORY_DATA_RECV", name, true);
 						end
 					end
 				elseif control_code == ADDON_MSG_REPLY_ADDON_PACK or control_code == ADDON_MSG_REPLY_ADDON_PACK_1 then
@@ -2076,8 +2086,25 @@ NS:BuildEnv("emu");
 				NS.POPUP_ON_RECV[name] = not mute;
 				local t = time();
 				local counter_expired = NS.PREV_QUERY_SENT_TIME[name] == nil or (t - NS.PREV_QUERY_SENT_TIME[name] > 1);
-				local update_tal = talent ~= false and counter_expired and (force_update or (NS.queryCache[name] == nil or NS.queryCache[name].time_tal == nil or (t - (NS.queryCache[name].time_tal or (-DATA_VALIDITY))) > DATA_VALIDITY));
-				local update_inv = equitment ~= false and counter_expired and (force_update or (NS.queryCache[name] == nil or NS.queryCache[name].time_inv == nil or (t - (NS.queryCache[name].time_inv or (-DATA_VALIDITY))) > DATA_VALIDITY));
+				local cache = NS.queryCache[name];
+				local update_tal = talent ~= false and
+									counter_expired and
+									(
+										cache == nil or cache.time_tal == nil or
+										(
+											((t - (cache.time_tal or (-DATA_VALIDITY))) > THROTTLE_TALENT) and
+											(force_update or (t - (cache.time_tal or (-DATA_VALIDITY))) > DATA_VALIDITY)
+										)
+									);
+				local update_inv = equitment ~= false and
+									counter_expired and
+									(
+										cache == nil or cache.time_inv == nil or
+										(
+											((t - (cache.time_inv or (-DATA_VALIDITY))) > THROTTLE_EQUIPMENT) and
+											(force_update or (t - (cache.time_inv or (-DATA_VALIDITY))) > DATA_VALIDITY)
+										)
+									);
 				if update_tal or update_inv then
 					NS.PREV_QUERY_SENT_TIME[name] = t;
 					if UnitInBattleground('player') and realm ~= __ala_meta__.CRealmName then
@@ -2105,18 +2132,18 @@ NS:BuildEnv("emu");
 							end
 						end
 					end
-					if not update_tal then
+					if not update_inv then
 						_EventHandler:FireEvent("USER_EVENT_DATA_RECV", name);
-						_EventHandler:FireEvent("USER_EVENT_INVENTORY_DATA_RECV", name);
+						_EventHandler:FireEvent("USER_EVENT_INVENTORY_DATA_RECV", name, false);
 					end
 					if not update_tal then
 						_EventHandler:FireEvent("USER_EVENT_DATA_RECV", name);
-						_EventHandler:FireEvent("USER_EVENT_TALENT_DATA_RECV", name);
+						_EventHandler:FireEvent("USER_EVENT_TALENT_DATA_RECV", name, false);
 					end
 				else
 					_EventHandler:FireEvent("USER_EVENT_DATA_RECV", name);
-					_EventHandler:FireEvent("USER_EVENT_TALENT_DATA_RECV", name);
-					_EventHandler:FireEvent("USER_EVENT_INVENTORY_DATA_RECV", name);
+					_EventHandler:FireEvent("USER_EVENT_TALENT_DATA_RECV", name, false);
+					_EventHandler:FireEvent("USER_EVENT_INVENTORY_DATA_RECV", name, false);
 				end
 			end
 			return name;
@@ -2145,10 +2172,10 @@ NS:BuildEnv("emu");
 						cache.class = class;
 						cache.data = data;
 						cache.level = level;
-						__emulib.GetEquipmentData(cache);
+						__emulib.GetEquipmentData(cache, unit);
 						_EventHandler:FireEvent("USER_EVENT_DATA_RECV", name);
-						_EventHandler:FireEvent("USER_EVENT_TALENT_DATA_RECV", name);
-						_EventHandler:FireEvent("USER_EVENT_INVENTORY_DATA_RECV", name);
+						_EventHandler:FireEvent("USER_EVENT_TALENT_DATA_RECV", name, false);
+						_EventHandler:FireEvent("USER_EVENT_INVENTORY_DATA_RECV", name, false);
 					end
 				end
 			end
@@ -2410,9 +2437,28 @@ NS:BuildEnv("emu");
 
 		function NS.Emu_Menu(parent, mainFrame)
 			if ALADROP then
-				local drop_menu_table = { handler = _noop_, elements = {  }, };
+				local drop_menu_table = { handler = _noop_, };
+				if SET.autoShowEquipmentList then
+					tinsert(drop_menu_table, {
+							handler = function(button)
+								SET.autoShowEquipmentList = false;
+							end,
+							para = {  },
+							text = L.autoShowEquipmentList_FALSE,
+						}
+					);
+				else
+					tinsert(drop_menu_table, {
+							handler = function(button)
+								SET.autoShowEquipmentList = true;
+							end,
+							para = {  },
+							text = L.autoShowEquipmentList_TRUE,
+						}
+					);
+				end
 				if SET.minimap then
-					tinsert(drop_menu_table.elements, {
+					tinsert(drop_menu_table, {
 							handler = function(button)
 								SET.minimap = false;
 								NS.callback["minimap"](false);
@@ -2422,7 +2468,7 @@ NS:BuildEnv("emu");
 						}
 					);
 				else
-					tinsert(drop_menu_table.elements, {
+					tinsert(drop_menu_table, {
 							handler = function(button)
 								SET.minimap = true;
 								NS.callback["minimap"](true);
@@ -2433,7 +2479,7 @@ NS:BuildEnv("emu");
 					);
 				end
 				if SET.resizable_border then
-					tinsert(drop_menu_table.elements, {
+					tinsert(drop_menu_table, {
 							handler = function(button)
 								SET.resizable_border = false;
 							end,
@@ -2442,7 +2488,7 @@ NS:BuildEnv("emu");
 						}
 					);
 				else
-					tinsert(drop_menu_table.elements, {
+					tinsert(drop_menu_table, {
 							handler = function(button)
 								SET.resizable_border = true;
 							end,
@@ -2452,7 +2498,7 @@ NS:BuildEnv("emu");
 					);
 				end
 				if SET.singleFrame then
-					tinsert(drop_menu_table.elements, {
+					tinsert(drop_menu_table, {
 							handler = function(button, singleFrame, curFrame)
 								SET.singleFrame = singleFrame;
 							end,
@@ -2461,7 +2507,7 @@ NS:BuildEnv("emu");
 						}
 					);
 				else
-					tinsert(drop_menu_table.elements, {
+					tinsert(drop_menu_table, {
 							handler = function(button, singleFrame, curFrame)
 								SET.singleFrame = singleFrame;
 								local last = curFrame or NS.winMan_GetLastWin();
@@ -2475,7 +2521,7 @@ NS:BuildEnv("emu");
 				if mainFrame then
 					if not SET.singleFrame then
 						if mainFrame.style == 1 then
-							tinsert(drop_menu_table.elements, {
+							tinsert(drop_menu_table, {
 									handler = function(button, frame, style)
 										NS.mainFrameSetStyle(frame, style);
 									end,
@@ -2484,7 +2530,7 @@ NS:BuildEnv("emu");
 								}
 							);
 						elseif mainFrame.style == 2 then
-							tinsert(drop_menu_table.elements, {
+							tinsert(drop_menu_table, {
 									handler = function(button, frame, style)
 										NS.mainFrameSetStyle(frame, style);
 									end,
@@ -2497,7 +2543,7 @@ NS:BuildEnv("emu");
 				end
 				local allStyle = NS.winMan_IsAllSameStyle();
 				if SET.style == 1 then
-					tinsert(drop_menu_table.elements, {
+					tinsert(drop_menu_table, {
 							handler = function(button, style, alsoSetShownWin)
 								SET.style = style;
 								if alsoSetShownWin then
@@ -2511,7 +2557,7 @@ NS:BuildEnv("emu");
 						}
 					);
 				elseif SET.style == 2 then
-					tinsert(drop_menu_table.elements, {
+					tinsert(drop_menu_table, {
 							handler = function(button, style, alsoSetShownWin)
 								SET.style = style;
 								if alsoSetShownWin then
@@ -2526,7 +2572,7 @@ NS:BuildEnv("emu");
 					);
 				end
 				if SET.talents_in_tip then
-					tinsert(drop_menu_table.elements, {
+					tinsert(drop_menu_table, {
 							handler = function(button)
 								SET.talents_in_tip = false;
 							end,
@@ -2535,7 +2581,7 @@ NS:BuildEnv("emu");
 						}
 					);
 					if SET.talents_in_tip_icon then
-						tinsert(drop_menu_table.elements, {
+						tinsert(drop_menu_table, {
 								handler = function(button)
 									SET.talents_in_tip_icon = false;
 								end,
@@ -2544,7 +2590,7 @@ NS:BuildEnv("emu");
 							}
 						);
 					else
-						tinsert(drop_menu_table.elements, {
+						tinsert(drop_menu_table, {
 								handler = function(button)
 									SET.talents_in_tip_icon = true;
 								end,
@@ -2554,7 +2600,7 @@ NS:BuildEnv("emu");
 						);
 					end
 				else
-					tinsert(drop_menu_table.elements, {
+					tinsert(drop_menu_table, {
 							handler = function(button)
 								SET.talents_in_tip = true;
 							end,
@@ -2564,7 +2610,7 @@ NS:BuildEnv("emu");
 					);
 				end
 				if SET.inspectButtonOnUnitFrame then
-					tinsert(drop_menu_table.elements, {
+					tinsert(drop_menu_table, {
 							handler = function()
 								SET.inspectButtonOnUnitFrame = false;
 							end,
@@ -2573,7 +2619,7 @@ NS:BuildEnv("emu");
 						}
 					);
 					if SET.inspectButtonKey ~= "ALT" then
-						tinsert(drop_menu_table.elements, {
+						tinsert(drop_menu_table, {
 								handler = function()
 									SET.inspectButtonKey = "ALT";
 									NS.inspectButtonKeyFunc = IsAltKeyDown;
@@ -2584,7 +2630,7 @@ NS:BuildEnv("emu");
 						);
 					end
 					if SET.inspectButtonKey ~= "CTRL" then
-						tinsert(drop_menu_table.elements, {
+						tinsert(drop_menu_table, {
 								handler = function()
 									SET.inspectButtonKey = "CTRL";
 									NS.inspectButtonKeyFunc = IsControlKeyDown;
@@ -2595,7 +2641,7 @@ NS:BuildEnv("emu");
 						);
 					end
 					if SET.inspectButtonKey ~= "SHIFT" then
-						tinsert(drop_menu_table.elements, {
+						tinsert(drop_menu_table, {
 								handler = function()
 									SET.inspectButtonKey = "SHIFT";
 									NS.inspectButtonKeyFunc = IsShiftKeyDown;
@@ -2606,7 +2652,7 @@ NS:BuildEnv("emu");
 						);
 					end
 				else
-					tinsert(drop_menu_table.elements, {
+					tinsert(drop_menu_table, {
 							handler = function()
 								SET.inspectButtonOnUnitFrame = true;
 							end,
@@ -2954,6 +3000,7 @@ NS:BuildEnv("emu");
 					icon.glow:Hide();
 					icon.name:SetText("");
 					icon.link = nil;
+					return true;
 				end
 			else
 				icon:SetNormalTexture(TEXTURE_SET.EQUIPMENT_EMPTY[icon.slot]);
@@ -2961,11 +3008,25 @@ NS:BuildEnv("emu");
 				icon.name:SetText("");
 				icon.link = nil;
 			end
+			return false;
 		end
 		function NS.Emu_SetEquipments(equipmentContainer, meta)
+			local recache = false;
 			local slots = equipmentContainer.slots;
 			for slot = 0, 19 do
-				NS.Emu_SetEquipment(slots[slot], slot, meta[slot])
+				if NS.Emu_SetEquipment(slots[slot], slot, meta[slot]) then
+					recache = true;
+				end
+			end
+			if recache then
+				NS.recacheequipment[equipmentContainer] = meta;
+				NS.F_ScheduleDelayCall(NS.Emu_RecacheEquipments, 0.5);
+			end
+		end
+		function NS.Emu_RecacheEquipments()
+			for equipmentContainer, meta in next, NS.recacheequipment do
+				NS.recacheequipment[equipmentContainer] = nil;
+				NS.Emu_SetEquipments(equipmentContainer, meta);
 			end
 		end
 		function NS.CreateEquipmentFrame(mainFrame)
@@ -2973,7 +3034,7 @@ NS:BuildEnv("emu");
 			wrap:SetPoint("TOPRIGHT", mainFrame, "TOPLEFT", 0, 0);
 			wrap:SetPoint("BOTTOMRIGHT", mainFrame, "BOTTOMLEFT", 0, 0);
 			wrap:SetWidth(ui_style.equipmentFrameXSize);
-			uireimp._SetSimpleBackdrop(wrap, 0, 1, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 1.0);
+			uireimp._SetSimpleBackdrop(wrap, 0, 1, 0.0, 0.0, 0.0, 0.9, 0.0, 0.0, 0.0, 1.0);
 			wrap:Hide();
 			local frame = CreateFrame("FRAME", nil, wrap);
 			frame:SetWidth(ui_style.equipmentFrameXSize);
@@ -3007,7 +3068,7 @@ NS:BuildEnv("emu");
 				icon.glow = glow;
 
 				local name = icon:CreateFontString(nil, "OVERLAY");
-				name:SetFont(GameFontNormal:GetFont(), 12);
+				name:SetFont(GameFontNormal:GetFont(), 13);
 				icon.name = name;
 
 				icon.slot = slot;
@@ -3037,13 +3098,17 @@ NS:BuildEnv("emu");
 					slot.name:SetPoint("LEFT", slot, "RIGHT", ui_style.equipmentFrameIconTextGap, 0);
 				end
 			end
-			frame.equipmentContainer = equipmentContainer;
-			equipmentContainer.slots = slots;
 			frame:SetScript("OnShow", function(self)
-				NS.Emu_SetEquipments(equipmentContainer, NS.queryCache[mainFrame.name]);
+				if mainFrame.name ~= nil then
+					NS.Emu_SetEquipments(equipmentContainer, NS.queryCache[mainFrame.name]);
+				end
 			end);
 			frame.mainFrame = mainFrame;
+			frame.equipmentContainer = equipmentContainer;
+			equipmentContainer.slots = slots;
 			wrap.mainFrame = mainFrame;
+			wrap.frame = frame;
+			wrap.equipmentContainer = equipmentContainer;
 			return frame, equipmentContainer, wrap;
 		end
 	end
@@ -3698,18 +3763,17 @@ NS:BuildEnv("emu");
 							NS.Emu_Import(mainFrame, code);
 						end
 					end,
-					elements = {  },
 				};
 				for title, code in next, VAR.savedTalent do
 					if __emulib.GetClass(code) == class then
-						tinsert(drop_menu_table.elements, {
+						tinsert(drop_menu_table, {
 								para = { title, code, },
 								text = title,
 							}
 						);
 					end
 				end
-				if drop_menu_table.elements[1] ~= nil then
+				if drop_menu_table[1] ~= nil then
 					ALADROP(self, "TOPRIGHT", drop_menu_table);
 				end
 			end
@@ -3810,12 +3874,11 @@ NS:BuildEnv("emu");
 							editBox:HighlightText();
 							editBox.type = 'export';
 						end;
-						elements = {  },
 					};
 					for key, func in next, NS.extern.export do
 						local arg = func(mainFrame);
 						if arg then
-							tinsert(menu.elements, {
+							tinsert(menu, {
 								para = { arg, },
 								text = key,
 							});
@@ -3854,10 +3917,9 @@ NS:BuildEnv("emu");
 							NS.Emu_Import(mainFrame, code);
 						end
 					end,
-					elements = {  },
 				};
 				for title, code in next, VAR.savedTalent do
-					tinsert(drop_menu_table.elements, {
+					tinsert(drop_menu_table, {
 							para = { title, code, },
 							text = title,
 						}
@@ -3896,10 +3958,9 @@ NS:BuildEnv("emu");
 							NS.EmuSub_SendMessage(channel, nil, mainFrame);
 						end
 					end,
-					elements = {  },
 				};
 				for index, channel in next, channel_list do
-					sendTalent_OnLeftClickData.elements[index] = {
+					sendTalent_OnLeftClickData[index] = {
 						para = { channel, mainFrame, },
 						text = channel,
 					};
@@ -3913,11 +3974,9 @@ NS:BuildEnv("emu");
 							NS.Emu_Create(mainFrame, class, data, level, false, false, L.message .. sender);
 						end
 					end,
-					elements = {  };
 				};
-				local elements = sendTalent_OnRightClickData.elements;
 				for i = 1, #NS.recv_msg do
-					sendTalent_OnRightClickData.elements[i] = {
+					sendTalent_OnRightClickData[i] = {
 						para = { mainFrame, NS.recv_msg[i][1], NS.recv_msg[i][2], NS.recv_msg[i][3] },
 						text = NS.recv_msg[i][2] .. ": " .. NS.recv_msg[i][3],
 					};
@@ -6828,7 +6887,9 @@ do	-- initialize
 		NS.DB_PreProc(_talentDB);
 
 		NS.EmuCore_InitAddonMessage();
-		NS.EmuCore_MonitorInspect();
+		if NS.BUILD == "BCC" then
+			NS.EmuCore_MonitorInspect();
+		end
 		NS.tooltipFrame = NS.CreateTooltipFrame();
 
 		NS.extern.addon_init();
@@ -6962,6 +7023,7 @@ do	-- initialize
 		max_recv_msg = 16,
 		minimap = true,
 		minimapPos = 185,
+		autoShowEquipmentList = true,
 	};
 	local function modify_saved_var()
 		local TalentEmuSV = _G.TalentEmuSV;
@@ -7015,6 +7077,10 @@ do	-- initialize
 				TalentEmuSV.set.minimap = true;
 				TalentEmuSV._version = 220117.0;
 			end
+			if TalentEmuSV._version < 220720.0 then
+				TalentEmuSV.loot = {  };
+				TalentEmuSV._version = 220720.0;
+			end
 		else
 			TalentEmuSV = {
 				set = {
@@ -7022,13 +7088,16 @@ do	-- initialize
 				var = {
 					savedTalent = {  },
 				},
+				loot = {
+				},
 			};
 			_G.TalentEmuSV = TalentEmuSV;
 		end
 		TalentEmuSV.__upgraded = true;
-		TalentEmuSV._version = 220117.0;
+		TalentEmuSV._version = 220720.0;
 		SET = setmetatable(TalentEmuSV.set, { __index = default_set, });
 		VAR = TalentEmuSV.var;
+		LOOT = TalentEmuSV.loot;
 		NS:MergeGlobal(TalentEmuSV);
 	end
 
@@ -7050,6 +7119,7 @@ do	-- initialize
 			end
 			default_set.talents_in_tip = SET.credible;
 			C_Timer.After(0.1, init);
+			NS.InitLootMonitor();
 		end
 	end
 	_EventHandler:RegEvent("PLAYER_ENTERING_WORLD");
@@ -7089,7 +7159,6 @@ do	-- SLASH and _G
 	end
 
 	local ALATEMU = {  };
-	_G.ALATEMU = ALATEMU;
 	ALATEMU.ExportCode = function(...)
 		return NS.Emu_Export(...)
 	end
@@ -7220,6 +7289,7 @@ do	-- SLASH and _G
 		end
 		return nil;
 	end
+	_G.ALATEMU = ALATEMU;
 end
 
 -->		<misc
@@ -7403,8 +7473,8 @@ end
 					editBox:Show();
 					editBox:SetFocus();
 					editBox:Insert(link);
-					return;
 				end
+				return;
 			end
 			return Orig_TalentFrameTalent_OnClick(self, mouseButton);
 		end
@@ -7534,6 +7604,540 @@ end
 		C_Timer.After(1.0, Tooltip_Set);
 
 	end
+	----------------------------------------------------------------------------------------------------ILLIDIAN LOOT RECORD
+	local LootMonitorDriver = {
+		Area = {
+			[339] = {
+				function(Driver)
+					Driver.map = 339;
+					Driver:RegisterEvent("ENCOUNTER_END");
+					Driver:RegisterEvent("BOSS_KILL");
+					Driver:RegisterEvent("UPDATE_INSTANCE_INFO");
+					-- print("Reg BOSS");
+					return Driver:OnEvent("ENCOUNTER_END");
+				end,
+				function(Driver)
+					for instanceIndex = 1, Driver.GetNumSavedInstances() do
+						local name, id, reset, difficulty, locked, extended, instanceIDMostSig, isRaid, maxPlayers, difficultyName, numEncounters, encounterProgress = Driver.GetSavedInstanceInfo(instanceIndex);
+						if locked and isRaid then
+							local inst = Driver.instance_name_hash[name];
+							if inst == "BT" then	--	564
+								Driver.Instance = "BT";
+								Driver.LockedInstanceID = id;
+								-- local _, _, _8Killed = Driver.GetSavedInstanceEncounterInfo(instanceIndex, 8);
+								-- local _, _, _9Killed = Driver.GetSavedInstanceEncounterInfo(instanceIndex, 9);
+								-- if _8Killed or _9Killed then
+									Driver:RegisterEvent("CHAT_MSG_LOOT");
+									Driver:RegisterEvent("LOOT_OPENED");
+									-- print("Reg LOOT", _8Killed, _9Killed);
+								-- else
+									-- Driver:UnregisterEvent("CHAT_MSG_LOOT");
+									-- Driver:UnregisterEvent("LOOT_OPENED");
+									-- -- print("UnrReg LOOT", _8Killed, _9Killed);
+								-- end
+								return;
+							end
+						end
+					end
+					Driver:UnregisterEvent("CHAT_MSG_LOOT");
+					Driver:UnregisterEvent("LOOT_OPENED");
+					-- print("UnrReg LOOT", nil, nil);
+				end,
+				{
+					--督军
+						[32239] = true,	--	Slippers of the Seacaller
+						[32240] = true,	--	Guise of the Tidal Lurker
+						[32377] = true,	--	Mantle of Darkness
+						[32241] = true,	--	Helm of Soothing Currents
+						[32234] = true,	--	Fists of Mukoa
+						[32242] = true,	--	Boots of Oceanic Fury
+						[32232] = true,	--	Eternium Shell Bracers
+						[32243] = true,	--	Pearl Inlaid Boots
+						[32245] = true,	--	Tide-stomper's Greaves
+						[32238] = true,	--	Ring of Calming Waves
+						[32247] = true,	--	Ring of Captured Storms
+						[32237] = true,	--	The Maelstrom's Fury
+						[32236] = true,	--	Rising Tide
+						[32248] = true,	--	Halberd of Desolation
+					--火人
+						[32256] = true,	--	Waistwrap of Infinity
+						[32252] = true,	--	Nether Shadow Tunic
+						[32259] = true,	--	Bands of the Coming Storm
+						[32251] = true,	--	Wraps of Precise Flight
+						[32258] = true,	--	Naturalist's Preserving Cinch
+						[32250] = true,	--	Pauldrons of Abyssal Fury
+						[32260] = true,	--	Choker of Endless Nightmares
+						[32261] = true,	--	Band of the Abyssal Lord
+						[32257] = true,	--	Idol of the White Stag
+						[32254] = true,	--	The Brutalizer
+						[32262] = true,	--	Syphon of the Nathrezim
+						[32255] = true,	--	Felstone Bulwark
+						[32253] = true,	--	Legionkiller
+					--阿卡玛之影
+						[32273] = true,	--	Amice of Brilliant Light
+						[32270] = true,	--	Focused Mana Bindings
+						[32513] = true,	--	Wristbands of Divine Influence
+						[32265] = true,	--	Shadow-walker's Cord
+						[32271] = true,	--	Kilt of Immortal Nature
+						[32264] = true,	--	Shoulders of the Hidden Predator
+						[32275] = true,	--	Spiritwalker Gauntlets
+						[32276] = true,	--	Flashfire Girdle
+						[32279] = true,	--	The Seeker's Wristguards
+						[32278] = true,	--	Grips of Silent Justice
+						[32263] = true,	--	Praetorian's Legguards
+						[32268] = true,	--	Myrmidon's Treads
+						[32266] = true,	--	Ring of Deceitful Intent
+						[32361] = true,	--	Blind-Seers Icon
+					--血沸
+						[32337] = true,	--	Shroud of Forgiveness
+						[32338] = true,	--	Blood-cursed Shoulderpads
+						[32340] = true,	--	Garments of Temperance
+						[32339] = true,	--	Belt of Primal Majesty
+						[32334] = true,	--	Vest of Mounting Assault
+						[32342] = true,	--	Girdle of Mighty Resolve
+						[32333] = true,	--	Girdle of Stability
+						[32341] = true,	--	Leggings of Divine Retribution
+						[32335] = true,	--	Unstoppable Aggressor's Ring
+						[32501] = true,	--	Shadowmoon Insignia
+						[32269] = true,	--	Messenger of Fate
+						[32344] = true,	--	Staff of Immaculate Recovery
+						[32343] = true,	--	Wand of Prismatic Focus
+					--三脸
+						[32353] = true,	--	Gloves of Unfailing Faith
+						[32351] = true,	--	Elunite Empowered Bracers
+						[32347] = true,	--	Grips of Damnation
+						[32352] = true,	--	Naturewarden's Treads
+						[32517] = true,	--	The Wavemender's Mantle
+						[32346] = true,	--	Boneweave Girdle
+						[32354] = true,	--	Crown of Empowered Fate
+						[32345] = true,	--	Dreadboots of the Legion
+						[32349] = true,	--	Translucent Spellthread Necklace
+						[32362] = true,	--	Pendant of Titans
+						[32350] = true,	--	Touch of Inspiration
+						[32332] = true,	--	Torch of the Damned
+						[32363] = true,	--	Naaru-Blessed Life Rod
+					--血魔
+						[32323] = true,	--	Shadowmoon Destroyer's Drape
+						[32329] = true,	--	Cowl of Benevolence
+						[32327] = true,	--	Robe of the Shadow Council
+						[32324] = true,	--	Insidious Bands
+						[32328] = true,	--	Botanist's Gloves of Growth
+						[32510] = true,	--	Softstep Boots of Tracking
+						[32280] = true,	--	Gauntlets of Enforcement
+						[32512] = true,	--	Girdle of Lordaeron's Fallen
+						[32330] = true,	--	Totem of Ancestral Guidance
+						[32348] = true,	--	Soul Cleaver
+						[32326] = true,	--	Twisted Blades of Zarak
+						[32325] = true,	--	Rifle of the Stoic Guardian
+					--祖母
+						[32367] = true,	--	Leggings of Devastation
+						[32366] = true,	--	Shadowmaster's Boots
+						[32365] = true,	--	Heartshatter Breastplate
+						[32370] = true,	--	Nadina's Pendant of Purity
+						[32368] = true,	--	Tome of the Lightbringer
+						[32369] = true,	--	Blade of Savagery
+						[31101] = true,	--	Pauldrons of the Forgotten Conqueror
+						[31103] = true,	--	Pauldrons of the Forgotten Protector
+						[31102] = true,	--	Pauldrons of the Forgotten Vanquisher
+					--F4
+						[32331] = true,	--	Cloak of the Illidari Council
+						[32519] = true,	--	Belt of Divine Guidance
+						[32518] = true,	--	Veil of Turning Leaves
+						[32376] = true,	--	Forest Prowler's Helm
+						[32373] = true,	--	Helm of the Illidari Shatterer
+						[32505] = true,	--	Madness of the Betrayer
+						[31098] = true,	--	Leggings of the Forgotten Conqueror
+						[31100] = true,	--	Leggings of the Forgotten Protector
+						[31099] = true,	--	Leggings of the Forgotten Vanquisher
+					--蛋蛋
+						[32524] = true,	--	斗篷
+						[32525] = true,	--	兜帽
+						[32235] = true,	--	眼罩
+						[32521] = true,	--	铁壁
+						[32497] = true,	--	蛋戒
+						[32483] = true,	--	骨头
+						[32496] = true,	--	蛋花
+						[31089] = true,	--	骑牧术
+						[31091] = true,	--	战猎萨
+						[31090] = true,	--	贼法德
+						[32471] = true,	--	蛋匕
+						[32500] = true,	--	蛋挞
+						[32374] = true,	--	狗杖
+						[32375] = true,	--	蛋盾
+						[32336] = true,	--	黑工
+						[32837] = true,	--	主手
+						[32838] = true,	--	副手
+					--小怪
+						-- [32590] = true,	--	Nethervoid Cloak
+						-- [34012] = true,	--	Shroud of the Final Stand
+						-- [32609] = true,	--	Boots of the Divine Light
+						-- [32593] = true,	--	Treads of the Den Mother
+						-- [32592] = true,	--	Chestguard of Relentless Storms
+						-- [32608] = true,	--	Pillager's Gauntlets
+						-- [32606] = true,	--	Girdle of the Lightbearer
+						-- [32591] = true,	--	Choker of Serrated Blades
+						-- [32589] = true,	--	Hellfire-Encased Pendant
+						-- [32526] = true,	--	Band of Devastation
+						-- [32528] = true,	--	Blessed Band of Karabor
+						-- [32527] = true,	--	Ring of Ancient Knowledge
+						-- [34009] = true,	--	Hammer of Judgement
+						-- [32943] = true,	--	Swiftsteel Bludgeon
+						-- [34011] = true,	--	Illidari Runeshield
+						-- [32228] = true,	--	Empyrean Sapphire
+						-- [32231] = true,	--	Pyrestone
+						-- [32229] = true,	--	Lionseye
+						-- [32249] = true,	--	Seaspray Emerald
+						-- [32230] = true,	--	Shadowsong Amethyst
+						-- [32227] = true,	--	Crimson Spinel
+						-- [32428] = true,	--	Heart of Darkness
+						-- [32897] = true,	--	Mark of the Illidari
+					--图纸
+						-- [32738] = true,	--	Plans: Dawnsteel Bracers
+						-- [32739] = true,	--	Plans: Dawnsteel Shoulders
+						-- [32736] = true,	--	Plans: Swiftsteel Bracers
+						-- [32737] = true,	--	Plans: Swiftsteel Shoulders
+						-- [32748] = true,	--	Pattern: Bindings of Lightning Reflexes
+						-- [32744] = true,	--	Pattern: Bracers of Renewed Life
+						-- [32750] = true,	--	Pattern: Living Earth Bindings
+						-- [32751] = true,	--	Pattern: Living Earth Shoulders
+						-- [32749] = true,	--	Pattern: Shoulders of Lightning Reflexes
+						-- [32745] = true,	--	Pattern: Shoulderpads of Renewed Life
+						-- [32746] = true,	--	Pattern: Swiftstrike Bracers
+						-- [32747] = true,	--	Pattern: Swiftstrike Shoulders
+						-- [32754] = true,	--	Pattern: Bracers of Nimble Thought
+						-- [32755] = true,	--	Pattern: Mantle of Nimble Thought
+						-- [32753] = true,	--	Pattern: Swiftheal Mantle
+						-- [32752] = true,	--	Pattern: Swiftheal Wraps
+					--
+				},
+			},
+			[335] = {
+				function(Driver)
+					Driver.map = 335;
+					Driver:RegisterEvent("ENCOUNTER_END");
+					Driver:RegisterEvent("BOSS_KILL");
+					Driver:RegisterEvent("UPDATE_INSTANCE_INFO");
+					-- print("Reg BOSS");
+					return Driver:OnEvent("ENCOUNTER_END");
+				end,
+				function(Driver)
+					for instanceIndex = 1, Driver.GetNumSavedInstances() do
+						local name, id, reset, difficulty, locked, extended, instanceIDMostSig, isRaid, maxPlayers, difficultyName, numEncounters, encounterProgress = Driver.GetSavedInstanceInfo(instanceIndex);
+						if locked and isRaid then
+							local inst = Driver.instance_name_hash[name];
+							if inst == "SW" then	--	580
+								Driver.Instance = "SW";
+								Driver.LockedInstanceID = id;
+								-- local _, _, _5Killed = Driver.GetSavedInstanceEncounterInfo(instanceIndex, 8);
+								-- local _, _, _6Killed = Driver.GetSavedInstanceEncounterInfo(instanceIndex, 9);
+								-- if _5Killed or _6Killed then
+									Driver:RegisterEvent("CHAT_MSG_LOOT");
+									Driver:RegisterEvent("LOOT_OPENED");
+									-- print("Reg LOOT", _5Killed, _6Killed);
+								-- else
+									-- Driver:UnregisterEvent("CHAT_MSG_LOOT");
+									-- Driver:UnregisterEvent("LOOT_OPENED");
+									-- print("UnrReg LOOT", _5Killed, _6Killed);
+								-- end
+								return;
+							end
+						end
+					end
+					Driver:UnregisterEvent("CHAT_MSG_LOOT");
+					Driver:UnregisterEvent("LOOT_OPENED");
+					-- print("UnrReg LOOT", nil, nil);
+				end,
+				{
+					--蓝龙
+						[34170] = true,	--	Pantaloons of Calming Strife
+						--[34386] = true,	--	Pantaloons of Growing Strife
+						[34169] = true,	--	Breeches of Natural Aggression
+						--[34384] = true,	--	Breeches of Natural Splendor
+						[34168] = true,	--	Starstalker Legguards
+						[34167] = true,	--	Legplates of the Holy Juggernaut
+						--[34382] = true,	--	Judicator's Legguards
+						[34166] = true,	--	Band of Lucent Beams
+						[34848] = true,	--	Bracers of the Forgotten Conqueror
+						[34851] = true,	--	Bracers of the Forgotten Protector
+						[34852] = true,	--	Bracers of the Forgotten Vanquisher
+						[34165] = true,	--	Fang of Kalecgos
+						[34164] = true,	--	Dragonscale-Encrusted Longblade
+					--布胖
+						[34181] = true,	--	Leggings of Calamity
+						[34180] = true,	--	Felfury Legplates
+						--[34381] = true,	--	Felstrength Legplates
+						[34178] = true,	--	Collar of the Pit Lord
+						[34177] = true,	--	Clutch of Demise
+						[34853] = true,	--	Belt of the Forgotten Conqueror
+						[34854] = true,	--	Belt of the Forgotten Protector
+						[34855] = true,	--	Belt of the Forgotten Vanquisher
+						[34176] = true,	--	Reign of Misery
+						[34179] = true,	--	Heart of the Pit
+					--菲米斯
+						[34352] = true,	--	Borderland Fortress Grips
+						[34188] = true,	--	Leggings of the Immortal Night
+						--[34385] = true,	--	Leggings of the Immortal Beast
+						[34186] = true,	--	Chain Links of the Tumultuous Storm
+						--[34383] = true,	--	Kilt of Spiritual Reconstruction
+						[34184] = true,	--	Brooch of the Highborne
+						[34856] = true,	--	Boots of the Forgotten Conqueror
+						[34857] = true,	--	Boots of the Forgotten Protector
+						[34858] = true,	--	Boots of the Forgotten Vanquisher
+						[34182] = true,	--	Grand Magister's Staff of Torrents
+						[34185] = true,	--	Sword Breaker's Bulwark
+					--双子
+						[34205] = true,	--	Shroud of Redeemed Souls
+						[34190] = true,	--	Crimson Paragon's Cover
+						[34210] = true,	--	Amice of the Convoker
+						[34202] = true,	--	Shawl of Wonderment
+						--[34393] = true,	--	Shoulderpads of Knowledge's Pursuit
+						[34209] = true,	--	Spaulders of Reclamation
+						--[34391] = true,	--	Spaulders of Devastation
+						[34195] = true,	--	Shoulderpads of Vehemence
+						--[34392] = true,	--	Demontooth Shoulderpads
+						[34194] = true,	--	Mantle of the Golden Forest
+						[34208] = true,	--	Equilibrium Epaulets
+						--[34390] = true,	--	Erupting Epaulets
+						[34192] = true,	--	Pauldrons of Perseverance
+						--[34388] = true,	--	Pauldrons of Berserking
+						[34193] = true,	--	Spaulders of the Thalassian Savior
+						--[34389] = true,	--	Spaulders of the Thalassian Defender
+						[35290] = true,	--	Sin'dorei Pendant of Conquest
+						[35291] = true,	--	Sin'dorei Pendant of Salvation
+						[35292] = true,	--	Sin'dorei Pendant of Triumph
+						[34204] = true,	--	Amulet of Unfettered Magics
+						[34189] = true,	--	Band of Ruinous Delight
+						[34206] = true,	--	Book of Highborne Hymns
+						[34197] = true,	--	Shiv of Exsanguination
+						[34199] = true,	--	Archon's Gavel
+						[34203] = true,	--	Grip of Mannoroth
+						[34198] = true,	--	Stanchion of Primal Instinct
+						[34196] = true,	--	Golden Bow of Quel'Thalas
+					--穆鲁
+						[34232] = true,	--	Fel Conquerer Raiments
+						[34233] = true,	--	Robes of Faltered Light
+						--[34399] = true,	--	Robes of Ghostly Hatred
+						[34212] = true,	--	Sunglow Vest
+						--[34398] = true,	--	Utopian Tunic of Elune
+						[34211] = true,	--	Harness of Carnal Instinct
+						--[34397] = true,	--	Bladed Chaos Tunic
+						[34234] = true,	--	Shadowed Gauntlets of Paroxysm
+						--[34408] = true,	--	Gloves of the Forest Drifter
+						[34229] = true,	--	Garments of Serene Shores
+						--[34396] = true,	--	Garments of Crashing Shores
+						[34228] = true,	--	Vicious Hawkstrider Hauberk
+						[34215] = true,	--	Warharness of Reckless Fury
+						--[34394] = true,	--	Breastplate of Agony's Aversion
+						[34240] = true,	--	Gauntlets of the Soothed Soul
+						[34216] = true,	--	Heroic Judicator's Chestguard
+						--[34395] = true,	--	Noble Judicator's Chestguard
+						[34213] = true,	--	Ring of Hardened Resolve
+						[34230] = true,	--	Ring of Omnipotence
+						[35282] = true,	--	Sin'dorei Band of Dominance
+						[35283] = true,	--	Sin'dorei Band of Salvation
+						[35284] = true,	--	Sin'dorei Band of Triumph
+						[34427] = true,	--	Blackened Naaru Sliver
+						[34430] = true,	--	Glimmering Naaru Sliver
+						[34429] = true,	--	Shifting Naaru Sliver
+						[34428] = true,	--	Steely Naaru Sliver
+						[34214] = true,	--	Muramasa
+						[34231] = true,	--	Aegis of Angelic Fortune
+					--鸡蛋
+						[34241] = true,	--	Cloak of Unforgivable Sin
+						[34242] = true,	--	Tattered Cape of Antonidas
+						[34339] = true,	--	Cowl of Light's Purity
+						--[34405] = true,	--	Helm of Arcane Purity
+						[34340] = true,	--	Dark Conjuror's Collar
+						[34342] = true,	--	Handguards of the Dawn
+						--[34406] = true,	--	Gloves of Tyri's Power
+						[34344] = true,	--	Handguards of Defiled Worlds
+						[34244] = true,	--	Duplicitous Guise
+						--[34404] = true,	--	Mask of the Fury Hunter
+						[34245] = true,	--	Cover of Ursol the Wise
+						--[34403] = true,	--	Cover of Ursoc the Mighty
+						[34333] = true,	--	Coif of Alleria
+						[34332] = true,	--	Cowl of Gul'dan
+						--[34402] = true,	--	Shroud of Chieftain Ner'zhul
+						[34343] = true,	--	Thalassian Ranger Gauntlets
+						[34243] = true,	--	Helm of Burning Righteousness
+						--[34401] = true,	--	Helm of Uther's Resolve
+						[34345] = true,	--	Crown of Anasterian
+						--[34400] = true,	--	Crown of Dath'Remar
+						[34341] = true,	--	Borderland Paingrips
+						[34334] = true,	--	Thori'dal, the Stars' Fury
+						[34329] = true,	--	Crux of the Apocalypse
+						[34247] = true,	--	Apolyon, the Soul-Render
+						[34335] = true,	--	Hammer of Sanctification
+						[34331] = true,	--	Hand of the Deceiver
+						[34336] = true,	--	Sunflare
+						[34337] = true,	--	Golden Staff of the Sin'dorei
+					--图纸
+						-- [35212] = true,	--	Pattern: Leather Gauntlets of the Sun
+						-- [35216] = true,	--	Pattern: Leather Chestguard of the Sun
+						-- [35213] = true,	--	Pattern: Fletcher's Gloves of the Phoenix
+						-- [35217] = true,	--	Pattern: Embrace of the Phoenix
+						-- [35214] = true,	--	Pattern: Gloves of Immortal Dusk
+						-- [35218] = true,	--	Pattern: Carapace of Sun and Shadow
+						-- [35215] = true,	--	Pattern: Sun-Drenched Scale Gloves
+						-- [35219] = true,	--	Pattern: Sun-Drenched Scale Chestguard
+						-- [35204] = true,	--	Pattern: Sunfire Handwraps
+						-- [35206] = true,	--	Pattern: Sunfire Robe
+						-- [35205] = true,	--	Pattern: Hands of Eternal Light
+						-- [35207] = true,	--	Pattern: Robe of Eternal Light
+						-- [35198] = true,	--	Design: Loop of Forged Power
+						-- [35201] = true,	--	Design: Pendant of Sunfire
+						-- [35199] = true,	--	Design: Ring of Flowing Life
+						-- [35202] = true,	--	Design: Amulet of Flowing Life
+						-- [35200] = true,	--	Design: Hard Khorium Band
+						-- [35203] = true,	--	Design: Hard Khorium Choker
+						-- [35186] = true,	--	Schematic: Annihilator Holo-Gogs
+						-- [35187] = true,	--	Schematic: Justicebringer 3000 Specs
+						-- [35189] = true,	--	Schematic: Powerheal 9000 Lens
+						-- [35190] = true,	--	Schematic: Hyper-Magnified Moon Specs
+						-- [35191] = true,	--	Schematic: Wonderheal XT68 Shades
+						-- [35192] = true,	--	Schematic: Primal-Attuned Goggles
+						-- [35193] = true,	--	Schematic: Lightning Etched Specs
+						-- [35194] = true,	--	Schematic: Surestrike Goggles v3.0
+						-- [35195] = true,	--	Schematic: Mayhem Projection Goggles
+						-- [35196] = true,	--	Schematic: Hard Khorium Goggles
+						-- [35197] = true,	--	Schematic: Quad Deathblow X44 Goggles
+					--小怪
+						-- [34351] = true,	--	Tranquil Majesty Wraps
+						-- --[34407] = true,	--	Tranquil Moonlight Wraps
+						-- [34350] = true,	--	Gauntlets of the Ancient Shadowmoon
+						-- --[34409] = true,	--	Gauntlets of the Ancient Frostwolf
+						-- [35733] = true,	--	Ring of Harmonic Beauty
+						-- [34183] = true,	--	Shivering Felspine
+						-- [34346] = true,	--	Mounting Vengeance
+						-- [34349] = true,	--	Blade of Life's Inevitability
+						-- [34348] = true,	--	Wand of Cleansing Light
+						-- [34347] = true,	--	Wand of the Demonsoul
+						-- [35273] = true,	--	Study of Advanced Smelting
+						-- [34664] = true,	--	Sunmote
+						-- [32228] = true,	--	Empyrean Sapphire
+						-- [32231] = true,	--	Pyrestone
+						-- [32229] = true,	--	Lionseye
+						-- [32249] = true,	--	Seaspray Emerald
+						-- [32230] = true,	--	Shadowsong Amethyst
+						-- [32227] = true,	--	Crimson Spinel
+						-- [35208] = true,	--	Plans: Sunblessed Gauntlets
+						-- [35210] = true,	--	Plans: Sunblessed Breastplate
+						-- [35209] = true,	--	Plans: Hard Khorium Battlefists
+						-- [35211] = true,	--	Plans: Hard Khorium Battleplate
+					--
+				},
+			},
+		},
+		OnLoad = function(Driver)
+			for map, meta in next, Driver.Area do
+				for item, val in next, meta[3] do
+					Driver.ValidItem[item] = val;
+				end
+			end
+			Driver:RegisterEvent("ZONE_CHANGED_NEW_AREA");
+			Driver:RegisterEvent("ZONE_CHANGED");
+			Driver:RegisterEvent("ZONE_CHANGED_INDOORS");
+			Driver:RegisterEvent("NEW_WMO_CHUNK");
+			Driver:RegisterEvent("PLAYER_ENTERING_WORLD");
+			Driver:SetScript("OnEvent", Driver.OnEvent);
+			Driver:OnEvent("NOTHING");
+		end,
+		ValidItem = setmetatable({  }, { __index = function() return true; end }),
+		-- ValidItem = {  },
+		CreatureLooted = {  },
+		GetSavedLockedInstanceID = function(Driver)
+			for instanceIndex = 1, Driver.GetNumSavedInstances() do
+				local name, id, reset, difficulty, locked, extended, instanceIDMostSig, isRaid, maxPlayers, difficultyName, numEncounters, encounterProgress = Driver.GetSavedInstanceInfo(instanceIndex);
+				if locked and isRaid then
+					local inst = Driver.instance_name_hash[name];
+					if inst == "BT" then	--	564
+						return id;
+					end
+				end
+			end
+		end,
+		CheckItem = function(Driver, item, p)
+			item = tonumber(item);
+			if item ~= nil and Driver.ValidItem[item] then
+				local id = Driver.LockedInstanceID;
+				LOOT[id] = LOOT[id] or { Instance = Driver.Instance, };
+				local V = LOOT[id];
+				V[item] = (V[item] or 0) + p;
+			end
+		end,
+		OnEvent = function(Driver, event, ...)
+			if event == "LOOT_OPENED" then
+				for slot = 1, Driver.GetNumLootItems() do
+					if LootSlotHasItem(slot) then
+						local src = Driver.GetLootSourceInfo(slot);
+						--	Creature-0-5002-564-9076-22917-00004FF2A6
+						if Driver.CreatureLooted[src] == nil then
+							local link = Driver.GetLootSlotLink(slot);
+							if link ~= nil then
+								local id = strmatch(link, "|Hitem:(%d+):");
+								if id ~= nil then
+									Driver:CheckItem(id, 1);
+								end
+							end
+						end
+					end
+				end
+				for slot = 1, Driver.GetNumLootItems() do
+					if LootSlotHasItem(slot) then
+						local src = Driver.GetLootSourceInfo(slot);
+						Driver.CreatureLooted[src] = true;
+					end
+				end
+			elseif event == "CHAT_MSG_LOOT" then
+				local id = strmatch(..., "|Hitem:(%d+):");
+				if id ~= nil then
+					Driver:CheckItem(id, 10000);
+				end
+			elseif event == "ENCOUNTER_END" or event == "BOSS_KILL" or event == "UPDATE_INSTANCE_INFO" then
+				local meta = Driver.Area[Driver.map];
+				if meta ~= nil then
+					return meta[2](Driver);
+				end
+			else
+				local map = Driver.GetBestMapForUnit('player');
+				local meta = Driver.Area[map];
+				-- print("Map", map, meta, Driver.map);
+				if meta ~= nil then
+					if map ~= Driver.map then
+						Driver.map = map;
+						return meta[1](Driver);
+					end
+				else
+					Driver.map = nil;
+					Driver:UnregisterEvent("ENCOUNTER_END");
+					Driver:UnregisterEvent("BOSS_KILL");
+					Driver:UnregisterEvent("UPDATE_INSTANCE_INFO");
+					Driver:UnregisterEvent("CHAT_MSG_LOOT");
+					Driver:UnregisterEvent("LOOT_OPENED");
+					-- print("Unreg BOSS & LOOT");
+				end
+			end
+		end,
+		GetLootSourceInfo = _G.GetLootSourceInfo,
+		GetNumLootItems = _G.GetNumLootItems,
+		LootSlotHasItem = _G.LootSlotHasItem,
+		GetLootSlotInfo = _G.GetLootSlotInfo,
+		GetLootSlotLink = _G.GetLootSlotLink,
+		GetNumSavedInstances = _G.GetNumSavedInstances,
+		GetSavedInstanceInfo = _G.GetSavedInstanceInfo,
+		GetSavedInstanceEncounterInfo = _G.GetSavedInstanceEncounterInfo,
+		GetBestMapForUnit = _G.C_Map.GetBestMapForUnit,
+		instance_name_hash = __ala_meta__.__raidlib.__raid_meta.hash,
+	};
+	function NS.InitLootMonitor()
+		local Driver = CreateFrame('FRAME');
+		for method, func in next, LootMonitorDriver do
+			Driver[method] = func;
+		end
+		NS.LootMonitorDriver = Driver;
+		return Driver:OnLoad();
+	end
+	----------------------------------------------------------------------------------------------------
 -->		misc>
 
 do	-- dev

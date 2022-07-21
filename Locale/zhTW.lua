@@ -27,12 +27,6 @@ L.curPointsReqLevel = "等級";
 L.message = "信息: ";
 L.me = "我";
 
-L.level_60 = "切换到60级天赋 |cffff0000自动重载插件|r";
-L.level_70 = "切换到70级天赋 |cffff0000自动重载插件|r";
-L.minimap_TRUE = "顯示小地圖圖標";
-L.minimap_FALSE = "隱藏小地圖圖標";
-L.resizable_border_TRUE = "拖動窗口邊緣改變大小";
-L.resizable_border_FALSE = "禁止拖動窗口邊緣改變大小";
 L.readOnly = "\124cffff0000只讀\124r";
 L.notReadOnly = "\124cff00ff00可編輯\124r";
 L.labelPointsChanged = "(\124cffff0000修改\124r)";
@@ -65,6 +59,14 @@ L.nextRank = "下一等級";
 L.maxRank = "最高等級";
 L.reqPoints = "%d/%d点%s";
 
+L.level_60 = "切换到60级天赋 |cffff0000自动重载插件|r";
+L.level_70 = "切换到70级天赋 |cffff0000自动重载插件|r";
+L.autoShowEquipmentList_TRUE = "自動顯示裝備列表";
+L.autoShowEquipmentList_FALSE = "手動顯示裝備列表";
+L.minimap_TRUE = "顯示小地圖圖標";
+L.minimap_FALSE = "隱藏小地圖圖標";
+L.resizable_border_TRUE = "拖動窗口邊緣改變大小";
+L.resizable_border_FALSE = "禁止拖動窗口邊緣改變大小";
 L.SetWinStyle_BLZ = "设置窗口为暴雪风格";
 L.SetWinStyle_ALA = "设置窗口为扁平化风格";
 L.SetSingleFrame_True = "設置爲單個窗體顯示";

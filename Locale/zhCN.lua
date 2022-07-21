@@ -61,6 +61,8 @@ L.reqPoints = "%d/%d点%s";
 
 L.level_60 = "切换到60级天赋 |cffff0000自动重载插件|r";
 L.level_70 = "切换到70级天赋 |cffff0000自动重载插件|r";
+L.autoShowEquipmentList_TRUE = "自动显示装备列表";
+L.autoShowEquipmentList_FALSE = "手动显示装备列表";
 L.minimap_TRUE = "显示小地图图标";
 L.minimap_FALSE = "隐藏小地图图标";
 L.resizable_border_TRUE = "拖动窗口边缘可改变大小";

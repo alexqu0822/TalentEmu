@@ -28,56 +28,47 @@ NS.MAX_NUM_TALENTS = 28;
 NS.CUR_PHASE = 6;
 --
 NS._classTab = {
-	DRUID =
-	{
+	DRUID = {
 		283,	--Balance,平衡
 		281,	--Feral,野性战斗
 		282,	--Restoration,恢复
 	},
-	HUNTER =
-	{
+	HUNTER = {
 		361,	--BeastMastery,野兽控制
 		363,	--Marksmanship,射击
 		362,	--Survival,生存
 	},
-	MAGE =
-	{
+	MAGE = {
 		81,		--Arcane,奥术
 		41,		--Fire,火焰
 		61,		--Frost,冰霜
 	},
-	PALADIN =
-	{
+	PALADIN = {
 		382,	--Holy,神圣
 		383,	--Protection,防护
 		381,	--Combat,惩戒
 	},
-	PRIEST =
-	{
+	PRIEST = {
 		201,	--Discipline,戒律
 		202,	--Holy,神圣
 		203,	--Shadow,暗影
 	},
-	ROGUE =
-	{
+	ROGUE = {
 		182,	--Assassination,刺杀
 		181,	--Combat,战斗
 		183,	--Subtlety,敏锐
 	},
-	SHAMAN =
-	{
+	SHAMAN = {
 		261,	--Elemental,元素
 		263,	--Enhancement,增强
 		262,	--Restoration,恢复
 	},
-	WARLOCK =
-	{
+	WARLOCK = {
 		302,	--Curses,痛苦
 		303,	--Summoning,恶魔学识
 		301,	--Destruction,毁灭
 	},
-	WARRIOR =
-	{
+	WARRIOR = {
 		161,	--Arms,武器
 		164,	--Fury,狂怒
 		163,	--Protection,防护
@@ -92,8 +83,122 @@ NS._classTab = {
 	--	 1_level, 2_id, 3_cost, 4_phase, name, passive, talent, class
 --
 NS._talentDB = {
-	MAGE =
-	{
+	DRUID = {
+		[281] =
+		{
+			{ 0, 1,  796, 5, nil, nil,  nil, { 16934, 16935, 16936, 16937, 16938, }, "Interface\\icons\\ability_hunter_pet_hyena", },
+			{ 0, 2,  795, 5, nil, nil,  nil, { 16858, 16859, 16860, 16861, 16862, }, "Interface\\icons\\ability_druid_demoralizingroar", },
+			{ 1, 0,  799, 5, nil, nil,  nil, { 16947, 16948, 16949, 16950, 16951, }, "Interface\\icons\\ability_ambush", },
+			{ 1, 1,  797, 2, nil, nil,  nil, { 16940, 16941,   nil,   nil,   nil, }, "Interface\\icons\\ability_druid_bash", },
+			{ 1, 2,  794, 5, nil, nil,  nil, { 16929, 16930, 16931, 16932, 16933, }, "Interface\\icons\\inv_misc_pelt_bear_03", },
+			{ 2, 0,  807, 2, nil, nil,  nil, { 17002, 24866,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_spiritwolf", },
+			{ 2, 1,  804, 1, nil, nil,  nil, { 16979,   nil,   nil,   nil,   nil, }, "Interface\\icons\\ability_hunter_pet_bear", },
+			{ 2, 2,  798, 3, nil, nil,  nil, { 16942, 16943, 16944,   nil,   nil, }, "Interface\\icons\\inv_misc_monsterclaw_04", },
+			{ 3, 0,  802, 2, nil, nil,  nil, { 16966, 16968,   nil,   nil,   nil, }, "Interface\\icons\\spell_shadow_vampiricaura", },
+			{ 3, 1,  803, 3, nil, nil,  nil, { 16972, 16974, 16975,   nil,   nil, }, "Interface\\icons\\ability_hunter_pet_cat", },
+			{ 3, 2,  800, 2,   2,   2,  798, { 16952, 16954,   nil,   nil,   nil, }, "Interface\\icons\\ability_ghoulfrenzy", },
+			{ 3, 3,  801, 2,   2,   2,  798, { 16958, 16961,   nil,   nil,   nil, }, "Interface\\icons\\ability_racial_cannibalize", },
+			{ 4, 0,  805, 2, nil, nil,  nil, { 16998, 16999,   nil,   nil,   nil, }, "Interface\\icons\\ability_druid_ravage", },
+			{ 4, 2, 1162, 1, nil, nil,  nil, { 16857,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_faeriefire", },
+			{ 5, 1,  808, 5,   3,   1,  803, { 17003, 17004, 17005, 17006, 24894, }, "Interface\\icons\\spell_holy_blessingofagility", },
+			{ 6, 1,  809, 1, nil, nil,  nil, { 17007,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_unyeildingstamina", },
+		},
+		[282] =
+		{
+			{ 0, 1,  821, 5, nil, nil,  nil, { 17050, 17051, 17053, 17054, 17055, }, "Interface\\icons\\spell_nature_regeneration", },
+			{ 0, 2,  822, 5, nil, nil,  nil, { 17056, 17058, 17059, 17060, 17061, }, "Interface\\icons\\spell_holy_blessingofstamina", },
+			{ 1, 0,  824, 5, nil, nil,  nil, { 17069, 17070, 17071, 17072, 17073, }, "Interface\\icons\\spell_nature_healingtouch", },
+			{ 1, 1,  823, 5, nil, nil,  nil, { 17063, 17065, 17066, 17067, 17068, }, "Interface\\icons\\spell_nature_healingwavegreater", },
+			{ 1, 2,  826, 2, nil, nil,  nil, { 17079, 17082,   nil,   nil,   nil, }, "Interface\\icons\\ability_druid_enrage", },
+			{ 2, 1,  829, 3, nil, nil,  nil, { 17106, 17107, 17108,   nil,   nil, }, "Interface\\icons\\spell_frost_windwalkon", },
+			{ 2, 2,  827, 1, nil, nil,  nil, {  5570,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_insectswarm", },
+			{ 2, 3,  841, 5, nil, nil,  nil, { 17118, 17119, 17120, 17121, 17122, }, "Interface\\icons\\ability_eyeoftheowl", },
+			{ 3, 1,  843, 5, nil, nil,  nil, { 24968, 24969, 24970, 24971, 24972, }, "Interface\\icons\\spell_holy_elunesgrace", },
+			{ 3, 3,  830, 3, nil, nil,  nil, { 17111, 17112, 17113,   nil,   nil, }, "Interface\\icons\\spell_nature_rejuvenation", },
+			{ 4, 0,  831, 1,   1,   0,  824, { 17116,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_ravenform", },
+			{ 4, 2,  828, 5,   2,   2,  827, { 17104, 24943, 24944, 24945, 24946, }, "Interface\\icons\\spell_nature_protectionformnature", },
+			{ 4, 3,  842, 2, nil, nil,  nil, { 17123, 17124,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_tranquility", },
+			{ 5, 2,  825, 5, nil, nil,  nil, { 17074, 17075, 17076, 17077, 17078, }, "Interface\\icons\\spell_nature_resistnature", },
+			{ 6, 1,  844, 1,   3,   1,  843, { 18562,   nil,   nil,   nil,   nil, }, "Interface\\icons\\inv_relics_idolofrejuvenation", },
+		},
+		[283] =
+		{
+			{ 0, 0,  762, 5, nil, nil,  nil, { 16814, 16815, 16816, 16817, 16818, }, "Interface\\icons\\spell_nature_abolishmagic", },
+			{ 0, 1,  761, 1, nil, nil,  nil, { 16689,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_natureswrath", },
+			{ 0, 2,  921, 4,   0,   1,  761, { 17245, 17247, 17248, 17249,   nil, }, "Interface\\icons\\spell_nature_natureswrath", },
+			{ 1, 0,  787, 3, nil, nil,  nil, { 16918, 16919, 16920,   nil,   nil, }, "Interface\\icons\\spell_nature_stranglevines", },
+			{ 1, 1,  763, 5, nil, nil,  nil, { 16821, 16822, 16823, 16824, 16825, }, "Interface\\icons\\spell_nature_starfall", },
+			{ 1, 2,  791, 5, nil, nil,  nil, { 16902, 16903, 16904, 16905, 16906, }, "Interface\\icons\\inv_staff_01", },
+			{ 1, 3,  781, 3, nil, nil,  nil, { 16833, 16834, 16835,   nil,   nil, }, "Interface\\icons\\spell_nature_wispsplode", },
+			{ 2, 0,  782, 3, nil, nil,  nil, { 16836, 16839, 16840,   nil,   nil, }, "Interface\\icons\\spell_nature_thorns", },
+			{ 2, 2,  788, 1,   1,   2,  791, { 16864,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_crystalball", },
+			{ 2, 3,  764, 2, nil, nil,  nil, { 16819, 16820,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_naturetouchgrow", },
+			{ 3, 1,  792, 5,   1,   1,  763, { 16909, 16910, 16911, 16912, 16913, }, "Interface\\icons\\spell_nature_purge", },
+			{ 3, 2,  784, 5, nil, nil,  nil, { 16850, 16923, 16924, 16925, 16926, }, "Interface\\icons\\spell_arcane_starfire", },
+			{ 4, 1,  789, 1, nil, nil,  nil, { 16880,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_naturesblessing", },
+			{ 4, 2,  783, 3, nil, nil,  nil, { 16845, 16846, 16847,   nil,   nil, }, "Interface\\icons\\spell_nature_sentinal", },
+			{ 5, 1,  790, 5,   4,   1,  789, { 16896, 16897, 16899, 16900, 16901, }, "Interface\\icons\\spell_nature_moonglow", },
+			{ 6, 1,  793, 1, nil, nil,  nil, { 24858,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_forceofnature", },
+		},
+	},
+	HUNTER = {
+		[361] =
+		{
+			{ 0, 1, 1382, 5, nil, nil,  nil, { 19552, 19553, 19554, 19555, 19556, }, "Interface\\icons\\spell_nature_ravenform", },
+			{ 0, 2, 1389, 5, nil, nil,  nil, { 19583, 19584, 19585, 19586, 19587, }, "Interface\\icons\\spell_nature_reincarnation", },
+			{ 1, 0, 1624, 2, nil, nil,  nil, { 19557, 19558,   nil,   nil,   nil, }, "Interface\\icons\\ability_eyeoftheowl", },
+			{ 1, 1, 1381, 5, nil, nil,  nil, { 19549, 19550, 19551, 24386, 24387, }, "Interface\\icons\\ability_hunter_aspectofthemonkey", },
+			{ 1, 2, 1395, 3, nil, nil,  nil, { 19609, 19610, 19612,   nil,   nil, }, "Interface\\icons\\inv_misc_pelt_bear_03", },
+			{ 1, 3, 1625, 2, nil, nil,  nil, { 24443, 19575,   nil,   nil,   nil, }, "Interface\\icons\\ability_hunter_beastsoothe", },
+			{ 2, 0, 1384, 2, nil, nil,  nil, { 19559, 19560,   nil,   nil,   nil, }, "Interface\\icons\\ability_mount_jungletiger", },
+			{ 2, 1, 1391, 1, nil, nil,  nil, { 19596,   nil,   nil,   nil,   nil, }, "Interface\\icons\\ability_druid_dash", },
+			{ 2, 2, 1396, 5, nil, nil,  nil, { 19616, 19617, 19618, 19619, 19620, }, "Interface\\icons\\ability_bullrush", },
+			{ 3, 1, 1385, 2, nil, nil,  nil, { 19572, 19573,   nil,   nil,   nil, }, "Interface\\icons\\ability_hunter_mendpet", },
+			{ 3, 2, 1393, 5, nil, nil,  nil, { 19598, 19599, 19600, 19601, 19602, }, "Interface\\icons\\inv_misc_monsterclaw_04", },
+			{ 4, 0, 1388, 2, nil, nil,  nil, { 19578, 20895,   nil,   nil,   nil, }, "Interface\\icons\\ability_druid_demoralizingroar", },
+			{ 4, 1, 1387, 1, nil, nil,  nil, { 19577,   nil,   nil,   nil,   nil, }, "Interface\\icons\\ability_devour", },
+			{ 4, 3, 1390, 2, nil, nil,  nil, { 19590, 19592,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_abolishmagic", },
+			{ 5, 2, 1397, 5,   3,   2, 1393, { 19621, 19622, 19623, 19624, 19625, }, "Interface\\icons\\inv_misc_monsterclaw_03", },
+			{ 6, 1, 1386, 1,   4,   1, 1387, { 19574,   nil,   nil,   nil,   nil, }, "Interface\\icons\\ability_druid_ferociousbite", },
+		},
+		[362] =
+		{
+			{ 0, 0, 1623, 3, nil, nil,  nil, { 24293, 24294, 24295,   nil,   nil, }, "Interface\\icons\\inv_misc_head_dragon_black", },
+			{ 0, 1, 1301, 3, nil, nil,  nil, { 19151, 19152, 19153,   nil,   nil, }, "Interface\\icons\\spell_holy_prayerofhealing", },
+			{ 0, 2, 1311, 5, nil, nil,  nil, { 19295, 19297, 19298, 19301, 19300, }, "Interface\\icons\\ability_parry", },
+			{ 1, 0, 1304, 5, nil, nil,  nil, { 19184, 19387, 19388, 19389, 19390, }, "Interface\\icons\\spell_nature_stranglevines", },
+			{ 1, 1, 1621, 2, nil, nil,  nil, { 19159, 19160,   nil,   nil,   nil, }, "Interface\\icons\\ability_racial_bloodrage", },
+			{ 1, 2, 1305, 5, nil, nil,  nil, { 19228, 19232, 19233, 19234, 19235, }, "Interface\\icons\\ability_rogue_trip", },
+			{ 2, 0, 1306, 2, nil, nil,  nil, { 19239, 19245,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_timestop", },
+			{ 2, 1, 1622, 5, nil, nil,  nil, { 19255, 19256, 19257, 19258, 19259, }, "Interface\\icons\\spell_shadow_twilight", },
+			{ 2, 2, 1308, 1, nil, nil,  nil, { 19263,   nil,   nil,   nil,   nil, }, "Interface\\icons\\ability_whirlwind", },
+			{ 3, 0, 1322, 2, nil, nil,  nil, { 19376, 19377,   nil,   nil,   nil, }, "Interface\\icons\\ability_ensnare", },
+			{ 3, 1, 1310, 3, nil, nil,  nil, { 19290, 19294, 24283,   nil,   nil, }, "Interface\\icons\\ability_kick", },
+			{ 3, 3, 1309, 2, nil, nil,  nil, { 19286, 19287,   nil,   nil,   nil, }, "Interface\\icons\\ability_rogue_feigndeath", },
+			{ 4, 1, 1321, 3, nil, nil,  nil, { 19370, 19371, 19373,   nil,   nil, }, "Interface\\icons\\spell_holy_blessingofstamina", },
+			{ 4, 2, 1312, 1,   2,   2, 1308, { 19306,   nil,   nil,   nil,   nil, }, "Interface\\icons\\ability_warrior_challange", },
+			{ 5, 2, 1303, 5, nil, nil,  nil, { 19168, 19180, 19181, 24296, 24297, }, "Interface\\icons\\spell_nature_invisibilty", },
+			{ 6, 1, 1325, 1,   4,   1, 1321, { 19386,   nil,   nil,   nil,   nil, }, "Interface\\icons\\inv_spear_02", },
+		},
+		[363] =
+		{
+			{ 0, 1, 1341, 5, nil, nil,  nil, { 19407, 19412, 19413, 19414, 19415, }, "Interface\\icons\\spell_frost_stun", },
+			{ 0, 2, 1342, 5, nil, nil,  nil, { 19416, 19417, 19418, 19419, 19420, }, "Interface\\icons\\spell_frost_wizardmark", },
+			{ 1, 1, 1343, 5, nil, nil,  nil, { 19421, 19422, 19423, 19424, 19425, }, "Interface\\icons\\ability_hunter_snipershot", },
+			{ 1, 2, 1344, 5, nil, nil,  nil, { 19426, 19427, 19429, 19430, 19431, }, "Interface\\icons\\ability_searingarrow", },
+			{ 2, 0, 1345, 1, nil, nil,  nil, { 19434,   nil,   nil,   nil,   nil, }, "Interface\\icons\\inv_spear_07", },
+			{ 2, 1, 1346, 5, nil, nil,  nil, { 19454, 19455, 19456, 19457, 19458, }, "Interface\\icons\\ability_impalingbolt", },
+			{ 2, 3, 1352, 3, nil, nil,  nil, { 19498, 19499, 19500,   nil,   nil, }, "Interface\\icons\\ability_townwatch", },
+			{ 3, 1, 1348, 5, nil, nil,  nil, { 19464, 19465, 19466, 19467, 19468, }, "Interface\\icons\\ability_hunter_quickshot", },
+			{ 3, 2, 1349, 5,   1,   2, 1344, { 19485, 19487, 19488, 19489, 19490, }, "Interface\\icons\\ability_piercedamage", },
+			{ 4, 0, 1353, 1, nil, nil,  nil, { 19503,   nil,   nil,   nil,   nil, }, "Interface\\icons\\ability_golemstormbolt", },
+			{ 4, 1, 1347, 3, nil, nil,  nil, { 19461, 19462, 24691,   nil,   nil, }, "Interface\\icons\\ability_upgrademoonglaive", },
+			{ 4, 2, 1351, 3, nil, nil,  nil, { 19491, 19493, 19494,   nil,   nil, }, "Interface\\icons\\ability_hunter_criticalshot", },
+			{ 5, 2, 1362, 5, nil, nil,  nil, { 19507, 19508, 19509, 19510, 19511, }, "Interface\\icons\\inv_weapon_rifle_06", },
+			{ 6, 1, 1361, 1,   4,   1, 1347, { 19506,   nil,   nil,   nil,   nil, }, "Interface\\icons\\ability_trueshot", },
+		},
+	},
+	MAGE = {
 		[41] =
 		{
 			{ 0, 1,   26, 5, nil, nil,  nil, { 11069, 12338, 12339, 12340, 12341, }, "Interface\\icons\\spell_fire_flamebolt", },
@@ -154,72 +259,120 @@ NS._talentDB = {
 			{ 6, 1,   87, 1,   5,   1,  421, { 12042,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_lightning", },
 		},
 	},
-	WARRIOR =
-	{
-		[161] =
+	PALADIN = {
+		[381] =
 		{
-			{ 0, 0,  124, 3, nil, nil,  nil, { 12282, 12663, 12664,   nil,   nil, }, "Interface\\icons\\ability_rogue_ambush", },
-			{ 0, 1,  130, 5, nil, nil,  nil, { 16462, 16463, 16464, 16465, 16466, }, "Interface\\icons\\ability_parry", },
-			{ 0, 2,  127, 3, nil, nil,  nil, { 12286, 12658, 12659,   nil,   nil, }, "Interface\\icons\\ability_gouge", },
-			{ 1, 0,  126, 2, nil, nil,  nil, { 12285, 12697,   nil,   nil,   nil, }, "Interface\\icons\\ability_warrior_charge", },
-			{ 1, 1,  641, 5, nil, nil,  nil, { 12295, 12676, 12677, 12678, 12679, }, "Interface\\icons\\spell_nature_enchantarmor", },
-			{ 1, 3,  128, 3, nil, nil,  nil, { 12287, 12665, 12666,   nil,   nil, }, "Interface\\icons\\ability_thunderclap", },
-			{ 2, 0,  131, 2, nil, nil,  nil, { 12290, 12963,   nil,   nil,   nil, }, "Interface\\icons\\inv_sword_05", },
-			{ 2, 1,  137, 1,   1,   1,  641, { 12296,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_blessingofstamina", },
-			{ 2, 2,  121, 3,   0,   2,  127, { 12834, 12849, 12867,   nil,   nil, }, "Interface\\icons\\ability_backstab", },
-			{ 3, 1,  136, 5, nil, nil,  nil, { 12163, 12711, 12712, 12713, 12714, }, "Interface\\icons\\inv_axe_09", },
-			{ 3, 2,  662, 2,   2,   2,  121, { 16493, 16494,   nil,   nil,   nil, }, "Interface\\icons\\ability_searingarrow", },
-			{ 4, 0,  132, 5, nil, nil,  nil, { 12700, 12781, 12783, 12784, 12785, }, "Interface\\icons\\inv_axe_06", },
-			{ 4, 1,  133, 1, nil, nil,  nil, { 12292,   nil,   nil,   nil,   nil, }, "Interface\\icons\\ability_rogue_slicedice", },
-			{ 4, 2,  125, 5, nil, nil,  nil, { 12284, 12701, 12702, 12703, 12704, }, "Interface\\icons\\inv_mace_01", },
-			{ 4, 3,  123, 5, nil, nil,  nil, { 12281, 12812, 12813, 12814, 12815, }, "Interface\\icons\\inv_sword_27", },
-			{ 5, 0,  134, 5, nil, nil,  nil, { 12165, 12830, 12831, 12832, 12833, }, "Interface\\icons\\inv_weapon_halbard_01", },
-			{ 5, 2,  129, 3, nil, nil,  nil, { 12289, 12668, 23695,   nil,   nil, }, "Interface\\icons\\ability_shockwave", },
-			{ 6, 1,  135, 1,   4,   1,  133, { 12294,   nil,   nil,   nil,   nil, }, "Interface\\icons\\ability_warrior_savageblow", },
+			{ 0, 1, 1401, 5, nil, nil,  nil, { 20042, 20045, 20046, 20047, 20048, }, "Interface\\icons\\spell_holy_fistofjustice", },
+			{ 0, 2, 1407, 5, nil, nil,  nil, { 20101, 20102, 20103, 20104, 20105, }, "Interface\\icons\\spell_frost_windwalkon", },
+			{ 1, 0, 1631, 2, nil, nil,  nil, { 25956, 25957,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_righteousfury", },
+			{ 1, 1, 1464, 3, nil, nil,  nil, { 20335, 20336, 20337,   nil,   nil, }, "Interface\\icons\\spell_holy_holysmite", },
+			{ 1, 2, 1403, 5, nil, nil,  nil, { 20060, 20061, 20062, 20063, 20064, }, "Interface\\icons\\ability_parry", },
+			{ 2, 0, 1633, 3, nil, nil,  nil, {  9452, 26016, 26021,   nil,   nil, }, "Interface\\icons\\spell_holy_vindication", },
+			{ 2, 1, 1411, 5, nil, nil,  nil, { 20117, 20118, 20119, 20120, 20121, }, "Interface\\icons\\spell_holy_retributionaura", },
+			{ 2, 2, 1481, 1, nil, nil,  nil, { 20375,   nil,   nil,   nil,   nil, }, "Interface\\icons\\ability_warrior_innerrage", },
+			{ 2, 3, 1634, 2, nil, nil,  nil, { 26022, 26023,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_persuitofjustice", },
+			{ 3, 0, 1632, 2, nil, nil,  nil, {  9799, 25988,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_eyeforaneye", },
+			{ 3, 2, 1405, 2, nil, nil,  nil, { 20091, 20092,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_auraoflight", },
+			{ 4, 0, 1410, 3, nil, nil,  nil, { 20111, 20112, 20113,   nil,   nil, }, "Interface\\icons\\inv_hammer_04", },
+			{ 4, 2, 1409, 1, nil, nil,  nil, { 20218,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_mindvision", },
+			{ 5, 1, 1402, 5,   2,   1, 1411, { 20049, 20056, 20057, 20058, 20059, }, "Interface\\icons\\ability_racial_avatar", },
+			{ 6, 1, 1441, 1, nil, nil,  nil, { 20066,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_prayerofhealing", },
 		},
-		[163] =
+		[382] =
 		{
-			{ 0, 1, 1601, 5, nil, nil,  nil, { 12298, 12724, 12725, 12726, 12727, }, "Interface\\icons\\inv_shield_06", },
-			{ 0, 2,  138, 5, nil, nil,  nil, { 12297, 12750, 12751, 12752, 12753, }, "Interface\\icons\\spell_nature_mirrorimage", },
-			{ 1, 0,  142, 2, nil, nil,  nil, { 12301, 12818,   nil,   nil,   nil, }, "Interface\\icons\\ability_racial_bloodrage", },
-			{ 1, 2,  140, 5, nil, nil,  nil, { 12299, 12761, 12762, 12763, 12764, }, "Interface\\icons\\spell_holy_devotion", },
-			{ 1, 3,  141, 5, nil, nil,  nil, { 12300, 12959, 12960, 12961, 12962, }, "Interface\\icons\\spell_magic_magearmor", },
-			{ 2, 0,  153, 1,   1,   0,  142, { 12975,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_ashestoashes", },
-			{ 2, 1,  145, 3,   0,   1, 1601, { 12945, 12307, 12944,   nil,   nil, }, "Interface\\icons\\ability_defend", },
-			{ 2, 2,  147, 3, nil, nil,  nil, { 12797, 12799, 12800,   nil,   nil, }, "Interface\\icons\\ability_warrior_revenge", },
-			{ 2, 3,  144, 5, nil, nil,  nil, { 12303, 12788, 12789, 12791, 12792, }, "Interface\\icons\\ability_warrior_innerrage", },
-			{ 3, 0,  146, 3, nil, nil,  nil, { 12308, 12810, 12811,   nil,   nil, }, "Interface\\icons\\ability_warrior_sunder", },
-			{ 3, 1,  151, 3, nil, nil,  nil, { 12313, 12804, 12807,   nil,   nil, }, "Interface\\icons\\ability_warrior_disarm", },
-			{ 3, 2,  143, 2, nil, nil,  nil, { 12302, 12765,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_reincarnation", },
-			{ 4, 0,  150, 2, nil, nil,  nil, { 12312, 12803,   nil,   nil,   nil, }, "Interface\\icons\\ability_warrior_shieldwall", },
-			{ 4, 1,  152, 1, nil, nil,  nil, { 12809,   nil,   nil,   nil,   nil, }, "Interface\\icons\\ability_thunderbolt", },
-			{ 4, 2,  149, 2, nil, nil,  nil, { 12311, 12958,   nil,   nil,   nil, }, "Interface\\icons\\ability_warrior_shieldbash", },
-			{ 5, 2,  702, 5, nil, nil,  nil, { 16538, 16539, 16540, 16541, 16542, }, "Interface\\icons\\inv_sword_20", },
-			{ 6, 1,  148, 1,   4,   1,  152, { 23922,   nil,   nil,   nil,   nil, }, "Interface\\icons\\inv_shield_05", },
+			{ 0, 1, 1450, 5, nil, nil,  nil, { 20262, 20263, 20264, 20265, 20266, }, "Interface\\icons\\ability_golemthunderclap", },
+			{ 0, 2, 1449, 5, nil, nil,  nil, { 20257, 20258, 20259, 20260, 20261, }, "Interface\\icons\\spell_nature_sleep", },
+			{ 1, 1, 1432, 5, nil, nil,  nil, { 20205, 20206, 20207, 20209, 20208, }, "Interface\\icons\\spell_arcane_blink", },
+			{ 1, 2, 1463, 5, nil, nil,  nil, { 20224, 20225, 20330, 20331, 20332, }, "Interface\\icons\\ability_thunderbolt", },
+			{ 2, 0, 1444, 3, nil, nil,  nil, { 20237, 20238, 20239,   nil,   nil, }, "Interface\\icons\\spell_holy_holybolt", },
+			{ 2, 1, 1435, 1, nil, nil,  nil, { 26573,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_innerfire", },
+			{ 2, 2, 1443, 2, nil, nil,  nil, { 20234, 20235,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_layonhands", },
+			{ 2, 3, 1628, 2, nil, nil,  nil, {  9453, 25836,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_unyieldingfaith", },
+			{ 3, 1, 1461, 5, nil, nil,  nil, { 20210, 20212, 20213, 20214, 20215, }, "Interface\\icons\\spell_holy_greaterheal", },
+			{ 3, 2, 1446, 2, nil, nil,  nil, { 20244, 20245,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_sealofwisdom", },
+			{ 4, 1, 1433, 1,   3,   1, 1461, { 20216,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_heal", },
+			{ 4, 2, 1465, 3, nil, nil,  nil, { 20359, 20360, 20361,   nil,   nil, }, "Interface\\icons\\spell_holy_healingaura", },
+			{ 5, 2, 1627, 5, nil, nil,  nil, {  5923,  5924,  5925,  5926, 25829, }, "Interface\\icons\\spell_holy_power", },
+			{ 6, 1, 1502, 1,   4,   1, 1433, { 20473,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_searinglight", },
 		},
-		[164] =
+		[383] =
 		{
-			{ 0, 1,  158, 5, nil, nil,  nil, { 12321, 12835, 12836, 12837, 12838, }, "Interface\\icons\\spell_nature_purge", },
-			{ 0, 2,  157, 5, nil, nil,  nil, { 12320, 12852, 12853, 12855, 12856, }, "Interface\\icons\\ability_rogue_eviscerate", },
-			{ 1, 1,  161, 5, nil, nil,  nil, { 12324, 12876, 12877, 12878, 12879, }, "Interface\\icons\\ability_warrior_warcry", },
-			{ 1, 2,  159, 5, nil, nil,  nil, { 12322, 12999, 13000, 13001, 13002, }, "Interface\\icons\\spell_nature_stoneclawtotem", },
-			{ 2, 0,  166, 3, nil, nil,  nil, { 12329, 12950, 20496,   nil,   nil, }, "Interface\\icons\\ability_warrior_cleave", },
-			{ 2, 1,  160, 1, nil, nil,  nil, { 12323,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_shadow_deathscream", },
-			{ 2, 2,  661, 3, nil, nil,  nil, { 16487, 16489, 16492,   nil,   nil, }, "Interface\\icons\\spell_shadow_summonimp", },
-			{ 2, 3,  154, 5, nil, nil,  nil, { 12318, 12857, 12858, 12860, 12861, }, "Interface\\icons\\ability_warrior_battleshout", },
-			{ 3, 0, 1581, 5, nil, nil,  nil, { 23584, 23585, 23586, 23587, 23588, }, "Interface\\icons\\ability_dualwield", },
-			{ 3, 1, 1542, 2, nil, nil,  nil, { 20502, 20503,   nil,   nil,   nil, }, "Interface\\icons\\inv_sword_48", },
-			{ 3, 2,  155, 5, nil, nil,  nil, { 12317, 13045, 13046, 13047, 13048, }, "Interface\\icons\\spell_shadow_unholyfrenzy", },
-			{ 4, 0,  168, 5, nil, nil,  nil, { 12862, 12330, 20497, 20498, 20499, }, "Interface\\icons\\ability_warrior_decisivestrike", },
-			{ 4, 1,  165, 1, nil, nil,  nil, { 12328,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_shadow_deathpact", },
-			{ 4, 3, 1543, 2, nil, nil,  nil, { 20504, 20505,   nil,   nil,   nil, }, "Interface\\icons\\ability_rogue_sprint", },
-			{ 5, 0, 1541, 2, nil, nil,  nil, { 20500, 20501,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_ancestralguardian", },
-			{ 5, 2,  156, 5,   3,   2,  155, { 12319, 12971, 12972, 12973, 12974, }, "Interface\\icons\\ability_ghoulfrenzy", },
-			{ 6, 1,  167, 1,   4,   1,  165, { 23881,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_bloodlust", },
+			{ 0, 1, 1422, 5, nil, nil,  nil, { 20138, 20139, 20140, 20141, 20142, }, "Interface\\icons\\spell_holy_devotionaura", },
+			{ 0, 2, 1421, 5, nil, nil,  nil, { 20127, 20130, 20135, 20136, 20137, }, "Interface\\icons\\ability_defend", },
+			{ 1, 0, 1630, 3, nil, nil,  nil, { 20189, 20192, 20193,   nil,   nil, }, "Interface\\icons\\ability_rogue_ambush", },
+			{ 1, 1, 1425, 2, nil, nil,  nil, { 20174, 20175,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_sealofprotection", },
+			{ 1, 3, 1423, 5, nil, nil,  nil, { 20143, 20144, 20145, 20146, 20147, }, "Interface\\icons\\spell_holy_devotion", },
+			{ 2, 0, 1442, 1, nil, nil,  nil, { 20217,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_magic_magearmor", },
+			{ 2, 1, 1501, 3, nil, nil,  nil, { 20468, 20469, 20470,   nil,   nil, }, "Interface\\icons\\spell_holy_sealoffury", },
+			{ 2, 2, 1424, 3,   0,   2, 1421, { 20148, 20149, 20150,   nil,   nil, }, "Interface\\icons\\inv_shield_06", },
+			{ 2, 3, 1629, 5, nil, nil,  nil, { 20096, 20097, 20098, 20099, 20100, }, "Interface\\icons\\spell_magic_lesserinvisibilty", },
+			{ 3, 1, 1521, 3, nil, nil,  nil, { 20487, 20488, 20489,   nil,   nil, }, "Interface\\icons\\spell_holy_sealofmight", },
+			{ 3, 2, 1626, 3, nil, nil,  nil, { 20254, 20255, 20256,   nil,   nil, }, "Interface\\icons\\spell_holy_mindsooth", },
+			{ 4, 1, 1431, 1, nil, nil,  nil, { 20911,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_lightningshield", },
+			{ 4, 2, 1426, 5, nil, nil,  nil, { 20177, 20179, 20181, 20180, 20182, }, "Interface\\icons\\spell_holy_blessingofstrength", },
+			{ 5, 2, 1429, 5, nil, nil,  nil, { 20196, 20197, 20198, 20199, 20200, }, "Interface\\icons\\inv_sword_20", },
+			{ 6, 1, 1430, 1,   4,   1, 1431, { 20925,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_blessingofprotection", },
 		},
 	},
-	ROGUE =
-	{
+	PRIEST = {
+		[201] =
+		{
+			{ 0, 1,  342, 5, nil, nil,  nil, { 14522, 14788, 14789, 14790, 14791, }, "Interface\\icons\\spell_magic_magearmor", },
+			{ 0, 2,  345, 5, nil, nil,  nil, { 14524, 14525, 14526, 14527, 14528, }, "Interface\\icons\\inv_wand_01", },
+			{ 1, 0,  352, 5, nil, nil,  nil, { 14523, 14784, 14785, 14786, 14787, }, "Interface\\icons\\spell_nature_manaregentotem", },
+			{ 1, 1,  344, 2, nil, nil,  nil, { 14749, 14767,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_wordfortitude", },
+			{ 1, 2,  343, 3, nil, nil,  nil, { 14748, 14768, 14769,   nil,   nil, }, "Interface\\icons\\spell_holy_powerwordshield", },
+			{ 1, 3,  321, 2, nil, nil,  nil, { 14531, 14774,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_tranquility", },
+			{ 2, 1,  348, 1, nil, nil,  nil, { 14751,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_frost_windwalkon", },
+			{ 2, 2,  347, 3, nil, nil,  nil, { 14521, 14776, 14777,   nil,   nil, }, "Interface\\icons\\spell_nature_sleep", },
+			{ 3, 0,  346, 3, nil, nil,  nil, { 14747, 14770, 14771,   nil,   nil, }, "Interface\\icons\\spell_holy_innerfire", },
+			{ 3, 1,  341, 5, nil, nil,  nil, { 14520, 14780, 14781, 14782, 14783, }, "Interface\\icons\\ability_hibernation", },
+			{ 3, 3,  350, 2, nil, nil,  nil, { 14750, 14772,   nil,   nil,   nil, }, "Interface\\icons\\spell_shadow_manaburn", },
+			{ 4, 1, 1201, 5, nil, nil,  nil, { 18551, 18552, 18553, 18554, 18555, }, "Interface\\icons\\spell_nature_enchantarmor", },
+			{ 4, 2,  351, 1,   2,   2,  347, { 14752,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_divinespirit", },
+			{ 5, 2, 1202, 5, nil, nil,  nil, { 18544, 18547, 18548, 18549, 18550, }, "Interface\\icons\\spell_nature_slowingtotem", },
+			{ 6, 1,  322, 1,   4,   1, 1201, { 10060,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_powerinfusion", },
+		},
+		[202] =
+		{
+			{ 0, 0,  410, 2, nil, nil,  nil, { 14913, 15012,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_healingfocus", },
+			{ 0, 1,  406, 3, nil, nil,  nil, { 14908, 15020, 17191,   nil,   nil, }, "Interface\\icons\\spell_holy_renew", },
+			{ 0, 2,  401, 5, nil, nil,  nil, { 14889, 15008, 15009, 15010, 15011, }, "Interface\\icons\\spell_holy_sealofsalvation", },
+			{ 1, 1,  411, 5, nil, nil,  nil, { 27900, 27901, 27902, 27903, 27904, }, "Interface\\icons\\spell_holy_spellwarding", },
+			{ 1, 2, 1181, 5, nil, nil,  nil, { 18530, 18531, 18533, 18534, 18535, }, "Interface\\icons\\spell_holy_sealofwrath", },
+			{ 2, 0,  442, 1, nil, nil,  nil, { 15237,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_holynova", },
+			{ 2, 1, 1636, 3, nil, nil,  nil, { 27811, 27815, 27816,   nil,   nil, }, "Interface\\icons\\spell_holy_blessedrecovery", },
+			{ 2, 3,  361, 3, nil, nil,  nil, { 14892, 15362, 15363,   nil,   nil, }, "Interface\\icons\\spell_holy_layonhands", },
+			{ 3, 0, 1635, 2, nil, nil,  nil, { 27789, 27790,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_purify", },
+			{ 3, 1,  408, 3, nil, nil,  nil, { 14912, 15013, 15014,   nil,   nil, }, "Interface\\icons\\spell_holy_heal02", },
+			{ 3, 2,  403, 2,   1,   2, 1181, { 14909, 15017,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_searinglightpriest", },
+			{ 4, 0,  413, 2, nil, nil,  nil, { 14911, 15018,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_prayerofhealing02", },
+			{ 4, 1, 1561, 1, nil, nil,  nil, { 20711,   nil,   nil,   nil,   nil, }, "Interface\\icons\\inv_enchant_essenceeternallarge", },
+			{ 4, 2,  402, 5, nil, nil,  nil, { 14901, 15028, 15029, 15030, 15031, }, "Interface\\icons\\spell_holy_spiritualguidence", },
+			{ 5, 2,  404, 5, nil, nil,  nil, { 14898, 15349, 15354, 15355, 15356, }, "Interface\\icons\\spell_nature_moonglow", },
+			{ 6, 1, 1637, 1,   4,   1, 1561, { 724,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_summonlightwell", },
+		},
+		[203] =
+		{
+			{ 0, 1,  465, 5, nil, nil,  nil, { 15270, 15335, 15336, 15337, 15338, }, "Interface\\icons\\spell_shadow_requiem", },
+			{ 0, 2,  464, 5, nil, nil,  nil, { 15268, 15323, 15324, 15325, 15326, }, "Interface\\icons\\spell_shadow_gathershadows", },
+			{ 1, 0,  466, 3, nil, nil,  nil, { 15318, 15272, 15320,   nil,   nil, }, "Interface\\icons\\spell_shadow_shadowward", },
+			{ 1, 1,  482, 2, nil, nil,  nil, { 15275, 15317,   nil,   nil,   nil, }, "Interface\\icons\\spell_shadow_shadowwordpain", },
+			{ 1, 2,  463, 5, nil, nil,  nil, { 15260, 15327, 15328, 15329, 15330, }, "Interface\\icons\\spell_shadow_burningspirit", },
+			{ 2, 0,  542, 2, nil, nil,  nil, { 15392, 15448,   nil,   nil,   nil, }, "Interface\\icons\\spell_shadow_psychicscream", },
+			{ 2, 1,  481, 5, nil, nil,  nil, { 15273, 15312, 15313, 15314, 15316, }, "Interface\\icons\\spell_shadow_unholyfrenzy", },
+			{ 2, 2,  501, 1, nil, nil,  nil, { 15407,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_shadow_siphonmana", },
+			{ 3, 1,  483, 2, nil, nil,  nil, { 15274, 15311,   nil,   nil,   nil, }, "Interface\\icons\\spell_magic_lesserinvisibilty", },
+			{ 3, 2,  881, 3, nil, nil,  nil, { 17322, 17323, 17325,   nil,   nil, }, "Interface\\icons\\spell_shadow_chilltouch", },
+			{ 3, 3,  461, 5, nil, nil,  nil, { 15257, 15331, 15332, 15333, 15334, }, "Interface\\icons\\spell_shadow_blackplague", },
+			{ 4, 0,  541, 1,   2,   0,  542, { 15487,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_shadow_impphaseshift", },
+			{ 4, 1,  484, 1, nil, nil,  nil, { 15286,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_shadow_unsummonbuilding", },
+			{ 4, 2, 1638, 2,   4,   1,  484, { 27839, 27840,   nil,   nil,   nil, }, "Interface\\icons\\spell_shadow_improvedvampiricembrace", },
+			{ 5, 2,  462, 5, nil, nil,  nil, { 15259, 15307, 15308, 15309, 15310, }, "Interface\\icons\\spell_shadow_twilight", },
+			{ 6, 1,  521, 1,   4,   1,  484, { 15473,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_shadow_shadowform", },
+		},
+	},
+	ROGUE = {
 		[181] =
 		{
 			{ 0, 0,  203, 3, nil, nil,  nil, { 13741, 13793, 13792,   nil,   nil, }, "Interface\\icons\\ability_gouge", },
@@ -281,67 +434,7 @@ NS._talentDB = {
 			{ 6, 1,  381, 1,   4,   1,  284, { 14183,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_shadow_possession", },
 		},
 	},
-	PRIEST =
-	{
-		[201] =
-		{
-			{ 0, 1,  342, 5, nil, nil,  nil, { 14522, 14788, 14789, 14790, 14791, }, "Interface\\icons\\spell_magic_magearmor", },
-			{ 0, 2,  345, 5, nil, nil,  nil, { 14524, 14525, 14526, 14527, 14528, }, "Interface\\icons\\inv_wand_01", },
-			{ 1, 0,  352, 5, nil, nil,  nil, { 14523, 14784, 14785, 14786, 14787, }, "Interface\\icons\\spell_nature_manaregentotem", },
-			{ 1, 1,  344, 2, nil, nil,  nil, { 14749, 14767,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_wordfortitude", },
-			{ 1, 2,  343, 3, nil, nil,  nil, { 14748, 14768, 14769,   nil,   nil, }, "Interface\\icons\\spell_holy_powerwordshield", },
-			{ 1, 3,  321, 2, nil, nil,  nil, { 14531, 14774,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_tranquility", },
-			{ 2, 1,  348, 1, nil, nil,  nil, { 14751,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_frost_windwalkon", },
-			{ 2, 2,  347, 3, nil, nil,  nil, { 14521, 14776, 14777,   nil,   nil, }, "Interface\\icons\\spell_nature_sleep", },
-			{ 3, 0,  346, 3, nil, nil,  nil, { 14747, 14770, 14771,   nil,   nil, }, "Interface\\icons\\spell_holy_innerfire", },
-			{ 3, 1,  341, 5, nil, nil,  nil, { 14520, 14780, 14781, 14782, 14783, }, "Interface\\icons\\ability_hibernation", },
-			{ 3, 3,  350, 2, nil, nil,  nil, { 14750, 14772,   nil,   nil,   nil, }, "Interface\\icons\\spell_shadow_manaburn", },
-			{ 4, 1, 1201, 5, nil, nil,  nil, { 18551, 18552, 18553, 18554, 18555, }, "Interface\\icons\\spell_nature_enchantarmor", },
-			{ 4, 2,  351, 1,   2,   2,  347, { 14752,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_divinespirit", },
-			{ 5, 2, 1202, 5, nil, nil,  nil, { 18544, 18547, 18548, 18549, 18550, }, "Interface\\icons\\spell_nature_slowingtotem", },
-			{ 6, 1,  322, 1,   4,   1, 1201, { 10060,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_powerinfusion", },
-		},
-		[202] =
-		{
-			{ 0, 0,  410, 2, nil, nil,  nil, { 14913, 15012,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_healingfocus", },
-			{ 0, 1,  406, 3, nil, nil,  nil, { 14908, 15020, 17191,   nil,   nil, }, "Interface\\icons\\spell_holy_renew", },
-			{ 0, 2,  401, 5, nil, nil,  nil, { 14889, 15008, 15009, 15010, 15011, }, "Interface\\icons\\spell_holy_sealofsalvation", },
-			{ 1, 1,  411, 5, nil, nil,  nil, { 27900, 27901, 27902, 27903, 27904, }, "Interface\\icons\\spell_holy_spellwarding", },
-			{ 1, 2, 1181, 5, nil, nil,  nil, { 18530, 18531, 18533, 18534, 18535, }, "Interface\\icons\\spell_holy_sealofwrath", },
-			{ 2, 0,  442, 1, nil, nil,  nil, { 15237,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_holynova", },
-			{ 2, 1, 1636, 3, nil, nil,  nil, { 27811, 27815, 27816,   nil,   nil, }, "Interface\\icons\\spell_holy_blessedrecovery", },
-			{ 2, 3,  361, 3, nil, nil,  nil, { 14892, 15362, 15363,   nil,   nil, }, "Interface\\icons\\spell_holy_layonhands", },
-			{ 3, 0, 1635, 2, nil, nil,  nil, { 27789, 27790,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_purify", },
-			{ 3, 1,  408, 3, nil, nil,  nil, { 14912, 15013, 15014,   nil,   nil, }, "Interface\\icons\\spell_holy_heal02", },
-			{ 3, 2,  403, 2,   1,   2, 1181, { 14909, 15017,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_searinglightpriest", },
-			{ 4, 0,  413, 2, nil, nil,  nil, { 14911, 15018,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_prayerofhealing02", },
-			{ 4, 1, 1561, 1, nil, nil,  nil, { 20711,   nil,   nil,   nil,   nil, }, "Interface\\icons\\inv_enchant_essenceeternallarge", },
-			{ 4, 2,  402, 5, nil, nil,  nil, { 14901, 15028, 15029, 15030, 15031, }, "Interface\\icons\\spell_holy_spiritualguidence", },
-			{ 5, 2,  404, 5, nil, nil,  nil, { 14898, 15349, 15354, 15355, 15356, }, "Interface\\icons\\spell_nature_moonglow", },
-			{ 6, 1, 1637, 1,   4,   1, 1561, { 724,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_summonlightwell", },
-		},
-		[203] =
-		{
-			{ 0, 1,  465, 5, nil, nil,  nil, { 15270, 15335, 15336, 15337, 15338, }, "Interface\\icons\\spell_shadow_requiem", },
-			{ 0, 2,  464, 5, nil, nil,  nil, { 15268, 15323, 15324, 15325, 15326, }, "Interface\\icons\\spell_shadow_gathershadows", },
-			{ 1, 0,  466, 3, nil, nil,  nil, { 15318, 15272, 15320,   nil,   nil, }, "Interface\\icons\\spell_shadow_shadowward", },
-			{ 1, 1,  482, 2, nil, nil,  nil, { 15275, 15317,   nil,   nil,   nil, }, "Interface\\icons\\spell_shadow_shadowwordpain", },
-			{ 1, 2,  463, 5, nil, nil,  nil, { 15260, 15327, 15328, 15329, 15330, }, "Interface\\icons\\spell_shadow_burningspirit", },
-			{ 2, 0,  542, 2, nil, nil,  nil, { 15392, 15448,   nil,   nil,   nil, }, "Interface\\icons\\spell_shadow_psychicscream", },
-			{ 2, 1,  481, 5, nil, nil,  nil, { 15273, 15312, 15313, 15314, 15316, }, "Interface\\icons\\spell_shadow_unholyfrenzy", },
-			{ 2, 2,  501, 1, nil, nil,  nil, { 15407,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_shadow_siphonmana", },
-			{ 3, 1,  483, 2, nil, nil,  nil, { 15274, 15311,   nil,   nil,   nil, }, "Interface\\icons\\spell_magic_lesserinvisibilty", },
-			{ 3, 2,  881, 3, nil, nil,  nil, { 17322, 17323, 17325,   nil,   nil, }, "Interface\\icons\\spell_shadow_chilltouch", },
-			{ 3, 3,  461, 5, nil, nil,  nil, { 15257, 15331, 15332, 15333, 15334, }, "Interface\\icons\\spell_shadow_blackplague", },
-			{ 4, 0,  541, 1,   2,   0,  542, { 15487,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_shadow_impphaseshift", },
-			{ 4, 1,  484, 1, nil, nil,  nil, { 15286,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_shadow_unsummonbuilding", },
-			{ 4, 2, 1638, 2,   4,   1,  484, { 27839, 27840,   nil,   nil,   nil, }, "Interface\\icons\\spell_shadow_improvedvampiricembrace", },
-			{ 5, 2,  462, 5, nil, nil,  nil, { 15259, 15307, 15308, 15309, 15310, }, "Interface\\icons\\spell_shadow_twilight", },
-			{ 6, 1,  521, 1,   4,   1,  484, { 15473,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_shadow_shadowform", },
-		},
-	},
-	SHAMAN =
-	{
+	SHAMAN = {
 		[261] =
 		{
 			{ 0, 1,  564, 5, nil, nil,  nil, { 16039, 16109, 16110, 16111, 16112, }, "Interface\\icons\\spell_nature_wispsplode", },
@@ -398,67 +491,7 @@ NS._talentDB = {
 			{ 6, 1,  901, 1,   4,   1,  611, { 17364,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_sealofmight", },
 		},
 	},
-	DRUID =
-	{
-		[281] =
-		{
-			{ 0, 1,  796, 5, nil, nil,  nil, { 16934, 16935, 16936, 16937, 16938, }, "Interface\\icons\\ability_hunter_pet_hyena", },
-			{ 0, 2,  795, 5, nil, nil,  nil, { 16858, 16859, 16860, 16861, 16862, }, "Interface\\icons\\ability_druid_demoralizingroar", },
-			{ 1, 0,  799, 5, nil, nil,  nil, { 16947, 16948, 16949, 16950, 16951, }, "Interface\\icons\\ability_ambush", },
-			{ 1, 1,  797, 2, nil, nil,  nil, { 16940, 16941,   nil,   nil,   nil, }, "Interface\\icons\\ability_druid_bash", },
-			{ 1, 2,  794, 5, nil, nil,  nil, { 16929, 16930, 16931, 16932, 16933, }, "Interface\\icons\\inv_misc_pelt_bear_03", },
-			{ 2, 0,  807, 2, nil, nil,  nil, { 17002, 24866,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_spiritwolf", },
-			{ 2, 1,  804, 1, nil, nil,  nil, { 16979,   nil,   nil,   nil,   nil, }, "Interface\\icons\\ability_hunter_pet_bear", },
-			{ 2, 2,  798, 3, nil, nil,  nil, { 16942, 16943, 16944,   nil,   nil, }, "Interface\\icons\\inv_misc_monsterclaw_04", },
-			{ 3, 0,  802, 2, nil, nil,  nil, { 16966, 16968,   nil,   nil,   nil, }, "Interface\\icons\\spell_shadow_vampiricaura", },
-			{ 3, 1,  803, 3, nil, nil,  nil, { 16972, 16974, 16975,   nil,   nil, }, "Interface\\icons\\ability_hunter_pet_cat", },
-			{ 3, 2,  800, 2,   2,   2,  798, { 16952, 16954,   nil,   nil,   nil, }, "Interface\\icons\\ability_ghoulfrenzy", },
-			{ 3, 3,  801, 2,   2,   2,  798, { 16958, 16961,   nil,   nil,   nil, }, "Interface\\icons\\ability_racial_cannibalize", },
-			{ 4, 0,  805, 2, nil, nil,  nil, { 16998, 16999,   nil,   nil,   nil, }, "Interface\\icons\\ability_druid_ravage", },
-			{ 4, 2, 1162, 1, nil, nil,  nil, { 16857,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_faeriefire", },
-			{ 5, 1,  808, 5,   3,   1,  803, { 17003, 17004, 17005, 17006, 24894, }, "Interface\\icons\\spell_holy_blessingofagility", },
-			{ 6, 1,  809, 1, nil, nil,  nil, { 17007,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_unyeildingstamina", },
-		},
-		[282] =
-		{
-			{ 0, 1,  821, 5, nil, nil,  nil, { 17050, 17051, 17053, 17054, 17055, }, "Interface\\icons\\spell_nature_regeneration", },
-			{ 0, 2,  822, 5, nil, nil,  nil, { 17056, 17058, 17059, 17060, 17061, }, "Interface\\icons\\spell_holy_blessingofstamina", },
-			{ 1, 0,  824, 5, nil, nil,  nil, { 17069, 17070, 17071, 17072, 17073, }, "Interface\\icons\\spell_nature_healingtouch", },
-			{ 1, 1,  823, 5, nil, nil,  nil, { 17063, 17065, 17066, 17067, 17068, }, "Interface\\icons\\spell_nature_healingwavegreater", },
-			{ 1, 2,  826, 2, nil, nil,  nil, { 17079, 17082,   nil,   nil,   nil, }, "Interface\\icons\\ability_druid_enrage", },
-			{ 2, 1,  829, 3, nil, nil,  nil, { 17106, 17107, 17108,   nil,   nil, }, "Interface\\icons\\spell_frost_windwalkon", },
-			{ 2, 2,  827, 1, nil, nil,  nil, {  5570,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_insectswarm", },
-			{ 2, 3,  841, 5, nil, nil,  nil, { 17118, 17119, 17120, 17121, 17122, }, "Interface\\icons\\ability_eyeoftheowl", },
-			{ 3, 1,  843, 5, nil, nil,  nil, { 24968, 24969, 24970, 24971, 24972, }, "Interface\\icons\\spell_holy_elunesgrace", },
-			{ 3, 3,  830, 3, nil, nil,  nil, { 17111, 17112, 17113,   nil,   nil, }, "Interface\\icons\\spell_nature_rejuvenation", },
-			{ 4, 0,  831, 1,   1,   0,  824, { 17116,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_ravenform", },
-			{ 4, 2,  828, 5,   2,   2,  827, { 17104, 24943, 24944, 24945, 24946, }, "Interface\\icons\\spell_nature_protectionformnature", },
-			{ 4, 3,  842, 2, nil, nil,  nil, { 17123, 17124,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_tranquility", },
-			{ 5, 2,  825, 5, nil, nil,  nil, { 17074, 17075, 17076, 17077, 17078, }, "Interface\\icons\\spell_nature_resistnature", },
-			{ 6, 1,  844, 1,   3,   1,  843, { 18562,   nil,   nil,   nil,   nil, }, "Interface\\icons\\inv_relics_idolofrejuvenation", },
-		},
-		[283] =
-		{
-			{ 0, 0,  762, 5, nil, nil,  nil, { 16814, 16815, 16816, 16817, 16818, }, "Interface\\icons\\spell_nature_abolishmagic", },
-			{ 0, 1,  761, 1, nil, nil,  nil, { 16689,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_natureswrath", },
-			{ 0, 2,  921, 4,   0,   1,  761, { 17245, 17247, 17248, 17249,   nil, }, "Interface\\icons\\spell_nature_natureswrath", },
-			{ 1, 0,  787, 3, nil, nil,  nil, { 16918, 16919, 16920,   nil,   nil, }, "Interface\\icons\\spell_nature_stranglevines", },
-			{ 1, 1,  763, 5, nil, nil,  nil, { 16821, 16822, 16823, 16824, 16825, }, "Interface\\icons\\spell_nature_starfall", },
-			{ 1, 2,  791, 5, nil, nil,  nil, { 16902, 16903, 16904, 16905, 16906, }, "Interface\\icons\\inv_staff_01", },
-			{ 1, 3,  781, 3, nil, nil,  nil, { 16833, 16834, 16835,   nil,   nil, }, "Interface\\icons\\spell_nature_wispsplode", },
-			{ 2, 0,  782, 3, nil, nil,  nil, { 16836, 16839, 16840,   nil,   nil, }, "Interface\\icons\\spell_nature_thorns", },
-			{ 2, 2,  788, 1,   1,   2,  791, { 16864,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_crystalball", },
-			{ 2, 3,  764, 2, nil, nil,  nil, { 16819, 16820,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_naturetouchgrow", },
-			{ 3, 1,  792, 5,   1,   1,  763, { 16909, 16910, 16911, 16912, 16913, }, "Interface\\icons\\spell_nature_purge", },
-			{ 3, 2,  784, 5, nil, nil,  nil, { 16850, 16923, 16924, 16925, 16926, }, "Interface\\icons\\spell_arcane_starfire", },
-			{ 4, 1,  789, 1, nil, nil,  nil, { 16880,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_naturesblessing", },
-			{ 4, 2,  783, 3, nil, nil,  nil, { 16845, 16846, 16847,   nil,   nil, }, "Interface\\icons\\spell_nature_sentinal", },
-			{ 5, 1,  790, 5,   4,   1,  789, { 16896, 16897, 16899, 16900, 16901, }, "Interface\\icons\\spell_nature_moonglow", },
-			{ 6, 1,  793, 1, nil, nil,  nil, { 24858,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_forceofnature", },
-		},
-	},
-	WARLOCK =
-	{
+	WARLOCK = {
 		[301] =
 		{
 			{ 0, 1,  944, 5, nil, nil,  nil, { 17793, 17796, 17801, 17802, 17803, }, "Interface\\icons\\spell_shadow_shadowbolt", },
@@ -519,118 +552,67 @@ NS._talentDB = {
 			{ 6, 2, 1263, 2, nil, nil,  nil, { 18774, 18775,   nil,   nil,   nil, }, "Interface\\icons\\inv_misc_gem_sapphire_01", },
 		},
 	},
-	HUNTER =
-	{
-		[361] =
+	WARRIOR = {
+		[161] =
 		{
-			{ 0, 1, 1382, 5, nil, nil,  nil, { 19552, 19553, 19554, 19555, 19556, }, "Interface\\icons\\spell_nature_ravenform", },
-			{ 0, 2, 1389, 5, nil, nil,  nil, { 19583, 19584, 19585, 19586, 19587, }, "Interface\\icons\\spell_nature_reincarnation", },
-			{ 1, 0, 1624, 2, nil, nil,  nil, { 19557, 19558,   nil,   nil,   nil, }, "Interface\\icons\\ability_eyeoftheowl", },
-			{ 1, 1, 1381, 5, nil, nil,  nil, { 19549, 19550, 19551, 24386, 24387, }, "Interface\\icons\\ability_hunter_aspectofthemonkey", },
-			{ 1, 2, 1395, 3, nil, nil,  nil, { 19609, 19610, 19612,   nil,   nil, }, "Interface\\icons\\inv_misc_pelt_bear_03", },
-			{ 1, 3, 1625, 2, nil, nil,  nil, { 24443, 19575,   nil,   nil,   nil, }, "Interface\\icons\\ability_hunter_beastsoothe", },
-			{ 2, 0, 1384, 2, nil, nil,  nil, { 19559, 19560,   nil,   nil,   nil, }, "Interface\\icons\\ability_mount_jungletiger", },
-			{ 2, 1, 1391, 1, nil, nil,  nil, { 19596,   nil,   nil,   nil,   nil, }, "Interface\\icons\\ability_druid_dash", },
-			{ 2, 2, 1396, 5, nil, nil,  nil, { 19616, 19617, 19618, 19619, 19620, }, "Interface\\icons\\ability_bullrush", },
-			{ 3, 1, 1385, 2, nil, nil,  nil, { 19572, 19573,   nil,   nil,   nil, }, "Interface\\icons\\ability_hunter_mendpet", },
-			{ 3, 2, 1393, 5, nil, nil,  nil, { 19598, 19599, 19600, 19601, 19602, }, "Interface\\icons\\inv_misc_monsterclaw_04", },
-			{ 4, 0, 1388, 2, nil, nil,  nil, { 19578, 20895,   nil,   nil,   nil, }, "Interface\\icons\\ability_druid_demoralizingroar", },
-			{ 4, 1, 1387, 1, nil, nil,  nil, { 19577,   nil,   nil,   nil,   nil, }, "Interface\\icons\\ability_devour", },
-			{ 4, 3, 1390, 2, nil, nil,  nil, { 19590, 19592,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_abolishmagic", },
-			{ 5, 2, 1397, 5,   3,   2, 1393, { 19621, 19622, 19623, 19624, 19625, }, "Interface\\icons\\inv_misc_monsterclaw_03", },
-			{ 6, 1, 1386, 1,   4,   1, 1387, { 19574,   nil,   nil,   nil,   nil, }, "Interface\\icons\\ability_druid_ferociousbite", },
+			{ 0, 0,  124, 3, nil, nil,  nil, { 12282, 12663, 12664,   nil,   nil, }, "Interface\\icons\\ability_rogue_ambush", },
+			{ 0, 1,  130, 5, nil, nil,  nil, { 16462, 16463, 16464, 16465, 16466, }, "Interface\\icons\\ability_parry", },
+			{ 0, 2,  127, 3, nil, nil,  nil, { 12286, 12658, 12659,   nil,   nil, }, "Interface\\icons\\ability_gouge", },
+			{ 1, 0,  126, 2, nil, nil,  nil, { 12285, 12697,   nil,   nil,   nil, }, "Interface\\icons\\ability_warrior_charge", },
+			{ 1, 1,  641, 5, nil, nil,  nil, { 12295, 12676, 12677, 12678, 12679, }, "Interface\\icons\\spell_nature_enchantarmor", },
+			{ 1, 3,  128, 3, nil, nil,  nil, { 12287, 12665, 12666,   nil,   nil, }, "Interface\\icons\\ability_thunderclap", },
+			{ 2, 0,  131, 2, nil, nil,  nil, { 12290, 12963,   nil,   nil,   nil, }, "Interface\\icons\\inv_sword_05", },
+			{ 2, 1,  137, 1,   1,   1,  641, { 12296,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_blessingofstamina", },
+			{ 2, 2,  121, 3,   0,   2,  127, { 12834, 12849, 12867,   nil,   nil, }, "Interface\\icons\\ability_backstab", },
+			{ 3, 1,  136, 5, nil, nil,  nil, { 12163, 12711, 12712, 12713, 12714, }, "Interface\\icons\\inv_axe_09", },
+			{ 3, 2,  662, 2,   2,   2,  121, { 16493, 16494,   nil,   nil,   nil, }, "Interface\\icons\\ability_searingarrow", },
+			{ 4, 0,  132, 5, nil, nil,  nil, { 12700, 12781, 12783, 12784, 12785, }, "Interface\\icons\\inv_axe_06", },
+			{ 4, 1,  133, 1, nil, nil,  nil, { 12292,   nil,   nil,   nil,   nil, }, "Interface\\icons\\ability_rogue_slicedice", },
+			{ 4, 2,  125, 5, nil, nil,  nil, { 12284, 12701, 12702, 12703, 12704, }, "Interface\\icons\\inv_mace_01", },
+			{ 4, 3,  123, 5, nil, nil,  nil, { 12281, 12812, 12813, 12814, 12815, }, "Interface\\icons\\inv_sword_27", },
+			{ 5, 0,  134, 5, nil, nil,  nil, { 12165, 12830, 12831, 12832, 12833, }, "Interface\\icons\\inv_weapon_halbard_01", },
+			{ 5, 2,  129, 3, nil, nil,  nil, { 12289, 12668, 23695,   nil,   nil, }, "Interface\\icons\\ability_shockwave", },
+			{ 6, 1,  135, 1,   4,   1,  133, { 12294,   nil,   nil,   nil,   nil, }, "Interface\\icons\\ability_warrior_savageblow", },
 		},
-		[362] =
+		[163] =
 		{
-			{ 0, 0, 1623, 3, nil, nil,  nil, { 24293, 24294, 24295,   nil,   nil, }, "Interface\\icons\\inv_misc_head_dragon_black", },
-			{ 0, 1, 1301, 3, nil, nil,  nil, { 19151, 19152, 19153,   nil,   nil, }, "Interface\\icons\\spell_holy_prayerofhealing", },
-			{ 0, 2, 1311, 5, nil, nil,  nil, { 19295, 19297, 19298, 19301, 19300, }, "Interface\\icons\\ability_parry", },
-			{ 1, 0, 1304, 5, nil, nil,  nil, { 19184, 19387, 19388, 19389, 19390, }, "Interface\\icons\\spell_nature_stranglevines", },
-			{ 1, 1, 1621, 2, nil, nil,  nil, { 19159, 19160,   nil,   nil,   nil, }, "Interface\\icons\\ability_racial_bloodrage", },
-			{ 1, 2, 1305, 5, nil, nil,  nil, { 19228, 19232, 19233, 19234, 19235, }, "Interface\\icons\\ability_rogue_trip", },
-			{ 2, 0, 1306, 2, nil, nil,  nil, { 19239, 19245,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_timestop", },
-			{ 2, 1, 1622, 5, nil, nil,  nil, { 19255, 19256, 19257, 19258, 19259, }, "Interface\\icons\\spell_shadow_twilight", },
-			{ 2, 2, 1308, 1, nil, nil,  nil, { 19263,   nil,   nil,   nil,   nil, }, "Interface\\icons\\ability_whirlwind", },
-			{ 3, 0, 1322, 2, nil, nil,  nil, { 19376, 19377,   nil,   nil,   nil, }, "Interface\\icons\\ability_ensnare", },
-			{ 3, 1, 1310, 3, nil, nil,  nil, { 19290, 19294, 24283,   nil,   nil, }, "Interface\\icons\\ability_kick", },
-			{ 3, 3, 1309, 2, nil, nil,  nil, { 19286, 19287,   nil,   nil,   nil, }, "Interface\\icons\\ability_rogue_feigndeath", },
-			{ 4, 1, 1321, 3, nil, nil,  nil, { 19370, 19371, 19373,   nil,   nil, }, "Interface\\icons\\spell_holy_blessingofstamina", },
-			{ 4, 2, 1312, 1,   2,   2, 1308, { 19306,   nil,   nil,   nil,   nil, }, "Interface\\icons\\ability_warrior_challange", },
-			{ 5, 2, 1303, 5, nil, nil,  nil, { 19168, 19180, 19181, 24296, 24297, }, "Interface\\icons\\spell_nature_invisibilty", },
-			{ 6, 1, 1325, 1,   4,   1, 1321, { 19386,   nil,   nil,   nil,   nil, }, "Interface\\icons\\inv_spear_02", },
+			{ 0, 1, 1601, 5, nil, nil,  nil, { 12298, 12724, 12725, 12726, 12727, }, "Interface\\icons\\inv_shield_06", },
+			{ 0, 2,  138, 5, nil, nil,  nil, { 12297, 12750, 12751, 12752, 12753, }, "Interface\\icons\\spell_nature_mirrorimage", },
+			{ 1, 0,  142, 2, nil, nil,  nil, { 12301, 12818,   nil,   nil,   nil, }, "Interface\\icons\\ability_racial_bloodrage", },
+			{ 1, 2,  140, 5, nil, nil,  nil, { 12299, 12761, 12762, 12763, 12764, }, "Interface\\icons\\spell_holy_devotion", },
+			{ 1, 3,  141, 5, nil, nil,  nil, { 12300, 12959, 12960, 12961, 12962, }, "Interface\\icons\\spell_magic_magearmor", },
+			{ 2, 0,  153, 1,   1,   0,  142, { 12975,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_ashestoashes", },
+			{ 2, 1,  145, 3,   0,   1, 1601, { 12945, 12307, 12944,   nil,   nil, }, "Interface\\icons\\ability_defend", },
+			{ 2, 2,  147, 3, nil, nil,  nil, { 12797, 12799, 12800,   nil,   nil, }, "Interface\\icons\\ability_warrior_revenge", },
+			{ 2, 3,  144, 5, nil, nil,  nil, { 12303, 12788, 12789, 12791, 12792, }, "Interface\\icons\\ability_warrior_innerrage", },
+			{ 3, 0,  146, 3, nil, nil,  nil, { 12308, 12810, 12811,   nil,   nil, }, "Interface\\icons\\ability_warrior_sunder", },
+			{ 3, 1,  151, 3, nil, nil,  nil, { 12313, 12804, 12807,   nil,   nil, }, "Interface\\icons\\ability_warrior_disarm", },
+			{ 3, 2,  143, 2, nil, nil,  nil, { 12302, 12765,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_reincarnation", },
+			{ 4, 0,  150, 2, nil, nil,  nil, { 12312, 12803,   nil,   nil,   nil, }, "Interface\\icons\\ability_warrior_shieldwall", },
+			{ 4, 1,  152, 1, nil, nil,  nil, { 12809,   nil,   nil,   nil,   nil, }, "Interface\\icons\\ability_thunderbolt", },
+			{ 4, 2,  149, 2, nil, nil,  nil, { 12311, 12958,   nil,   nil,   nil, }, "Interface\\icons\\ability_warrior_shieldbash", },
+			{ 5, 2,  702, 5, nil, nil,  nil, { 16538, 16539, 16540, 16541, 16542, }, "Interface\\icons\\inv_sword_20", },
+			{ 6, 1,  148, 1,   4,   1,  152, { 23922,   nil,   nil,   nil,   nil, }, "Interface\\icons\\inv_shield_05", },
 		},
-		[363] =
+		[164] =
 		{
-			{ 0, 1, 1341, 5, nil, nil,  nil, { 19407, 19412, 19413, 19414, 19415, }, "Interface\\icons\\spell_frost_stun", },
-			{ 0, 2, 1342, 5, nil, nil,  nil, { 19416, 19417, 19418, 19419, 19420, }, "Interface\\icons\\spell_frost_wizardmark", },
-			{ 1, 1, 1343, 5, nil, nil,  nil, { 19421, 19422, 19423, 19424, 19425, }, "Interface\\icons\\ability_hunter_snipershot", },
-			{ 1, 2, 1344, 5, nil, nil,  nil, { 19426, 19427, 19429, 19430, 19431, }, "Interface\\icons\\ability_searingarrow", },
-			{ 2, 0, 1345, 1, nil, nil,  nil, { 19434,   nil,   nil,   nil,   nil, }, "Interface\\icons\\inv_spear_07", },
-			{ 2, 1, 1346, 5, nil, nil,  nil, { 19454, 19455, 19456, 19457, 19458, }, "Interface\\icons\\ability_impalingbolt", },
-			{ 2, 3, 1352, 3, nil, nil,  nil, { 19498, 19499, 19500,   nil,   nil, }, "Interface\\icons\\ability_townwatch", },
-			{ 3, 1, 1348, 5, nil, nil,  nil, { 19464, 19465, 19466, 19467, 19468, }, "Interface\\icons\\ability_hunter_quickshot", },
-			{ 3, 2, 1349, 5,   1,   2, 1344, { 19485, 19487, 19488, 19489, 19490, }, "Interface\\icons\\ability_piercedamage", },
-			{ 4, 0, 1353, 1, nil, nil,  nil, { 19503,   nil,   nil,   nil,   nil, }, "Interface\\icons\\ability_golemstormbolt", },
-			{ 4, 1, 1347, 3, nil, nil,  nil, { 19461, 19462, 24691,   nil,   nil, }, "Interface\\icons\\ability_upgrademoonglaive", },
-			{ 4, 2, 1351, 3, nil, nil,  nil, { 19491, 19493, 19494,   nil,   nil, }, "Interface\\icons\\ability_hunter_criticalshot", },
-			{ 5, 2, 1362, 5, nil, nil,  nil, { 19507, 19508, 19509, 19510, 19511, }, "Interface\\icons\\inv_weapon_rifle_06", },
-			{ 6, 1, 1361, 1,   4,   1, 1347, { 19506,   nil,   nil,   nil,   nil, }, "Interface\\icons\\ability_trueshot", },
-		},
-	},
-	PALADIN =
-	{
-		[381] =
-		{
-			{ 0, 1, 1401, 5, nil, nil,  nil, { 20042, 20045, 20046, 20047, 20048, }, "Interface\\icons\\spell_holy_fistofjustice", },
-			{ 0, 2, 1407, 5, nil, nil,  nil, { 20101, 20102, 20103, 20104, 20105, }, "Interface\\icons\\spell_frost_windwalkon", },
-			{ 1, 0, 1631, 2, nil, nil,  nil, { 25956, 25957,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_righteousfury", },
-			{ 1, 1, 1464, 3, nil, nil,  nil, { 20335, 20336, 20337,   nil,   nil, }, "Interface\\icons\\spell_holy_holysmite", },
-			{ 1, 2, 1403, 5, nil, nil,  nil, { 20060, 20061, 20062, 20063, 20064, }, "Interface\\icons\\ability_parry", },
-			{ 2, 0, 1633, 3, nil, nil,  nil, {  9452, 26016, 26021,   nil,   nil, }, "Interface\\icons\\spell_holy_vindication", },
-			{ 2, 1, 1411, 5, nil, nil,  nil, { 20117, 20118, 20119, 20120, 20121, }, "Interface\\icons\\spell_holy_retributionaura", },
-			{ 2, 2, 1481, 1, nil, nil,  nil, { 20375,   nil,   nil,   nil,   nil, }, "Interface\\icons\\ability_warrior_innerrage", },
-			{ 2, 3, 1634, 2, nil, nil,  nil, { 26022, 26023,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_persuitofjustice", },
-			{ 3, 0, 1632, 2, nil, nil,  nil, {  9799, 25988,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_eyeforaneye", },
-			{ 3, 2, 1405, 2, nil, nil,  nil, { 20091, 20092,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_auraoflight", },
-			{ 4, 0, 1410, 3, nil, nil,  nil, { 20111, 20112, 20113,   nil,   nil, }, "Interface\\icons\\inv_hammer_04", },
-			{ 4, 2, 1409, 1, nil, nil,  nil, { 20218,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_mindvision", },
-			{ 5, 1, 1402, 5,   2,   1, 1411, { 20049, 20056, 20057, 20058, 20059, }, "Interface\\icons\\ability_racial_avatar", },
-			{ 6, 1, 1441, 1, nil, nil,  nil, { 20066,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_prayerofhealing", },
-		},
-		[382] =
-		{
-			{ 0, 1, 1450, 5, nil, nil,  nil, { 20262, 20263, 20264, 20265, 20266, }, "Interface\\icons\\ability_golemthunderclap", },
-			{ 0, 2, 1449, 5, nil, nil,  nil, { 20257, 20258, 20259, 20260, 20261, }, "Interface\\icons\\spell_nature_sleep", },
-			{ 1, 1, 1432, 5, nil, nil,  nil, { 20205, 20206, 20207, 20209, 20208, }, "Interface\\icons\\spell_arcane_blink", },
-			{ 1, 2, 1463, 5, nil, nil,  nil, { 20224, 20225, 20330, 20331, 20332, }, "Interface\\icons\\ability_thunderbolt", },
-			{ 2, 0, 1444, 3, nil, nil,  nil, { 20237, 20238, 20239,   nil,   nil, }, "Interface\\icons\\spell_holy_holybolt", },
-			{ 2, 1, 1435, 1, nil, nil,  nil, { 26573,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_innerfire", },
-			{ 2, 2, 1443, 2, nil, nil,  nil, { 20234, 20235,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_layonhands", },
-			{ 2, 3, 1628, 2, nil, nil,  nil, {  9453, 25836,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_unyieldingfaith", },
-			{ 3, 1, 1461, 5, nil, nil,  nil, { 20210, 20212, 20213, 20214, 20215, }, "Interface\\icons\\spell_holy_greaterheal", },
-			{ 3, 2, 1446, 2, nil, nil,  nil, { 20244, 20245,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_sealofwisdom", },
-			{ 4, 1, 1433, 1,   3,   1, 1461, { 20216,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_heal", },
-			{ 4, 2, 1465, 3, nil, nil,  nil, { 20359, 20360, 20361,   nil,   nil, }, "Interface\\icons\\spell_holy_healingaura", },
-			{ 5, 2, 1627, 5, nil, nil,  nil, {  5923,  5924,  5925,  5926, 25829, }, "Interface\\icons\\spell_holy_power", },
-			{ 6, 1, 1502, 1,   4,   1, 1433, { 20473,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_searinglight", },
-		},
-		[383] =
-		{
-			{ 0, 1, 1422, 5, nil, nil,  nil, { 20138, 20139, 20140, 20141, 20142, }, "Interface\\icons\\spell_holy_devotionaura", },
-			{ 0, 2, 1421, 5, nil, nil,  nil, { 20127, 20130, 20135, 20136, 20137, }, "Interface\\icons\\ability_defend", },
-			{ 1, 0, 1630, 3, nil, nil,  nil, { 20189, 20192, 20193,   nil,   nil, }, "Interface\\icons\\ability_rogue_ambush", },
-			{ 1, 1, 1425, 2, nil, nil,  nil, { 20174, 20175,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_sealofprotection", },
-			{ 1, 3, 1423, 5, nil, nil,  nil, { 20143, 20144, 20145, 20146, 20147, }, "Interface\\icons\\spell_holy_devotion", },
-			{ 2, 0, 1442, 1, nil, nil,  nil, { 20217,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_magic_magearmor", },
-			{ 2, 1, 1501, 3, nil, nil,  nil, { 20468, 20469, 20470,   nil,   nil, }, "Interface\\icons\\spell_holy_sealoffury", },
-			{ 2, 2, 1424, 3,   0,   2, 1421, { 20148, 20149, 20150,   nil,   nil, }, "Interface\\icons\\inv_shield_06", },
-			{ 2, 3, 1629, 5, nil, nil,  nil, { 20096, 20097, 20098, 20099, 20100, }, "Interface\\icons\\spell_magic_lesserinvisibilty", },
-			{ 3, 1, 1521, 3, nil, nil,  nil, { 20487, 20488, 20489,   nil,   nil, }, "Interface\\icons\\spell_holy_sealofmight", },
-			{ 3, 2, 1626, 3, nil, nil,  nil, { 20254, 20255, 20256,   nil,   nil, }, "Interface\\icons\\spell_holy_mindsooth", },
-			{ 4, 1, 1431, 1, nil, nil,  nil, { 20911,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_lightningshield", },
-			{ 4, 2, 1426, 5, nil, nil,  nil, { 20177, 20179, 20181, 20180, 20182, }, "Interface\\icons\\spell_holy_blessingofstrength", },
-			{ 5, 2, 1429, 5, nil, nil,  nil, { 20196, 20197, 20198, 20199, 20200, }, "Interface\\icons\\inv_sword_20", },
-			{ 6, 1, 1430, 1,   4,   1, 1431, { 20925,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_blessingofprotection", },
+			{ 0, 1,  158, 5, nil, nil,  nil, { 12321, 12835, 12836, 12837, 12838, }, "Interface\\icons\\spell_nature_purge", },
+			{ 0, 2,  157, 5, nil, nil,  nil, { 12320, 12852, 12853, 12855, 12856, }, "Interface\\icons\\ability_rogue_eviscerate", },
+			{ 1, 1,  161, 5, nil, nil,  nil, { 12324, 12876, 12877, 12878, 12879, }, "Interface\\icons\\ability_warrior_warcry", },
+			{ 1, 2,  159, 5, nil, nil,  nil, { 12322, 12999, 13000, 13001, 13002, }, "Interface\\icons\\spell_nature_stoneclawtotem", },
+			{ 2, 0,  166, 3, nil, nil,  nil, { 12329, 12950, 20496,   nil,   nil, }, "Interface\\icons\\ability_warrior_cleave", },
+			{ 2, 1,  160, 1, nil, nil,  nil, { 12323,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_shadow_deathscream", },
+			{ 2, 2,  661, 3, nil, nil,  nil, { 16487, 16489, 16492,   nil,   nil, }, "Interface\\icons\\spell_shadow_summonimp", },
+			{ 2, 3,  154, 5, nil, nil,  nil, { 12318, 12857, 12858, 12860, 12861, }, "Interface\\icons\\ability_warrior_battleshout", },
+			{ 3, 0, 1581, 5, nil, nil,  nil, { 23584, 23585, 23586, 23587, 23588, }, "Interface\\icons\\ability_dualwield", },
+			{ 3, 1, 1542, 2, nil, nil,  nil, { 20502, 20503,   nil,   nil,   nil, }, "Interface\\icons\\inv_sword_48", },
+			{ 3, 2,  155, 5, nil, nil,  nil, { 12317, 13045, 13046, 13047, 13048, }, "Interface\\icons\\spell_shadow_unholyfrenzy", },
+			{ 4, 0,  168, 5, nil, nil,  nil, { 12862, 12330, 20497, 20498, 20499, }, "Interface\\icons\\ability_warrior_decisivestrike", },
+			{ 4, 1,  165, 1, nil, nil,  nil, { 12328,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_shadow_deathpact", },
+			{ 4, 3, 1543, 2, nil, nil,  nil, { 20504, 20505,   nil,   nil,   nil, }, "Interface\\icons\\ability_rogue_sprint", },
+			{ 5, 0, 1541, 2, nil, nil,  nil, { 20500, 20501,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_ancestralguardian", },
+			{ 5, 2,  156, 5,   3,   2,  155, { 12319, 12971, 12972, 12973, 12974, }, "Interface\\icons\\ability_ghoulfrenzy", },
+			{ 6, 1,  167, 1,   4,   1,  165, { 23881,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_bloodlust", },
 		},
 	},
 };
@@ -1257,8 +1239,7 @@ NS._BG1 = {
 };
 
 NS._preset_talent = {
-	DRUID =
-	{
+	DRUID = {
 		H = {
 			E = {
 				"https://classic.wowhead.com/talent-calc/druid/5140000302--505203105315051",
@@ -1288,8 +1269,7 @@ NS._preset_talent = {
 			},
 		},
 	},
-	HUNTER =
-	{
+	HUNTER = {
 		D = {
 			E = {
 				"https://classic.wowhead.com/talent-calc/hunter/2-05251030513051-33202004103",
@@ -1302,8 +1282,7 @@ NS._preset_talent = {
 			},
 		}
 	},
-	MAGE =
-	{
+	MAGE = {
 		D = {
 			E = {
 				"https://classic.wowhead.com/talent-calc/mage/2300450310031531--053500030013",
@@ -1316,8 +1295,7 @@ NS._preset_talent = {
 			},
 		},
 	},
-	PALADIN =
-	{
+	PALADIN = {
 		H = {
 			E = {
 				"https://classic.wowhead.com/talent-calc/paladin/05503122521351-503201-5",
@@ -1346,8 +1324,7 @@ NS._preset_talent = {
 			},
 		},
 	},
-	PRIEST =
-	{
+	PRIEST = {
 		H = {
 			E = {
 				"https://classic.wowhead.com/talent-calc/priest/5012301305001-025051031300055",
@@ -1369,8 +1346,7 @@ NS._preset_talent = {
 			},
 		},
 	},
-	ROGUE =
-	{
+	ROGUE = {
 		D = {
 			E = {
 				"https://classic.wowhead.com/talent-calc/rogue/005323105-3210052020050150231",
@@ -1382,8 +1358,7 @@ NS._preset_talent = {
 			},
 		},
 	},
-	SHAMAN =
-	{
+	SHAMAN = {
 		H = {
 			E = {
 				"https://classic.wowhead.com/talent-calc/shaman/-5-552350510553151",
@@ -1405,8 +1380,7 @@ NS._preset_talent = {
 			},
 		},
 	},
-	WARLOCK =
-	{
+	WARLOCK = {
 		D = {
 			E = {
 				"https://classic.wowhead.com/talent-calc/warlock/25002-2050300142301-52500051020001",
@@ -1421,8 +1395,7 @@ NS._preset_talent = {
 			},
 		},
 	},
-	WARRIOR =
-	{
+	WARRIOR = {
 		D = {
 			E = {
 				"https://classic.wowhead.com/talent-calc/warrior/20305011302-05050005525010051",

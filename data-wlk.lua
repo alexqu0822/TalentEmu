@@ -21,13 +21,18 @@ local _patch_version, _build_number, _build_date, _toc_version = GetBuildInfo();
 
 ]]
 
-NS.BUILD = "BCC";
+NS.BUILD = "WLK";
 NS.MAX_NUM_TIER = 9;
 NS.MAX_NUM_COL = 4;
 NS.MAX_NUM_TALENTS = 36;
 NS.CUR_PHASE = 5;
 --
 NS._classTab = {
+	DEATHKNIGHT = {
+		398,	--Blood,鲜血
+		399,	--Frost,冰霜
+		400,	--Unholy,邪恶
+	},
 	DRUID = {
 		283,	--Balance,平衡
 		281,	--Feral,野性战斗
@@ -83,6 +88,7 @@ NS._classTab = {
 	--	 1_level, 2_id, 3_cost, 4_phase, name, passive, talent, class
 --
 NS._talentDB = {
+	DEATHKNIGHT = {},
 	DRUID = {
 		[283] = {
 			{ 0, 0,  762, 5, nil, nil,   nil, {  16814, 16815, 16816, 16817, 16818, }, "Interface\\Icons\\Spell_Nature_AbolishMagic", },
@@ -737,6 +743,7 @@ NS._talentDB = {
 };
 --	_spellDB_P = { [class] = {    {  name = "", { level, id, cost, phase, }, passive = true, talent = true, race = "", require = SpellID,  }    } }
 NS._spellDB_P = {
+	DEATHKNIGHT = {},
 	DRUID = {
 		{ name = "治疗之触", { 1, 5185, 0, }, { 8, 5186, 200, }, { 14, 5187, 900, }, { 20, 5188, 2000, }, { 26, 5189, 4500, }, { 32, 6778, 8000, }, { 38, 8903, 12000, }, { 44, 9758, 18000, }, { 50, 9888, 23000, }, { 56, 9889, 30000, }, { 60, 25297, 34000, }, { 62, 26978, 43000, }, { 69, 26979, 90000, }, },
 		{ name = "愤怒", { 1, 5176, 0, }, { 6, 5177, 100, }, { 14, 5178, 900, }, { 22, 5179, 3000, }, { 30, 5180, 6000, }, { 38, 6780, 12000, }, { 46, 8905, 20000, }, { 54, 9912, 28000, }, { 61, 26984, 39000, }, { 69, 26985, 90000, }, },
