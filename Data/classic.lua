@@ -2,32 +2,32 @@
 	by ALA @ 163UI
 --]]--
 
-if WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC then
-	return;
-end
-
-
-local ADDON, NS = ...;
-
 local _patch_version, _build_number, _build_date, _toc_version = GetBuildInfo();
 
-----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------main
---------------------------------------------------
---[[
-	tier, column, isLearnable = GetTalentPrereqs( tabIndex[1-3] , talentIndex[1,MAX_NUM_TALENTS] );
-	local name, iconTexture, tier, column, rank, maxRank, isExceptional, available = GetTalentInfo( tabIndex[1-3] , talentIndex[1,MAX_NUM_TALENTS] );
+if _toc_version >= 20000 or _toc_version < 11400 then
+	return;
+end
+-- if WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC then
+-- 	return;
+-- end
 
-]]
 
-NS.BUILD = "CLASSIC";
-NS.MAX_NUM_TIER = 7;
-NS.MAX_NUM_COL = 4;
-NS.MAX_NUM_TALENTS = 28;
-NS.CUR_PHASE = 6;
+local __addon, __private = ...;
+local MT = __private.MT;
+local CT = __private.CT;
+local VT = __private.VT;
+local DT = __private.DT;
+
+----------------------------------------------------------------------------------------------------
+
+DT.BUILD = "CLASSIC";
+DT.MAX_LEVEL = 60;
+DT.MAX_NUM_TIER = 7;
+DT.MAX_NUM_COL = 4;
+DT.MAX_NUM_TALENTS = 28;
+DT.CUR_PHASE = 6;
 --
-NS._classTab = {
+DT.ClassSpec = {
 	DRUID = {
 		283,	--Balance,平衡
 		281,	--Feral,野性战斗
@@ -76,13 +76,11 @@ NS._classTab = {
 
 };
 --
-	--	_talentDB
-	--1-----2----3---4---------5--------6-------7------8---------9--------10-----------11---------------12
-	--tier, col, id, maxPoint, reqTier, reqCol, reqId, Spell[5], texture, [icon index, req index in db, req by index in db](calculated after addon loaded)
-	--	_spellDB_P
-	--	 1_level, 2_id, 3_cost, 4_phase, name, passive, talent, class
+	--	DT.TalentDB
+	--1-----2----3---4---------5--------6-------7------8---------9--------10-----------11--------------------12
+	--tier, col, id, maxPoint, reqTier, reqCol, reqId, Spell[5], texture, [icon index, req index in TreeTDB, req by index in TreeTDB](calculated after addon loaded)
 --
-NS._talentDB = {
+DT.TalentDB = {
 	DRUID = {
 		[281] =
 		{
@@ -616,8 +614,13 @@ NS._talentDB = {
 		},
 	},
 };
---	_spellDB_P = { [class] = {    {  name = "", { level, id, cost, phase, }, passive = true, talent = true, race = "", require = SpellID,  }    } }
-NS._spellDB_P = {
+--
+	--	DT.SpellDB_P
+	--1------2---3-----4------5-----6--------7-------8
+	--level, id, cost, phase, name, passive, talent, class
+	--	passive = true, talent = true, race = "", require = SpellID,
+--
+DT.SpellDB = {
 	DRUID = {
 		{ name = "愤怒", { 1, 5176, 0, }, { 6, 5177, 100, }, { 14, 5178, 900, }, { 22, 5179, 3000, }, { 30, 5180, 6000, }, { 38, 6780, 12000, }, { 46, 8905, 20000, }, { 54, 9912, 28000, }, },
 		{ name = "野性印记", { 1, 1126, 10, }, { 10, 5232, 300, }, { 20, 6756, 2000, }, { 30, 5234, 6000, }, { 40, 8907, 14000, }, { 50, 9884, 23000, }, { 60, 9885, 34000, }, },
@@ -1108,11 +1111,8 @@ NS._spellDB_P = {
 		{ name = "盾牌猛击", { -1, 23922, 0, }, { 48, 23923, 200, }, { 54, 23924, 2800, }, { 60, 23925, 3100, }, talent = true, },
 	},
 };
---[==[
-NS._talentSpellData = {  };
 
---]==]
-NS._talentTabIcon = {
+DT.TalentSpecIcon = {
 	[41] = "Interface\\Icons\\spell_fire_firebolt02",
 	[61] = "Interface\\Icons\\spell_frost_frostbolt02",
 	[81] = "Interface\\Icons\\inv_misc_rune_03",
@@ -1149,7 +1149,7 @@ NS._talentTabIcon = {
 	[411] = "Interface\\Icons\\Ability_Hunter_CombatExperience",
 };
 
-NS._BG0 = {
+DT.ClassBG = {
 	DEATHKNIGHT = {
 		"Interface\\TalentFrame\\bg-deathknight-blood",
 		"Interface\\TalentFrame\\bg-deathknight-frost",
@@ -1208,7 +1208,7 @@ NS._BG0 = {
 	},
 };
 
-NS._BG1 = {
+DT.SpecBG = {
 		[283] = "Interface\\TalentFrame\\DruidBalance-TopLeft",
 		[281] = "Interface\\TalentFrame\\DruidFeralCombat-TopLeft",
 		[282] = "Interface\\TalentFrame\\DruidRestoration-TopLeft",
@@ -1238,7 +1238,7 @@ NS._BG1 = {
 		[163] = "Interface\\TalentFrame\\WarriorProtection-TopLeft",
 };
 
-NS._preset_talent = {
+DT.PresetTalents = {
 	DRUID = {
 		H = {
 			E = {
@@ -1415,4 +1415,3 @@ NS._preset_talent = {
 		},
 	},
 };
-

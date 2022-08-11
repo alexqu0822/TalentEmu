@@ -21,6 +21,11 @@ local __ala_meta__ = _G.__ala_meta__;
 	local ScrollList = _G.alaScrollList;
 	if ScrollList ~= nil and ScrollList.__minor ~= nil and ScrollList.__minor >= __version then
 		return;
+	elseif ScrollList == nil or ScrollList.Halt == nil then
+		ScrollList = {  };
+		_G.alaScrollList = ScrollList;
+	else
+		ScrollList:Halt();
 	end
 	ScrollList = ScrollList or {  };
 	ScrollList.__minor = __version;
@@ -289,6 +294,5 @@ local __ala_meta__ = _G.__ala_meta__;
 
 -->
 
-_G.alaScrollList = ScrollList;
 _G["ALASCR"] = ScrollList.CreateScrollFrame;
 
