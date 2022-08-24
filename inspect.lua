@@ -48,7 +48,7 @@ MT.BuildEnv('INSPECT');
 				local name = info[2];
 				local class = info[3];
 				local level = info[4];
-				local code, numGroup, activeGroup, data1, data2 = VT.__emulib.EncodeInspectV2(class, level);
+				local code, numGroup, activeGroup, data1, data2 = VT.__emulib.EncodeInspectTalentDataV2(class, level);
 				if code ~= nil then
 					local cache = VT.TQueryCache[name];
 					if cache == nil then

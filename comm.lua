@@ -47,7 +47,7 @@ MT.BuildEnv('COMM');
 			end
 			VT.QuerySent[name] = popup and Tick or VT.QuerySent[name] or nil;
 			VT.AutoShowEquipmentFrameOnComm[name] = popup and update_equipment ~= false and Tick or VT.AutoShowEquipmentFrameOnComm[name];
-			local ready = VT.PrevQueryRequestSentTime[name] == nil or (Tick - VT.PrevQueryRequestSentTime[name] > 1);
+			local ready = VT.PrevQueryRequestSentTime[name] == nil or (Tick - VT.PrevQueryRequestSentTime[name] > 0.1);
 			local cache = VT.TQueryCache[name];
 			local update_tal = update_talent ~= false and
 								ready and
@@ -59,6 +59,19 @@ MT.BuildEnv('COMM');
 										(
 											force_update or
 											(Tick - (cache.time_tal or -CT.DATA_VALIDITY) > CT.DATA_VALIDITY)
+										)
+									)
+								);
+			local update_gly = update_talent ~= false and
+								ready and
+								(
+									cache == nil or
+									cache.time_gly == nil or
+									(
+										(Tick - (cache.time_gly or -CT.DATA_VALIDITY) > CT.THROTTLE_GLYPH_QUERY) and
+										(
+											force_update or
+											(Tick - (cache.time_gly or -CT.DATA_VALIDITY) > CT.DATA_VALIDITY)
 										)
 									)
 								);
@@ -75,7 +88,7 @@ MT.BuildEnv('COMM');
 										)
 									)
 								);
-			if update_tal or update_inv then
+			if update_tal or update_gly or update_inv then
 				--[[
 				MT.Error(
 					"MT.SendQueryRequest",
@@ -85,14 +98,19 @@ MT.BuildEnv('COMM');
 					update_talent == false and "0" or "1",
 					update_equipment == false and "0" or "1",
 					update_tal == false and "0" or "1",
+					update_gly == false and "0" or "1",
 					update_inv == false and "0" or "1"
 				);
 				--]]
 				VT.PrevQueryRequestSentTime[name] = Tick;
-				VT.__emulib.SendQueryRequest(shortname, realm, update_tal, update_inv, false);
+				VT.__emulib.SendQueryRequest(shortname, realm, update_tal, update_gly, update_inv);
 				if not update_tal then
 					MT._TriggerCallback("CALLBACK_DATA_RECV", name);
 					MT._TriggerCallback("CALLBACK_TALENT_DATA_RECV", name, false);
+				end
+				if not update_gly then
+					MT._TriggerCallback("CALLBACK_DATA_RECV", name);
+					MT._TriggerCallback("CALLBACK_GLYPH_DATA_RECV", name, false, popup and update_talent ~= false);
 				end
 				if not update_inv then
 					MT._TriggerCallback("CALLBACK_DATA_RECV", name);
@@ -101,6 +119,7 @@ MT.BuildEnv('COMM');
 			else
 				MT._TriggerCallback("CALLBACK_DATA_RECV", name);
 				MT._TriggerCallback("CALLBACK_TALENT_DATA_RECV", name, false);
+				MT._TriggerCallback("CALLBACK_GLYPH_DATA_RECV", name, false);
 				MT._TriggerCallback("CALLBACK_INVENTORY_DATA_RECV", name, false);
 			end
 		end
@@ -149,11 +168,56 @@ MT.BuildEnv('COMM');
 					if cache.time_inv ~= nil and Tick - cache.time_inv < CT.DATA_VALIDITY then
 						MT._TriggerCallback("CALLBACK_INVENTORY_DATA_RECV", name, true);
 					end
+					if cache.time_gly ~= nil and Tick - cache.time_gly < CT.DATA_VALIDITY then
+						MT._TriggerCallback("CALLBACK_GLYPH_DATA_RECV", name, true);
+					end
 				end
 			end
 		end,
-		OnGlyhp = function(name, code, version, Decoder, overheard)
+		OnGlyph = function(name, code, version, Decoder, overheard)
+			local data1, data2 = Decoder(code);
+			if data1 == nil and data2 == nil then
+				-- MT.Error("No GlyphSet 1");
+				-- MT.Error("No GlyphSet 2");
+				return;
+			end
+			local Tick = MT.GetUnifiedTime();
+			local cache = VT.TQueryCache[name];
+			if cache == nil then
+				cache = {  };
+				VT.TQueryCache[name] = cache;
+			end
+			cache.time_gly = Tick;
+			cache.glyph = { data1, data2, };
+			--[=[
+			if data1 ~= nil then
+				for index = 1, 6 do
+					local val = data1[index];
+					if val ~= nil then
+						MT.Error("GlyphSet 1: ", val[1], val[2], val[3], GetSpellLink(val[3]), val[4]);
+					else
+						MT.Error("GlyphSet 1: Empty");
+					end
+				end
+			else
+				MT.Error("No GlyphSet 1");
+			end
+			if data2 ~= nil then
+				for index = 1, 6 do
+					local val = data2[index];
+					if val ~= nil then
+						MT.Error("GlyphSet 1: ", val[1], val[2], val[3], val[4], GetSpellInfo(val[3]));
+					else
+						MT.Error("GlyphSet 1: Empty");
+					end
+				end
+			else
+				MT.Error("No GlyphSet 2");
+			end
+			--]=]
 			if not overheard then
+				MT._TriggerCallback("CALLBACK_DATA_RECV", name);
+				MT._TriggerCallback("CALLBACK_GLYPH_DATA_RECV", name, true);
 			end
 		end,
 		OnEquipment = function(name, code, version, Decoder, overheard)
@@ -352,6 +416,7 @@ MT.BuildEnv('COMM');
 		Driver:RegisterEvent("CHAT_MSG_ADDON_LOGGED");
 		Driver:SetScript("OnEvent", OnEvent);
 		MT._RegisterCallback("CALLBACK_TALENT_DATA_RECV", MT.CALLBACK.OnTalentDataRecv);
+		MT._RegisterCallback("CALLBACK_INVENTORY_DATA_RECV", MT.CALLBACK.OnGlyphDataRecv);
 		MT._RegisterCallback("CALLBACK_INVENTORY_DATA_RECV", MT.CALLBACK.OnInventoryDataRecv);
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_SYSTEM", ChatFilter_CHAT_MSG_SYSTEM);
 		-- hooksecurefunc("SendChatMessage", function(_msg, _type, _lang, _target)

@@ -145,7 +145,7 @@ local uireimp = __ala_meta__.uireimp;
 		uireimp._SetSimpleBackdrop(Menu, -1, 1, MenuBackdropColor[1], MenuBackdropColor[2], MenuBackdropColor[3], MenuBackdropColor[4], MenuBorderColor[1], MenuBorderColor[2], MenuBorderColor[3], MenuBorderColor[4]);
 	end
 	local function CreateMenu()
-		Menu = CreateFrame("BUTTON", nil, UIParent);
+		Menu = CreateFrame('BUTTON', nil, UIParent);
 		Menu:SetFrameStrata("FULLSCREEN_DIALOG");
 		Menu:SetClampedToScreen(true);
 		Menu:Hide();
@@ -221,7 +221,7 @@ local uireimp = __ala_meta__.uireimp;
 
 	end
 	local function CreateMenuButton(Menu, x, y)
-		local Button = CreateFrame("BUTTON", nil, Menu);
+		local Button = CreateFrame('BUTTON', nil, Menu);
 		Button:SetPoint("TOP", Menu, "TOP", x, y);
 
 		Button.HT = Button:CreateTexture(nil, "HIGHLIGHT");

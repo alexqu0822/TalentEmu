@@ -99,7 +99,7 @@ MT.BuildEnv('MISC');
 						end
 					end
 
-					local button = CreateFrame("BUTTON", nil, _TalentFrame, "UIPanelButtonTemplate");
+					local button = CreateFrame('BUTTON', nil, _TalentFrame, "UIPanelButtonTemplate");
 					button:SetSize(80, 20);
 					button:SetPoint("RIGHT", _G.TalentFrameCloseButton, "LEFT", -2, 0);
 					button:SetText(L.TalentFrameCallButtonString);
@@ -119,7 +119,7 @@ MT.BuildEnv('MISC');
 						end
 					end
 
-					local button = CreateFrame("BUTTON", nil, _TalentFrame, "UIPanelButtonTemplate");
+					local button = CreateFrame('BUTTON', nil, _TalentFrame, "UIPanelButtonTemplate");
 					button:SetSize(80, 20);
 					button:SetPoint("RIGHT", _G.PlayerTalentFrameCloseButton, "LEFT", -2, 0);
 					button:SetText(L.TalentFrameCallButtonString);
@@ -136,7 +136,7 @@ MT.BuildEnv('MISC');
 		if IsAddOnLoaded("Blizzard_TalentUI") then
 			HookTalentFrame(nil, nil, "Blizzard_TalentUI");
 		else
-			local Agent = CreateFrame("FRAME");
+			local Agent = CreateFrame('FRAME');
 			Agent:RegisterEvent("ADDON_LOADED");
 			Agent:SetScript("OnEvent", HookTalentFrame);
 			Agent = nil;
@@ -183,7 +183,7 @@ MT.BuildEnv('MISC');
 			MT.SetConfig("inspect_pack", true);
 		end
 		--
-		VT.VAR[CT.SELFGUID] = VT.__emulib.EncodePlayerV2();
+		VT.VAR[CT.SELFGUID] = VT.__emulib.EncodePlayerTalentDataV2();
 		local Driver = CreateFrame('FRAME', nil, UIParent);
 		Driver:RegisterEvent("CONFIRM_TALENT_WIPE");
 		--	Fires when the user selects the "Yes, I do." confirmation prompt after speaking to a class trainer and choosing to unlearn their talents.
@@ -199,7 +199,7 @@ MT.BuildEnv('MISC');
 		--	Fires when spells in the spellbook change in any way. Can be trivial (e.g.: icon changes only), or substantial (e.g.: learning or unlearning spells/skills).
 		--	Payload	none
 		Driver:SetScript("OnEvent", function(Driver, event)
-			VT.VAR[CT.SELFGUID] = VT.__emulib.EncodePlayerV2();
+			VT.VAR[CT.SELFGUID] = VT.__emulib.EncodePlayerTalentDataV2();
 			for index = 1, VT.SaveButtonMenuAltDefinition.num do
 				if VT.SaveButtonMenuAltDefinition[index].param[1] == CT.SELFGUID then
 					VT.SaveButtonMenuAltDefinition[index].param[2] = VT.VAR[CT.SELFGUID];
@@ -240,7 +240,7 @@ MT.BuildEnv('MISC');
 			if not unitFrameName or unitFrameName == "" then
 				unitFrameName = "UNK" .. temp_unkFrame_id;
 			end
-			local unitFrameButton = CreateFrame("BUTTON", nil, UIParent);
+			local unitFrameButton = CreateFrame('BUTTON', nil, UIParent);
 			unitFrameButton:SetSize(60, 60);
 			unitFrameButton:Show();
 			unitFrameButton:SetAlpha(0.0);

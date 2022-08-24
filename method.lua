@@ -211,7 +211,7 @@ MT.BuildEnv('METHOD');
 						type(TreeFrames[3]) == 'table' and type(TreeFrames[3].TalentSet) == 'table'
 				then
 				--
-				return VT.__emulib.EncodeFrameDataV2(CT.ClassToIndex[Frame.class], Frame.level,
+				return VT.__emulib.EncodeFrameTalentDataV2(CT.ClassToIndex[Frame.class], Frame.level,
 							TreeFrames[1].TalentSet, TreeFrames[2].TalentSet, TreeFrames[3].TalentSet,
 							#TreeFrames[1].TreeTDB, #TreeFrames[2].TreeTDB, #TreeFrames[3].TreeTDB
 						);
@@ -243,13 +243,13 @@ MT.BuildEnv('METHOD');
 			if TypeData == 'string' then
 				local ClassTDB = DT.TalentDB[class];
 				local SpecList = DT.ClassSpec[class];
-				return VT.__emulib.EncodeFrameDataV2(classIndex, (level ~= nil and tonumber(level)) or DT.MAX_LEVEL,
+				return VT.__emulib.EncodeFrameTalentDataV2(classIndex, (level ~= nil and tonumber(level)) or DT.MAX_LEVEL,
 							data,
 							#ClassTDB[SpecList[1]], #ClassTDB[SpecList[2]], #ClassTDB[SpecList[3]]);
 			elseif TypeData == 'table' and type(data[1]) == 'table' and type(data[2]) == 'table' and type(data[3]) == 'table' then
 				local ClassTDB = DT.TalentDB[class];
 				local SpecList = DT.ClassSpec[class];
-				return VT.__emulib.EncodeFrameDataV2(classIndex, (level ~= nil and tonumber(level)) or DT.MAX_LEVEL,
+				return VT.__emulib.EncodeFrameTalentDataV2(classIndex, (level ~= nil and tonumber(level)) or DT.MAX_LEVEL,
 							data[1], data[2], data[3],
 							#ClassTDB[SpecList[1]], #ClassTDB[SpecList[2]], #ClassTDB[SpecList[3]]);
 			else
@@ -745,6 +745,7 @@ MT.BuildEnv('METHOD');
 		if cache ~= nil then
 			local Tick = MT.GetUnifiedTime();
 			if VT.QuerySent[name] ~= nil and Tick - VT.QuerySent[name] <= CT.INSPECT_WAIT_TIME then
+				MT.Error("MT.CALLBACK.OnTalentDataRecv", cache.data.num);
 				local readOnly = false;
 				if name ~= CT.SELFNAME then
 					readOnly = true;
@@ -768,12 +769,13 @@ MT.BuildEnv('METHOD');
 			VT.QuerySent[name] = nil;
 		end
 	end
-	function MT.CALLBACK.OnInventoryDataRecv(name, iscomm, ascomm)
-		if VT.SET.show_equipment then
+	function MT.CALLBACK.OnGlyphDataRecv(name, iscomm, ascomm)
+		local cache = VT.TQueryCache[name];
+		if cache ~= nil and VT.SET.show_equipment then
 			local Frames = MT.UI.FrameGetNameBinding(name);
 			if Frames ~= nil and Frames[1] ~= nil then
 				local popup = (iscomm or ascomm) and VT.SET.autoShowEquipmentFrame;
-				MT.Error("EquipFrame", "CALLBACK", popup, iscomm, ascomm, VT.SET.autoShowEquipmentFrame);
+				MT.Error("EquipFrame", "CALLBACK-G", popup, iscomm, ascomm, VT.SET.autoShowEquipmentFrame);
 				if popup then
 					local T = VT.AutoShowEquipmentFrameOnComm[name];
 					if T ~= nil and MT.GetUnifiedTime() - T < 10 then
@@ -786,7 +788,32 @@ MT.BuildEnv('METHOD');
 				for i = 1, #Frames do
 					Frames[i].objects.EquipmentFrameButton:Show();
 					if Frames[i].EquipmentFrameContainer:IsShown() then
-						MT.UI.EquipmentFrameUpdate(Frames[i].EquipmentContainer, VT.TQueryCache[name]);
+						MT.UI.GlyphFrameUpdate(Frames[i].GlyphContainer, cache);
+					end
+				end
+			end
+		end
+	end
+	function MT.CALLBACK.OnInventoryDataRecv(name, iscomm, ascomm)
+		local cache = VT.TQueryCache[name];
+		if cache ~= nil and VT.SET.show_equipment then
+			local Frames = MT.UI.FrameGetNameBinding(name);
+			if Frames ~= nil and Frames[1] ~= nil then
+				local popup = (iscomm or ascomm) and VT.SET.autoShowEquipmentFrame;
+				MT.Error("EquipFrame", "CALLBACK-E", popup, iscomm, ascomm, VT.SET.autoShowEquipmentFrame);
+				if popup then
+					local T = VT.AutoShowEquipmentFrameOnComm[name];
+					if T ~= nil and MT.GetUnifiedTime() - T < 10 then
+						for i = 1, #Frames do
+							Frames[i].EquipmentFrameContainer:Show();
+						end
+					end
+					VT.AutoShowEquipmentFrameOnComm[name] = nil;
+				end
+				for i = 1, #Frames do
+					Frames[i].objects.EquipmentFrameButton:Show();
+					if Frames[i].EquipmentFrameContainer:IsShown() then
+						MT.UI.EquipmentFrameUpdate(Frames[i].EquipmentContainer, cache);
 					end
 				end
 			end

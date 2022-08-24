@@ -103,6 +103,7 @@ __ala_meta__.emu = __private;
 	CT.TEXTUREPATH =  CT.MEDIAPATH .. [[Textures\]];
 	CT.NUM_POINTS_NEXT_TIER = 5;
 	CT.THROTTLE_TALENT_QUERY = VT.__emulib.CT.TALENT_REPLY_THROTTLED_INTERVAL + 0.5;
+	CT.THROTTLE_GLYPH_QUERY = VT.__emulib.CT.GLYPH_REPLY_THROTTLED_INTERVAL + 0.5;
 	CT.THROTTLE_EQUIPMENT_QUERY = VT.__emulib.CT.EQUIPMENT_REPLY_THROTTLED_INTERVAL + 0.5;
 	CT.DATA_VALIDITY = 30;
 	CT.IndexToClass = VT.__emulib.__classList;
@@ -292,7 +293,7 @@ MT.BuildEnv('INIT');
 	VT.__is_loggedin = IsLoggedIn();
 	-- MT.InspectButtonKeyFunc = _G.IsAltKeyDown;
 
-	if CT.BNTAG == "\97\108\101\120\35\53\49\54\55\50\50" or CT.BNTAG == "Sanjeev#1289" then
+	if CT.BNTAG == "\97\108\101\120\35\53\49\54\55\50\50" or CT.BNTAG == "ALEX#125620" or CT.BNTAG == "Sanjeev#1289" then
 		MT.Error = MT.ErrorDev;
 	else
 		MT.Error = MT.ErrorRelease;

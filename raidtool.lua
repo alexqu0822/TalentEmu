@@ -1476,7 +1476,7 @@ MT.BuildEnv('RAIDTOOL');
 	local function RaidNode_OnClick(Node)
 	end
 	local function CreateRaidNode(Parent, index, buttonHeight)
-		local Node = CreateFrame("BUTTON", nil, Parent);
+		local Node = CreateFrame('BUTTON', nil, Parent);
 		Node:SetHeight(buttonHeight);
 		VT.__uireimp._SetSimpleBackdrop(Node, 0, 1, 0.0, 0.0, 0.0, 0.75, 0.0, 0.0, 0.0, 1.0);
 		Node:SetHighlightTexture([[Interface\FriendsFrame\UI-FriendsFrame-HighlightBar]]);
@@ -1743,7 +1743,7 @@ MT.BuildEnv('RAIDTOOL');
 	end
 	local function CreateRaidToolUI()
 		--	Frame
-			local Frame = CreateFrame("FRAME", "ALA_RAID_TOOL_UI", UIParent);
+			local Frame = CreateFrame('FRAME', "ALA_RAID_TOOL_UI", UIParent);
 			UISpecialFrames[#UISpecialFrames + 1] = "ALA_RAID_TOOL_UI";
 			VT.__uireimp._SetSimpleBackdrop(Frame, 0, 1, 0.0, 0.0, 0.0, 0.75, 0.0, 0.0, 0.0, 1.0);
 			Frame:SetSize(TUISTYLE.RaidToolUIFrameXSize, TUISTYLE.RaidToolUIFrameYSize);
@@ -1779,7 +1779,7 @@ MT.BuildEnv('RAIDTOOL');
 			ScrollList:SetPoint("TOPRIGHT", -4, -24);
 			Frame.ScrollList = ScrollList;
 
-			local Close = CreateFrame("BUTTON", nil, Frame);
+			local Close = CreateFrame('BUTTON', nil, Frame);
 			Close:SetSize(16, 16);
 			Close:SetNormalTexture("interface\\buttons\\ui-stopbutton");
 			Close:SetPushedTexture("interface\\buttons\\ui-stopbutton");
@@ -1792,7 +1792,7 @@ MT.BuildEnv('RAIDTOOL');
 			end);
 			Frame.Close = Close;
 
-			local Refresh = CreateFrame("BUTTON", nil, Frame);
+			local Refresh = CreateFrame('BUTTON', nil, Frame);
 			Refresh:SetSize(16, 16);
 			Refresh:SetNormalTexture("interface\\buttons\\ui-refreshbutton");
 			Refresh:SetPushedTexture("interface\\buttons\\ui-refreshbutton");
@@ -1829,7 +1829,7 @@ MT.BuildEnv('RAIDTOOL');
 				Frame.LableBossMod = RaidToolLableBossMod;
 			--
 
-			local GuildList = CreateFrame("CHECKBUTTON", nil, Frame, "OptionsBaseCheckButtonTemplate");
+			local GuildList = CreateFrame('CHECKBUTTON', nil, Frame, "OptionsBaseCheckButtonTemplate");
 			GuildList:SetSize(16, 16);
 			GuildList:SetHitRectInsets(0, 0, 0, 0);
 			GuildList:ClearAllPoints();

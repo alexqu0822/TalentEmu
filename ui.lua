@@ -16,6 +16,7 @@ local DT = __private.DT;
 	local strsplit, strsub, strupper, strmatch, format, gsub = string.split, string.sub, string.upper, string.match, string.format, string.gsub;
 	local tostring, tonumber = tostring, tonumber;
 	local min, max, floor, random = math.min, math.max, math.floor, math.random;
+	local sin360, cos360 = sin, cos;
 	local UnitLevel = UnitLevel;
 	local GetItemInfo = GetItemInfo;
 	local GetSpellInfo = GetSpellInfo;
@@ -95,6 +96,10 @@ local DT = __private.DT;
 		EquipmentNodeXToBorder = 8;
 		EquipmentNodeYToBorder = 16;
 		EquipmentNodeTextGap = 4;
+
+		GlyphFrameSize = 200,
+		MajorGlyphNodeSize = 64,
+		MinorGlyphNodeSize = 48,
 
 		ControlButtonSize = 18,
 		SideButtonSize = 28,
@@ -1551,6 +1556,30 @@ MT.BuildEnv('UI');
 				EquipmentFrameContainer:Show();
 			end
 		end
+		function MT.UI.GlyphFrameUpdate(GlyphContainer, cache)
+			local glyph = cache.glyph;
+			local activeGroup = GlyphContainer.Frame.activeGroup;
+			local GlyphNodes = GlyphContainer.GlyphNodes;
+			if glyph ~= nil and glyph[activeGroup] ~= nil then
+				local data = glyph[activeGroup];
+				for index = 1, 6 do
+					local info = data[index];
+					if info ~= nil then
+						GlyphNodes[index].id = info[2];
+						GlyphNodes[index].Glyph:Show();
+						GlyphNodes[index].Glyph:SetTexture(info[3]);
+					else
+						GlyphNodes[index].id = nil;
+						GlyphNodes[index].Glyph:Hide();
+					end
+				end
+			else
+				for index = 1, 6 do
+					GlyphNodes[index].id = nil;
+					GlyphNodes[index].Glyph:Hide();
+				end
+			end
+		end
 		function MT.UI.TreeFrameUpdateSize(Frame, width, height)
 			local TreeFrames = Frame.TreeFrames;
 			local style = Frame.style;
@@ -1598,7 +1627,7 @@ MT.BuildEnv('UI');
 		end
 	--	TooltipFrame
 		function MT.UI.CreateTooltipFrame()
-			local TooltipFrame = CreateFrame("FRAME", nil, UIParent);
+			local TooltipFrame = CreateFrame('FRAME', nil, UIParent);
 			TooltipFrame:SetSize(1, 1);
 			TooltipFrame:SetFrameStrata("FULLSCREEN");
 			TooltipFrame:SetClampedToScreen(true);
@@ -1612,7 +1641,7 @@ MT.BuildEnv('UI');
 			local Tooltip1LabelRight = TooltipFrame:CreateFontString(nil, "ARTWORK", "GameTooltipHeaderText");
 			Tooltip1LabelRight:SetPoint("TOPRIGHT", -6, -6);
 			local Tooltip1Name = "Emu_Tooltip1" .. (MT.GetUnifiedTime() + 1) .. random(1000000, 10000000);
-			local Tooltip1 = CreateFrame("GAMETOOLTIP", Tooltip1Name, UIParent, "GameTooltipTemplate");
+			local Tooltip1 = CreateFrame('GAMETOOLTIP', Tooltip1Name, UIParent, "GameTooltipTemplate");
 			Tooltip1:SetPoint("TOPLEFT", Tooltip1LabelLeft, "BOTTOMLEFT", 0, 6);
 			if Tooltip1.NineSlice ~= nil then
 				Tooltip1.NineSlice:SetAlpha(0.0);
@@ -1636,7 +1665,7 @@ MT.BuildEnv('UI');
 			local Tooltip2LabelLeft = TooltipFrame:CreateFontString(nil, "ARTWORK", "GameTooltipHeaderText");
 			Tooltip2LabelLeft:SetPoint("TOPLEFT", Tooltip1FooterLeft, "BOTTOMLEFT", -12, -4);
 			local Tooltip2Name = "Emu_Tooltip2" .. (MT.GetUnifiedTime() + 100) .. random(1000000, 10000000);
-			local Tooltip2 = CreateFrame("GAMETOOLTIP", Tooltip2Name, UIParent, "GameTooltipTemplate");
+			local Tooltip2 = CreateFrame('GAMETOOLTIP', Tooltip2Name, UIParent, "GameTooltipTemplate");
 			Tooltip2:SetPoint("TOPLEFT", Tooltip2LabelLeft, "BOTTOMLEFT", 0, 6);
 			if Tooltip2.NineSlice ~= nil then
 				Tooltip2.NineSlice:SetAlpha(0.0);
@@ -1767,7 +1796,7 @@ MT.BuildEnv('UI');
 			end
 		end
 		local function CreateSpellListNode(Parent, index, buttonHeight)
-			local Node = CreateFrame("BUTTON", nil, Parent);
+			local Node = CreateFrame('BUTTON', nil, Parent);
 			Node:SetHeight(buttonHeight);
 			VT.__uireimp._SetSimpleBackdrop(Node, 0, 1, 0.0, 0.0, 0.0, 0.75, 0.0, 0.0, 0.0, 1.0);
 			Node:SetHighlightTexture("Interface\\FriendsFrame\\UI-FriendsFrame-HighlightBar");
@@ -1813,13 +1842,13 @@ MT.BuildEnv('UI');
 			end
 		end
 		function MT.UI.CreateSpellListFrame(Frame)
-			local SpellListFrameContainer = CreateFrame("FRAME", nil, Frame);
+			local SpellListFrameContainer = CreateFrame('FRAME', nil, Frame);
 			SpellListFrameContainer:SetPoint("TOPLEFT", Frame, "TOPRIGHT", 0, 0);
 			SpellListFrameContainer:SetPoint("BOTTOMLEFT", Frame, "BOTTOMRIGHT", 0, 0);
 			SpellListFrameContainer:SetWidth(TUISTYLE.SpellListFrameXSize);
 			VT.__uireimp._SetSimpleBackdrop(SpellListFrameContainer, 0, 1, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 1.0);
 			SpellListFrameContainer:Hide();
-			local SpellListFrame = CreateFrame("FRAME", nil, SpellListFrameContainer);	--	Frame:GetName() .. "SpellListFrame"
+			local SpellListFrame = CreateFrame('FRAME', nil, SpellListFrameContainer);	--	Frame:GetName() .. "SpellListFrame"
 			SpellListFrame:SetPoint("CENTER", SpellListFrameContainer);
 			SpellListFrame:SetWidth(TUISTYLE.SpellListFrameXSize);
 			SpellListFrame:Show();
@@ -1829,7 +1858,7 @@ MT.BuildEnv('UI');
 			ScrollList:SetPoint("TOPRIGHT", -TUISTYLE.SpellListFrameXToBorder, -TUISTYLE.SpellListFrameYToBottom);
 			SpellListFrame.ScrollList = ScrollList;
 
-			local SearchEdit = CreateFrame("EDITBOX", nil, SpellListFrame);
+			local SearchEdit = CreateFrame('EDITBOX', nil, SpellListFrame);
 			SearchEdit:SetSize(TUISTYLE.SpellListFrameXSize - 2 * TUISTYLE.SpellListFrameXToBorder - 36, 16);
 			SearchEdit:SetFont(GameFontHighlight:GetFont(), 10, "OUTLINE");
 			SearchEdit:SetAutoFocus(false);
@@ -1853,7 +1882,7 @@ MT.BuildEnv('UI');
 			SearchEditNote:SetText(L.Search);
 			SearchEditNote:Show();
 			SearchEdit.Note = SearchEditNote;
-			local SearchEditCancel = CreateFrame("BUTTON", nil, SearchEdit);
+			local SearchEditCancel = CreateFrame('BUTTON', nil, SearchEdit);
 			SearchEditCancel:SetSize(16, 16);
 			SearchEditCancel:SetPoint("RIGHT", SearchEdit);
 			SearchEditCancel:SetScript("OnClick", function(SearchEditCancel)
@@ -1863,7 +1892,7 @@ MT.BuildEnv('UI');
 			SearchEditCancel:Hide();
 			SearchEditCancel:SetNormalTexture("interface\\petbattles\\deadpeticon");
 			SearchEdit.Cancel = SearchEditCancel;
-			local SearchEditOK = CreateFrame("BUTTON", nil, SpellListFrame);
+			local SearchEditOK = CreateFrame('BUTTON', nil, SpellListFrame);
 			SearchEditOK:SetSize(32, 16);
 			SearchEditOK:SetPoint("LEFT", SearchEdit, "RIGHT", 4, 0);
 			SearchEditOK:SetScript("OnClick", function(SearchEditOK)
@@ -1921,7 +1950,7 @@ MT.BuildEnv('UI');
 			SpellListFrame.SearchEdit = SearchEdit;
 			SpellListFrame.SearchEditOK = SearchEditOK;
 
-			local ShowAllSpell = CreateFrame("CHECKBUTTON", nil, SpellListFrame, "OptionsBaseCheckButtonTemplate");
+			local ShowAllSpell = CreateFrame('CHECKBUTTON', nil, SpellListFrame, "OptionsBaseCheckButtonTemplate");
 			ShowAllSpell:SetSize(16, 16);
 			ShowAllSpell:SetHitRectInsets(0, 0, 0, 0);
 			ShowAllSpell:ClearAllPoints();
@@ -1939,7 +1968,7 @@ MT.BuildEnv('UI');
 			ShowAllSpell.Name = ShowAllSpellLabel;
 			ShowAllSpellLabel:SetPoint("RIGHT", ShowAllSpell, "LEFT", 0, 0);
 
-			local Close = CreateFrame("BUTTON", nil, SpellListFrame);
+			local Close = CreateFrame('BUTTON', nil, SpellListFrame);
 			Close:SetSize(32, 16);
 			Close:SetPoint("BOTTOMLEFT", 4, 6);
 			Close:SetScript("OnClick", function(Close)
@@ -1993,27 +2022,36 @@ MT.BuildEnv('UI');
 		local function EquipmentFrame_OnShow(EquipmentFrame)
 			local Frame = EquipmentFrame.Frame;
 			if Frame.name ~= nil then
-				MT.UI.EquipmentFrameUpdate(EquipmentFrame.EquipmentContainer, VT.TQueryCache[Frame.name]);
+				MT.UI.EquipmentFrameUpdate(Frame.EquipmentContainer, VT.TQueryCache[Frame.name]);
+				MT.UI.GlyphFrameUpdate(Frame.GlyphContainer, VT.TQueryCache[Frame.name]);
 			end
 		end
 		function MT.UI.CreateEquipmentFrame(Frame)
-			local EquipmentFrameContainer = CreateFrame("FRAME", nil, Frame);
+			local EquipmentFrameContainer = CreateFrame('FRAME', nil, Frame);
 			EquipmentFrameContainer:SetPoint("TOPRIGHT", Frame, "TOPLEFT", 0, 0);
 			EquipmentFrameContainer:SetPoint("BOTTOMRIGHT", Frame, "BOTTOMLEFT", 0, 0);
 			EquipmentFrameContainer:SetWidth(TUISTYLE.EquipmentFrameXSize);
 			VT.__uireimp._SetSimpleBackdrop(EquipmentFrameContainer, 0, 1, 0.0, 0.0, 0.0, 0.9, 0.0, 0.0, 0.0, 1.0);
 			EquipmentFrameContainer:Hide();
-			local EquipmentFrame = CreateFrame("FRAME", nil, EquipmentFrameContainer);
+			local EquipmentFrame = CreateFrame('FRAME', nil, EquipmentFrameContainer);
 			EquipmentFrame:SetWidth(TUISTYLE.EquipmentFrameXSize);
-			EquipmentFrame:SetPoint("CENTER", EquipmentFrameContainer);
+			if CT.TOCVERSION >= 30000 then
+				EquipmentFrame:SetPoint("TOP", EquipmentFrameContainer);
+			else
+				EquipmentFrame:SetPoint("CENTER", EquipmentFrameContainer);
+			end
 			EquipmentFrame:Show();
-			local EquipmentContainer = CreateFrame("FRAME", nil, EquipmentFrame);
-			EquipmentContainer:SetPoint("CENTER");
-			EquipmentContainer:SetSize(TUISTYLE.EquipmentFrameXSize, TUISTYLE.equipmentContainerYSize);
+			local EquipmentContainer = CreateFrame('FRAME', nil, EquipmentFrame);
+			if CT.TOCVERSION >= 30000 then
+				EquipmentContainer:SetPoint("TOP", EquipmentFrame);
+			else
+				EquipmentContainer:SetPoint("CENTER", EquipmentFrame);
+			end
+			EquipmentContainer:SetSize(TUISTYLE.EquipmentFrameXSize, TUISTYLE.EquipmentContainerYSize);
 			EquipmentContainer:Show();
 			local EquipmentNodes = {  };
 			for slot = 0, 19 do
-				local Node = CreateFrame("BUTTON", nil, EquipmentContainer);
+				local Node = CreateFrame('BUTTON', nil, EquipmentContainer);
 				Node:SetSize(TUISTYLE.EquipmentNodeSize, TUISTYLE.EquipmentNodeSize);
 				Node:Show();
 
@@ -2067,11 +2105,93 @@ MT.BuildEnv('UI');
 				end
 			end
 			EquipmentFrame:SetScript("OnShow", EquipmentFrame_OnShow);
+			EquipmentContainer.Frame = Frame;
+			EquipmentContainer.EquipmentNodes = EquipmentNodes;
 			EquipmentFrame.Frame = Frame;
 			EquipmentFrame.EquipmentContainer = EquipmentContainer;
-			EquipmentContainer.EquipmentNodes = EquipmentNodes;
 			EquipmentFrameContainer.Frame = Frame;
-			return EquipmentFrame, EquipmentContainer, EquipmentFrameContainer;
+			EquipmentFrameContainer.EquipmentFrame = EquipmentFrame;
+			EquipmentFrameContainer.EquipmentContainer = EquipmentContainer;
+			--
+			if CT.TOCVERSION >= 30000 then
+				local GlyphFrame = CreateFrame('FRAME', nil, EquipmentFrameContainer);
+				GlyphFrame:SetSize(TUISTYLE.GlyphFrameSize, TUISTYLE.GlyphFrameSize);
+				GlyphFrame:SetPoint("BOTTOM", EquipmentFrameContainer);
+				GlyphFrame:Show();
+				local GlyphContainer = CreateFrame('FRAME', nil, GlyphFrame);
+				GlyphContainer:SetPoint("BOTTOM", GlyphFrame, "BOTTOM", 0, 8);
+				GlyphContainer:SetSize(TUISTYLE.GlyphFrameSize, TUISTYLE.GlyphFrameSize);
+				local GlyphNodes = {  };
+				--[[
+							1
+						3		5
+						6		4
+							2
+				--]]
+				local NodesInfo = {
+					[1] = { 1, 0, },
+					[2] = { 2, 180, },
+					[3] = { 2, 300, },
+					[4] = { 1, 120, },
+					[5] = { 2, 60, },
+					[6] = { 1, 240, },
+				};
+				for index = 1, 6 do
+					local info = NodesInfo[index];
+					local size = info[1] == 1 and TUISTYLE.MajorGlyphNodeSize or TUISTYLE.MinorGlyphNodeSize;
+					local R = TUISTYLE.GlyphFrameSize * 0.5 - size * 0.5 - 2;
+					local Node = CreateFrame('BUTTON', nil, GlyphContainer);
+					Node:SetSize(size, size);
+					Node:SetPoint("CENTER", GlyphContainer, "CENTER", R * sin360(info[2]), R * cos360(info[2]));
+					local Setting = Node:CreateTexture(nil, "BACKGROUND");
+					Setting:SetSize(size * 1.2, size * 1.2);
+					Setting:SetPoint("CENTER", 0, 0);
+					Setting:SetTexture([[Interface\Spellbook\UI-GlyphFrame]]);
+					Setting:SetTexCoord(0.765625, 0.927734375, 0.15625, 0.31640625);
+					local Background = Node:CreateTexture(nil, "BORDER");
+					Background:SetSize(size * 1.2, size * 1.2);
+					Background:SetPoint("CENTER", 0, 0);
+					Background:SetTexture([[Interface\Spellbook\UI-GlyphFrame]]);
+					Background:SetTexCoord(0.78125, 0.91015625, 0.69921875, 0.828125);
+					local Highlight = Node:CreateTexture(nil, "BORDER");
+					Highlight:SetSize(size * 1.2, size * 1.2);
+					Highlight:SetPoint("CENTER", 0, 0);
+					Highlight:SetTexture([[Interface\Spellbook\UI-GlyphFrame]]);
+					Highlight:SetTexCoord(0.765625, 0.927734375, 0.15625, 0.31640625);
+					Highlight:SetVertexColor(1.0, 1.0, 1.0, 0.25);
+					Highlight:SetBlendMode("ADD");
+					Highlight:Hide();
+					Node:SetHighlightTexture(Highlight);
+					local Glyph = Node:CreateTexture(nil, "ARTWORK");
+					Glyph:SetSize(size * 0.75, size * 0.75);
+					Glyph:SetPoint("CENTER", 0, 0);
+					Glyph:SetTexture([[Interface\Spellbook\UI-Glyph-Rune1]]);
+					Glyph:Hide();
+					local Ring = Node:CreateTexture(nil, "OVERLAY");
+					Ring:SetSize(size * 0.86, size * 0.86);
+					Ring:SetPoint("CENTER", 0, 1);
+					Ring:SetTexture([[Interface\Spellbook\UI-GlyphFrame]]);
+					Ring:SetTexCoord(0.787109375, 0.908203125, 0.033203125, 0.154296875);
+					local Shine = Node:CreateTexture(nil, "OVERLAY");
+					Shine:SetSize(size / 6, size / 6);
+					Shine:SetPoint("CENTER", -size / 8, size / 6);
+					Shine:SetTexture([[Interface\Spellbook\UI-GlyphFrame]]);
+					Shine:SetTexCoord(0.9609375, 1.0, 0.921875, 0.9609375);
+					Node.Setting = Setting;
+					Node.Background = Background;
+					Node.Highlight = Highlight;
+					Node.Glyph = Glyph;
+					Node.Shine = Shine;
+					GlyphNodes[index] = Node;
+				end
+				GlyphContainer.Frame = Frame;
+				GlyphContainer.GlyphNodes = GlyphNodes;
+				EquipmentFrameContainer.Frame = Frame;
+				EquipmentFrameContainer.GlyphFrame = GlyphFrame;
+				EquipmentFrameContainer.GlyphContainer = GlyphContainer;
+			end
+			--
+			return EquipmentFrameContainer, EquipmentFrame, EquipmentContainer;
 		end
 	--	TreeFrame
 		local function TreeNode_OnEnter(Node)
@@ -2106,7 +2226,7 @@ MT.BuildEnv('UI');
 			end
 		end
 		local function CreateTreeNode(TreeFrame, id)
-			local Node = CreateFrame("BUTTON", nil, TreeFrame);	--	TreeFrame:GetName() .. "TreeNode" .. id
+			local Node = CreateFrame('BUTTON', nil, TreeFrame);	--	TreeFrame:GetName() .. "TreeNode" .. id
 			Node:SetSize(TUISTYLE.TreeNodeSize, TUISTYLE.TreeNodeSize);
 
 			Node:Hide();
@@ -2186,7 +2306,7 @@ MT.BuildEnv('UI');
 			local TreeFrames = {  };
 
 			for TreeIndex = 1, 3 do
-				local TreeFrame = CreateFrame("FRAME", nil, Frame);	--	Frame:GetName() .. "TreeFrame" .. TreeIndex
+				local TreeFrame = CreateFrame('FRAME', nil, Frame);	--	Frame:GetName() .. "TreeFrame" .. TreeIndex
 				TreeFrame:SetSize(TUISTYLE.TreeFrameXSizeSingle, TUISTYLE.TreeFrameYSize);
 
 				TreeFrame:Show();
@@ -2255,7 +2375,7 @@ MT.BuildEnv('UI');
 				ResetButtonBG:SetVertexColor(TTEXTURESET.TALENT_RESET_BG_COLOR[1], TTEXTURESET.TALENT_RESET_BG_COLOR[2], TTEXTURESET.TALENT_RESET_BG_COLOR[3], TTEXTURESET.TALENT_RESET_BG_COLOR[4]);
 				TreeFrame.ResetButtonBG = ResetButtonBG;
 
-				local ResetButton = CreateFrame("BUTTON", nil, TreeFrame);
+				local ResetButton = CreateFrame('BUTTON', nil, TreeFrame);
 				ResetButton:SetSize(TUISTYLE.ControlButtonSize, TUISTYLE.ControlButtonSize);
 				ResetButton:SetPoint("CENTER", ResetButtonBG);
 				ResetButton:SetHighlightTexture(TTEXTURESET.TALENT_RESET_HIGHLIGHT);
@@ -2651,7 +2771,7 @@ MT.BuildEnv('UI');
 				HeaderBG:SetColorTexture(0.0, 0.0, 0.0, 0.5);
 				Header.BG = HeaderBG;
 
-				local ReadOnlyButton = CreateFrame("BUTTON", nil, Header);
+				local ReadOnlyButton = CreateFrame('BUTTON', nil, Header);
 				ReadOnlyButton:SetSize(TUISTYLE.ControlButtonSize, TUISTYLE.ControlButtonSize);
 				ReadOnlyButton:SetNormalTexture(TTEXTURESET.LOCK);
 				ReadOnlyButton:GetNormalTexture():SetVertexColor(TTEXTURESET.LOCK_UNLOCKED_COLOR[1], TTEXTURESET.LOCK_UNLOCKED_COLOR[2], TTEXTURESET.LOCK_UNLOCKED_COLOR[3], TTEXTURESET.LOCK_UNLOCKED_COLOR[4]);
@@ -2670,7 +2790,7 @@ MT.BuildEnv('UI');
 				ReadOnlyButton.information = L.ReadOnlyButton;
 				objects.ReadOnlyButton = ReadOnlyButton;
 
-				local CloseButton = CreateFrame("BUTTON", nil, Header);
+				local CloseButton = CreateFrame('BUTTON', nil, Header);
 				CloseButton:SetSize(TUISTYLE.ControlButtonSize, TUISTYLE.ControlButtonSize);
 				CloseButton:SetNormalTexture(TTEXTURESET.CLOSE);
 				CloseButton:GetNormalTexture():SetTexCoord(TTEXTURESET.CLOSE_COORD[1], TTEXTURESET.CLOSE_COORD[2], TTEXTURESET.CLOSE_COORD[3], TTEXTURESET.CLOSE_COORD[4]);
@@ -2698,7 +2818,7 @@ MT.BuildEnv('UI');
 				Name.Points2 = { "BOTTOM", Header, "TOP", 0, 4, };
 				objects.Name = Name;
 
-				local ResetToEmuButton = CreateFrame("BUTTON", nil, Header);
+				local ResetToEmuButton = CreateFrame('BUTTON', nil, Header);
 				ResetToEmuButton:SetSize(TUISTYLE.ControlButtonSize, TUISTYLE.ControlButtonSize);
 				ResetToEmuButton:SetNormalTexture(TTEXTURESET.CLOSE);
 				ResetToEmuButton:GetNormalTexture():SetTexCoord(TTEXTURESET.CLOSE_COORD[1], TTEXTURESET.CLOSE_COORD[2], TTEXTURESET.CLOSE_COORD[3], TTEXTURESET.CLOSE_COORD[4]);
@@ -2727,7 +2847,7 @@ MT.BuildEnv('UI');
 				Label:Hide();
 				objects.Label = Label;
 
-				local ResetToSetButton = CreateFrame("BUTTON", nil, Header);
+				local ResetToSetButton = CreateFrame('BUTTON', nil, Header);
 				ResetToSetButton:SetSize(TUISTYLE.ControlButtonSize, TUISTYLE.ControlButtonSize);
 				ResetToSetButton:SetNormalTexture(TTEXTURESET.RESET);
 				ResetToSetButton:GetNormalTexture():SetTexCoord(TTEXTURESET.RESET_COORD[1], TTEXTURESET.RESET_COORD[2], TTEXTURESET.RESET_COORD[3], TTEXTURESET.RESET_COORD[4]);
@@ -2743,7 +2863,7 @@ MT.BuildEnv('UI');
 				ResetToSetButton.information = L.ResetToSetButton;
 				objects.ResetToSetButton = ResetToSetButton;
 
-				local TalentGroupSelect = CreateFrame("BUTTON", nil, Header);
+				local TalentGroupSelect = CreateFrame('BUTTON', nil, Header);
 				TalentGroupSelect:SetSize(TUISTYLE.ControlButtonSize, TUISTYLE.ControlButtonSize);
 				TalentGroupSelect:SetNormalTexture(TTEXTURESET.DROP);
 				-- TalentGroupSelect:GetNormalTexture():SetTexCoord(TTEXTURESET.RESET_COORD[1], TTEXTURESET.RESET_COORD[2], TTEXTURESET.RESET_COORD[3], TTEXTURESET.RESET_COORD[4]);
@@ -2763,7 +2883,7 @@ MT.BuildEnv('UI');
 
 			--	<Footer>
 				--	Control
-					local ResetAllButton = CreateFrame("BUTTON", nil, Frame);
+					local ResetAllButton = CreateFrame('BUTTON', nil, Frame);
 					ResetAllButton:SetSize(TUISTYLE.ControlButtonSize, TUISTYLE.ControlButtonSize);
 					ResetAllButton:SetNormalTexture(TTEXTURESET.RESET);
 					ResetAllButton:GetNormalTexture():SetTexCoord(TTEXTURESET.RESET_COORD[1], TTEXTURESET.RESET_COORD[2], TTEXTURESET.RESET_COORD[3], TTEXTURESET.RESET_COORD[4]);
@@ -2822,13 +2942,13 @@ MT.BuildEnv('UI');
 				--
 
 				--	Tree
-					local TreeButtonsBar = CreateFrame("FRAME", nil, Frame);
+					local TreeButtonsBar = CreateFrame('FRAME', nil, Frame);
 					TreeButtonsBar:SetPoint("CENTER", Frame, "BOTTOM", 0, TUISTYLE.FrameFooterYSize + TUISTYLE.TreeFrameFooterYSize * 0.5);
 					TreeButtonsBar:SetSize(TUISTYLE.TreeButtonXSize * 3 + TUISTYLE.TreeButtonGap * 2, TUISTYLE.TreeButtonYSize);
 					Frame.TreeButtonsBar = TreeButtonsBar;
 					local TreeButtons = {  };
 					for TreeIndex = 1, 3 do
-						local TreeButton = CreateFrame("BUTTON", nil, TreeButtonsBar);
+						local TreeButton = CreateFrame('BUTTON', nil, TreeButtonsBar);
 						TreeButton:SetSize(TUISTYLE.TreeButtonXSize, TUISTYLE.TreeButtonYSize);
 						TreeButton:SetNormalTexture(TTEXTURESET.UNK);
 						TreeButton:GetNormalTexture():SetTexCoord(TUISTYLE.TreeButtonTexCoord[1], TUISTYLE.TreeButtonTexCoord[2], TUISTYLE.TreeButtonTexCoord[3], TUISTYLE.TreeButtonTexCoord[4]);
@@ -2871,7 +2991,7 @@ MT.BuildEnv('UI');
 			--	</Footer>
 
 			--	<Side>
-				local SideAnchorTop = CreateFrame("FRAME", nil, Frame);
+				local SideAnchorTop = CreateFrame('FRAME', nil, Frame);
 				SideAnchorTop:SetWidth(1);
 				Frame.SideAnchorTop = SideAnchorTop;
 				SideAnchorTop:SetPoint("TOPLEFT", Frame, "TOPRIGHT", 2, 0);
@@ -2880,7 +3000,7 @@ MT.BuildEnv('UI');
 					local ClassButtons = {  };--CT.IndexToClass
 					for index = 1, #CT.IndexToClass do
 						local class = CT.IndexToClass[index];
-						local ClassButton = CreateFrame("BUTTON", nil, SideAnchorTop);
+						local ClassButton = CreateFrame('BUTTON', nil, SideAnchorTop);
 						ClassButton:SetSize(TUISTYLE.SideButtonSize, TUISTYLE.SideButtonSize);
 						ClassButton:SetNormalTexture(TTEXTURESET.CLASS);
 						ClassButton:SetPushedTexture(TTEXTURESET.CLASS);
@@ -2920,13 +3040,13 @@ MT.BuildEnv('UI');
 					Frame.objects.CurClassIndicator = CurClassIndicator;
 				--
 
-				local SideAnchorBottom = CreateFrame("FRAME", nil, Frame);
+				local SideAnchorBottom = CreateFrame('FRAME', nil, Frame);
 				SideAnchorBottom:SetWidth(1);
 				Frame.SideAnchorBottom = SideAnchorBottom;
 				SideAnchorBottom:SetPoint("TOPLEFT", Frame, "TOPRIGHT", 2, 0);
 				SideAnchorBottom:SetPoint("BOTTOMLEFT", Frame, "BOTTOMRIGHT", 2, 0);
 				--	Control
-					local SpellListButton = CreateFrame("BUTTON", nil, SideAnchorBottom);
+					local SpellListButton = CreateFrame('BUTTON', nil, SideAnchorBottom);
 					SpellListButton:SetSize(TUISTYLE.SideButtonSize, TUISTYLE.SideButtonSize);
 					SpellListButton:SetNormalTexture(TTEXTURESET.SPELLTAB);
 					SpellListButton:GetNormalTexture():SetTexCoord(TTEXTURESET.SPELLTAB_COORD[1], TTEXTURESET.SPELLTAB_COORD[2], TTEXTURESET.SPELLTAB_COORD[3], TTEXTURESET.SPELLTAB_COORD[4]);
@@ -2943,7 +3063,7 @@ MT.BuildEnv('UI');
 					SpellListButton.information = L.SpellListButton;
 					Frame.SpellListButton = SpellListButton;
 
-					local ApplyTalentsButton = CreateFrame("BUTTON", nil, SideAnchorBottom);
+					local ApplyTalentsButton = CreateFrame('BUTTON', nil, SideAnchorBottom);
 					ApplyTalentsButton:SetSize(TUISTYLE.SideButtonSize, TUISTYLE.SideButtonSize);
 					ApplyTalentsButton:SetNormalTexture(TTEXTURESET.APPLY);
 					ApplyTalentsButton:SetPushedTexture(TTEXTURESET.APPLY);
@@ -2965,7 +3085,7 @@ MT.BuildEnv('UI');
 					ApplyTalentsButton.Progress = ApplyTalentsButtonProgress;
 					Frame.ApplyTalentsProgress = ApplyTalentsButtonProgress;
 
-					local EditBox = CreateFrame("EDITBOX", nil, Frame);
+					local EditBox = CreateFrame('EDITBOX', nil, Frame);
 					EditBox:SetSize(TUISTYLE.EditBoxXSize, TUISTYLE.EditBoxYSize);
 					EditBox:SetFontObject(GameFontHighlightSmall);
 					EditBox:SetAutoFocus(false);
@@ -2987,7 +3107,7 @@ MT.BuildEnv('UI');
 					Texture:SetAlpha(0.36);
 					Texture:SetVertexColor(1.0, 1.0, 1.0);
 					EditBox.Texture = Texture;
-					local EditBoxOKButton = CreateFrame("BUTTON", nil, EditBox);
+					local EditBoxOKButton = CreateFrame('BUTTON', nil, EditBox);
 					EditBoxOKButton:SetSize(TUISTYLE.EditBoxYSize, TUISTYLE.EditBoxYSize);
 					EditBoxOKButton:SetNormalTexture(TTEXTURESET.EDIT_OK);
 					EditBoxOKButton:SetPushedTexture(TTEXTURESET.EDIT_OK);
@@ -3002,7 +3122,7 @@ MT.BuildEnv('UI');
 					EditBoxOKButton.information = L.EditBoxOKButton;
 					EditBox.OKButton = EditBoxOKButton;
 
-					local ImportButton = CreateFrame("BUTTON", nil, SideAnchorBottom);
+					local ImportButton = CreateFrame('BUTTON', nil, SideAnchorBottom);
 					ImportButton:SetSize(TUISTYLE.SideButtonSize, TUISTYLE.SideButtonSize);
 					ImportButton:SetNormalTexture(TTEXTURESET.IMPORT);
 					ImportButton:GetNormalTexture():SetTexCoord(TTEXTURESET.IMPORT_COORD[1], TTEXTURESET.IMPORT_COORD[2], TTEXTURESET.IMPORT_COORD[3], TTEXTURESET.IMPORT_COORD[4]);
@@ -3020,7 +3140,7 @@ MT.BuildEnv('UI');
 					ImportButton.information = L.ImportButton;
 					Frame.ImportButton = ImportButton;
 
-					local ExportButton = CreateFrame("BUTTON", nil, SideAnchorBottom);
+					local ExportButton = CreateFrame('BUTTON', nil, SideAnchorBottom);
 					ExportButton:SetSize(TUISTYLE.SideButtonSize, TUISTYLE.SideButtonSize);
 					ExportButton:SetNormalTexture(TTEXTURESET.EXPORT);
 					ExportButton:GetNormalTexture():SetTexCoord(TTEXTURESET.EXPORT_COORD[1], TTEXTURESET.EXPORT_COORD[2], TTEXTURESET.EXPORT_COORD[3], TTEXTURESET.EXPORT_COORD[4]);
@@ -3038,7 +3158,7 @@ MT.BuildEnv('UI');
 					ExportButton.information = L.ExportButton;
 					Frame.ExportButton = ExportButton;
 
-					local SaveButton = CreateFrame("BUTTON", nil, SideAnchorBottom);
+					local SaveButton = CreateFrame('BUTTON', nil, SideAnchorBottom);
 					SaveButton:SetSize(TUISTYLE.SideButtonSize, TUISTYLE.SideButtonSize);
 					SaveButton:SetNormalTexture(TTEXTURESET.SAVE);
 					SaveButton:SetPushedTexture(TTEXTURESET.SAVE);
@@ -3054,7 +3174,7 @@ MT.BuildEnv('UI');
 					SaveButton.information = L.SaveButton;
 					Frame.SaveButton = SaveButton;
 
-					local SendButton = CreateFrame("BUTTON", nil, SideAnchorBottom);
+					local SendButton = CreateFrame('BUTTON', nil, SideAnchorBottom);
 					SendButton:SetSize(TUISTYLE.SideButtonSize, TUISTYLE.SideButtonSize);
 					SendButton:SetNormalTexture(TTEXTURESET.SEND);
 					SendButton:SetPushedTexture(TTEXTURESET.SEND);
@@ -3072,7 +3192,7 @@ MT.BuildEnv('UI');
 				--
 
 				--	Left
-					local EquipmentFrameButton = CreateFrame("BUTTON", nil, Frame);
+					local EquipmentFrameButton = CreateFrame('BUTTON', nil, Frame);
 					EquipmentFrameButton:SetSize(TUISTYLE.SideButtonSize, TUISTYLE.SideButtonSize);
 					EquipmentFrameButton:SetNormalTexture(TTEXTURESET.EQUIPMENT_TEXTURE);
 					EquipmentFrameButton:GetNormalTexture():SetTexCoord(TTEXTURESET.EQUIPMENT_TEXTURE_COORD[1], TTEXTURESET.EQUIPMENT_TEXTURE_COORD[2], TTEXTURESET.EQUIPMENT_TEXTURE_COORD[3], TTEXTURESET.EQUIPMENT_TEXTURE_COORD[4]);
@@ -3118,6 +3238,7 @@ MT.BuildEnv('UI');
 			Frame.SpellListFrame:SetHeight(Frame:GetHeight() / Frame.TreeFrameScale);
 			Frame.EquipmentFrame:SetScale(Frame.TreeFrameScale);
 			Frame.EquipmentFrame:SetHeight(Frame:GetHeight() / Frame.TreeFrameScale);
+			Frame.GlyphFrame:SetScale(Frame.TreeFrameScale);
 		end
 		local function Frame_OnMouseDown(Frame, button)
 			if button == "LeftButton" then
@@ -3200,7 +3321,7 @@ MT.BuildEnv('UI');
 		local temp_id = 0;
 		function MT.UI.CreateFrame()
 			temp_id = temp_id + 1;
-			local Frame = CreateFrame("FRAME", nil, UIParent);
+			local Frame = CreateFrame('FRAME', nil, UIParent);
 			Frame.id = temp_id;
 
 			Frame:SetPoint("CENTER");
@@ -3222,7 +3343,9 @@ MT.BuildEnv('UI');
 
 			Frame.TreeFrames = MT.UI.CreateTreeFrames(Frame);
 			Frame.SpellListFrame, Frame.SpellListFrameContainer = MT.UI.CreateSpellListFrame(Frame);
-			Frame.EquipmentFrame, Frame.EquipmentContainer, Frame.EquipmentFrameContainer = MT.UI.CreateEquipmentFrame(Frame);
+			Frame.EquipmentFrameContainer, Frame.EquipmentFrame, Frame.EquipmentContainer = MT.UI.CreateEquipmentFrame(Frame);
+			Frame.GlyphFrame = Frame.EquipmentFrameContainer.GlyphFrame;
+			Frame.GlyphContainer = Frame.EquipmentFrameContainer.GlyphContainer;
 
 			MT.UI.CreateFrameSubObject(Frame);
 
@@ -3461,7 +3584,7 @@ MT.BuildEnv('UI');
 		TUISTYLE.FrameYSizeDefault_Style1 = TUISTYLE.TreeFrameYSize + TUISTYLE.TreeFrameYToBorder * 2 + TUISTYLE.FrameHeaderYSize + TUISTYLE.FrameFooterYSize;
 		TUISTYLE.FrameXSizeDefault_Style2 = TUISTYLE.TreeFrameXSizeSingle + TUISTYLE.TreeFrameXToBorder * 2;
 		TUISTYLE.FrameYSizeDefault_Style2 = TUISTYLE.TreeFrameYSize + TUISTYLE.TreeFrameYToBorder * 2 + TUISTYLE.FrameHeaderYSize + TUISTYLE.FrameFooterYSize;
-		TUISTYLE.equipmentContainerYSize = TUISTYLE.EquipmentNodeYToBorder + TUISTYLE.EquipmentNodeSize * 10 + TUISTYLE.EquipmentNodeGap * 11 + TUISTYLE.EquipmentNodeArmorWeaponGap + TUISTYLE.EquipmentNodeYToBorder;
+		TUISTYLE.EquipmentContainerYSize = TUISTYLE.EquipmentNodeYToBorder + TUISTYLE.EquipmentNodeSize * 10 + TUISTYLE.EquipmentNodeGap * 11 + TUISTYLE.EquipmentNodeArmorWeaponGap + TUISTYLE.EquipmentNodeYToBorder;
 		VT.TooltipFrame = MT.UI.CreateTooltipFrame();
 	end);
 	MT.RegisterOnLogin('UI', function(LoggedIn)
