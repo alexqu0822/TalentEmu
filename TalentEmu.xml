@@ -22,6 +22,7 @@
     <script file = "comm.lua" />
     <script file = "tooltip.lua" />
     <script file = "misc.lua" />
+    <script file = "dev.lua" />
 
     <include file = "Bindings.xml" />
     

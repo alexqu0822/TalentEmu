@@ -10,10 +10,10 @@ local DT = __private.DT;
 
 --		upvalue
 	local type = type;
-	local next, unpack = next, unpack;
+	local next = next;
 	local select = select;
 	local wipe, tinsert, tremove = table.wipe, table.insert, table.remove;
-	local strsub, strupper, format, gsub = string.sub, string.upper, string.format, string.gsub;
+	local strsplit, strsub, strupper, strmatch, format, gsub = string.split, string.sub, string.upper, string.match, string.format, string.gsub;
 	local tostring, tonumber = tostring, tonumber;
 	local min, max, floor, random = math.min, math.max, math.floor, math.random;
 	local UnitLevel = UnitLevel;
@@ -21,6 +21,7 @@ local DT = __private.DT;
 	local GetSpellInfo = GetSpellInfo;
 	local FindSpellBookSlotBySpellID, PickupSpell = FindSpellBookSlotBySpellID, PickupSpell;
 	local IsControlKeyDown = IsControlKeyDown;
+	local IsAltKeyDown = IsAltKeyDown;
 	local IsShiftKeyDown = IsShiftKeyDown;
 	local _After = C_Timer.After;
 	local CreateFrame = CreateFrame;
@@ -169,13 +170,14 @@ local DT = __private.DT;
 		CLOSE_NORMAL_COLOR = { 1.0, 1.0, 1.0, 1.0, },
 		RESET = CT.TEXTUREPATH .. [[CharacterUndelete]],
 		RESET_COORD = { 7 / 32, 25 / 32, 7 / 32, 25 / 32, },
+		DROP = CT.TEXTUREPATH .. [[ArrowDown]],
 		SPEC_NORMAL_COLOR = { 1.0, 1.0, 1.0, 0.5 },
 		SPEC_PUSHED_COLOR = { 1.0, 1.0, 1.0, 0.25 },
 		SPEC_INDICATOR_COORD = { 0.10, 0.90, 0.08, 0.92, },
 		SPEC_INDICATOR_COLOR = { 0.0, 1.0, 1.0, },
 
-		INSPECT = CT.TEXTUREPATH .. [[PvP-Banner-Emblem-45]],
-		INSPECT_COLOR = { 0.0, 1.0, 0.0, 1.0, },
+		-- INSPECT = CT.TEXTUREPATH .. [[PvP-Banner-Emblem-45]],
+		-- INSPECT_COLOR = { 0.0, 1.0, 0.0, 1.0, },
 		SPELLTAB = CT.TEXTUREPATH .. [[UI-MicroButton-EJ-UP]],
 		SPELLTAB_COORD = { 3 / 32, 29 / 32, 31 / 64, 57 / 64 },
 		APPLY = CT.TEXTUREPATH .. [[ReadyCheck-Ready]],
@@ -195,8 +197,8 @@ local DT = __private.DT;
 		CLASS_INDICATOR_COORD = { 4 / 64, 60 / 64, 5 / 64, 61 / 64, },
 		CLASS_INDICATOR_COLOR = { 0.0, 1.0, 0.0, 1.0, },
 
-		INSPECT_BUTTON = CT.TEXTUREPATH .. [[PvP-Banner-Emblem-45]],
-		INSPECT_BUTTON_COLOR = { 0.0, 1.0, 0.0, 1.0, },
+		-- INSPECT_BUTTON = CT.TEXTUREPATH .. [[PvP-Banner-Emblem-45]],
+		-- INSPECT_BUTTON_COLOR = { 0.0, 1.0, 0.0, 1.0, },
 
 		EQUIPMENT_TEXTURE = [[Interface\Buttons\Spell-Reset]];
 		EQUIPMENT_TEXTURE_COORD = { 6 / 64, 58 / 64, 6 / 64, 58 / 64, };
@@ -255,7 +257,7 @@ MT.BuildEnv('UI');
 																					MinVal				(fontString)
 																					Split				(fontString)
 																					active				(bool)
-																					dbIndex				(num)
+																					TalentSeq				(num)
 													HSeq				(texture)
 													VSep				(texture)
 													TalentSet			(table)
@@ -269,11 +271,11 @@ MT.BuildEnv('UI');
 													TreeTDB				(table)
 	--]==]
 	--
-		function MT.UI.FrameSetName(Frame, name)				--	NAME CHANGED HERE ONLY	--	and MT.UI.FrameUpdateLabelTex
+		function MT.UI.FrameSetName(Frame, name)				--	NAME CHANGED HERE ONLY	--	and MT.UI.FrameUpdateLabelText
 			Frame.name = name;
 			if name ~= nil then
 				local objects = Frame.objects;
-				objects.Label:SetText(name);
+				objects.Name:SetText(name);
 				if VT.SET.inspect_pack and VT.TQueryCache[name] ~= nil and VT.TQueryCache[name].pack ~= nil then
 					local info = VT.__emulib.DecodeAddonPackData(VT.TQueryCache[name].pack);
 					if info then
@@ -299,7 +301,7 @@ MT.BuildEnv('UI');
 				MT.UI.FrameSetBinding(Frame, name);
 			else
 				local objects = Frame.objects;
-				objects.Label:SetText(L.Emu);
+				objects.Name:SetText(L.Emu);
 				objects.PackLabel:Hide();
 				objects.ResetToEmuButton:Hide();
 				objects.ResetToSetButton:Hide();
@@ -312,6 +314,7 @@ MT.BuildEnv('UI');
 				objects.CurClassIndicator:SetPoint("CENTER", ClassButtons[CT.ClassToIndex[Frame.class]]);
 				MT.UI.FrameReleaseBinding(Frame);
 				Frame.EquipmentFrameContainer:Hide();
+				MT.Error("EquipFrame", "MT.UI.FrameSetName Hide");
 			end
 			Frame.objects.EquipmentFrameButton:Hide();
 		end
@@ -324,7 +327,6 @@ MT.BuildEnv('UI');
 				if type(level) == 'string' then
 					level = tonumber(level);
 				end
-				level = DT.MAX_LEVEL;
 				Frame.level = level;
 				Frame.TotalAvailablePoints = MT.GetLevelAvailablePoints(level);
 			end
@@ -334,12 +336,14 @@ MT.BuildEnv('UI');
 				Frame.class = nil;
 				Frame.ClassTDB = nil;
 				Frame.initialized = false;
+				Frame.objects.Name:SetTextColor(1.0, 1.0, 1.0, 1.0);
+				Frame.objects.Label:SetTextColor(1.0, 1.0, 1.0, 1.0);
 			else
 				--	check class value
 					local Type = type(class);
 					if Type == 'number' then
 						if CT.IndexToClass[class] == nil then
-							MT.Log("MT.UI.FrameSetClass", 1, "class", "number", class);
+							MT.Error("MT.UI.FrameSetClass", 1, "class", "number", class);
 							return false;
 						end
 						class = CT.IndexToClass[class];
@@ -348,46 +352,46 @@ MT.BuildEnv('UI');
 						Type = type(class);
 						if Type == 'number' then
 							if CT.IndexToClass[class] == nil then
-								MT.Log("MT.UI.FrameSetClass", 1, "class", "table", "number", class);
+								MT.Error("MT.UI.FrameSetClass", 2, "class", "table", "number", class);
 								return false;
 							end
 							class = CT.IndexToClass[class];
 						elseif Type ~= 'string' then
-							MT.Log("MT.UI.FrameSetClass", 1, "class", "table", Type, class);
+							MT.Error("MT.UI.FrameSetClass", 3, "class", "table", Type, class);
 							return false;
 						else
 							class = strupper(class);
 							if CT.ClassToIndex[class] == nil then
-								MT.Log("MT.UI.FrameSetClass", 1, "class", "table", "string", class);
+								MT.Error("MT.UI.FrameSetClass", 4, "class", "table", "string", class);
 								return false;
 							end
 						end
 					elseif Type == 'string' then
 						class = strupper(class);
 						if CT.ClassToIndex[class] == nil then
-							local val = tonumber(class);
-							if val ~= nil then
-								class = CT.IndexToClass[val];
+							local index = tonumber(class);
+							if index ~= nil then
+								class = CT.IndexToClass[index];
 								if class == nil then
-									MT.Log("MT.UI.FrameSetClass", 1, "class", "string", val);
+									MT.Error("MT.UI.FrameSetClass", 5, "class", "string", index);
 									return false;
 								end
 							end
 						end
 					else
-						MT.Log("MT.UI.FrameSetClass", 1, "class", Type);
+						MT.Error("MT.UI.FrameSetClass", 6, "class", Type);
 						return false;
 					end
 				--
 
 				local SpecList = DT.ClassSpec[class];
 				if SpecList == nil then
-					MT.Log("MT.UI.FrameSetClass", class, 7, "SpecList == nil");
+					MT.Error("MT.UI.FrameSetClass", 7, class, "SpecList == nil");
 					return false;
 				end
 				local ClassTDB = DT.TalentDB[class];
 				if ClassTDB == nil then
-					MT.Log("MT.UI.FrameSetClass", class, 8, "ClassTDB == nil");
+					MT.Error("MT.UI.FrameSetClass", 8, class, "ClassTDB == nil");
 					return false;
 				end
 				local TreeFrames = Frame.TreeFrames;
@@ -412,53 +416,52 @@ MT.BuildEnv('UI');
 					end
 					TreeFrame.BG:SetTexture(DT.SpecBG[SpecID]);
 					TreeFrame.TreeLabel:SetText(L.DATA[SpecID]);
-					if TreeTDB ~= nil then
-						for dbIndex = 1, #TreeTDB do
-							local def = TreeTDB[dbIndex];
-							local Node = TreeNodes[def[10]];
-							Node.dbIndex = dbIndex;
-							Node:Show();
-							local _, _, texture = GetSpellInfo(def[8][1]);
-							if texture ~= nil then
-								Node:SetNormalTexture(texture);
-								Node:SetPushedTexture(texture);
-							elseif def[9] ~= nil then
-								Node:SetNormalTexture(def[9]);
-								Node:SetPushedTexture(def[9]);
-							else
-								Node:SetNormalTexture(TTEXTURESET.UNK);
-								Node:SetPushedTexture(TTEXTURESET.UNK);
-							end
-							Node.MaxVal:SetText(def[4]);
-							Node.CurVal:SetText("0");
+					for TalentSeq = 1, #TreeTDB do
+						local TalentDef = TreeTDB[TalentSeq];
+						local Node = TreeNodes[TalentDef[10]];
+						Node.TalentSeq = TalentSeq;
+						Node:Show();
+						local _, _, texture = GetSpellInfo(TalentDef[8][1]);
+						if texture ~= nil then
+							Node:SetNormalTexture(texture);
+							Node:SetPushedTexture(texture);
+						elseif TalentDef[9] ~= nil then
+							Node:SetNormalTexture(TalentDef[9]);
+							Node:SetPushedTexture(TalentDef[9]);
+						else
+							Node:SetNormalTexture(TTEXTURESET.UNK);
+							Node:SetPushedTexture(TTEXTURESET.UNK);
+						end
+						Node.MaxVal:SetText(TalentDef[4]);
+						Node.CurVal:SetText("0");
 
-							local dep = def[11];
-							if dep ~= nil then
-								local Arrow = MT.UI.DependArrowGet(TreeFrame);
-								MT.UI.DependArrowSet(Arrow, def[1] - def[5], def[2] - def[6], false, Node, TreeNodes[TreeTDB[dep][10]]);
-								local DepArrows = TreeFrame.NodeDependArrows[dep];
-								DepArrows[#DepArrows + 1] = Arrow;
-							end
+						local DepTSeq = TalentDef[11];
+						if DepTSeq ~= nil then
+							local Arrow = MT.UI.DependArrowGet(TreeFrame);
+							MT.UI.DependArrowSet(Arrow, TalentDef[1] - TalentDef[5], TalentDef[2] - TalentDef[6], false, Node, TreeNodes[TreeTDB[DepTSeq][10]]);
+							local DepArrows = TreeFrame.NodeDependArrows[DepTSeq];
+							DepArrows[#DepArrows + 1] = Arrow;
+						end
 
-							if def[1] == 0 then
-								if def[5] == nil then
-									MT.UI.TreeNodeActivate(Node);
-								end
+						if TalentDef[1] == 0 then
+							if TalentDef[5] == nil then
+								MT.UI.TreeNodeActivate(Node);
 							end
 						end
-						TreeFrame.TreeTDB = TreeTDB;
-					else
-						MT.Log("MT.UI.FrameSetClass", class, 9, TreeIndex, SpecID, "TreeTDB == nil");
 					end
+					TreeFrame.TreeTDB = TreeTDB;
 				end
 
+				local color = RAID_CLASS_COLORS[class];
+				Frame.objects.Name:SetTextColor(color.r, color.g, color.b, 1.0);
+				Frame.objects.Label:SetTextColor(color.r, color.g, color.b, 1.0);
 				Frame.BG:SetTexture(DT.ClassBG[class][random(1, #DT.ClassBG[class])]);
 
 				Frame.class = class;
 				Frame.ClassTDB = ClassTDB;
 				Frame.initialized = true;
 
-				if CT.SELFCLASSUPPER == class then
+				if CT.SELFCLASS == class then
 					Frame.ApplyTalentsButton:Show();
 				else
 					Frame.ApplyTalentsButton:Hide();
@@ -469,67 +472,104 @@ MT.BuildEnv('UI');
 
 			return true;
 		end
-		function MT.UI.FrameSetData(Frame, data)				--	DATA CHANGED HERE ONLY	--	TODO REQUIRE TREE.
+		function MT.UI.FrameSetData(Frame, data, activeGroup)				--	DATA CHANGED HERE ONLY	--	TODO REQUIRE TREE.
 			if data == nil or data == "" then
 				Frame.data = nil;
+				local Points = Frame.objects.Name.Points1;
+				Frame.objects.Name:ClearAllPoints();
+				Frame.objects.Name:SetPoint(Points[1], Points[2], Points[3], Points[4], Points[5]);
+				Frame.label = nil;
+				Frame.objects.Label:Hide();
+				Frame.objects.ResetToSetButton:ClearAllPoints();
+				Frame.objects.ResetToSetButton:SetPoint("LEFT", Frame.objects.Name, "RIGHT", 0, 0);
+				Frame.objects.TalentGroupSelect:Hide();
 			else
 				--	check point value
 					if not Frame.initialized then
-						MT.Log("MT.UI.FrameSetData", 1, "not initialized");
+						MT.Error("MT.UI.FrameSetData", 1, "not initialized");
 						return false;
 					end
-					if type(data) ~= 'string' then
-						MT.Log("MT.UI.FrameSetData", 2, type(data));
+					if type(data) ~= 'table' then
+						MT.Error("MT.UI.FrameSetData", 2, type(data));
 						return false;
 					end
-					if tonumber(data) == nil then
-						MT.Log("MT.UI.FrameSetData", 4, data);
+					if data[1] ~= "" and tonumber(data[1]) == nil then
+						MT.Error("MT.UI.FrameSetData", 3, data);
 						return false;
 					end
 				--
 
 				Frame.data = data;
+				Frame.activeGroup = activeGroup or data.active or 1;
+
+				local seldata = data[Frame.activeGroup];
 				local TreeFrames = Frame.TreeFrames;
-				local len = #data;
+				local len = #seldata;
 				local pos = 1;
 				local offset = 0;
 				for TreeIndex = 1, 3 do
+					if pos > len then
+						break;
+					end
 					local TreeFrame = TreeFrames[TreeIndex];
 					local TreeNodes = TreeFrame.TreeNodes;
 					local TreeTDB = TreeFrame.TreeTDB;
 					local TalentSet = TreeFrame.TalentSet;
-					for dbIndex = 1, #TreeTDB do
+					for TalentSeq = 1, #TreeTDB do
 						if pos > len then
-							return false;
+							break;
 						end
-						local val = strsub(data, pos, pos);
+						local val = strsub(seldata, pos, pos);
 						val = tonumber(val);
 						if val ~= 0 then
-							local def = TreeTDB[dbIndex];
-							local dep = def[11];
-							if dep ~= nil and dep <= len then
-								local depval = strsub(data, offset + dep, offset + dep);
+							local TalentDef = TreeTDB[TalentSeq];
+							local DepTSeq = TalentDef[11];
+							if DepTSeq ~= nil and DepTSeq <= len then
+								local depval = strsub(seldata, offset + DepTSeq, offset + DepTSeq);
 								if depval ~= "0" then
 									depval = tonumber(depval);
-									local deppts = depval - TalentSet[dep];
+									local deppts = depval - TalentSet[DepTSeq];
 									if deppts > 0 then
-										MT.UI.TreeNodeChangePoint(TreeNodes[TreeTDB[dep][10]], deppts);
+										MT.UI.TreeNodeChangePoint(TreeNodes[TreeTDB[DepTSeq][10]], deppts);
 									end
 								end
 							end
-							local pts = val - TalentSet[dbIndex];
+							local pts = val - TalentSet[TalentSeq];
 							if pts > 0 then
-								local ret = MT.UI.TreeNodeChangePoint(TreeNodes[def[10]], pts);
+								local ret = MT.UI.TreeNodeChangePoint(TreeNodes[TalentDef[10]], pts);
 								if ret < 0 then
-									MT.Log("MT.UI.FrameSetData", 5, ret, "tab", TreeIndex, "tier", def[1], "col", def[2], "maxPoints", def[4], "set", val, def, pos);
+									MT.Error("MT.UI.FrameSetData", 4, ret, "tab", TreeIndex, "tier", TalentDef[1], "col", TalentDef[2], "maxPoints", TalentDef[4], "set", val, TalentDef, pos);
 								elseif ret > 0 then
-									MT.Log("MT.UI.FrameSetData", 6, ret, "tab", TreeIndex, "tier", def[1], "col", def[2], "maxPoints", def[4], "set", val, def, pos);
+									MT.Error("MT.UI.FrameSetData", 5, ret, "tab", TreeIndex, "tier", TalentDef[1], "col", TalentDef[2], "maxPoints", TalentDef[4], "set", val, TalentDef, pos);
 								end
 							end
 						end
 						pos = pos + 1;
 					end
 					offset = pos;
+				end
+
+				if data.num > 1 then
+					local Points = Frame.objects.Name.Points2;
+					Frame.objects.Name:ClearAllPoints();
+					Frame.objects.Name:SetPoint(Points[1], Points[2], Points[3], Points[4], Points[5]);
+					local val = data[Frame.activeGroup];
+					local stats = MT.CountTreePoints(val, Frame.class);
+					Frame.label = stats[1] .. "-" .. stats[2] .. "-" .. stats[3];
+					Frame.objects.Label:SetText(Frame.label);
+					Frame.objects.Label:Show();
+					Frame.objects.ResetToSetButton:ClearAllPoints();
+					Frame.objects.ResetToSetButton:SetPoint("LEFT", Frame.objects.Label, "RIGHT", 0, 0);
+					Frame.objects.TalentGroupSelect:Show();
+				else
+					local Points = Frame.objects.Name.Points1;
+					Frame.objects.Name:ClearAllPoints();
+					Frame.objects.Name:SetPoint(Points[1], Points[2], Points[3], Points[4], Points[5]);
+					Frame.label = nil;
+					Frame.objects.Label:Hide();
+					Frame.objects.ResetToSetButton:ClearAllPoints();
+					Frame.objects.ResetToSetButton:SetPoint("LEFT", Frame.objects.Name, "RIGHT", 0, 0);
+					Frame.objects.TalentGroupSelect:Hide();
 				end
 			end
 
@@ -567,10 +607,10 @@ MT.BuildEnv('UI');
 					local TreeNodes = TreeFrame.TreeNodes;
 					local TalentSet = TreeFrame.TalentSet;
 					local TreeTDB = TreeFrame.TreeTDB;
-					for dbIndex = 1, #TreeTDB do
-						if TalentSet[dbIndex] == 0 then
-							local def = TreeTDB[dbIndex];
-							MT.UI.TreeNodeSetTextColorUnavailable(TreeNodes[def[10]]);
+					for TalentSeq = 1, #TreeTDB do
+						if TalentSet[TalentSeq] == 0 then
+							local TalentDef = TreeTDB[TalentSeq];
+							MT.UI.TreeNodeSetTextColorUnavailable(TreeNodes[TalentDef[10]]);
 						end
 					end
 				end
@@ -579,11 +619,11 @@ MT.BuildEnv('UI');
 					local TreeFrame = TreeFrames[TreeIndex];
 					local TreeNodes = TreeFrame.TreeNodes;
 					local TreeTDB = TreeFrame.TreeTDB;
-					for dbIndex = 1, #TreeTDB do
-						local def = TreeTDB[dbIndex];
-						if def[1] == 0 then
-							if def[5] == nil then
-								MT.UI.TreeNodeSetTextColorAvailable(TreeNodes[def[10]]);
+					for TalentSeq = 1, #TreeTDB do
+						local TalentDef = TreeTDB[TalentSeq];
+						if TalentDef[1] == 0 then
+							if TalentDef[5] == nil then
+								MT.UI.TreeNodeSetTextColorAvailable(TreeNodes[TalentDef[10]]);
 							end
 						else
 							break;
@@ -593,14 +633,14 @@ MT.BuildEnv('UI');
 				MT.UI.FrameResetTalents(Frame);
 			end
 		end
-		function MT.UI.FrameSetInfo(Frame, class, data, level, readOnly, name, rule)
-			MT.UI.FrameReset(Frame);
+		function MT.UI.FrameSetInfo(Frame, class, level, data, activeGroup, name, readOnly, rule)
+			MT.UI.FrameReset(Frame, true, false, true);
 			if not MT.UI.FrameSetClass(Frame, class) then
 				Frame:Hide();
 				return false;
 			end
 			if data ~= nil then
-				MT.UI.FrameSetData(Frame, data);
+				MT.UI.FrameSetData(Frame, data, activeGroup);
 			end
 			MT.UI.FrameSetLevel(Frame, level);
 			--	MT.UI.FrameSetReadOnly(Frame, readOnly);
@@ -629,48 +669,48 @@ MT.BuildEnv('UI');
 				end
 			end
 
-			local dbIndex = Node.dbIndex;
-			local TreeTDB = TreeFrame.TreeTDB;
-			local def = TreeTDB[dbIndex];
 			local TalentSet = TreeFrame.TalentSet;
+			local TreeTDB = TreeFrame.TreeTDB;
+			local TalentSeq = Node.TalentSeq;
+			local TalentDef = TreeTDB[TalentSeq];
 
-			if (numPoints > 0 and TalentSet[dbIndex] == def[4]) or (numPoints < 0 and TalentSet[dbIndex] == 0) then	--	increased from max_rank OR decreased from min_rank
+			if (numPoints > 0 and TalentSet[TalentSeq] == TalentDef[4]) or (numPoints < 0 and TalentSet[TalentSeq] == 0) then	--	increased from max_rank OR decreased from min_rank
 				return 2;
 			end
 
 			if Node.free_edit then
 				local ret = 0;
 
-				if TalentSet[dbIndex] + numPoints >= def[4] then
-					if TalentSet[dbIndex] + numPoints > def[4] then
+				if TalentSet[TalentSeq] + numPoints >= TalentDef[4] then
+					if TalentSet[TalentSeq] + numPoints > TalentDef[4] then
 						ret = 4;
 					end
-					numPoints = def[4] - TalentSet[dbIndex];
-					TalentSet[dbIndex] = def[4];
+					numPoints = TalentDef[4] - TalentSet[TalentSeq];
+					TalentSet[TalentSeq] = TalentDef[4];
 					MT.UI.TreeNodeSetTextColorMaxRank(Node);
 					MT.UI.TreeNodeLight(Node);
-				elseif TalentSet[dbIndex] + numPoints <= 0 then
-					if TalentSet[dbIndex] + numPoints < 0 then
+				elseif TalentSet[TalentSeq] + numPoints <= 0 then
+					if TalentSet[TalentSeq] + numPoints < 0 then
 						ret = 5;
 					end
-					numPoints = -TalentSet[dbIndex];
-					TalentSet[dbIndex] = 0;
+					numPoints = -TalentSet[TalentSeq];
+					TalentSet[TalentSeq] = 0;
 					MT.UI.TreeNodeUnlight(Node);
 					MT.UI.TreeNodeSetTextColorUnavailable(Node);
 				else
-					TalentSet[dbIndex] = TalentSet[dbIndex] + numPoints;
+					TalentSet[TalentSeq] = TalentSet[TalentSeq] + numPoints;
 					MT.UI.TreeNodeSetTextColorAvailable(Node);
 					if numPoints > 0 then
 						MT.UI.TreeNodeLight(Node);
 						MT.UI.TreeNodeSetTextColorAvailable(Node);
 					end
 				end
-				Node.CurVal:SetText(TalentSet[dbIndex]);
+				Node.CurVal:SetText(TalentSet[TalentSeq]);
 
 				return ret;
 			else
-				local tier = def[1];
-				local depby = def[12];
+				local tier = TalentDef[1];
+				local depby = TalentDef[12];
 				if numPoints < 0 then	--	whether it can be decreased
 					if depby ~= nil then		--	depended on by other
 						for i = 1, #depby do
@@ -696,45 +736,45 @@ MT.BuildEnv('UI');
 
 				local ret = 0;
 
-				if TalentSet[dbIndex] + numPoints >= def[4] then
-					if TalentSet[dbIndex] + numPoints > def[4] then
+				if TalentSet[TalentSeq] + numPoints >= TalentDef[4] then
+					if TalentSet[TalentSeq] + numPoints > TalentDef[4] then
 						ret = 4;
 					end
-					numPoints = def[4] - TalentSet[dbIndex];
-					TalentSet[dbIndex] = def[4];
+					numPoints = TalentDef[4] - TalentSet[TalentSeq];
+					TalentSet[TalentSeq] = TalentDef[4];
 					MT.UI.TreeNodeSetTextColorMaxRank(Node);
 					MT.UI.TreeNodeLight(Node);
 					if depby ~= nil then
 						for i = 1, #depby do
 							MT.UI.TreeNodeActivate_RecheckPoint(TreeFrame.TreeNodes[TreeTDB[depby[i]][10]]);
 						end
-						local Arrows = TreeFrame.NodeDependArrows[dbIndex];
+						local Arrows = TreeFrame.NodeDependArrows[TalentSeq];
 						for i = 1, #Arrows do
 							MT.UI.DependArrowSetTexCoord(Arrows[i], true);
 						end
 					end
-				elseif TalentSet[dbIndex] + numPoints <= 0 then
-					if TalentSet[dbIndex] + numPoints < 0 then
+				elseif TalentSet[TalentSeq] + numPoints <= 0 then
+					if TalentSet[TalentSeq] + numPoints < 0 then
 						ret = 5;
 					end
-					numPoints = -TalentSet[dbIndex];
-					TalentSet[dbIndex] = 0;
+					numPoints = -TalentSet[TalentSeq];
+					TalentSet[TalentSeq] = 0;
 					MT.UI.TreeNodeUnlight(Node);
 					MT.UI.TreeNodeSetTextColorAvailable(Node);
 				else
-					TalentSet[dbIndex] = TalentSet[dbIndex] + numPoints;
+					TalentSet[TalentSeq] = TalentSet[TalentSeq] + numPoints;
 					MT.UI.TreeNodeSetTextColorAvailable(Node);
 					if numPoints > 0 then
 						MT.UI.TreeNodeLight(Node);
 					end
 				end
-				Node.CurVal:SetText(TalentSet[dbIndex]);
+				Node.CurVal:SetText(TalentSet[TalentSeq]);
 
 				if numPoints < 0 and depby ~= nil then	--	deactive talents that depend on this
 					for i = 1, #depby do
 						MT.UI.TreeNodeDeactive(TreeFrame.TreeNodes[TreeTDB[depby[i]][10]]);
 					end
-					local Arrows = TreeFrame.NodeDependArrows[dbIndex];
+					local Arrows = TreeFrame.NodeDependArrows[TalentSeq];
 					for i = 1, #Arrows do
 						MT.UI.DependArrowSetTexCoord(Arrows[i], false);
 					end
@@ -745,7 +785,7 @@ MT.BuildEnv('UI');
 				--	TopCheckedTier		begin from 0
 				TalentSet.Total = TalentSet.Total + numPoints;
 				TreeFrame.CurTreePoints:SetText(TalentSet.Total);
-				TalentSet.CountByTier[def[1]] = TalentSet.CountByTier[def[1]] + numPoints;
+				TalentSet.CountByTier[TalentDef[1]] = TalentSet.CountByTier[TalentDef[1]] + numPoints;
 
 				local TopAvailableTier = min(floor(TalentSet.Total / CT.NUM_POINTS_NEXT_TIER), DT.MAX_NUM_TIER - 1);
 				if TopAvailableTier > TalentSet.TopAvailableTier then
@@ -783,13 +823,13 @@ MT.BuildEnv('UI');
 
 				if Frame.name ~= nil then
 					local TalentChanged = TreeFrame.TalentChanged;
-					if TalentChanged[dbIndex] ~= nil then
-						TalentChanged[dbIndex] = TalentChanged[dbIndex] + numPoints;
-						if TalentChanged[dbIndex] == 0 then
-							TalentChanged[dbIndex] = nil;
+					if TalentChanged[TalentSeq] ~= nil then
+						TalentChanged[TalentSeq] = TalentChanged[TalentSeq] + numPoints;
+						if TalentChanged[TalentSeq] == 0 then
+							TalentChanged[TalentSeq] = nil;
 						end
 					else
-						TalentChanged[dbIndex] = numPoints;
+						TalentChanged[TalentSeq] = numPoints;
 					end
 				end
 
@@ -800,31 +840,31 @@ MT.BuildEnv('UI');
 					EditBox:SetText(MT.GenerateTitleFromRawData(Frame));
 				end
 
-				MT.UI.FrameUpdateLabelTex(Frame);
+				MT.UI.FrameUpdateLabelText(Frame);
 				if GetMouseFocus() == Node then
-					MT.UI.TooltipFrameSetTalent(VT.TooltipFrame, Node, TreeFrame.SpecID, def[1] * 5, TreeFrame.TalentSet.Total, def[8], TalentSet[dbIndex], def[4])
+					MT.UI.TooltipFrameSetTalent(VT.TooltipFrame, Node, TreeFrame.SpecID, TalentDef[1] * 5, TreeFrame.TalentSet.Total, TalentDef[8], TalentSet[TalentSeq], TalentDef[4])
 				end
 
 				return ret;
 			end
 		end
-		function MT.UI.TreeFrameResetTalentDependTree(TreeFrame, dbIndex)
+		function MT.UI.TreeFrameResetTalentDependTree(TreeFrame, TalentSeq)
 			local TalentSet = TreeFrame.TalentSet;
 			local TreeTDB = TreeFrame.TreeTDB;
-			if TalentSet[dbIndex] > 0 then
-				local depby = TreeTDB[dbIndex][12];
+			if TalentSet[TalentSeq] > 0 then
+				local depby = TreeTDB[TalentSeq][12];
 				if depby then
 					for index = 1, #depby do
 						MT.UI.TreeFrameResetTalentDependTree(TreeFrame, depby[index]);
 					end
 				end
-				MT.UI.TreeNodeChangePoint(TreeFrame.TreeNodes[TreeTDB[dbIndex][10]], -TalentSet[dbIndex]);
+				MT.UI.TreeNodeChangePoint(TreeFrame.TreeNodes[TreeTDB[TalentSeq][10]], -TalentSet[TalentSeq]);
 			end
 		end
 		function MT.UI.TreeFrameResetTalents(TreeFrame)
 			local TreeTDB = TreeFrame.TreeTDB;
-			for i = #TreeTDB, 1, -1 do
-				MT.UI.TreeFrameResetTalentDependTree(TreeFrame, i);
+			for TalentSeq = #TreeTDB, 1, -1 do
+				MT.UI.TreeFrameResetTalentDependTree(TreeFrame, TalentSeq);
 			end
 		end
 		function MT.UI.FrameResetTalents(Frame)
@@ -834,53 +874,59 @@ MT.BuildEnv('UI');
 				MT.UI.TreeFrameResetTalents(TreeFrame);
 			end
 		end
-		function MT.UI.FrameReset(Frame)
-			local TreeFrames = Frame.TreeFrames;
-			for TreeIndex = 1, 3 do
-				local TreeFrame = TreeFrames[TreeIndex];
+		function MT.UI.FrameReset(Frame, ResetData, ResetName, ResetSetting)
+			if ResetData ~= false then
+				local TreeFrames = Frame.TreeFrames;
+				for TreeIndex = 1, 3 do
+					local TreeFrame = TreeFrames[TreeIndex];
 
-				local TreeNodes = TreeFrame.TreeNodes;
-				for i = 1, DT.MAX_NUM_ICONS_PER_SPEC do
-					TreeNodes[i]:Hide();
-					TreeNodes[i].dbIndex = nil;
-					MT.UI.TreeNodeDeactive(TreeNodes[i]);
+					local TreeNodes = TreeFrame.TreeNodes;
+					for i = 1, DT.MAX_NUM_TALENTS do
+						TreeNodes[i]:Hide();
+						TreeNodes[i].TalentSeq = nil;
+						MT.UI.TreeNodeDeactive(TreeNodes[i]);
+					end
+
+					local TalentSet = TreeFrame.TalentSet;
+					for i = 1, DT.MAX_NUM_TALENTS do
+						TalentSet[i] = 0;
+					end
+					for Tier = 0, DT.MAX_NUM_TIER do
+						TalentSet.CountByTier[Tier] = 0;
+					end
+					TalentSet.Total = 0;
+					TalentSet.TopAvailableTier = 0;
+					TalentSet.TopCheckedTier = 0;
+
+					for i = 1, DT.MAX_NUM_TALENTS do
+						wipe(TreeFrame.NodeDependArrows[i]);
+					end
+
+					local DependArrows = TreeFrame.DependArrows;
+					for i = 1, #DependArrows do
+						DependArrows[i]:Hide();
+						DependArrows[i].Branch1:Hide();
+						DependArrows[i]:ClearAllPoints();
+						DependArrows[i].Branch1:ClearAllPoints();
+					end
+					DependArrows.used = 0;
+
+					TreeFrame.CurTreePoints:SetText("0");
 				end
 
-				local TalentSet = TreeFrame.TalentSet;
-				for i = 1, DT.MAX_NUM_TALENTS do
-					TalentSet[i] = 0;
-				end
-				for i = 0, DT.MAX_NUM_TIER do
-					TalentSet.CountByTier[i] = 0;
-				end
-				TalentSet.Total = 0;
-				TalentSet.TopAvailableTier = 0;
-				TalentSet.TopCheckedTier = 0;
-
-				for i = 1, DT.MAX_NUM_ICONS_PER_SPEC do
-					wipe(TreeFrame.NodeDependArrows[i]);
-				end
-
-				local DependArrows = TreeFrame.DependArrows;
-				for i = 1, #DependArrows do
-					DependArrows[i]:Hide();
-					DependArrows[i].Branch1:Hide();
-					DependArrows[i]:ClearAllPoints();
-					DependArrows[i].Branch1:ClearAllPoints();
-				end
-				DependArrows.used = 0;
-
-				TreeFrame.CurTreePoints:SetText("0");
+				MT.UI.FrameSetClass(Frame, nil);
+				MT.UI.FrameSetLevel(Frame, nil);
+				MT.UI.FrameSetData(Frame, nil);
+			end
+			if ResetName ~= false then
+				MT.UI.FrameSetName(Frame, nil);
+			end
+			if ResetSetting ~= false then
+				--	MT.UI.FrameSetReadOnly(Frame, false);
+				MT.UI.FrameSetEditByRule(Frame, false);
 			end
 
-			MT.UI.FrameSetClass(Frame, nil);
-			MT.UI.FrameSetLevel(Frame, nil);
-			MT.UI.FrameSetData(Frame, nil);
-			--	MT.UI.FrameSetReadOnly(Frame, false);
-			MT.UI.FrameSetEditByRule(Frame, false);
-			MT.UI.FrameSetName(Frame, nil);
-
-			MT.UI.FrameUpdateLabelTex(Frame);
+			MT.UI.FrameUpdateLabelText(Frame);
 
 			Frame.initialized = false;
 		end
@@ -891,9 +937,9 @@ MT.BuildEnv('UI');
 				local TreeTDB = TreeFrame.TreeTDB;
 				local TalentSet = TreeFrame.TalentSet;
 				local TreeNodes = TreeFrame.TreeNodes;
-				for i = 1, #TreeTDB do
-					if TreeTDB[i][4] ~= TalentSet[i] then
-						MT.UI.TreeNodeSetTextColorUnavailable(TreeNodes[MT.GetTreeNodeIndex(TreeTDB[i])]);
+				for TalentSeq = 1, #TreeTDB do
+					if TreeTDB[TalentSeq][4] ~= TalentSet[TalentSeq] then
+						MT.UI.TreeNodeSetTextColorUnavailable(TreeNodes[MT.GetTreeNodeIndex(TreeTDB[TalentSeq])]);
 					end
 				end
 			end
@@ -905,35 +951,34 @@ MT.BuildEnv('UI');
 				local TreeTDB = TreeFrame.TreeTDB;
 				local TalentSet = TreeFrame.TalentSet;
 				local TreeNodes = TreeFrame.TreeNodes;
-				for i = 1, #TreeTDB do
-					if TreeTDB[i][4] == TalentSet[i] then
-						--	MT.UI.TreeNodeSetTextColorMaxRank(TreeNodes[MT.GetTreeNodeIndex(TreeTDB[i])]);
-					elseif TalentSet[i] > 0 or TreeTDB[i][1] == 0 then
-						MT.UI.TreeNodeSetTextColorAvailable(TreeNodes[MT.GetTreeNodeIndex(TreeTDB[i])]);
+				for TalentSeq = 1, #TreeTDB do
+					if TreeTDB[TalentSeq][4] == TalentSet[TalentSeq] then
+						--	MT.UI.TreeNodeSetTextColorMaxRank(TreeNodes[MT.GetTreeNodeIndex(TreeTDB[TalentSeq])]);
+					elseif TalentSet[TalentSeq] > 0 or TreeTDB[TalentSeq][1] == 0 then
+						MT.UI.TreeNodeSetTextColorAvailable(TreeNodes[MT.GetTreeNodeIndex(TreeTDB[TalentSeq])]);
 					else
-						local def = TreeTDB[i];
+						local TalentDef = TreeTDB[TalentSeq];
 						local numPointsLowerTier = 0;
-						for j = 0, def[1] - 1 do
+						for j = 0, TalentDef[1] - 1 do
 							numPointsLowerTier = numPointsLowerTier + TalentSet.CountByTier[j];
 						end
-						if numPointsLowerTier >= def[1] * CT.NUM_POINTS_NEXT_TIER then
-							MT.UI.TreeNodeActivate_RecheckReq(TreeNodes[MT.GetTreeNodeIndex(TreeTDB[i])]);
+						if numPointsLowerTier >= TalentDef[1] * CT.NUM_POINTS_NEXT_TIER then
+							MT.UI.TreeNodeActivate_RecheckReq(TreeNodes[MT.GetTreeNodeIndex(TreeTDB[TalentSeq])]);
 						end
 					end
 				end
 			end
 		end
-		function MT.UI.FrameUpdateLabelTex(Frame)
+		function MT.UI.FrameUpdateLabelText(Frame)
 			local objects = Frame.objects;
 			if Frame.name then
-				--objects.ResetToEmuButton:Hide();
 				local should_show = false;
 				for TreeIndex = 1, 3 do
 					local TreeFrame = Frame.TreeFrames[TreeIndex];
 					local TalentChanged = TreeFrame.TalentChanged;
 					local TreeTDB = TreeFrame.TreeTDB;
-					for i = 1, #TreeTDB do
-						if TalentChanged[i] then
+					for TalentSeq = 1, #TreeTDB do
+						if TalentChanged[TalentSeq] then
 							should_show = true;
 							break;
 						end
@@ -941,10 +986,18 @@ MT.BuildEnv('UI');
 				end
 				if should_show then
 					objects.ResetToSetButton:Show();
-					objects.Label:SetText(Frame.name .. L.LabelPointsChanged);
+					if Frame.label ~= nil then
+						objects.Label:SetText(Frame.label .. L.LabelPointsChanged);
+					else
+						objects.Name:SetText(Frame.name .. L.LabelPointsChanged);
+					end
 				else
 					objects.ResetToSetButton:Hide();
-					objects.Label:SetText(Frame.name);
+					if Frame.label ~= nil then
+						objects.Label:SetText(Frame.label);
+					else
+						objects.Name:SetText(Frame.name);
+					end
 				end
 			end
 			objects.CurPointsUsed:SetText(Frame.TotalUsedPoints);
@@ -1045,32 +1098,32 @@ MT.BuildEnv('UI');
 			Node.Overlay:SetTexture(TTEXTURESET.ICON_FORBIDDEN);
 		end
 		function MT.UI.TreeNodeActivate_RecheckReq(Node)
-			local dbIndex = Node.dbIndex;
-			if dbIndex then
+			local TalentSeq = Node.TalentSeq;
+			if TalentSeq then
 				local TreeFrame = Node.TreeFrame;
 				local TreeTDB = TreeFrame.TreeTDB;
-				local def = TreeTDB[dbIndex];
-				local dep = def[11];
-				if dep == nil or TreeFrame.TalentSet[dep] == TreeTDB[dep][4] then
+				local TalentDef = TreeTDB[TalentSeq];
+				local DepTSeq = TalentDef[11];
+				if DepTSeq == nil or TreeFrame.TalentSet[DepTSeq] == TreeTDB[DepTSeq][4] then
 					MT.UI.TreeNodeActivate(Node);
 				end
 			end
 		end
 		function MT.UI.TreeNodeActivate_RecheckPoint(Node)
-			local dbIndex = Node.dbIndex;
-			if dbIndex > 0 then
+			local TalentSeq = Node.TalentSeq;
+			if TalentSeq > 0 then
 				local TreeFrame = Node.TreeFrame;
 				local TreeTDB = TreeFrame.TreeTDB;
 				local TalentSet = TreeFrame.TalentSet;
-				local def = TreeTDB[dbIndex];
-				if def[1] == 0 then
+				local TalentDef = TreeTDB[TalentSeq];
+				if TalentDef[1] == 0 then
 					MT.UI.TreeNodeActivate(Node);
 				end
 				local numPointsLowerTier = 0;
-				for i = 0, def[1] - 1 do
-					numPointsLowerTier = numPointsLowerTier + TalentSet.CountByTier[i];
+				for Tier = 0, TalentDef[1] - 1 do
+					numPointsLowerTier = numPointsLowerTier + TalentSet.CountByTier[Tier];
 				end
-				if numPointsLowerTier >= def[1] * CT.NUM_POINTS_NEXT_TIER then
+				if numPointsLowerTier >= TalentDef[1] * CT.NUM_POINTS_NEXT_TIER then
 					MT.UI.TreeNodeActivate(Node);
 				end
 			end
@@ -1181,10 +1234,10 @@ MT.BuildEnv('UI');
 				Branch2:SetSize(TUISTYLE.TreeNodeSize * (horizontalDist - 1) + TUISTYLE.TreeNodeXGap * horizontalDist + TUISTYLE.TreeNodeSize * 0.5, TUISTYLE.TalentDepBranchXSize);
 				if horizontalDist > 0 then
 					Branch2:SetPoint("LEFT", DepNode, "RIGHT");
-					Branch2:SetPoint("RIGHT", Branch1, "RIGHT");
+					Branch2:SetPoint("TOPRIGHT", Branch1, "TOPRIGHT");
 				else
 					Branch2:SetPoint("RIGHT", DepNode, "LEFT");
-					Branch2:SetPoint("LEFT", Branch1, "LEFT");
+					Branch2:SetPoint("TOPLEFT", Branch1, "TOPLEFT");
 				end
 				Branch2:Show();
 			end
@@ -1366,10 +1419,10 @@ MT.BuildEnv('UI');
 		end
 		function MT.UI.SetTooltip(Node)
 			local TreeFrame = Node.TreeFrame;
-			local dbIndex = Node.dbIndex;
-			local def = TreeFrame.TreeTDB[dbIndex];
-			if def ~= nil then
-				MT.UI.TooltipFrameSetTalent(VT.TooltipFrame, Node, TreeFrame.SpecID, def[1] * 5, TreeFrame.TalentSet.Total, def[8], TreeFrame.TalentSet[dbIndex], def[4]);
+			local TalentSeq = Node.TalentSeq;
+			local TalentDef = TreeFrame.TreeTDB[TalentSeq];
+			if TalentDef ~= nil then
+				MT.UI.TooltipFrameSetTalent(VT.TooltipFrame, Node, TreeFrame.SpecID, TalentDef[1] * 5, TreeFrame.TalentSet.Total, TalentDef[8], TreeFrame.TalentSet[TalentSeq], TalentDef[4]);
 			else
 				MT.UI.HideTooltip(Node);
 			end
@@ -1389,26 +1442,28 @@ MT.BuildEnv('UI');
 			local search = SpellListFrame.SearchEdit:GetText();
 			if search == "" then search = nil; end
 			local TreeFrames = SpellListFrame.Frame.TreeFrames;
-			local S = DT.SpellDB[class];
-			if S ~= nil then
-				for _, s in next, S do
-					if not s.talent or TreeFrames[s.requireSpecIndex].TalentSet[s.requireIndex] > 0 then
-						for i = 1, #s do
-							local v = s[i];
+			local ClassSDB = DT.SpellDB[class];
+			if ClassSDB ~= nil then
+				for index = 1, #ClassSDB do
+					local SpellDef = ClassSDB[index];
+					if not SpellDef.talent or TreeFrames[SpellDef.requireSpecIndex].TalentSet[SpellDef.requireIndex] > 0 then
+						local NumLevel = #SpellDef;
+						for Level = 1, NumLevel do
+							local v = SpellDef[Level];
 							if search == nil or strmatch(GetSpellInfo(v[2]), search) or strmatch(tostring(v[2]), search) then
 								if v[1] <= level then
 									if showAll then
 										pos = pos + 1;
 										list[pos] = v;
-									elseif i == #s then
+									elseif Level == NumLevel then
 										pos = pos + 1;
 										list[pos] = v;
 									end
 								else
 									if not showAll then
-										if i > 1 then
+										if Level > 1 then
 											pos = pos + 1;
-											list[pos] = s[i - 1];
+											list[pos] = SpellDef[Level - 1];
 										end
 									end
 									break;
@@ -1649,7 +1704,7 @@ MT.BuildEnv('UI');
 				elseif data[1] > 0 then
 					GameTooltip:AddLine(L.SpellListFrameGTTReqLevel .. data[1], 1.0, 0.75, 0.5);
 				end
-				if CT.SELFCLASSUPPER == Node.list.class then
+				if CT.SELFCLASS == Node.list.class then
 					if not data[6] then
 						if FindSpellBookSlotBySpellID(data[2]) then
 							GameTooltip:AddLine(L.SpellAvailable);
@@ -1790,56 +1845,75 @@ MT.BuildEnv('UI');
 			SearchEditTexture:SetAlpha(0.75);
 			SearchEditTexture:SetBlendMode("ADD");
 			SearchEditTexture:SetVertexColor(0.25, 0.25, 0.25);
+			SearchEdit.Texture = SearchEditTexture;
 			local SearchEditNote = SearchEdit:CreateFontString(nil, "OVERLAY");
 			SearchEditNote:SetFont(GameFontNormal:GetFont(), 12);
 			SearchEditNote:SetTextColor(1.0, 1.0, 1.0, 0.5);
 			SearchEditNote:SetPoint("LEFT", 4, 0);
 			SearchEditNote:SetText(L.Search);
 			SearchEditNote:Show();
-			local SearchCancel = CreateFrame("BUTTON", nil, SearchEdit);
-			SearchCancel:SetSize(16, 16);
-			SearchCancel:SetPoint("RIGHT", SearchEdit);
-			SearchCancel:SetScript("OnClick", function(self) SearchEdit:SetText(""); SearchEdit:ClearFocus(); end);
-			SearchCancel:Hide();
-			SearchCancel:SetNormalTexture("interface\\petbattles\\deadpeticon")
+			SearchEdit.Note = SearchEditNote;
+			local SearchEditCancel = CreateFrame("BUTTON", nil, SearchEdit);
+			SearchEditCancel:SetSize(16, 16);
+			SearchEditCancel:SetPoint("RIGHT", SearchEdit);
+			SearchEditCancel:SetScript("OnClick", function(SearchEditCancel)
+				SearchEdit:SetText("");
+				SearchEdit:ClearFocus();
+			end);
+			SearchEditCancel:Hide();
+			SearchEditCancel:SetNormalTexture("interface\\petbattles\\deadpeticon");
+			SearchEdit.Cancel = SearchEditCancel;
 			local SearchEditOK = CreateFrame("BUTTON", nil, SpellListFrame);
 			SearchEditOK:SetSize(32, 16);
 			SearchEditOK:SetPoint("LEFT", SearchEdit, "RIGHT", 4, 0);
-			SearchEditOK:SetScript("OnClick", function(self) SearchEdit:ClearFocus(); end);
+			SearchEditOK:SetScript("OnClick", function(SearchEditOK)
+				SearchEdit:ClearFocus();
+			end);
 			SearchEditOK:Disable();
+			SearchEdit.OK = SearchEditOK;
 			local SearchEditOKTexture = SearchEditOK:CreateTexture(nil, "ARTWORK");
 			SearchEditOKTexture:SetPoint("TOPLEFT");
 			SearchEditOKTexture:SetPoint("BOTTOMRIGHT");
 			SearchEditOKTexture:SetColorTexture(0.25, 0.25, 0.25, 0.5);
 			SearchEditOKTexture:SetAlpha(0.75);
 			SearchEditOKTexture:SetBlendMode("ADD");
+			SearchEditOK.Texture = SearchEditOKTexture;
 			local SearchEditOKText = SearchEditOK:CreateFontString(nil, "OVERLAY");
 			SearchEditOKText:SetFont(GameFontHighlight:GetFont(), 12);
 			SearchEditOKText:SetTextColor(1.0, 1.0, 1.0, 0.5);
 			SearchEditOKText:SetPoint("CENTER");
 			SearchEditOKText:SetText(L["OK"]);
+			SearchEditOK.Text = SearchEditOKText;
 			SearchEditOK:SetFontString(SearchEditOKText);
 			SearchEditOK:SetPushedTextOffset(1, -1);
-			SearchEditOK:SetScript("OnEnable", function(self) SearchEditOKText:SetTextColor(1.0, 1.0, 1.0, 1.0); end);
-			SearchEditOK:SetScript("OnDisable", function(self) SearchEditOKText:SetTextColor(1.0, 1.0, 1.0, 0.5); end);
-			SearchEdit:SetScript("OnEnterPressed", function(self) self:ClearFocus(); end);
-			SearchEdit:SetScript("OnEscapePressed", function(self) self:ClearFocus(); end);
-			SearchEdit:SetScript("OnTextChanged", function(self, isUserInput)
+			SearchEditOK:SetScript("OnEnable", function(SearchEditOK)
+				SearchEditOKText:SetTextColor(1.0, 1.0, 1.0, 1.0);
+			end);
+			SearchEditOK:SetScript("OnDisable", function(SearchEditOK)
+				SearchEditOKText:SetTextColor(1.0, 1.0, 1.0, 0.5);
+			end);
+			SearchEdit:SetScript("OnEnterPressed", function(SearchEdit)
+				SearchEdit:ClearFocus();
+			end);
+			SearchEdit:SetScript("OnEscapePressed", function(SearchEdit)
+				SearchEdit:ClearFocus();
+			end);
+			SearchEdit:SetScript("OnTextChanged", function(SearchEdit, isUserInput)
 				MT.UI.SpellListFrameUpdate(SpellListFrame, Frame.class, MT.GetPointsReqLevel(Frame.TotalUsedPoints));
 				if not SearchEdit:HasFocus() and SearchEdit:GetText() == "" then
 					SearchEditNote:Show();
 				end
 				if SearchEdit:GetText() == "" then
-					SearchCancel:Hide();
+					SearchEditCancel:Hide();
 				else
-					SearchCancel:Show();
+					SearchEditCancel:Show();
 				end
 			end);
-			SearchEdit:SetScript("OnEditFocusGained", function(self)
+			SearchEdit:SetScript("OnEditFocusGained", function(SearchEdit)
 				SearchEditNote:Hide();
 				SearchEditOK:Enable();
 			end);
-			SearchEdit:SetScript("OnEditFocusLost", function(self)
+			SearchEdit:SetScript("OnEditFocusLost", function(SearchEdit)
 				if SearchEdit:GetText() == "" then SearchEditNote:Show(); end
 				SearchEditOK:Disable();
 			end);
@@ -1854,7 +1928,7 @@ MT.BuildEnv('UI');
 			ShowAllSpell:Show();
 			ShowAllSpell:SetChecked(false);
 			ShowAllSpell:SetPoint("BOTTOMRIGHT", -TUISTYLE.SpellListFrameXToBorder, 6);
-			ShowAllSpell:SetScript("OnClick", function(self)
+			ShowAllSpell:SetScript("OnClick", function(ShowAllSpell)
 				MT.UI.SpellListFrameUpdate(SpellListFrame, Frame.class, MT.GetPointsReqLevel(Frame.TotalUsedPoints));
 			end);
 			SpellListFrame.ShowAllSpell = ShowAllSpell;
@@ -1862,13 +1936,15 @@ MT.BuildEnv('UI');
 			local ShowAllSpellLabel = SpellListFrame:CreateFontString(nil, "ARTWORK");
 			ShowAllSpellLabel:SetFont(GameFontHighlight:GetFont(), 10, TUISTYLE.FrameFontOutline);
 			ShowAllSpellLabel:SetText(L.ShowAllSpell);
-			ShowAllSpell.Label = ShowAllSpellLabel;
+			ShowAllSpell.Name = ShowAllSpellLabel;
 			ShowAllSpellLabel:SetPoint("RIGHT", ShowAllSpell, "LEFT", 0, 0);
 
 			local Close = CreateFrame("BUTTON", nil, SpellListFrame);
 			Close:SetSize(32, 16);
 			Close:SetPoint("BOTTOMLEFT", 4, 6);
-			Close:SetScript("OnClick", function(self) MT.UI.SpellListFrameToggle(Frame); end);
+			Close:SetScript("OnClick", function(Close)
+				MT.UI.SpellListFrameToggle(Frame);
+			end);
 			local CloseTexture = Close:CreateTexture(nil, "ARTWORK");
 			CloseTexture:SetPoint("TOPLEFT");
 			CloseTexture:SetPoint("BOTTOMRIGHT");
@@ -1912,6 +1988,12 @@ MT.BuildEnv('UI');
 				if Node.link then
 					DressUpItemLink(Node.link);
 				end
+			end
+		end
+		local function EquipmentFrame_OnShow(EquipmentFrame)
+			local Frame = EquipmentFrame.Frame;
+			if Frame.name ~= nil then
+				MT.UI.EquipmentFrameUpdate(EquipmentFrame.EquipmentContainer, VT.TQueryCache[Frame.name]);
 			end
 		end
 		function MT.UI.CreateEquipmentFrame(Frame)
@@ -1984,12 +2066,9 @@ MT.BuildEnv('UI');
 					Node.Name:SetPoint("LEFT", Node, "RIGHT", TUISTYLE.EquipmentNodeTextGap, 0);
 				end
 			end
-			EquipmentFrame:SetScript("OnShow", function(self)
-				if Frame.name ~= nil then
-					MT.UI.EquipmentFrameUpdate(EquipmentContainer, VT.TQueryCache[Frame.name]);
-				end
-			end);
+			EquipmentFrame:SetScript("OnShow", EquipmentFrame_OnShow);
 			EquipmentFrame.Frame = Frame;
+			EquipmentFrame.EquipmentContainer = EquipmentContainer;
 			EquipmentContainer.EquipmentNodes = EquipmentNodes;
 			EquipmentFrameContainer.Frame = Frame;
 			return EquipmentFrame, EquipmentContainer, EquipmentFrameContainer;
@@ -2007,8 +2086,8 @@ MT.BuildEnv('UI');
 				local Frame = TreeFrame.Frame;
 				local TreeTDB = TreeFrame.TreeTDB;
 				local TalentSet = TreeFrame.TalentSet;
-				local dbIndex = Node.dbIndex;
-				local link = MT.GetSpellLink(TreeTDB[dbIndex][8][TalentSet[dbIndex] == 0 and 1 or TalentSet[dbIndex]]);
+				local TalentSeq = Node.TalentSeq;
+				local link = MT.GetSpellLink(TreeTDB[TalentSeq][8][TalentSet[TalentSeq] == 0 and 1 or TalentSet[TalentSeq]]);
 				if link then
 					local editBox = ChatEdit_ChooseBoxForSend();
 					editBox:Show();
@@ -2074,7 +2153,7 @@ MT.BuildEnv('UI');
 			local TreeNodes = {  };
 			local posX = 0;
 			local posY = 0;
-			for id = 1, DT.MAX_NUM_ICONS_PER_SPEC do
+			for id = 1, DT.MAX_NUM_TALENTS do
 				local Node = CreateTreeNode(TreeFrame, id);
 				Node:SetPoint("TOP", TreeFrame, "TOP", (TUISTYLE.TreeNodeSize + TUISTYLE.TreeNodeXGap) * (posX - DT.MAX_NUM_COL * 0.5 + 0.5), -TUISTYLE.TreeFrameHeaderYSize - TUISTYLE.TreeNodeYToTop - (TUISTYLE.TreeNodeSize + TUISTYLE.TreeNodeYGap) * posY);
 				Node:Hide();
@@ -2091,9 +2170,17 @@ MT.BuildEnv('UI');
 		end
 		local function TreeFrameResetButton_OnClick(ResetButton)
 			local TreeFrame = ResetButton.TreeFrame;
-			-- local Frame = TreeFrame.Frame;
 			MT.UI.TreeFrameResetTalents(TreeFrame);
-			--	MT.UI.FrameSetReadOnly(Frame, false);
+			--	MT.UI.FrameSetReadOnly(TreeFrame.Frame, false);
+		end
+		local function TreeFrame_OnDragStart(TreeFrame, button)
+			local Frame = TreeFrame.Frame;
+			if not Frame.isMoving and not Frame.isResizing and Frame:IsMovable() then
+				Frame:StartMoving();
+			end
+		end
+		local function TreeFrame_OnDragStop(TreeFrame, button)
+			TreeFrame.Frame:StopMovingOrSizing();
 		end
 		function MT.UI.CreateTreeFrames(Frame)
 			local TreeFrames = {  };
@@ -2108,16 +2195,8 @@ MT.BuildEnv('UI');
 				TreeFrame:RegisterForDrag("LeftButton");
 				--	TreeFrame:SetScript("OnShow", TreeFrame_OnShow);
 				--	TreeFrame:SetScript("OnHide", TreeFrame_OnHide);
-				TreeFrame:SetScript("OnDragStart", function(self, button)
-						if not Frame.isMoving and not Frame.isResizing and Frame:IsMovable() then
-							Frame:StartMoving();
-						end
-					end
-				);
-				TreeFrame:SetScript("OnDragStop", function(self, button)
-						Frame:StopMovingOrSizing();
-					end
-				);
+				TreeFrame:SetScript("OnDragStart", TreeFrame_OnDragStart);
+				TreeFrame:SetScript("OnDragStop", TreeFrame_OnDragStop);
 
 				local HSeq = {  };
 				HSeq[1] = TreeFrame:CreateTexture(nil, "ARTWORK");
@@ -2170,7 +2249,7 @@ MT.BuildEnv('UI');
 
 				local ResetButtonBG = TreeFrame:CreateTexture(nil, "ARTWORK");
 				ResetButtonBG:SetSize(TUISTYLE.TreeNodeSize, TUISTYLE.TreeNodeSize);
-				ResetButtonBG:SetPoint("CENTER", TreeFrame.TreeNodes[DT.MAX_NUM_ICONS_PER_SPEC]);
+				ResetButtonBG:SetPoint("CENTER", TreeFrame.TreeNodes[DT.MAX_NUM_TALENTS]);
 				ResetButtonBG:SetTexture(TTEXTURESET.TALENT_RESET_BG);
 				ResetButtonBG:SetTexCoord(TTEXTURESET.TALENT_RESET_BG_COORD[1], TTEXTURESET.TALENT_RESET_BG_COORD[2], TTEXTURESET.TALENT_RESET_BG_COORD[3], TTEXTURESET.TALENT_RESET_BG_COORD[4]);
 				ResetButtonBG:SetVertexColor(TTEXTURESET.TALENT_RESET_BG_COLOR[1], TTEXTURESET.TALENT_RESET_BG_COLOR[2], TTEXTURESET.TALENT_RESET_BG_COLOR[3], TTEXTURESET.TALENT_RESET_BG_COLOR[4]);
@@ -2216,7 +2295,7 @@ MT.BuildEnv('UI');
 				TreeFrame.TalentChanged = {  };
 				TreeFrame.DependArrows = { used = 0, };
 				TreeFrame.NodeDependArrows = {  };
-				for i = 1, DT.MAX_NUM_ICONS_PER_SPEC do
+				for i = 1, DT.MAX_NUM_TALENTS do
 					TreeFrame.NodeDependArrows[i] = {  };
 				end
 
@@ -2248,15 +2327,46 @@ MT.BuildEnv('UI');
 		end
 		local function ResetToSetButton_OnClick(self)
 			local Frame = self.Frame;
-			local class, data, level, readOnly, name, rule =  Frame.class, Frame.data, Frame.level, Frame.readOnly, Frame.name, Frame.rule;
+			local class, level, data, activeGroup, name, readOnly, rule =  Frame.class, Frame.level, Frame.data, Frame.activeGroup, Frame.name, Frame.readOnly, Frame.rule;
 			local ShowEquip = Frame.EquipmentFrameContainer:IsShown();
 			MT.UI.FrameReset(Frame);
-			MT.UI.FrameSetInfo(Frame, class, data, level, readOnly, name, rule);
+			MT.UI.FrameSetInfo(Frame, class, level, data, activeGroup, name, readOnly, rule);
 			if ShowEquip then
 				Frame.EquipmentFrameContainer:Show();
+				MT.Error("EquipFrame", "ResetToSet Show");
 			end
 			MT.CALLBACK.OnInventoryDataRecv(name);
 			self:Hide();
+		end
+		VT.TalentGroupSelectMenuDefinition = {
+			handler = function(button, Frame, val)
+				local class, level, data, activeGroup, name, readOnly, rule =  Frame.class, Frame.level, Frame.data, Frame.activeGroup, Frame.name, Frame.readOnly, Frame.rule;
+				local ShowEquip = Frame.EquipmentFrameContainer:IsShown();
+				MT.UI.FrameReset(Frame);
+				MT.UI.FrameSetInfo(Frame, class, level, data, val, name, readOnly, rule);
+				if ShowEquip then
+					Frame.EquipmentFrameContainer:Show();
+					MT.Error("EquipFrame", "TalentGroupSelect Show");
+				end
+				return MT.CALLBACK.OnInventoryDataRecv(name);
+			end,
+			num = 0,
+		};
+		local function TalentGroupSelect_OnClick(self)
+			local Frame = self.Frame;
+			local data = Frame.data;
+			if data.num > 1 then
+				for group = 1, data.num do
+					local val = data[group];
+					local stats = MT.CountTreePoints(val, Frame.class);
+					VT.TalentGroupSelectMenuDefinition[group] = {
+						param = group,
+						text = (group == Frame.activeGroup) and ("|cff00ff00>|r " .. stats[1] .. "-" .. stats[2] .. "-" .. stats[3] .. " |cff00ff00<|r") or ("|cff000000>|r " .. stats[1] .. "-" .. stats[2] .. "-" .. stats[3] .. " |cff000000<|r"),
+					};
+				end
+				VT.TalentGroupSelectMenuDefinition.num = data.num;
+				VT.__menulib.ShowMenu(self, "BOTTOMRIGHT", VT.TalentGroupSelectMenuDefinition, self.Frame, false, true);
+			end
 		end
 		--	Footer
 		local function ResetAllButton_OnClick(self)
@@ -2304,8 +2414,8 @@ MT.BuildEnv('UI');
 						};
 					end
 				end
+				VT.ClassButtonMenuDefinition.num = pos;
 				if pos > 0 then
-					VT.ClassButtonMenuDefinition.num = pos;
 					VT.__menulib.ShowMenu(self, "TOPRIGHT", VT.ClassButtonMenuDefinition, Frame);
 				end
 			end
@@ -2399,6 +2509,22 @@ MT.BuildEnv('UI');
 			end,
 			num = 0,
 		};
+		VT.SaveButtonMenuAltDefinition = {
+			handler = function(button, Frame, val)
+				if IsShiftKeyDown() then
+					VT.VAR[val[1]] = nil;
+					for index = VT.SaveButtonMenuAltDefinition.num, 1, -1 do
+						if VT.SaveButtonMenuAltDefinition[index].param[1] == val[1] then
+							tremove(VT.SaveButtonMenuAltDefinition, index);
+							VT.SaveButtonMenuAltDefinition.num = VT.SaveButtonMenuAltDefinition.num - 1;
+						end
+					end
+				else
+					MT.ImportCode(Frame, val[2]);
+				end
+			end,
+			num = 0,
+		}
 		local function SaveButton_OnClick(self, button)
 			if button == "LeftButton" then
 				local Frame = self.Frame;
@@ -2416,21 +2542,26 @@ MT.BuildEnv('UI');
 					EditBox.type = "save";
 				end
 			elseif button == "RightButton" then
-				if next(VT.VAR.savedTalent) == nil then
-					return;
-				end
-				local Frame = self.Frame;
-				local pos = 0;
-				for title, code in next, VT.VAR.savedTalent do
-					pos = pos + 1;
-					VT.SaveButtonMenuDefinition[pos] = {
-						param = { title, code, },
-						text = title,
-					};
-				end
-				if pos > 0 then
+				if IsAltKeyDown() then
+					if VT.SaveButtonMenuAltDefinition.num > 0 then
+						VT.__menulib.ShowMenu(self, "TOPRIGHT", VT.SaveButtonMenuAltDefinition, self.Frame);
+					end
+				else
+					if next(VT.VAR.savedTalent) == nil then
+						return;
+					end
+					local pos = 0;
+					for title, code in next, VT.VAR.savedTalent do
+						pos = pos + 1;
+						VT.SaveButtonMenuDefinition[pos] = {
+							param = { title, code, },
+							text = title,
+						};
+					end
 					VT.SaveButtonMenuDefinition.num = pos;
-					VT.__menulib.ShowMenu(self, "TOPRIGHT", VT.SaveButtonMenuDefinition, Frame);
+					if pos > 0 then
+						VT.__menulib.ShowMenu(self, "TOPRIGHT", VT.SaveButtonMenuDefinition, self.Frame);
+					end
 				end
 			end
 		end
@@ -2443,43 +2574,13 @@ MT.BuildEnv('UI');
 		};
 		VT.SendButtonMenuDefinition = {
 			handler = function(button, Frame, val)
-				return MT.CreateEmulator(Frame, val[1], val[2], val[3], false, L.message, false);
+				return MT.CreateEmulator(Frame, val[1], val[2], val[3], L.message, false, false);
 			end,
 			num = 0,
 		};
 		local function SendButton_OnClick(self, button)
 			local Frame = self.Frame;
 			if button == "LeftButton" then
-				--[==[
-				local sendTalent_OnLeftClickData = {
-					handler = function(button, channel, Frame)
-						if channel == "WHISPER" then
-							local EditBox = Frame.EditBox;
-							if EditBox:IsShown() and EditBox.Parent == self then
-								EditBox:Hide();
-							else
-								EditBox:ClearAllPoints();
-								EditBox:SetPoint("LEFT", self, "RIGHT", TUISTYLE.EditBoxYSize + 4, 0);
-								EditBox:SetText("");
-								EditBox:Show();
-								EditBox.OKButton:ClearAllPoints();
-								EditBox.OKButton:SetPoint("LEFT", self, "RIGHT", 4, 0);
-								EditBox.Parent = self;
-								EditBox.type = "send";
-							end
-						else
-							MT.PushTalents(channel, nil, Frame);
-						end
-					end,
-				};
-				for index, channel in next, channel_list do
-					sendTalent_OnLeftClickData[index] = {
-						param = { channel, Frame, },
-						text = channel,
-					};
-				end
-				VT.__menulib.ShowMenu(self, "TOPRIGHT", sendTalent_OnLeftClickData);
-				--]==]
 				MT.SendTalents(Frame);
 			elseif button == "RightButton" then
 				if VT.SendButtonMenuDefinition.num > 0 then
@@ -2494,9 +2595,9 @@ MT.BuildEnv('UI');
 			if self.type == "import" then
 				local code = self:GetText();
 				if code ~= nil and code ~= "" then
-					local class, data, level = MT.Decode(code);
-					if class ~= nil and data ~= nil and level ~= nil then
-						MT.UI.FrameSetInfo(self.Frame, class, data, level);
+					local class, level, numGroup, activeGroup, data1, data2 = MT.Decode(code);
+					if class ~= nil then
+						MT.UI.FrameSetInfo(self.Frame, class, level, { data1, data2, num = numGroup, active = activeGroup, });
 					end
 				end
 			elseif self.type == "save" then
@@ -2505,11 +2606,6 @@ MT.BuildEnv('UI');
 					title = #VT.VAR.savedTalent + 1;
 				end
 				VT.VAR.savedTalent[title] = MT.Encode(self.Frame);
-			-- elseif self.type == "send" then
-			-- 	local target = self:GetText();
-			-- 	if target and target ~= "" then
-			-- 		MT.PushTalents("WHISPER", target, self.Frame);
-			-- 	end
 			end
 			self.type = nil;
 			self:ClearFocus();
@@ -2523,12 +2619,39 @@ MT.BuildEnv('UI');
 			MT.UI.EquipmentFrameToggle(self.Frame);
 		end
 
+		local function EditBox_OnEscapePressed(EditBox)
+			EditBox:SetText("");
+			EditBox:ClearFocus();
+			EditBox:Hide();
+		end
+		local function EditBox_OnShow(EditBox)
+			EditBox.type = nil;
+			EditBox.charChanged = nil;
+		end
+		local function EditBox_OnHide(EditBox)
+			EditBox.type = nil;
+			EditBox.charChanged = nil;
+		end
+		local function EditBox_OnChar(EditBox)
+			EditBox.charChanged = true;
+		end
+
 		function MT.UI.CreateFrameSubObject(Frame)
 			local objects = {  };
 			Frame.objects = objects;
 
 			--	<Header>
-				local ReadOnlyButton = CreateFrame("BUTTON", nil, Frame);
+				local Header = CreateFrame('FRAME', nil, Frame);
+				Header:SetPoint("TOPLEFT");
+				Header:SetPoint("TOPRIGHT");
+				Header:SetHeight(TUISTYLE.FrameHeaderYSize);
+				Frame.Header = Header;
+				local HeaderBG = Header:CreateTexture(nil, "BACKGROUND");
+				HeaderBG:SetAllPoints();
+				HeaderBG:SetColorTexture(0.0, 0.0, 0.0, 0.5);
+				Header.BG = HeaderBG;
+
+				local ReadOnlyButton = CreateFrame("BUTTON", nil, Header);
 				ReadOnlyButton:SetSize(TUISTYLE.ControlButtonSize, TUISTYLE.ControlButtonSize);
 				ReadOnlyButton:SetNormalTexture(TTEXTURESET.LOCK);
 				ReadOnlyButton:GetNormalTexture():SetVertexColor(TTEXTURESET.LOCK_UNLOCKED_COLOR[1], TTEXTURESET.LOCK_UNLOCKED_COLOR[2], TTEXTURESET.LOCK_UNLOCKED_COLOR[3], TTEXTURESET.LOCK_UNLOCKED_COLOR[4]);
@@ -2537,7 +2660,7 @@ MT.BuildEnv('UI');
 				ReadOnlyButton:GetPushedTexture():SetVertexColor(TTEXTURESET.CONTROL_PUSHED_COLOR[1], TTEXTURESET.CONTROL_PUSHED_COLOR[2], TTEXTURESET.CONTROL_PUSHED_COLOR[3], TTEXTURESET.CONTROL_PUSHED_COLOR[4]);
 				ReadOnlyButton:SetHighlightTexture(TTEXTURESET.LOCK);
 				ReadOnlyButton:GetHighlightTexture():SetVertexColor(TTEXTURESET.CONTROL_HIGHLIGHT_COLOR[1], TTEXTURESET.CONTROL_HIGHLIGHT_COLOR[2], TTEXTURESET.CONTROL_HIGHLIGHT_COLOR[3], TTEXTURESET.CONTROL_HIGHLIGHT_COLOR[4]);
-				ReadOnlyButton:SetPoint("CENTER", Frame, "TOPLEFT", TUISTYLE.FrameHeaderYSize * 0.5, -TUISTYLE.FrameHeaderYSize * 0.5);
+				ReadOnlyButton:SetPoint("CENTER", Header, "LEFT", TUISTYLE.FrameHeaderYSize * 0.5, 0);
 				ReadOnlyButton:Show();
 				ReadOnlyButton:RegisterForClicks("LeftButtonUp", "RightButtonUp");
 				ReadOnlyButton:SetScript("OnClick", ReadOnlyButton_OnClick);
@@ -2547,7 +2670,7 @@ MT.BuildEnv('UI');
 				ReadOnlyButton.information = L.ReadOnlyButton;
 				objects.ReadOnlyButton = ReadOnlyButton;
 
-				local CloseButton = CreateFrame("BUTTON", nil, Frame);
+				local CloseButton = CreateFrame("BUTTON", nil, Header);
 				CloseButton:SetSize(TUISTYLE.ControlButtonSize, TUISTYLE.ControlButtonSize);
 				CloseButton:SetNormalTexture(TTEXTURESET.CLOSE);
 				CloseButton:GetNormalTexture():SetTexCoord(TTEXTURESET.CLOSE_COORD[1], TTEXTURESET.CLOSE_COORD[2], TTEXTURESET.CLOSE_COORD[3], TTEXTURESET.CLOSE_COORD[4]);
@@ -2558,7 +2681,7 @@ MT.BuildEnv('UI');
 				CloseButton:SetHighlightTexture(TTEXTURESET.CLOSE);
 				CloseButton:GetHighlightTexture():SetTexCoord(TTEXTURESET.CLOSE_COORD[1], TTEXTURESET.CLOSE_COORD[2], TTEXTURESET.CLOSE_COORD[3], TTEXTURESET.CLOSE_COORD[4]);
 				CloseButton:GetHighlightTexture():SetVertexColor(TTEXTURESET.CONTROL_HIGHLIGHT_COLOR[1], TTEXTURESET.CONTROL_HIGHLIGHT_COLOR[2], TTEXTURESET.CONTROL_HIGHLIGHT_COLOR[3], TTEXTURESET.CONTROL_HIGHLIGHT_COLOR[4]);
-				CloseButton:SetPoint("CENTER", Frame, "TOPRIGHT", -TUISTYLE.FrameHeaderYSize * 0.5, -TUISTYLE.FrameHeaderYSize * 0.5);
+				CloseButton:SetPoint("CENTER", Header, "RIGHT", -TUISTYLE.FrameHeaderYSize * 0.5, 0);
 				CloseButton:Show();
 				CloseButton:SetScript("OnClick", CloseButton_OnClick);
 				CloseButton:SetScript("OnEnter", MT.GeneralOnEnter);
@@ -2567,20 +2690,15 @@ MT.BuildEnv('UI');
 				CloseButton.information = L.CloseButton;
 				objects.CloseButton = CloseButton;
 
-				local Label = Frame:CreateFontString(nil, "ARTWORK");
-				Label:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeMid, TUISTYLE.FrameFontOutline);
-				Label:SetText(L.Emu);
-				Label:SetPoint("CENTER", Frame, "TOP", 0, -TUISTYLE.FrameHeaderYSize * 0.5);
-				objects.Label = Label;
+				local Name = Header:CreateFontString(nil, "ARTWORK");
+				Name:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeMid, TUISTYLE.FrameFontOutline);
+				Name:SetText(L.Emu);
+				Name:SetPoint("CENTER", Header, "CENTER", 0, 0);
+				Name.Points1 = { "CENTER", Header, "CENTER", 0, 0, };
+				Name.Points2 = { "BOTTOM", Header, "TOP", 0, 4, };
+				objects.Name = Name;
 
-				local PackLabel = Frame:CreateFontString(nil, "ARTWORK");
-				PackLabel:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSize, TUISTYLE.FrameFontOutline);
-				PackLabel:SetText("");
-				PackLabel:SetPoint("BOTTOM", Label, "TOP", 0, 4);
-				PackLabel:Hide();
-				objects.PackLabel = PackLabel;
-
-				local ResetToEmuButton = CreateFrame("BUTTON", nil, Frame);
+				local ResetToEmuButton = CreateFrame("BUTTON", nil, Header);
 				ResetToEmuButton:SetSize(TUISTYLE.ControlButtonSize, TUISTYLE.ControlButtonSize);
 				ResetToEmuButton:SetNormalTexture(TTEXTURESET.CLOSE);
 				ResetToEmuButton:GetNormalTexture():SetTexCoord(TTEXTURESET.CLOSE_COORD[1], TTEXTURESET.CLOSE_COORD[2], TTEXTURESET.CLOSE_COORD[3], TTEXTURESET.CLOSE_COORD[4]);
@@ -2588,7 +2706,7 @@ MT.BuildEnv('UI');
 				ResetToEmuButton:GetPushedTexture():SetTexCoord(TTEXTURESET.CLOSE_COORD[1], TTEXTURESET.CLOSE_COORD[2], TTEXTURESET.CLOSE_COORD[3], TTEXTURESET.CLOSE_COORD[4]);
 				ResetToEmuButton:GetPushedTexture():SetVertexColor(TTEXTURESET.CONTROL_PUSHED_COLOR[1], TTEXTURESET.CONTROL_PUSHED_COLOR[2], TTEXTURESET.CONTROL_PUSHED_COLOR[3], TTEXTURESET.CONTROL_PUSHED_COLOR[4]);
 				ResetToEmuButton:SetHighlightTexture(TTEXTURESET.NORMAL_HIGHLIGHT);
-				ResetToEmuButton:SetPoint("RIGHT", Label, "LEFT", 0, 0);
+				ResetToEmuButton:SetPoint("RIGHT", Name, "LEFT", 0, 0);
 				ResetToEmuButton:SetScript("OnClick", ResetToEmuButton_OnClick);
 				ResetToEmuButton:SetScript("OnEnter", MT.GeneralOnEnter);
 				ResetToEmuButton:SetScript("OnLeave", MT.GeneralOnLeave);
@@ -2596,7 +2714,20 @@ MT.BuildEnv('UI');
 				ResetToEmuButton.information = L.ResetToEmuButton;
 				objects.ResetToEmuButton = ResetToEmuButton;
 
-				local ResetToSetButton = CreateFrame("BUTTON", nil, Frame);
+				local PackLabel = Header:CreateFontString(nil, "ARTWORK");
+				PackLabel:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSize, TUISTYLE.FrameFontOutline);
+				PackLabel:SetText("");
+				PackLabel:SetPoint("BOTTOM", Name, "TOP", 0, 4);
+				PackLabel:Hide();
+				objects.PackLabel = PackLabel;
+
+				local Label = Header:CreateFontString(nil, "ARTWORK");
+				Label:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeMid, TUISTYLE.FrameFontOutline);
+				Label:SetPoint("CENTER", Header, "CENTER", 0, 0);
+				Label:Hide();
+				objects.Label = Label;
+
+				local ResetToSetButton = CreateFrame("BUTTON", nil, Header);
 				ResetToSetButton:SetSize(TUISTYLE.ControlButtonSize, TUISTYLE.ControlButtonSize);
 				ResetToSetButton:SetNormalTexture(TTEXTURESET.RESET);
 				ResetToSetButton:GetNormalTexture():SetTexCoord(TTEXTURESET.RESET_COORD[1], TTEXTURESET.RESET_COORD[2], TTEXTURESET.RESET_COORD[3], TTEXTURESET.RESET_COORD[4]);
@@ -2611,6 +2742,23 @@ MT.BuildEnv('UI');
 				ResetToSetButton.Frame = Frame;
 				ResetToSetButton.information = L.ResetToSetButton;
 				objects.ResetToSetButton = ResetToSetButton;
+
+				local TalentGroupSelect = CreateFrame("BUTTON", nil, Header);
+				TalentGroupSelect:SetSize(TUISTYLE.ControlButtonSize, TUISTYLE.ControlButtonSize);
+				TalentGroupSelect:SetNormalTexture(TTEXTURESET.DROP);
+				-- TalentGroupSelect:GetNormalTexture():SetTexCoord(TTEXTURESET.RESET_COORD[1], TTEXTURESET.RESET_COORD[2], TTEXTURESET.RESET_COORD[3], TTEXTURESET.RESET_COORD[4]);
+				TalentGroupSelect:SetPushedTexture(TTEXTURESET.DROP);
+				-- TalentGroupSelect:GetPushedTexture():SetTexCoord(TTEXTURESET.RESET_COORD[1], TTEXTURESET.RESET_COORD[2], TTEXTURESET.RESET_COORD[3], TTEXTURESET.RESET_COORD[4]);
+				TalentGroupSelect:GetPushedTexture():SetVertexColor(TTEXTURESET.CONTROL_PUSHED_COLOR[1], TTEXTURESET.CONTROL_PUSHED_COLOR[2], TTEXTURESET.CONTROL_PUSHED_COLOR[3], TTEXTURESET.CONTROL_PUSHED_COLOR[4]);
+				TalentGroupSelect:SetHighlightTexture(TTEXTURESET.NORMAL_HIGHLIGHT);
+				TalentGroupSelect:SetPoint("RIGHT", Label, "LEFT", 0, 0);
+				TalentGroupSelect:SetScript("OnClick", TalentGroupSelect_OnClick);
+				TalentGroupSelect:SetScript("OnEnter", MT.GeneralOnEnter);
+				TalentGroupSelect:SetScript("OnLeave", MT.GeneralOnLeave);
+				TalentGroupSelect:Hide();
+				TalentGroupSelect.Frame = Frame;
+				TalentGroupSelect.information = L.TalentGroupSelect;
+				objects.TalentGroupSelect = TalentGroupSelect;
 			--	</Header>
 
 			--	<Footer>
@@ -2825,10 +2973,10 @@ MT.BuildEnv('UI');
 					EditBox:Hide();
 					EditBox:EnableMouse(true);
 					EditBox:SetScript("OnEnterPressed", EditBox_OnEnterPressed);
-					EditBox:SetScript("OnEscapePressed", function(self) self:SetText(""); self:ClearFocus(); self:Hide(); end);
-					EditBox:SetScript("OnShow", function(self) self.type = nil; self.charChanged = nil; end);
-					EditBox:SetScript("OnHide", function(self) self.type = nil; self.charChanged = nil; end);
-					EditBox:SetScript("OnChar", function(self) self.charChanged = true; end);
+					EditBox:SetScript("OnEscapePressed", EditBox_OnEscapePressed);
+					EditBox:SetScript("OnShow", EditBox_OnShow);
+					EditBox:SetScript("OnHide", EditBox_OnHide);
+					EditBox:SetScript("OnChar", EditBox_OnChar);
 					EditBox.Frame = Frame;
 					Frame.EditBox = EditBox;
 					local Texture = EditBox:CreateTexture(nil, "ARTWORK");
@@ -3093,7 +3241,7 @@ MT.BuildEnv('UI');
 			Frame.CurTreeIndex = 1;
 			MT.UI.FrameSetName(Frame, nil);
 			MT.UI.FrameSetLevel(Frame, nil);
-			MT.UI.FrameSetClass(Frame, CT.SELFCLASSUPPER);
+			MT.UI.FrameSetClass(Frame, CT.SELFCLASS);
 			MT.UI.FrameSetData(Frame, nil);
 			--	MT.UI.FrameSetReadOnly(Frame, false);
 			Frame.initialized = false;
@@ -3255,18 +3403,18 @@ MT.BuildEnv('UI');
 			for Key, Frames in next, VT.NameBindingFrame do
 				if Key ~= name then
 					local num = #Frames;
-					if num == 2 then
-						if Frame == Frames[2] then
+					if num == 1 then
+						if Frame == Frames[1] then
 							VT.NameBindingFrame[Key] = nil;
 						end
-					elseif num > 2 then
-						for i = num, 2, -1 do
+					elseif num > 1 then
+						for i = num, 1, -1 do
 							if Frame == Frames[i] then
 								tremove(Frames, i);
 								num = num - 1;
 							end
 						end
-						if num < 2 then
+						if num <= 0 then
 							VT.NameBindingFrame[Key] = nil;
 						end
 					else
@@ -3277,20 +3425,18 @@ MT.BuildEnv('UI');
 			local Frames = VT.NameBindingFrame[name];
 			if Frames ~= nil then
 				local num = #Frames;
-				Frames[1] = MT.GetUnifiedTime();
-				if num >= 2 then
-					for i = 2, num do
+				if num >= 1 then
+					for i = 1, num do
 						if Frame == Frames[i] then
 							return;
 						end
 					end
 					Frames[num + 1] = Frame;
-					return;
 				else
-					Frames[2] = Frame;
+					Frames[1] = Frame;
 				end
 			else
-				VT.NameBindingFrame[name] = { MT.GetUnifiedTime(), Frame, };
+				VT.NameBindingFrame[name] = { Frame, };
 			end
 		end
 		function MT.UI.FrameGetNameBinding(name)

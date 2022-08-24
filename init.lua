@@ -75,7 +75,6 @@ __ala_meta__.emu = __private;
 	local print, date = print, date;
 	local type = type;
 	local tremove = table.remove;
-	local IsAltKeyDown = IsAltKeyDown;
 	local IsLoggedIn =IsLoggedIn;
 	local _After = C_Timer.After;
 	local CreateFrame = CreateFrame;
@@ -87,6 +86,7 @@ __ala_meta__.emu = __private;
 	VT.__autostyle = __ala_meta__.autostyle;
 	VT.__menulib = __ala_meta__.__menulib;
 	VT.__scrolllib = _G.alaScrollList;
+	VT.__popuplib = _G.alaPopup;
 
 -->		constant
 	CT.LOCALE = GetLocale();
@@ -94,19 +94,19 @@ __ala_meta__.emu = __private;
 	CT.SELFREALM = GetRealmName();
 	CT.SELFGUID = UnitGUID('player');
 	CT.SELFLCLASS, CT.SELFCLASS = UnitClass('player');
-	CT.SELFCLASSLOWER = strlower(CT.SELFCLASS);
-	CT.SELFCLASSUPPER = strupper(CT.SELFCLASS);
 	CT.SELFNAME = UnitName('player');
 	CT.SELFFULLNAME = CT.SELFNAME .. "-" .. CT.SELFREALM;
 	CT.SELFFACTION = UnitFactionGroup('player');
+	CT.CLIENTVERSION, CT.BUILDNUMBER, CT.BUILDDATE, CT.TOCVERSION = GetBuildInfo();
+	CT.ADDONVERSION = GetAddOnMetadata(__addon, "version");
 	CT.MEDIAPATH =  [[Interface\AddOns\]] .. __addon .. [[\Media\]];
 	CT.TEXTUREPATH =  CT.MEDIAPATH .. [[Textures\]];
 	CT.NUM_POINTS_NEXT_TIER = 5;
-	CT.THROTTLE_TALENT_QUERY = 1;
-	CT.THROTTLE_EQUIPMENT_QUERY = 15;
+	CT.THROTTLE_TALENT_QUERY = VT.__emulib.CT.TALENT_REPLY_THROTTLED_INTERVAL + 0.5;
+	CT.THROTTLE_EQUIPMENT_QUERY = VT.__emulib.CT.EQUIPMENT_REPLY_THROTTLED_INTERVAL + 0.5;
 	CT.DATA_VALIDITY = 30;
-	CT.IndexToClass = VT.__emulib.classList;
-	CT.ClassToIndex = VT.__emulib.classHash;
+	CT.IndexToClass = VT.__emulib.__classList;
+	CT.ClassToIndex = VT.__emulib.__classHash;
 	CT.TOOLTIP_UPDATE_DELAY = 0.02;
 	CT.INSPECT_WAIT_TIME = 10;
 	CT.L = {  };
@@ -118,13 +118,13 @@ __ala_meta__.emu = __private;
 MT.BuildEnv('INIT');
 -->		predef
 	MT.GetUnifiedTime = _G.GetTimePreciseSec;
-	function MT.Log(...)
+	function MT.ErrorDev(...)
 		print(date('|cff00ff00%H:%M:%S|r'), ...);
 	end
-	function MT.Error(...)
-		print(date('|cffff0000%H:%M:%S|r'), ...);
+	function MT.ErrorRelease(...)
 	end
-	function MT.noop()
+	function MT.Notice(...)
+		print(date('|cffff0000%H:%M:%S|r'), ...);
 	end
 	local _TimerPrivate = {  };		--	[callback] = { periodic, int, running, halting, limit, };
 	function MT._TimerStart(callback, int, limit)
@@ -220,6 +220,7 @@ MT.BuildEnv('INIT');
 	VT.NameBindingFrame = {  };
 	VT.PrevQueryRequestSentTime = {  };
 	VT.ApplyingTalents = {  };
+	VT.AutoShowEquipmentFrameOnComm = {  };
 
 -->
 -->		INIT
@@ -289,6 +290,12 @@ MT.BuildEnv('INIT');
 	end);
 
 	VT.__is_loggedin = IsLoggedIn();
-	MT.InspectButtonKeyFunc = IsAltKeyDown;
+	-- MT.InspectButtonKeyFunc = _G.IsAltKeyDown;
+
+	if CT.BNTAG == "\97\108\101\120\35\53\49\54\55\50\50" or CT.BNTAG == "Sanjeev#1289" then
+		MT.Error = MT.ErrorDev;
+	else
+		MT.Error = MT.ErrorRelease;
+	end
 
 -->

@@ -28,7 +28,7 @@ local uireimp = __ala_meta__.uireimp;
 
 -->			upvalue
 	local type = type;
-	local next = next;
+	local next, unpack = next, unpack;
 	local tremove = tremove;
 	local _ = nil;
 

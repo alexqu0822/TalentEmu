@@ -9,7 +9,6 @@ local VT = __private.VT;
 local DT = __private.DT;
 
 -->		upvalue
-	local type = type;
 	local next = next;
 	local select = select;
 	local strsplit, strlower, strsub, strmatch = string.split, string.lower, string.sub, string.match;
@@ -25,7 +24,7 @@ local DT = __private.DT;
 		resizable_border = false,
 		singleFrame = true,
 		style = 1,
-		talents_in_tip = false,
+		talents_in_tip = true,
 		talents_in_tip_icon = true,
 		inspectButtonOnUnitFrame = false,
 		show_equipment = true,
@@ -85,6 +84,7 @@ MT.BuildEnv('SETTING');
 			DB = {
 				set = {  },
 				var = { savedTalent = {  }, },
+				map = {  },
 			};
 			_G.TalentEmuSV = DB;
 		elseif DB._version < 220801.0 then
@@ -94,13 +94,18 @@ MT.BuildEnv('SETTING');
 			DB = {
 				set = SET or {  },
 				var = VAR or { savedTalent = {  }, },
+				map = {  },
 			};
 			_G.TalentEmuSV = DB;
+		elseif DB._version < 220811.0 then
+			DB.map = DB.map or {  };
 		end
-		DB._version = 220801.0;
+		DB._version = 220811.0;
 		VT.DB = DB;
 		VT.SET = setmetatable(DB.set, { __index = CT.DefaultSetting, });
 		VT.VAR = DB.var;
+		DB.map[DT.BUILD] = DB.map[DT.BUILD] or {  };
+		VT.MAP = DB.map[DT.BUILD];
 		VT.LOOT = DB.loot;
 		MT.MergeGlobal(DB);
 

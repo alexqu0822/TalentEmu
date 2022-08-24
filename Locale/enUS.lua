@@ -106,6 +106,9 @@ L.DATA = {
 	WARLOCK = "warlock",
 	WARRIOR = "warrior",
 
+	[398] = "Blood",
+	[399] = "Frost",
+	[400] = "Unholy",
 	[283] = "Balance",
 	[281] = "Feral",
 	[282] = "Restoration",

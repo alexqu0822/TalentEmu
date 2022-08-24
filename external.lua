@@ -9,17 +9,15 @@ local VT = __private.VT;
 local DT = __private.DT;
 
 --		upvalue
-	local type = type;
 	local next, unpack = next, unpack;
 	local strsplit, strlower, strupper, strmatch = string.split, string.lower, string.upper, string.match;
-	local tostring, tonumber = tostring, tonumber;
+	local tostring = tostring;
 	local RegisterAddonMessagePrefix = RegisterAddonMessagePrefix or C_ChatInfo.RegisterAddonMessagePrefix;
 	local IsAddonMessagePrefixRegistered = IsAddonMessagePrefixRegistered or C_ChatInfo.IsAddonMessagePrefixRegistered;
 	local GetRegisteredAddonMessagePrefixes = GetRegisteredAddonMessagePrefixes or C_ChatInfo.GetRegisteredAddonMessagePrefixes;
 	local SendAddonMessage = SendAddonMessage or C_ChatInfo.SendAddonMessage;
 	local Ambiguate = Ambiguate;
 	local _G = _G;
-	
 
 -->
 	local L = CT.L;
@@ -36,8 +34,15 @@ MT.BuildEnv('EXTERNAL');
 				https://classic.wowhead.com/talent-calc/warrior/05004-055001-55250110500001051
 					"^.*classic%.wowhead%.com/talent%-calc.*/([^/]+)/(%d.+)$"
 			]]
-			local class, data = strmatch(url, "classic%.wowhead%.com/talent%-calc.*/([^/]+)/([0-9%-]+)");
-			if class and data then
+			local class, data = nil;
+			if DT.BUILD == "CLASSIC" then
+				class, data = strmatch(url, "classic%.wowhead%.com/talent%-calc.*/([^/]+)/([0-9%-]+)");
+			elseif DT.BUILD == "BCC" then
+				class, data = strmatch(url, "tbc%.wowhead%.com/talent%-calc.*/([^/]+)/([0-9%-]+)");
+			elseif DT.BUILD == "WRATH" then
+				class, data = strmatch(url, "wrath%.wowhead%.com/talent%-calc.*/([^/]+)/([0-9%-]+)");
+			end
+			if class ~= nil and data ~= nil then
 				class = strupper(class);
 				local ClassTDB = DT.TalentDB[class];
 				local SpecList = DT.ClassSpec[class];
@@ -62,7 +67,7 @@ MT.BuildEnv('EXTERNAL');
 							else
 								data = data .. d2 .. d3;
 							end
-							return class, data, DT.MAX_LEVEL;
+							return class, DT.MAX_LEVEL, data;
 						end
 					end
 				end
@@ -74,21 +79,21 @@ MT.BuildEnv('EXTERNAL');
 			local ClassTDB = DT.TalentDB[Frame.class];
 			local SpecList = DT.ClassSpec[Frame.class];
 			local data = "";
-			for i = 3, 1, -1 do
-				local TalentSet = TreeFrames[i].TalentSet;
+			for TreeIndex = 3, 1, -1 do
+				local TalentSet = TreeFrames[TreeIndex].TalentSet;
 				local topPos = 0;
-				for i = #ClassTDB[SpecList[i]], 1, -1 do
-					if TalentSet[i] > 0 then
-						topPos = i;
+				for TreeIndex = #ClassTDB[SpecList[TreeIndex]], 1, -1 do
+					if TalentSet[TreeIndex] > 0 then
+						topPos = TreeIndex;
 						break;
 					end
 				end
 				if topPos > 0 then
-					for i = topPos, 1, -1 do
-						data = TalentSet[i] .. data;
+					for TreeIndex = topPos, 1, -1 do
+						data = TalentSet[TreeIndex] .. data;
 					end
 				end
-				if i > 1 and data ~= "" then
+				if TreeIndex > 1 and data ~= "" then
 					data = "-" .. data;
 				end
 			end
@@ -110,22 +115,29 @@ MT.BuildEnv('EXTERNAL');
 			elseif CT.LOCALE == "koKR" then
 				LOC = "ko.";
 			end
-			if DT.BUILD == "BCC" then
-				return LOC .. "tbc.wowhead.com/talent-calc/" .. strlower(Frame.class) .. "/" .. data;
-			elseif DT.BUILD == "CLASSIC" then
+			if DT.BUILD == "CLASSIC" then
 				return LOC .. "classic.wowhead.com/talent-calc/" .. strlower(Frame.class) .. "/" .. data;
+			elseif DT.BUILD == "BCC" then
+				return LOC .. "tbc.wowhead.com/talent-calc/" .. strlower(Frame.class) .. "/" .. data;
+			elseif DT.BUILD == "WRATH" then
+				return LOC .. "wrath.wowhead.com/talent-calc/" .. strlower(Frame.class) .. "/" .. data;
 			end
 		end,
 	};
 	VT.ExternalCodec.nfu = {
 		import = function(url)
-			--http://www.nfuwow.com/talents/60/warrior/tal/1331511131241111111100000000000000040000000000000000
-			--		   nfuwow%.com/talents/60/([^/]+)/tal/(%d+)
-			local class, data = strmatch(url, "nfuwow%.com/talents/" .. DT.MAX_LEVEL .. "/([^/]+)/tal/(%d+)");
+			local class, data = nil;
+			if DT.BUILD == "CLASSIC" then
+				class, data = strmatch(url, "nfuwow%.com/talents/60/([^/]+)/tal/(%d+)");
+			elseif DT.BUILD == "BCC" then
+				class, data = strmatch(url, "nfuwow%.com/talents/([^/]+)//index.html%?(%d+)");
+			elseif DT.BUILD == "WRATH" then
+				class, data = strmatch(url, "nfuwow%.com/talents/80/([^/]+)/tal/(%d+)");
+			end
 			if class ~= nil and data ~= nil then
 				class = strupper(class);
 				if DT.TalentDB[class] then
-					return class, data, DT.MAX_LEVEL;
+					return class, DT.MAX_LEVEL, data;
 				end
 			end
 			return nil;
@@ -135,10 +147,10 @@ MT.BuildEnv('EXTERNAL');
 			local ClassTDB = DT.TalentDB[Frame.class];
 			local SpecList = DT.ClassSpec[Frame.class];
 			local data = "";
-			for i = 1, 3 do
-				local TalentSet = TreeFrames[i].TalentSet;
-				for i = 1, #ClassTDB[SpecList[i]] do
-					data = data .. TalentSet[i];
+			for TreeIndex = 1, 3 do
+				local TalentSet = TreeFrames[TreeIndex].TalentSet;
+				for TreeIndex = 1, #ClassTDB[SpecList[TreeIndex]] do
+					data = data .. TalentSet[TreeIndex];
 				end
 			end
 			if DT.BUILD == "CLASSIC" then
@@ -150,33 +162,47 @@ MT.BuildEnv('EXTERNAL');
 			end
 		end,
 	};
-	--[==[
-	VT.ExternalCodec.yxrank = {
+	VT.ExternalCodec.wowfan = {
 		import = function(url)
-			--https://www.yxrank.com/classic/talent/warrior?count=333015011130012011111010010000000000000000000000000000000000000000000000000000000000
-			local class, temp = strmatch(url, "yxrank%.com/classic/talent/([a-zA-Z]+)%?count=(%d+)");
-			if class and temp then
+			--[[
+				https://70.wowfan.net/talent/index.html?cn&druid&51402201050313520105110000000000000000000000000000000000000000
+			]]
+			local class, data = nil;
+			if DT.BUILD == "CLASSIC" then
+				class, data = strmatch(url, "60%.wowfan%.net/%?talent#(.)(.+)");
+			elseif DT.BUILD == "BCC" then
+				class, data = strmatch(url, "70%.wowfan%.net/talent/index%.html%?cn&([a-z]+)&(%d+)");
+			elseif DT.BUILD == "WRATH" then
+				class, data = strmatch(url, "80%.wowfan%.net/%?talent#(.)(.+)");
+			end
+			if class ~= nil and data ~= nil then
 				class = strupper(class);
 				local ClassTDB = DT.TalentDB[class];
 				local SpecList = DT.ClassSpec[class];
-				if ClassTDB then
-					local data = "";
-					for i = 1, 3 do
-						local TreeTDB = ClassTDB[SpecList[i]];
-						for j, val in inext, TreeTDB, 0 do
-							local pos = (i - 1) * DT.MAX_NUM_TALENTS + val[1] * 4 + val[2] + 1;
-							local v = strsub(temp, pos, pos);
-							if v == "" then
-								break;
+				if ClassTDB ~= nil and SpecList ~= nil then
+					--(%d*)[%-]*(%d*)[%-]*(%d*)
+					local d1, d2, d3 = strmatch(data, "(%d*)[%-]?(%d*)[%-]?(%d*)");
+					if d1 and d2 and d3 then
+						if d1 == "" and d2 == "" and d3 == "" then
+							return class, "", DT.MAX_LEVEL;
+						elseif d2 == "" and d3 == "" then
+							return d1;
+						else
+							local l1 = #ClassTDB[SpecList[1]];
+							if l1 > #d1 then
+								data = d1 .. strrep("0", l1 - #d1);
+							else
+								data = d1;
 							end
-							v = tonumber(v);
-							if v > val[4] then
-								return nil;
+							local l2  = #ClassTDB[SpecList[2]];
+							if l2 > #d2 then
+								data = data .. d2 .. strrep("0", l2 - #d2) .. d3;
+							else
+								data = data .. d2 .. d3;
 							end
-							data = data .. v;
+							return class, DT.MAX_LEVEL, data;
 						end
 					end
-					return class, data, 60;
 				end
 			end
 			return nil;
@@ -185,22 +211,30 @@ MT.BuildEnv('EXTERNAL');
 			local TreeFrames = Frame.TreeFrames;
 			local ClassTDB = DT.TalentDB[Frame.class];
 			local SpecList = DT.ClassSpec[Frame.class];
-			local ofs = 0;
-			local temp = {  };
-			for i = 1, 3 do
-				local TalentSet = TreeFrames[i].TalentSet;
-				for j, val in inext, ClassTDB[SpecList[i]], 0 do
-					temp[ofs + val[1] * 4 + val[2] + 1] = TalentSet[j];
+			if DT.BUILD == "CLASSIC" then
+				if CT.LOCALE == "zhCN" or CT.LOCALE == "zhTW" then
+				else
 				end
-				for j = 1, DT.MAX_NUM_TALENTS do
-					temp[ofs + j] = temp[ofs + j] or 0;
+			elseif DT.BUILD == "BCC" then
+				local data = "";
+				for TreeIndex = 1, 3 do
+					local TalentSet = TreeFrames[TreeIndex].TalentSet;
+					for TreeIndex = 1, #ClassTDB[SpecList[TreeIndex]] do
+						data = data .. TalentSet[TreeIndex];
+					end
 				end
-				ofs = ofs + DT.MAX_NUM_TALENTS;
+				if CT.LOCALE == "zhCN" or CT.LOCALE == "zhTW" then
+					return "70.wowfan.net/talent/index.html?cn&" .. strlower(Frame.class) .. "&" .. data;
+				else
+					return "70.wowfan.net/talent/index.html?en&" .. strlower(Frame.class) .. "&" .. data;
+				end
+			elseif DT.BUILD == "WRATH" then
+				if CT.LOCALE == "zhCN" or CT.LOCALE == "zhTW" then
+				else
+				end
 			end
-			return "www.yxrank.com/classic/talent/" .. Frame.class .. "?count=" .. tConcat(temp);
 		end,
 	};
-	--]==]
 	VT.ExternalAddOn["D4C"] = {
 		addon = "DBM",
 		list = {  },
@@ -210,8 +244,8 @@ MT.BuildEnv('EXTERNAL');
 				--	tremove(temp, 1);
 				temp[1] = tostring(temp[4]);
 				self.list[Ambiguate(sender, 'none')] = temp;
-				--	print(sender, "dbm ver", temp[4], unpack(temp));
-				--	print(sender, "dbm ver", temp[3]);	--	temp[3]
+				--	print(sender, "DBM Version", temp[4], unpack(temp));
+				--	print(sender, "DBM Version", temp[3]);	--	temp[3]
 				return true;
 			end
 		end,
@@ -225,8 +259,8 @@ MT.BuildEnv('EXTERNAL');
 				--	tremove(temp, 1);
 				temp[1] = tostring(temp[4]);
 				self.list[Ambiguate(sender, 'none')] = temp;
-				--	print(sender, "dbm ver", temp[4], unpack(temp));
-				--	print(sender, "dbm ver", temp[3]);	--	temp[3]
+				--	print(sender, "DBM Version", temp[4], unpack(temp));
+				--	print(sender, "DBM Version", temp[3]);	--	temp[3]
 				return true;
 			end
 		end,
@@ -240,7 +274,7 @@ MT.BuildEnv('EXTERNAL');
 				--	tremove(temp, 1);
 				temp[1] = temp[2] .. "-" .. temp[3];
 				self.list[Ambiguate(sender, 'none')] = temp;
-				--	print(sender, "bw ver", temp[1] .. "-" .. temp[2], unpack(temp));	--	temp[1] .. "-" .. temp[2]
+				--	print(sender, "BW Version", temp[1] .. "-" .. temp[2], unpack(temp));	--	temp[1] .. "-" .. temp[2]
 				return true;
 			end
 		end,
