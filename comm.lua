@@ -416,7 +416,9 @@ MT.BuildEnv('COMM');
 		Driver:RegisterEvent("CHAT_MSG_ADDON_LOGGED");
 		Driver:SetScript("OnEvent", OnEvent);
 		MT._RegisterCallback("CALLBACK_TALENT_DATA_RECV", MT.CALLBACK.OnTalentDataRecv);
-		MT._RegisterCallback("CALLBACK_INVENTORY_DATA_RECV", MT.CALLBACK.OnGlyphDataRecv);
+		if VT.__support_glyph then
+			MT._RegisterCallback("CALLBACK_GLYPH_DATA_RECV", MT.CALLBACK.OnGlyphDataRecv);
+		end
 		MT._RegisterCallback("CALLBACK_INVENTORY_DATA_RECV", MT.CALLBACK.OnInventoryDataRecv);
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_SYSTEM", ChatFilter_CHAT_MSG_SYSTEM);
 		-- hooksecurefunc("SendChatMessage", function(_msg, _type, _lang, _target)

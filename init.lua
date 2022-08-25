@@ -292,6 +292,7 @@ MT.BuildEnv('INIT');
 
 	VT.__is_loggedin = IsLoggedIn();
 	-- MT.InspectButtonKeyFunc = _G.IsAltKeyDown;
+	VT.__support_glyph = CT.TOCVERSION >= 30000;
 
 	if CT.BNTAG == "\97\108\101\120\35\53\49\54\55\50\50" or CT.BNTAG == "ALEX#125620" or CT.BNTAG == "Sanjeev#1289" then
 		MT.Error = MT.ErrorDev;

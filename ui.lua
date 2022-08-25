@@ -27,6 +27,7 @@ local DT = __private.DT;
 	local _After = C_Timer.After;
 	local CreateFrame = CreateFrame;
 	local GetMouseFocus = GetMouseFocus;
+	local GetCursorPosition = GetCursorPosition;
 	local _G = _G;
 	local DressUpItemLink = DressUpItemLink;
 	local ChatEdit_ChooseBoxForSend = ChatEdit_ChooseBoxForSend;
@@ -2023,7 +2024,9 @@ MT.BuildEnv('UI');
 			local Frame = EquipmentFrame.Frame;
 			if Frame.name ~= nil then
 				MT.UI.EquipmentFrameUpdate(Frame.EquipmentContainer, VT.TQueryCache[Frame.name]);
-				MT.UI.GlyphFrameUpdate(Frame.GlyphContainer, VT.TQueryCache[Frame.name]);
+				if VT.__support_glyph then
+					MT.UI.GlyphFrameUpdate(Frame.GlyphContainer, VT.TQueryCache[Frame.name]);
+				end
 			end
 		end
 		function MT.UI.CreateEquipmentFrame(Frame)
@@ -2035,14 +2038,14 @@ MT.BuildEnv('UI');
 			EquipmentFrameContainer:Hide();
 			local EquipmentFrame = CreateFrame('FRAME', nil, EquipmentFrameContainer);
 			EquipmentFrame:SetWidth(TUISTYLE.EquipmentFrameXSize);
-			if CT.TOCVERSION >= 30000 then
+			if VT.__support_glyph then
 				EquipmentFrame:SetPoint("TOP", EquipmentFrameContainer);
 			else
 				EquipmentFrame:SetPoint("CENTER", EquipmentFrameContainer);
 			end
 			EquipmentFrame:Show();
 			local EquipmentContainer = CreateFrame('FRAME', nil, EquipmentFrame);
-			if CT.TOCVERSION >= 30000 then
+			if VT.__support_glyph then
 				EquipmentContainer:SetPoint("TOP", EquipmentFrame);
 			else
 				EquipmentContainer:SetPoint("CENTER", EquipmentFrame);
@@ -2113,7 +2116,7 @@ MT.BuildEnv('UI');
 			EquipmentFrameContainer.EquipmentFrame = EquipmentFrame;
 			EquipmentFrameContainer.EquipmentContainer = EquipmentContainer;
 			--
-			if CT.TOCVERSION >= 30000 then
+			if VT.__support_glyph then
 				local GlyphFrame = CreateFrame('FRAME', nil, EquipmentFrameContainer);
 				GlyphFrame:SetSize(TUISTYLE.GlyphFrameSize, TUISTYLE.GlyphFrameSize);
 				GlyphFrame:SetPoint("BOTTOM", EquipmentFrameContainer);
@@ -3238,7 +3241,9 @@ MT.BuildEnv('UI');
 			Frame.SpellListFrame:SetHeight(Frame:GetHeight() / Frame.TreeFrameScale);
 			Frame.EquipmentFrame:SetScale(Frame.TreeFrameScale);
 			Frame.EquipmentFrame:SetHeight(Frame:GetHeight() / Frame.TreeFrameScale);
-			Frame.GlyphFrame:SetScale(Frame.TreeFrameScale);
+			if VT.__support_glyph then
+				Frame.GlyphFrame:SetScale(Frame.TreeFrameScale);
+			end
 		end
 		local function Frame_OnMouseDown(Frame, button)
 			if button == "LeftButton" then
