@@ -41,6 +41,7 @@ local DT = __private.DT;
 	local ITEM_QUALITY_COLORS = ITEM_QUALITY_COLORS;
 	local StaticPopupDialogs = StaticPopupDialogs;
 	local StaticPopup_Show = StaticPopup_Show;
+	local MAJOR_GLYPH, MINOR_GLYPH = MAJOR_GLYPH, MINOR_GLYPH;
 
 -->
 	local L = CT.L;
@@ -1564,20 +1565,28 @@ MT.BuildEnv('UI');
 			if glyph ~= nil and glyph[activeGroup] ~= nil then
 				local data = glyph[activeGroup];
 				for index = 1, 6 do
+					local Node = GlyphNodes[index];
 					local info = data[index];
 					if info ~= nil then
-						GlyphNodes[index].id = info[2];
-						GlyphNodes[index].Glyph:Show();
-						GlyphNodes[index].Glyph:SetTexture(info[3]);
+						Node.SpellID = info[3];
+						Node.Glyph:Show();
+						Node.Glyph:SetTexture(info[4]);
+						local def = Node.def;
+						Node.Background:SetTexCoord(def[7], def[8], def[9], def[10]);
 					else
-						GlyphNodes[index].id = nil;
-						GlyphNodes[index].Glyph:Hide();
+						Node.SpellID = nil;
+						Node.Glyph:Hide();
+						local d0 = Node.d0;
+						Node.Background:SetTexCoord(d0[7], d0[8], d0[9], d0[10]);
 					end
 				end
 			else
 				for index = 1, 6 do
-					GlyphNodes[index].id = nil;
-					GlyphNodes[index].Glyph:Hide();
+					local Node = GlyphNodes[index];
+					Node.SpellID = nil;
+					Node.Glyph:Hide();
+					local d0 = Node.d0;
+					Node.Background:SetTexCoord(d0[7], d0[8], d0[9], d0[10]);
 				end
 			end
 		end
@@ -1994,7 +2003,19 @@ MT.BuildEnv('UI');
 			SpellListFrameContainer.Frame = Frame;
 			return SpellListFrame, SpellListFrameContainer;
 		end
-	--	EquipmentFrame
+	--	EquipmentFrame & GlyphFrame
+		local function GlyphNode_OnEnter(Node)
+			local SpellID = Node.SpellID;
+			if SpellID ~= nil then
+				GameTooltip:SetOwner(Node, "ANCHOR_RIGHT");
+				GameTooltip:SetSpellByID(SpellID);
+				GameTooltip:AddLine(Node.TypeText, 0.75, 0.75, 1.0);
+				GameTooltip:Show();
+			end
+		end
+		local function GlyphNode_OnLeave(Node)
+			GameTooltip:Hide();
+		end
 		local function EquipmentNode_OnEnter(Node)
 			if Node.link then
 				GameTooltip:SetOwner(Node, "ANCHOR_LEFT");
@@ -2131,22 +2152,25 @@ MT.BuildEnv('UI');
 						6		4
 							2
 				--]]
-				local NodesInfo = {
-					[1] = { 1, 0, },
-					[2] = { 2, 180, },
-					[3] = { 2, 300, },
-					[4] = { 1, 120, },
-					[5] = { 2, 60, },
-					[6] = { 1, 240, },
+				local NodesDef = {
+					[0] = { 0,   0, 0.0, 0.00, 0.0, 1.0, 0.78125    , 0.91015625 , 0.69921875, 0.828125, },
+					[1] = { 1,   0, 1.0, 0.25, 0.0, 1.0, 0.0        , 0.12890625 , 0.87109375, 1.0, },
+					[2] = { 2, 180, 0.0, 0.25, 1.0, 1.0, 0.130859375, 0.259765625, 0.87109375, 1.0, },
+					[3] = { 2, 300, 0.0, 0.25, 1.0, 1.0, 0.392578125, 0.521484375, 0.87109375, 1.0, },
+					[4] = { 1, 120, 1.0, 0.25, 0.0, 1.0, 0.5234375  , 0.65234375 , 0.87109375, 1.0, },
+					[5] = { 2,  60, 0.0, 0.25, 1.0, 1.0, 0.26171875 , 0.390625   , 0.87109375, 1.0, },
+					[6] = { 1, 240, 1.0, 0.25, 0.0, 1.0, 0.654296875, 0.783203125, 0.87109375, 1.0, },
 				};
 				for index = 1, 6 do
-					local info = NodesInfo[index];
-					local size = info[1] == 1 and TUISTYLE.MajorGlyphNodeSize or TUISTYLE.MinorGlyphNodeSize;
+					local def = NodesDef[index];
+					local size = def[1] == 1 and TUISTYLE.MajorGlyphNodeSize or TUISTYLE.MinorGlyphNodeSize;
 					local R = TUISTYLE.GlyphFrameSize * 0.5 - size * 0.5 - 2;
 					local Node = CreateFrame('BUTTON', nil, GlyphContainer);
 					Node:SetSize(size, size);
-					Node:SetPoint("CENTER", GlyphContainer, "CENTER", R * sin360(info[2]), R * cos360(info[2]));
-					local Setting = Node:CreateTexture(nil, "BACKGROUND");
+					Node:SetPoint("CENTER", GlyphContainer, "CENTER", R * sin360(def[2]), R * cos360(def[2]));
+					Node:SetScript("OnEnter", GlyphNode_OnEnter);
+					Node:SetScript("OnLeave", GlyphNode_OnLeave);
+					local Setting = Node:CreateTexture(nil, "ARTWORK");
 					Setting:SetSize(size * 1.2, size * 1.2);
 					Setting:SetPoint("CENTER", 0, 0);
 					Setting:SetTexture([[Interface\Spellbook\UI-GlyphFrame]]);
@@ -2169,6 +2193,8 @@ MT.BuildEnv('UI');
 					Glyph:SetSize(size * 0.75, size * 0.75);
 					Glyph:SetPoint("CENTER", 0, 0);
 					Glyph:SetTexture([[Interface\Spellbook\UI-Glyph-Rune1]]);
+					Glyph:SetVertexColor(def[3], def[4], def[5], def[6]);
+					Glyph:SetBlendMode("BLEND");
 					Glyph:Hide();
 					local Ring = Node:CreateTexture(nil, "OVERLAY");
 					Ring:SetSize(size * 0.86, size * 0.86);
@@ -2180,11 +2206,16 @@ MT.BuildEnv('UI');
 					Shine:SetPoint("CENTER", -size / 8, size / 6);
 					Shine:SetTexture([[Interface\Spellbook\UI-GlyphFrame]]);
 					Shine:SetTexCoord(0.9609375, 1.0, 0.921875, 0.9609375);
+					Node.Type = def[1];
+					Node.TypeText = def[1] == 1 and MAJOR_GLYPH or MINOR_GLYPH;
+					Node.ID = index;
 					Node.Setting = Setting;
 					Node.Background = Background;
 					Node.Highlight = Highlight;
 					Node.Glyph = Glyph;
 					Node.Shine = Shine;
+					Node.def = def;
+					Node.d0 = NodesDef[0];
 					GlyphNodes[index] = Node;
 				end
 				GlyphContainer.Frame = Frame;
