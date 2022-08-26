@@ -265,7 +265,7 @@ MT.BuildEnv('METHOD');
 		end
 	end
 	function MT.SetPack(name)
-		if VT.SET.inspect_pack then
+		if VT.SET.supreme then
 			MT.UI.IteratorFrames(IteratorFunc, name);
 		end
 	end
