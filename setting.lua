@@ -84,7 +84,6 @@ MT.BuildEnv('SETTING');
 			DB = {
 				set = {  },
 				var = { savedTalent = {  }, },
-				map = {  },
 			};
 			_G.TalentEmuSV = DB;
 		elseif DB._version < 220801.0 then
@@ -94,18 +93,19 @@ MT.BuildEnv('SETTING');
 			DB = {
 				set = SET or {  },
 				var = VAR or { savedTalent = {  }, },
-				map = {  },
 			};
 			_G.TalentEmuSV = DB;
-		elseif DB._version < 220811.0 then
-			DB.map = DB.map or {  };
 		end
 		DB._version = 220811.0;
 		VT.DB = DB;
 		VT.SET = setmetatable(DB.set, { __index = CT.DefaultSetting, });
 		VT.VAR = DB.var;
-		DB.map[DT.BUILD] = DB.map[DT.BUILD] or {  };
-		VT.MAP = DB.map[DT.BUILD];
+		if DT.BUILD == "WRATH" then
+			DB.map[DT.BUILD] = DB.map[DT.BUILD] or {  };
+			VT.MAP = DB.map[DT.BUILD];
+		else
+			DB.map = nil;
+		end
 		VT.LOOT = DB.loot;
 		MT.MergeGlobal(DB);
 

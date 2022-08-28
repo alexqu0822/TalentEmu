@@ -148,7 +148,7 @@ MT.BuildEnv('COMM');
 		OnTalent = function(name, code, version, Decoder, overheard)
 			local class, level, numGroup, activeGroup, data1, data2 = Decoder(code);
 			if class ~= nil then
-				if version == "V1" then
+				if version == "V1" and DT.BUILD == "WRATH" then
 					class, level, numGroup, activeGroup, data1, data2 = MT.TalentConversion(class, level, numGroup, activeGroup, data1, data2);
 				end
 				local Tick = MT.GetUnifiedTime();

@@ -11,11 +11,23 @@ local DT = {  }; __private.DT = DT;		--	data
 local __ala_meta__ = _G.__ala_meta__;
 __ala_meta__.emu = __private;
 
--->		Dev
+-->		upvalue
 	local setfenv = setfenv;
 	local setmetatable = setmetatable;
 	local rawset = rawset;
 	local next = next;
+	local xpcall = xpcall;
+	local geterrorhandler = geterrorhandler;
+	local print, date = print, date;
+	local type = type;
+	local tremove = table.remove;
+	local strrep = string.rep;
+	local IsLoggedIn =IsLoggedIn;
+	local _After = C_Timer.After;
+	local CreateFrame = CreateFrame;
+	local _G = _G;
+
+-->		Dev
 	local _GlobalRef = {  };
 	local _GlobalAssign = {  };
 	function MT.BuildEnv(category)
@@ -69,16 +81,6 @@ __ala_meta__.emu = __private;
 		end
 		DB._GlobalAssign = _GlobalAssign;
 	end
--->		upvalue
-	local xpcall = xpcall;
-	local geterrorhandler = geterrorhandler;
-	local print, date = print, date;
-	local type = type;
-	local tremove = table.remove;
-	local IsLoggedIn =IsLoggedIn;
-	local _After = C_Timer.After;
-	local CreateFrame = CreateFrame;
-	local _G = _G;
 
 -->
 	VT.__uireimp = __ala_meta__.uireimp;
@@ -114,6 +116,20 @@ __ala_meta__.emu = __private;
 
 	CT.TEXTUREICON = CT.TEXTUREPATH .. [[ICON]];
 	CT.TEXTUREUNK = [[Interface\Icons\Inv_Misc_QuestionMark]];
+
+	CT.RepeatedZero = setmetatable(
+		{
+			[0] = "",
+			[1] = "0",
+		},
+		{
+			__index = function(tbl, key)
+				local str = strrep("0", key);
+				tbl[key] = str;
+				return str;
+			end,
+		}
+	);
 
 -->
 MT.BuildEnv('INIT');

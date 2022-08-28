@@ -173,9 +173,10 @@ MT.BuildEnv('MISC');
 	MT.RegisterOnInit('MISC', function(LoggedIn)
 	end);
 	MT.RegisterOnLogin('MISC', function(LoggedIn)
-		local DB = VT.DB;
-		local Map = VT.__emulib.GetTalentMap(CT.SELFCLASS);
-		VT.MAP[CT.SELFCLASS] = { VMap = Map.VMap, RMap = Map.RMap, };
+		if DT.BUILD == "WRATH" then
+			local Map = VT.__emulib.GetTalentMap(CT.SELFCLASS);
+			VT.MAP[CT.SELFCLASS] = { VMap = Map.VMap, RMap = Map.RMap, };
+		end
 		--
 		local SET = VT.SET;
 		SET.supreme = not not ME[CT.BNTAG];

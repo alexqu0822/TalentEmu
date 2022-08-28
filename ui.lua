@@ -1851,6 +1851,50 @@ MT.BuildEnv('UI');
 				Node:Hide();
 			end
 		end
+		local function SearchEditCancel_OnClick(SearchEditCancel)
+			SearchEditCancel.Edit:SetText("");
+			SearchEditCancel.Edit:ClearFocus();
+		end
+		local function SearchEditOK_OnClick(SearchEditOK)
+			SearchEditOK.Edit:ClearFocus();
+		end
+		local function SearchEditOK_OnEnable(SearchEditOK)
+			SearchEditOK.Text:SetTextColor(1.0, 1.0, 1.0, 1.0);
+		end
+		local function SearchEditOK_OnDisable(SearchEditOK)
+			SearchEditOK.Text:SetTextColor(1.0, 1.0, 1.0, 0.5);
+		end
+		local function SearchEdit_OnEnterPressed(SearchEdit)
+			SearchEdit:ClearFocus();
+		end
+		local function SearchEdit_OnEscapePressed(SearchEdit)
+			SearchEdit:ClearFocus();
+		end
+		local function SearchEdit_OnTextChanged(SearchEdit, isUserInput)
+			MT.UI.SpellListFrameUpdate(SearchEdit.SpellListFrame, SearchEdit.SpellListFrame.Frame.class, MT.GetPointsReqLevel(SearchEdit.SpellListFrame.Frame.TotalUsedPoints));
+			if not SearchEdit:HasFocus() and SearchEdit:GetText() == "" then
+				SearchEdit.Note:Show();
+			end
+			if SearchEdit:GetText() == "" then
+				SearchEdit.Cancel:Hide();
+			else
+				SearchEdit.Cancel:Show();
+			end
+		end
+		local function SearchEdit_OnEditFocusGained(SearchEdit)
+			SearchEdit.Note:Hide();
+			SearchEdit.OK:Enable();
+		end
+		local function SearchEdit_OnEditFocusLost(SearchEdit)
+			if SearchEdit:GetText() == "" then SearchEdit.Note:Show(); end
+			SearchEdit.OK:Disable();
+		end
+		local function ShowAllSpell_OnClick(ShowAllSpell)
+			MT.UI.SpellListFrameUpdate(ShowAllSpell.SpellListFrame, ShowAllSpell.SpellListFrame.Frame.class, MT.GetPointsReqLevel(ShowAllSpell.SpellListFrame.Frame.TotalUsedPoints));
+		end
+		local function Close_OnClick(Close)
+			MT.UI.SpellListFrameToggle(Close.SpellListFrame.Frame);
+		end
 		function MT.UI.CreateSpellListFrame(Frame)
 			local SpellListFrameContainer = CreateFrame('FRAME', nil, Frame);
 			SpellListFrameContainer:SetPoint("TOPLEFT", Frame, "TOPRIGHT", 0, 0);
@@ -1895,20 +1939,17 @@ MT.BuildEnv('UI');
 			local SearchEditCancel = CreateFrame('BUTTON', nil, SearchEdit);
 			SearchEditCancel:SetSize(16, 16);
 			SearchEditCancel:SetPoint("RIGHT", SearchEdit);
-			SearchEditCancel:SetScript("OnClick", function(SearchEditCancel)
-				SearchEdit:SetText("");
-				SearchEdit:ClearFocus();
-			end);
+			SearchEditCancel:SetScript("OnClick", SearchEditCancel_OnClick);
 			SearchEditCancel:Hide();
 			SearchEditCancel:SetNormalTexture("interface\\petbattles\\deadpeticon");
+			SearchEditCancel.Edit = SearchEdit;
 			SearchEdit.Cancel = SearchEditCancel;
 			local SearchEditOK = CreateFrame('BUTTON', nil, SpellListFrame);
 			SearchEditOK:SetSize(32, 16);
 			SearchEditOK:SetPoint("LEFT", SearchEdit, "RIGHT", 4, 0);
-			SearchEditOK:SetScript("OnClick", function(SearchEditOK)
-				SearchEdit:ClearFocus();
-			end);
+			SearchEditOK:SetScript("OnClick", SearchEditOK_OnClick);
 			SearchEditOK:Disable();
+			SearchEditOK.Edit = SearchEdit;
 			SearchEdit.OK = SearchEditOK;
 			local SearchEditOKTexture = SearchEditOK:CreateTexture(nil, "ARTWORK");
 			SearchEditOKTexture:SetPoint("TOPLEFT");
@@ -1925,38 +1966,15 @@ MT.BuildEnv('UI');
 			SearchEditOK.Text = SearchEditOKText;
 			SearchEditOK:SetFontString(SearchEditOKText);
 			SearchEditOK:SetPushedTextOffset(1, -1);
-			SearchEditOK:SetScript("OnEnable", function(SearchEditOK)
-				SearchEditOKText:SetTextColor(1.0, 1.0, 1.0, 1.0);
-			end);
-			SearchEditOK:SetScript("OnDisable", function(SearchEditOK)
-				SearchEditOKText:SetTextColor(1.0, 1.0, 1.0, 0.5);
-			end);
-			SearchEdit:SetScript("OnEnterPressed", function(SearchEdit)
-				SearchEdit:ClearFocus();
-			end);
-			SearchEdit:SetScript("OnEscapePressed", function(SearchEdit)
-				SearchEdit:ClearFocus();
-			end);
-			SearchEdit:SetScript("OnTextChanged", function(SearchEdit, isUserInput)
-				MT.UI.SpellListFrameUpdate(SpellListFrame, Frame.class, MT.GetPointsReqLevel(Frame.TotalUsedPoints));
-				if not SearchEdit:HasFocus() and SearchEdit:GetText() == "" then
-					SearchEditNote:Show();
-				end
-				if SearchEdit:GetText() == "" then
-					SearchEditCancel:Hide();
-				else
-					SearchEditCancel:Show();
-				end
-			end);
-			SearchEdit:SetScript("OnEditFocusGained", function(SearchEdit)
-				SearchEditNote:Hide();
-				SearchEditOK:Enable();
-			end);
-			SearchEdit:SetScript("OnEditFocusLost", function(SearchEdit)
-				if SearchEdit:GetText() == "" then SearchEditNote:Show(); end
-				SearchEditOK:Disable();
-			end);
+			SearchEditOK:SetScript("OnEnable", SearchEditOK_OnEnable);
+			SearchEditOK:SetScript("OnDisable", SearchEditOK_OnDisable);
+			SearchEdit:SetScript("OnEnterPressed", SearchEdit_OnEnterPressed);
+			SearchEdit:SetScript("OnEscapePressed", SearchEdit_OnEscapePressed);
+			SearchEdit:SetScript("OnTextChanged", SearchEdit_OnTextChanged);
+			SearchEdit:SetScript("OnEditFocusGained", SearchEdit_OnEditFocusGained);
+			SearchEdit:SetScript("OnEditFocusLost", SearchEdit_OnEditFocusLost);
 			SearchEdit:ClearFocus();
+			SearchEdit.SpellListFrame = SpellListFrame;
 			SpellListFrame.SearchEdit = SearchEdit;
 			SpellListFrame.SearchEditOK = SearchEditOK;
 
@@ -1967,9 +1985,8 @@ MT.BuildEnv('UI');
 			ShowAllSpell:Show();
 			ShowAllSpell:SetChecked(false);
 			ShowAllSpell:SetPoint("BOTTOMRIGHT", -TUISTYLE.SpellListFrameXToBorder, 6);
-			ShowAllSpell:SetScript("OnClick", function(ShowAllSpell)
-				MT.UI.SpellListFrameUpdate(SpellListFrame, Frame.class, MT.GetPointsReqLevel(Frame.TotalUsedPoints));
-			end);
+			ShowAllSpell:SetScript("OnClick", ShowAllSpell_OnClick);
+			ShowAllSpell.SpellListFrame = SpellListFrame;
 			SpellListFrame.ShowAllSpell = ShowAllSpell;
 
 			local ShowAllSpellLabel = SpellListFrame:CreateFontString(nil, "ARTWORK");
@@ -1981,9 +1998,7 @@ MT.BuildEnv('UI');
 			local Close = CreateFrame('BUTTON', nil, SpellListFrame);
 			Close:SetSize(32, 16);
 			Close:SetPoint("BOTTOMLEFT", 4, 6);
-			Close:SetScript("OnClick", function(Close)
-				MT.UI.SpellListFrameToggle(Frame);
-			end);
+			Close:SetScript("OnClick", Close_OnClick);
 			local CloseTexture = Close:CreateTexture(nil, "ARTWORK");
 			CloseTexture:SetPoint("TOPLEFT");
 			CloseTexture:SetPoint("BOTTOMRIGHT");
@@ -1997,6 +2012,7 @@ MT.BuildEnv('UI');
 			CloseLabel:SetText(L["Hide"]);
 			Close:SetFontString(CloseLabel);
 			Close:SetPushedTextOffset(1, -1);
+			Close.SpellListFrame = SpellListFrame;
 			SpellListFrame.Close = Close;
 
 			SpellListFrame.Frame = Frame;
@@ -2004,18 +2020,6 @@ MT.BuildEnv('UI');
 			return SpellListFrame, SpellListFrameContainer;
 		end
 	--	EquipmentFrame & GlyphFrame
-		local function GlyphNode_OnEnter(Node)
-			local SpellID = Node.SpellID;
-			if SpellID ~= nil then
-				GameTooltip:SetOwner(Node, "ANCHOR_RIGHT");
-				GameTooltip:SetSpellByID(SpellID);
-				GameTooltip:AddLine(Node.TypeText, 0.75, 0.75, 1.0);
-				GameTooltip:Show();
-			end
-		end
-		local function GlyphNode_OnLeave(Node)
-			GameTooltip:Hide();
-		end
 		local function EquipmentNode_OnEnter(Node)
 			if Node.link then
 				GameTooltip:SetOwner(Node, "ANCHOR_LEFT");
@@ -2049,6 +2053,18 @@ MT.BuildEnv('UI');
 					MT.UI.GlyphFrameUpdate(Frame.GlyphContainer, VT.TQueryCache[Frame.name]);
 				end
 			end
+		end
+		local function GlyphNode_OnEnter(Node)
+			local SpellID = Node.SpellID;
+			if SpellID ~= nil then
+				GameTooltip:SetOwner(Node, "ANCHOR_RIGHT");
+				GameTooltip:SetSpellByID(SpellID);
+				GameTooltip:AddLine(Node.TypeText, 0.75, 0.75, 1.0);
+				GameTooltip:Show();
+			end
+		end
+		local function GlyphNode_OnLeave(Node)
+			GameTooltip:Hide();
 		end
 		function MT.UI.CreateEquipmentFrame(Frame)
 			local EquipmentFrameContainer = CreateFrame('FRAME', nil, Frame);
@@ -2617,10 +2633,10 @@ MT.BuildEnv('UI');
 		end
 		VT.ExportButtonMenuDefinition = {
 			handler = function(button, Frame, codec)
-				local code = codec.export(Frame);
+				local code = codec.export(Frame, codec);
 				if code ~= nil then
 					local EditBox = Frame.EditBox;
-					EditBox:SetText(codec.export(Frame));
+					EditBox:SetText(code);
 					EditBox:Show();
 					EditBox:SetFocus();
 					EditBox:HighlightText();

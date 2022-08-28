@@ -140,6 +140,9 @@ MT.BuildEnv('METHOD');
 	end
 
 	function MT.TalentConversion(class, level, numGroup, activeGroup, data1, data2)
+		if DT.BUILD ~= "WRATH" then
+			return class, level, numGroup, activeGroup, data1, data2;
+		end
 		local ClassTDB = DT.TalentDB[class];
 		local SpecList = DT.ClassSpec[class];
 		local Map = VT.__emulib.GetTalentMap(class) or VT.MAP[class] or (DT.TalentMap ~= nil and DT.TalentMap[class]) or nil;
@@ -154,6 +157,7 @@ MT.BuildEnv('METHOD');
 						return nil;
 					end
 				end
+				ofs = ofs + num;
 			end
 			return class, level, 1, 1, data1;
 		end
@@ -191,7 +195,7 @@ MT.BuildEnv('METHOD');
 	--	return		class, level, data
 	function MT.Decode(code)
 		for media, codec in next, VT.ExternalCodec do
-			local class, level, data = codec.import(code);
+			local class, level, data = codec.import(code, codec);
 			if class ~= nil then
 				return class, level, 1, 1, data;
 			end
