@@ -8,24 +8,31 @@ local CT = {  }; __private.CT = CT;		--	constant
 local VT = {  }; __private.VT = VT;		--	variables
 local DT = {  }; __private.DT = DT;		--	data
 
-local __ala_meta__ = _G.__ala_meta__;
-__ala_meta__.emu = __private;
-
 -->		upvalue
 	local setfenv = setfenv;
-	local setmetatable = setmetatable;
-	local rawset = rawset;
-	local next = next;
 	local xpcall = xpcall;
 	local geterrorhandler = geterrorhandler;
 	local print, date = print, date;
 	local type = type;
+	local setmetatable = setmetatable;
+	local rawset = rawset;
+	local next = next;
 	local tremove = table.remove;
 	local strrep = string.rep;
 	local IsLoggedIn =IsLoggedIn;
 	local _After = C_Timer.After;
 	local CreateFrame = CreateFrame;
 	local _G = _G;
+
+-->
+	local __ala_meta__ = _G.__ala_meta__;
+	__ala_meta__.emu = __private;
+	VT.__uireimp = __ala_meta__.uireimp;
+	VT.__emulib = __ala_meta__.__emulib;
+	VT.__autostyle = __ala_meta__.autostyle;
+	VT.__menulib = __ala_meta__.__menulib;
+	VT.__scrolllib = _G.alaScrollList;
+	VT.__popuplib = _G.alaPopup;
 
 -->		Dev
 	local _GlobalRef = {  };
@@ -81,14 +88,6 @@ __ala_meta__.emu = __private;
 		end
 		DB._GlobalAssign = _GlobalAssign;
 	end
-
--->
-	VT.__uireimp = __ala_meta__.uireimp;
-	VT.__emulib = __ala_meta__.__emulib;
-	VT.__autostyle = __ala_meta__.autostyle;
-	VT.__menulib = __ala_meta__.__menulib;
-	VT.__scrolllib = _G.alaScrollList;
-	VT.__popuplib = _G.alaPopup;
 
 -->		constant
 	CT.LOCALE = GetLocale();
@@ -233,9 +232,9 @@ MT.BuildEnv('INIT');
 	VT.ExternalAddOn = {  };
 	VT.Frames = { num = 0, used = 0, };
 	VT.TQueryCache = {  };	--	[GUID] = { [addon] = { data, time, }, }
-	VT.QuerySent = {  };
+	VT.QuerySent = {  };					--	尝试发送带弹出界面请求的时间，无论是否真实发送
 	VT.NameBindingFrame = {  };
-	VT.PrevQueryRequestSentTime = {  };
+	VT.PrevQueryRequestSentTime = {  };		--	真实发送请求的时间
 	VT.ApplyingTalents = {  };
 	VT.AutoShowEquipmentFrameOnComm = {  };
 

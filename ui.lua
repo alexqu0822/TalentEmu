@@ -306,6 +306,10 @@ MT.BuildEnv('UI');
 					wipe(TreeFrames[TreeIndex].TalentChanged);
 				end
 				MT.UI.FrameSetBinding(Frame, name);
+				if name == L.message then
+					Frame.EquipmentFrameContainer:Hide();
+					MT.Error("EquipFrame", "MT.UI.FrameSetName Hide");
+				end
 			else
 				local objects = Frame.objects;
 				objects.Name:SetText(L.Emu);
@@ -912,9 +916,11 @@ MT.BuildEnv('UI');
 					local DependArrows = TreeFrame.DependArrows;
 					for i = 1, #DependArrows do
 						DependArrows[i]:Hide();
-						DependArrows[i].Branch1:Hide();
 						DependArrows[i]:ClearAllPoints();
+						DependArrows[i].Branch1:Hide();
 						DependArrows[i].Branch1:ClearAllPoints();
+						DependArrows[i].Branch2:Hide();
+						DependArrows[i].Branch2:ClearAllPoints();
 					end
 					DependArrows.used = 0;
 
@@ -2690,7 +2696,12 @@ MT.BuildEnv('UI');
 						end
 					end
 				else
-					MT.ImportCode(Frame, val[2]);
+					-- MT.ImportCode(Frame, val[2]);
+					local Tick = MT.GetUnifiedTime();
+					local name = val[3];
+					VT.QuerySent[name] = Tick;
+					VT.AutoShowEquipmentFrameOnComm[name] = Tick;
+					return VT.__emulib.CHAT_MSG_ADDON(VT.__emulib.CT.COMM_PREFIX, val[2], "WHISPER", name);
 				end
 			end,
 			num = 0,

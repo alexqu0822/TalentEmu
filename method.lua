@@ -49,7 +49,7 @@ MT.BuildEnv('METHOD');
 				return nil;
 			end
 		end
-	elseif DT.BUILD == "BCC" then
+	elseif DT.BUILD == "BCC" or DT.BUILD == "WRATH" then
 		_G.ALA_GetSpellLink = _G.ALA_GetSpellLink or function(id, name)
 			--|cff71d5ff|Hspell:id|h[name]|h|r
 			name = name or GetSpellInfo(id);
@@ -274,7 +274,7 @@ MT.BuildEnv('METHOD');
 		end
 	end
 
-	function MT.ImportCode(Frame, code)
+	function MT.ImportCode(Frame, code, name)
 		if type(Frame) == 'string' then
 			code = Frame;
 			Frame = nil;
@@ -282,11 +282,13 @@ MT.BuildEnv('METHOD');
 		local class, level, numGroup, activeGroup, data1, data2 = MT.Decode(code);
 		if class ~= nil then
 			Frame = Frame or MT.UI.GetFrame(VT.SET.singleFrame and 1 or nil);
-			if not MT.UI.FrameSetInfo(Frame, class, level, { data1, data2, num = numGroup, active = activeGroup, }) then
+			if not MT.UI.FrameSetInfo(Frame, class, level, { data1, data2, num = numGroup, active = activeGroup, }, nil, name) then
 				Frame:Hide();
 				return false;
 			end
 			return true;
+		elseif level ~= nil then
+			MT.Notice(L[level]);
 		end
 		return false;
 	end

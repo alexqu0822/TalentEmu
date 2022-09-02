@@ -2,7 +2,7 @@
 	ALA@163UI
 --]]--
 
-local __version = 220825.0;
+local __version = 220901.0;
 
 local _G = _G;
 _G.__ala_meta__ = _G.__ala_meta__ or {  };
@@ -32,6 +32,7 @@ end
 	--
 	local GetTime = GetTime;
 	local type, tostring, tonumber = type, tostring, tonumber;
+	local select = select;
 	local wipe, concat = table.wipe, table.concat;
 	local strchar, strupper, strlower, strsplit, strsub, strmatch, strfind, strrep = string.char, string.upper, string.lower, string.split, string.sub, string.match, string.find, string.rep;
 	local floor, ceil = floor, ceil;
@@ -604,8 +605,8 @@ end
 		if strsub(code, 1, 2) ~= "!T" then
 			return nil;
 		end
-		local CLIENT_MAJOR = __debase64[strsub(code, 3, 3)];
-		if CLIENT_MAJOR ~= CLIENT_MAJOR then
+		local CM = __debase64[strsub(code, 3, 3)];
+		if CM ~= CLIENT_MAJOR then
 			return nil, "WOW VERSION";
 		end
 		local LIB_MAJOR = __debase64[strsub(code, 4, 4)];

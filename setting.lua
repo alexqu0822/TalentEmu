@@ -101,6 +101,7 @@ MT.BuildEnv('SETTING');
 		VT.SET = setmetatable(DB.set, { __index = CT.DefaultSetting, });
 		VT.VAR = DB.var;
 		if DT.BUILD == "WRATH" then
+			DB.map = DB.map or {  };
 			DB.map[DT.BUILD] = DB.map[DT.BUILD] or {  };
 			VT.MAP = DB.map[DT.BUILD];
 		else
