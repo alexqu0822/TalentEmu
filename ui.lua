@@ -1043,7 +1043,11 @@ MT.BuildEnv('UI');
 					TreeFrames[2].TreeLabel:Show();
 					TreeFrames[3].TreeLabel:Show();
 					Frame.TreeButtonsBar:Hide();
-					Frame:SetMinResize(TUISTYLE.FrameXSizeMin_Style1, TUISTYLE.FrameYSizeMin_Style1);
+					if Frame.SetResizeBounds ~= nil then
+						Frame:SetResizeBounds(TUISTYLE.FrameXSizeMin_Style1, TUISTYLE.FrameYSizeMin_Style1, 9999, 9999);
+					else
+						Frame:SetMinResize(TUISTYLE.FrameXSizeMin_Style1, TUISTYLE.FrameYSizeMin_Style1);
+					end
 
 					local scale = (Frame:GetHeight() - TUISTYLE.TreeFrameYToBorder * 2) / (TUISTYLE.TreeFrameYSize + TUISTYLE.FrameHeaderYSize + TUISTYLE.FrameFooterYSize);
 					Frame.TreeFrameScale = scale;
@@ -1065,7 +1069,11 @@ MT.BuildEnv('UI');
 					TreeFrames[2].TreeLabel:Hide();
 					TreeFrames[3].TreeLabel:Hide();
 					Frame.TreeButtonsBar:Show();
-					Frame:SetMinResize(TUISTYLE.FrameXSizeMin_Style2, TUISTYLE.FrameYSizeMin_Style2);
+					if Frame.SetResizeBounds ~= nil then
+						Frame:SetResizeBounds(TUISTYLE.FrameXSizeMin_Style2, TUISTYLE.FrameYSizeMin_Style2, 9999, 9999);
+					else
+						Frame:SetMinResize(TUISTYLE.FrameXSizeMin_Style2, TUISTYLE.FrameYSizeMin_Style2);
+					end
 
 					local scale = (Frame:GetHeight() - TUISTYLE.TreeFrameYToBorder * 2) / (TUISTYLE.TreeFrameYSize + TUISTYLE.FrameHeaderYSize + TUISTYLE.FrameFooterYSize);
 					Frame.TreeFrameScale = scale;
@@ -1074,6 +1082,15 @@ MT.BuildEnv('UI');
 					return;
 				end
 				MT.UI.TreeUpdate(Frame, Frame.CurTreeIndex, true);
+				local PScale = UIParent:GetEffectiveScale();
+				local FScale = Frame:GetEffectiveScale();
+				if Frame:GetRight() * FScale <= UIParent:GetLeft() * PScale + 16 then
+					Frame:ClearAllPoints();
+					Frame:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMLEFT", Frame:GetBottom() * FScale / PScale, 16 * FScale / PScale);
+				elseif Frame:GetLeft() * FScale >= UIParent:GetRight() * PScale - 16 then
+					Frame:ClearAllPoints();
+					Frame:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMRIGHT", Frame:GetBottom() * FScale / PScale, -16 * FScale / PScale);
+				end
 			end
 		end
 		function MT.UI.TreeNodeLight(Node)
@@ -3417,6 +3434,7 @@ MT.BuildEnv('UI');
 		local function Frame_OnSizeChanged(Frame, width, height)
 			width = Frame:GetWidth();
 			height = Frame:GetHeight();
+			Frame:SetClampRectInsets(width * 0.75, -width * 0.75, -height * 0.75, height * 0.75);
 			--	BG 0,512;0,360
 			local ratio = height / width;
 			if ratio > 360 / 512 then
@@ -3528,7 +3546,11 @@ MT.BuildEnv('UI');
 			Frame.id = temp_id;
 
 			Frame:SetPoint("CENTER");
-			Frame:SetMinResize(TUISTYLE.FrameXSizeMin_Style1, TUISTYLE.FrameYSizeMin_Style1);
+			if Frame.SetResizeBounds ~= nil then
+				Frame:SetResizeBounds(TUISTYLE.FrameXSizeMin_Style1, TUISTYLE.FrameYSizeMin_Style1, 9999, 9999);
+			else
+				Frame:SetMinResize(TUISTYLE.FrameXSizeMin_Style1, TUISTYLE.FrameYSizeMin_Style1);
+			end
 			Frame:SetFrameStrata("HIGH");
 			VT.__uireimp._SetSimpleBackdrop(Frame, 0, 1, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 1.0);
 
@@ -3555,6 +3577,7 @@ MT.BuildEnv('UI');
 			Frame:EnableMouse(true);
 			Frame:SetMovable(true);
 			Frame:SetResizable(true);
+			Frame:SetClampedToScreen(true);
 
 			Frame:Hide();
 
