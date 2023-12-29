@@ -13,7 +13,7 @@ if l10n.Locale ~= nil and l10n.Locale ~= "" then return;end
 
 BINDING_NAME_ALARAIDTOOL_NEWWINDOW = "Create an emulator";
 BINDING_NAME_ALARAIDTOOL_QUERY = "Inspect target";
-BINDING_HEADER_ALATALENTEMU_HEADER = "<|cff00ff00alaTalentEmu|r>";
+BINDING_HEADER_ALATALENTEMU_HEADER = "<|cff00ff00TalentEmu|r>";
 
 l10n.Locale = "enUS";
 
