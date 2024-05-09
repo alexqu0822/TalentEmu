@@ -69,7 +69,7 @@ local DT = __private.DT;
 		TreeFrameHeaderYSize = 0,
 		TreeFrameFooterYSize = 20,
 		TreeFrameSeqWidth = 1,
-		TreeFrameLabelBGTexCoord = { 0.05, 0.95, 0.35, 0.55, },
+		TreeFrameLabelBGTexCoord = { 0.05, 0.95, 0.05, 0.95, },
 		TreeNodeSize = 42,
 		TreeNodeXGap = 12,
 		TreeNodeYGap = 12,
@@ -448,7 +448,8 @@ MT.BuildEnv('UI');
 					end
 					TreeFrame.BG:SetTexture(DT.SpecBG[SpecID]);
 					TreeFrame.TreeLabel:SetText(l10n.DATA[SpecID]);
-					TreeFrame.TreeLabelBG:SetTexture(SpecTexture);
+					-- TreeFrame.TreeLabelBG:SetTexture(SpecTexture);
+					SetPortraitToTexture(TreeFrame.TreeLabelBG, SpecTexture)
 					for TalentSeq = 1, #TreeTDB do
 						local TalentDef = TreeTDB[TalentSeq];
 						if TalentDef[1] ~= nil then
@@ -459,12 +460,18 @@ MT.BuildEnv('UI');
 							if texture ~= nil then
 								Node:SetNormalTexture(texture);
 								Node:SetPushedTexture(texture);
+								-- SetPortraitToTexture(Node:GetNormalTexture(), texture);
+								-- SetPortraitToTexture(Node:GetPushedTexture(), texture);
 							elseif TalentDef[9] ~= nil then
 								Node:SetNormalTexture(TalentDef[9]);
 								Node:SetPushedTexture(TalentDef[9]);
+								-- SetPortraitToTexture(Node:GetNormalTexture(), TalentDef[9]);
+								-- SetPortraitToTexture(Node:GetPushedTexture(), TalentDef[9]);
 							else
 								Node:SetNormalTexture(TTEXTURESET.UNK);
 								Node:SetPushedTexture(TTEXTURESET.UNK);
+								-- SetPortraitToTexture(Node:GetNormalTexture(), TTEXTURESET.UNK);
+								-- SetPortraitToTexture(Node:GetPushedTexture(), TTEXTURESET.UNK);
 							end
 							Node.MaxVal:SetText(TalentDef[4]);
 							Node.CurVal:SetText("0");
@@ -2987,8 +2994,10 @@ MT.BuildEnv('UI');
 				TreeLabel:SetTextColor(0.9, 0.9, 0.9, 1.0);
 				TreeFrame.TreeLabel = TreeLabel;
 				local TreeLabelBG = TreeFrame:CreateTexture(nil, "ARTWORK");
-				TreeLabelBG:SetPoint("BOTTOMLEFT", TreeFrame, "BOTTOMLEFT", 0, 0);
-				TreeLabelBG:SetPoint("TOPRIGHT", TreeFrame, "BOTTOMRIGHT", 0, TUISTYLE.TreeFrameFooterYSize);
+				TreeLabelBG:SetSize(TUISTYLE.TreeFrameFooterYSize, TUISTYLE.TreeFrameFooterYSize);
+				-- TreeLabelBG:SetPoint("BOTTOMLEFT", TreeFrame, "BOTTOMLEFT", 0, 0);
+				-- TreeLabelBG:SetPoint("TOPRIGHT", TreeFrame, "BOTTOMRIGHT", 0, TUISTYLE.TreeFrameFooterYSize);
+				TreeLabelBG:SetPoint("RIGHT", TreeLabel, "LEFT", -4, 0);
 				TreeLabelBG:SetTexCoord(TUISTYLE.TreeFrameLabelBGTexCoord[1], TUISTYLE.TreeFrameLabelBGTexCoord[2], TUISTYLE.TreeFrameLabelBGTexCoord[3], TUISTYLE.TreeFrameLabelBGTexCoord[4]);
 				TreeFrame.TreeLabelBG = TreeLabelBG;
 
