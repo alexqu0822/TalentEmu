@@ -1,15 +1,17 @@
 ## Interface: 40400
-## Title: ala's Talent Emu
+## Title: Talent Emu Cata
+## Title-zhCN: ala天赋模拟器
+## Title-zhTW: ala天賦模擬器
 ## SavedVariablesPerCharacter: 
 ## SavedVariables: TalentEmuSV
-## Notes: ala's Talent Emu
+## Notes: Talent Emu
 ## Dependencies: 
 ## OptionalDependencies: 
 ## LoadOnDemand: 0
 ## DefaultState: enabled
-## Author: |cff00ff00ALA|r @ |cffff0000163UI|r
-## Author-zhCN: |cff00ff00ALA|r @ |cffff0000网易有爱|r
-## Author-zhTW: |cff00ff00ALA|r @ |cffff0000网易有爱|r
-## Version: 304r.240510
+## Author: |cff00ff00ALA|r
+## Author-zhCN: |cff00ff00ALA|r
+## Author-zhTW: |cff00ff00ALA|r
+## Version: 304r.240613
 
 TalentEmu.xml

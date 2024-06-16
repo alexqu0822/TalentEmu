@@ -900,7 +900,7 @@ MT.BuildEnv('UI');
 
 				if CT.TOCVERSION >= 40000 then
 					if TalentSet.Total >= DT.PointsNeeded4SecondaryTree then
-						if numPoints < 0 then
+						if numPoints < 0 and TalentSet.Total + numPoints < DT.PointsNeeded4SecondaryTree then
 							local TreeFrames = Frame.TreeFrames;
 							for TreeIndex = 1, 3 do
 								local TFrame = TreeFrames[TreeIndex];
@@ -2727,6 +2727,8 @@ MT.BuildEnv('UI');
 						Background:SetPoint("CENTER", 0, 0);
 						Background:SetTexture([[Interface\Spellbook\UI-GlyphFrame]]);
 						Background:SetTexCoord(0.78125, 0.91015625, 0.69921875, 0.828125);
+						Node.Setting = Setting;
+						Node.Background = Background;
 					end
 					local Highlight = Node:CreateTexture(nil, "BORDER");
 					if CT.BUILD == "WRATH" then
@@ -2765,8 +2767,6 @@ MT.BuildEnv('UI');
 					Node.Type = def[1];
 					Node.TypeText = def[1] == 1 and MAJOR_GLYPH or MINOR_GLYPH;
 					Node.ID = index;
-					Node.Setting = Setting;
-					Node.Background = Background;
 					Node.Highlight = Highlight;
 					Node.Glyph = Glyph;
 					Node.Ring = Ring;

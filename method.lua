@@ -2155,13 +2155,8 @@ MT.BuildEnv('METHOD');
 			local primaryTreeIndex = nil;
 			if CT.TOCVERSION >= 40000 then
 				local v1, v2, v3 = TreeFrames[1].TalentSet.Total, TreeFrames[2].TalentSet.Total, TreeFrames[3].TalentSet.Total;
-				local v0 = v1 + v2 + v3;
-				if v0 > v1 and v0 > v2 and v0 > v3 then
-					if v1 < DT.PointsNeeded4SecondaryTree then
-					end
-				end
-				--
 				local usedTree = 0;
+				local usedAny = nil;
 				for TreeIndex = 1, 3 do
 					local v = TreeFrames[TreeIndex].TalentSet.Total;
 					if v >= DT.PointsNeeded4SecondaryTree then
@@ -2169,6 +2164,7 @@ MT.BuildEnv('METHOD');
 						break;
 					elseif v > 0 then
 						usedTree = usedTree + 1;
+						usedAny = TreeIndex;
 					end
 				end
 				if primaryTreeIndex ~= nil then
@@ -2178,6 +2174,8 @@ MT.BuildEnv('METHOD');
 					end
 				elseif usedTree >= 2 then
 					return MT.Notice(l10n["CANNOT APPLY : ERROR CATA."], usedTree);
+				elseif usedTree == 1 then
+					primaryTreeIndex = usedAny;
 				end
 			end
 			for TreeIndex = 1, 3 do

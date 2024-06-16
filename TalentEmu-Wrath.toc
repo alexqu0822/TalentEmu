@@ -1,8 +1,10 @@
 ## Interface: 30403
-## Title: Talent Emu Wrath
+## Title: Talent Emu Cata
+## Title-zhCN: ala天赋模拟器
+## Title-zhTW: ala天賦模擬器
 ## SavedVariablesPerCharacter: 
 ## SavedVariables: TalentEmuSV
-## Notes: Talent Emu Wrath
+## Notes: Talent Emu
 ## Dependencies: 
 ## OptionalDependencies: 
 ## LoadOnDemand: 0
@@ -10,6 +12,6 @@
 ## Author: |cff00ff00ALA|r
 ## Author-zhCN: |cff00ff00ALA|r
 ## Author-zhTW: |cff00ff00ALA|r
-## Version: 304r.240510
+## Version: 304r.240613
 
 TalentEmu.xml
