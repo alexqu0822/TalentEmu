@@ -3918,7 +3918,7 @@ MT.BuildEnv('UI');
 		end
 		local function Frame_OnShow(Frame)
 			Frame_OnSizeChanged(Frame, Frame:GetWidth(), Frame:GetHeight());
-			Frame.ApplyTalentsProgress:SetText(nil);
+			Frame.ApplyTalentsProgress:SetText("");
 		end
 		local function Frame_OnHide(Frame)
 			MT.UI.ReleaseFrame(Frame.id);
