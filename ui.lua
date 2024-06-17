@@ -2339,7 +2339,7 @@ MT.BuildEnv('UI');
 			SearchEditTexture:SetVertexColor(0.25, 0.25, 0.25);
 			SearchEdit.Texture = SearchEditTexture;
 			local SearchEditNote = SearchEdit:CreateFontString(nil, "OVERLAY");
-			SearchEditNote:SetFont(TUISTYLE.FrameFont, 12);
+			SearchEditNote:SetFont(TUISTYLE.FrameFont, 12, TUISTYLE.FrameFontOutline);
 			SearchEditNote:SetTextColor(1.0, 1.0, 1.0, 0.5);
 			SearchEditNote:SetPoint("LEFT", 4, 0);
 			SearchEditNote:SetText(l10n.Search);
@@ -2368,7 +2368,7 @@ MT.BuildEnv('UI');
 			SearchEditOKTexture:SetBlendMode("ADD");
 			SearchEditOK.Texture = SearchEditOKTexture;
 			local SearchEditOKText = SearchEditOK:CreateFontString(nil, "OVERLAY");
-			SearchEditOKText:SetFont(TUISTYLE.FrameFont, 12);
+			SearchEditOKText:SetFont(TUISTYLE.FrameFont, 12, TUISTYLE.FrameFontOutline);
 			SearchEditOKText:SetTextColor(1.0, 1.0, 1.0, 0.5);
 			SearchEditOKText:SetPoint("CENTER");
 			SearchEditOKText:SetText(l10n["OK"]);
@@ -2415,7 +2415,7 @@ MT.BuildEnv('UI');
 			CloseTexture:SetAlpha(0.75);
 			CloseTexture:SetBlendMode("ADD");
 			local CloseLabel = Close:CreateFontString(nil, "OVERLAY");
-			CloseLabel:SetFont(TUISTYLE.FrameFont, 12);
+			CloseLabel:SetFont(TUISTYLE.FrameFont, 12, TUISTYLE.FrameFontOutline);
 			CloseLabel:SetTextColor(1.0, 1.0, 1.0, 0.5);
 			CloseLabel:SetPoint("CENTER");
 			CloseLabel:SetText(l10n["Hide"]);
@@ -2549,15 +2549,15 @@ MT.BuildEnv('UI');
 				Node.ILvl = ILvl;
 
 				local Name = Node:CreateFontString(nil, "OVERLAY");
-				Name:SetFont(TUISTYLE.FrameFont, 13);
+				Name:SetFont(TUISTYLE.FrameFont, 13, TUISTYLE.FrameFontOutline);
 				Node.Name = Name;
 
 				local Ench = Node:CreateFontString(nil, "OVERLAY");
-				Ench:SetFont(TUISTYLE.FrameFont, 13);
+				Ench:SetFont(TUISTYLE.FrameFont, 13, TUISTYLE.FrameFontOutline);
 				Node.Ench = Ench;
 
 				local Gem = Node:CreateFontString(nil, "OVERLAY");
-				Gem:SetFont(TUISTYLE.FrameFont, 13);
+				Gem:SetFont(TUISTYLE.FrameFont, 13, TUISTYLE.FrameFontOutline);
 				Node.Gem = Gem;
 
 				Node.EquipmentContainer = EquipmentContainer;
