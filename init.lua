@@ -30,7 +30,6 @@ local DT = {  }; __private.DT = DT;		--	data
 	__ala_meta__.emu = __private;
 	VT.__dep = __ala_meta__;
 	VT.__scrolllib = _G.alaScrollList;
-	VT.__poplib = __ala_meta__.__poplib;
 
 -->		Compatible
 	local _comptb = {  };

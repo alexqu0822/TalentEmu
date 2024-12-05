@@ -33,25 +33,25 @@ MT.BuildEnv('MISC');
 	--
 	--	popup
 
-		VT.__poplib:AddMethod("QUERY_TALENT", {
+		VT.__dep.__poplib:AddMethod("QUERY_TALENT", {
 			GetText = function() return l10n.PopupQuery; end,
-			CanShow = function() return true; end,
+			IsShown = function() return true; end,
 			OnClick = function(def, which, context)
 				MT.SendQueryRequest(context.name, context.server, true, true);
 			end,
 		});
-		VT.__poplib:AddEntry("SELF", "QUERY_TALENT");
-		VT.__poplib:AddEntry("_BRFF_SELF", "QUERY_TALENT");
-		VT.__poplib:AddEntry("PLAYER", "QUERY_TALENT");
-		VT.__poplib:AddEntry("FRIEND", "QUERY_TALENT");
-		VT.__poplib:AddEntry("FRIEND_OFFLINE", "QUERY_TALENT");
-		VT.__poplib:AddEntry("PARTY", "QUERY_TALENT");
-		VT.__poplib:AddEntry("_BRFF_PARTY", "QUERY_TALENT");
-		VT.__poplib:AddEntry("RAID", "QUERY_TALENT");
-		VT.__poplib:AddEntry("RAID_PLAYER", "QUERY_TALENT");
-		VT.__poplib:AddEntry("_BRFF_RAID_PLAYER", "QUERY_TALENT");
-		VT.__poplib:AddEntry("CHAT_ROSTER", "QUERY_TALENT");
-		VT.__poplib:AddEntry("GUILD", "QUERY_TALENT");
+		VT.__dep.__poplib:AddEntry("SELF", "QUERY_TALENT");
+		VT.__dep.__poplib:AddEntry("_BRFF_SELF", "QUERY_TALENT");
+		VT.__dep.__poplib:AddEntry("PLAYER", "QUERY_TALENT");
+		VT.__dep.__poplib:AddEntry("FRIEND", "QUERY_TALENT");
+		VT.__dep.__poplib:AddEntry("FRIEND_OFFLINE", "QUERY_TALENT");
+		VT.__dep.__poplib:AddEntry("PARTY", "QUERY_TALENT");
+		VT.__dep.__poplib:AddEntry("_BRFF_PARTY", "QUERY_TALENT");
+		VT.__dep.__poplib:AddEntry("RAID", "QUERY_TALENT");
+		VT.__dep.__poplib:AddEntry("RAID_PLAYER", "QUERY_TALENT");
+		VT.__dep.__poplib:AddEntry("_BRFF_RAID_PLAYER", "QUERY_TALENT");
+		VT.__dep.__poplib:AddEntry("CHAT_ROSTER", "QUERY_TALENT");
+		VT.__dep.__poplib:AddEntry("GUILD", "QUERY_TALENT");
 
 	--
 	--	TalentFrameCall

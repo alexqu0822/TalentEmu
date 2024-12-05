@@ -29,7 +29,7 @@ local DT = __private.DT;
 	local UIParent = UIParent;
 	local GameTooltip = GameTooltip;
 	local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
-	local GetTreeNumPoints = CT.TOCVERSION < 40000 and function(index) return select(3, GetTalentTabInfo(index)) or 0 end or function(index) return select(5, GetTalentTabInfo(index)) or 0 end
+	local GetTreeNumPoints = (CT.TOCVERSION >= 20000 and CT.TOCVERSION < 40000) and function(index) return select(3, GetTalentTabInfo(index)) or 0 end or function(index) return select(5, GetTalentTabInfo(index)) or 0 end
 
 -->
 	local l10n = CT.l10n;
