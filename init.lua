@@ -29,7 +29,6 @@ local DT = {  }; __private.DT = DT;		--	data
 	local __ala_meta__ = _G.__ala_meta__;
 	__ala_meta__.emu = __private;
 	VT.__dep = __ala_meta__;
-	VT.__scrolllib = _G.alaScrollList;
 
 -->		Compatible
 	local _comptb = {  };
@@ -127,6 +126,7 @@ local DT = {  }; __private.DT = DT;		--	data
 	CT.MEDIAPATH =  [[Interface\AddOns\]] .. __addon .. [[\Media\]];
 	CT.TEXTUREPATH =  CT.MEDIAPATH .. [[Textures\]];
 	CT.NUM_POINTS_NEXT_TIER = 5;
+	CT.TOOLTIP_WAIT_BEFORE_QUERY_UNIT = 0.5;
 	CT.THROTTLE_TALENT_QUERY = VT.__dep.__emulib.CT.TALENT_REPLY_THROTTLED_INTERVAL + 0.5;
 	CT.THROTTLE_GLYPH_QUERY = VT.__dep.__emulib.CT.GLYPH_REPLY_THROTTLED_INTERVAL + 0.5;
 	CT.THROTTLE_EQUIPMENT_QUERY = VT.__dep.__emulib.CT.EQUIPMENT_REPLY_THROTTLED_INTERVAL + 0.5;

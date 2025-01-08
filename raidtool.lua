@@ -504,7 +504,7 @@ MT.BuildEnv('RAIDTOOL');
 				RosterInfo = { class, level, online, unit }
 			]]
 
-			local ScrollList = VT.__scrolllib.CreateScrollFrame(Frame, nil, nil, TUISTYLE.RaidToolUIFrameButtonHeight, CreateRaidNode, SetRaidNode);
+			local ScrollList = VT.__dep.__scrolllib.CreateScrollFrame(Frame, nil, nil, TUISTYLE.RaidToolUIFrameButtonHeight, CreateRaidNode, SetRaidNode);
 			ScrollList:SetPoint("BOTTOMLEFT", 4, 24);
 			ScrollList:SetPoint("TOPRIGHT", -4, -24);
 			Frame.ScrollList = ScrollList;

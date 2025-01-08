@@ -2518,7 +2518,7 @@ MT.BuildEnv('UI');
 			SpellListFrame:SetWidth(TUISTYLE.SpellListFrameXSize);
 			SpellListFrame:Show();
 			SpellListFrame.list = {  };
-			local ScrollList = VT.__scrolllib.CreateScrollFrame(SpellListFrame, nil, nil, TUISTYLE.SpellListNodeHeight, _SpellListFrameFunc.CreateNode, _SpellListFrameFunc.SetNode);
+			local ScrollList = VT.__dep.__scrolllib.CreateScrollFrame(SpellListFrame, nil, nil, TUISTYLE.SpellListNodeHeight, _SpellListFrameFunc.CreateNode, _SpellListFrameFunc.SetNode);
 			ScrollList:SetPoint("BOTTOMLEFT", TUISTYLE.SpellListFrameXToBorder, TUISTYLE.SpellListFrameYToTop);
 			ScrollList:SetPoint("TOPRIGHT", -TUISTYLE.SpellListFrameXToBorder, -TUISTYLE.SpellListFrameYToBottom);
 			SpellListFrame.ScrollList = ScrollList;
