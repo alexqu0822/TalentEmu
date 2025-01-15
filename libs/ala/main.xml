@@ -22,7 +22,7 @@
 	<script file = "scroll.lua" />
 	<script file = "talent.lua" />
 
-	<!-- <script file = "ChatTransmit.lua" /> -->
+	<script file = "ChatTransmit.lua" />
 
 	<script file = "Setting.lua" />
 	<!-- <include file = "Bindings.xml" /> -->
