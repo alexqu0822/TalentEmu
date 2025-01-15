@@ -271,9 +271,6 @@ MT.BuildEnv('COMM');
 			PakData.Tick = MT.GetUnifiedTime();
 			PakData[1] = code;
 			MT.SetPack(name);
-			-- if VT.SET.inspect_pack then
-				-- NS.display_pack(code);
-			-- end
 			if not overheard then
 				MT._TriggerCallback("CALLBACK_DATA_RECV", name);
 			end

@@ -489,7 +489,7 @@ MT.BuildEnv('UI');
 				local cache = VT.TQueryCache[name];
 				local objects = Frame.objects;
 				objects.Name:SetText(name);
-				if VT.SET.supreme and cache ~= nil and cache.PakData[1] ~= nil then
+				if VT.__supreme and cache ~= nil and cache.PakData[1] ~= nil then
 					local _, info = VT.__dep.__emulib.DecodeAddOnPackData(cache.PakData[1]);
 					if info then
 						objects.PackLabel:SetText(info);

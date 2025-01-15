@@ -145,12 +145,6 @@ MT.BuildEnv('MISC');
 		--GameTooltip:SetSpellByID(SpellID)
 	--
 
-	local ME = {
-		['\97\108\101\120\35\53\49\54\55\50\50'] = 1,
-		['\229\141\149\233\133\146\231\170\157\35\53\49\54\51\55'] = 1,
-		['\65\76\65\35\53\49\51\55\55'] = 1,
-	};
-
 	local trytimes = 0;
 	local function _PerdiocGenerateTitle()
 		local halt = true;
@@ -192,12 +186,6 @@ MT.BuildEnv('MISC');
 		if CT.TOCVERSION >= 30000 then
 			local Map = VT.__dep.__emulib.GetTalentMap(CT.SELFCLASS);
 			VT.MAP[CT.SELFCLASS] = { VMap = Map.VMap, RMap = Map.RMap, };
-		end
-		--
-		local SET = VT.SET;
-		SET.supreme = not not ME[CT.BNTAG];
-		if SET.supreme then
-			MT.SetConfig("inspect_pack", true);
 		end
 		--
 		for GUID, code in next, VT.VAR do
