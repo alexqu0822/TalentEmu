@@ -362,8 +362,8 @@ MT.BuildEnv('RAIDTOOL');
 	local function OnEvent(Frame, event)
 		if event == "GROUP_ROSTER_UPDATE" then
 			MT._TimerStart(Frame.UpdateGroupRosterList, 0.2, 1);
-		elseif event == "GUILD_ROSTER_UPDATE" then
-			MT._TimerStart(Frame.UpdateGuildRosterList, 0.2, 1);
+		-- elseif event == "GUILD_ROSTER_UPDATE" then
+		-- 	MT._TimerStart(Frame.UpdateGuildRosterList, 0.2, 1);
 		end
 	end
 	local TPartyUnit = { 'player', };
@@ -489,9 +489,9 @@ MT.BuildEnv('RAIDTOOL');
 				self:StopMovingOrSizing();
 			end);
 			Frame:SetScript("OnShow", function(self)
-				if self.guild then
+				--[[if self.guild then
 					GuildRoster();
-				end
+				end--]]
 				Frame.Update();
 			end);
 			Frame:Hide();
@@ -567,7 +567,7 @@ MT.BuildEnv('RAIDTOOL');
 				Frame.LableBossModInfo = RaidToolLableBossModInfo;
 			--
 
-			local GuildList = CreateFrame('CHECKBUTTON', nil, Frame, "OptionsBaseCheckButtonTemplate");
+			--[[local GuildList = CreateFrame('CHECKBUTTON', nil, Frame, "OptionsBaseCheckButtonTemplate");
 			GuildList:SetSize(16, 16);
 			GuildList:SetHitRectInsets(0, 0, 0, 0);
 			GuildList:ClearAllPoints();
@@ -587,7 +587,7 @@ MT.BuildEnv('RAIDTOOL');
 			GuildListLabel:SetFont(TUISTYLE.RaidToolUIFont, 12, TUISTYLE.RaidToolUIFontOutline);
 			GuildListLabel:SetText(l10n.GuildList);
 			GuildList.Name = GuildListLabel;
-			GuildListLabel:SetPoint("RIGHT", GuildList, "LEFT", 0, 0);
+			GuildListLabel:SetPoint("RIGHT", GuildList, "LEFT", 0, 0);--]]
 		--	Script
 			MT._RegisterCallback("CALLBACK_DATA_RECV", function()
 				if Frame:IsShown() then
@@ -623,7 +623,7 @@ MT.BuildEnv('RAIDTOOL');
 			Frame:SetScript("OnEvent", OnEvent);
 			Frame:RegisterEvent("GROUP_ROSTER_UPDATE");
 			--	Frame:RegisterEvent("RAID_ROSTER_UPDATE");	--	not triggered in classic
-			Frame:RegisterEvent("GUILD_ROSTER_UPDATE");
+			-- Frame:RegisterEvent("GUILD_ROSTER_UPDATE");
 			MT._TimerStart(function()
 				for index = 1, #RosterList do
 					local name = RosterList[index];
