@@ -1,5 +1,5 @@
-## Interface: 11505
-## Title: Talent Emu Cata
+## Interface: 11506
+## Title: Talent Emu Vanilla
 ## Title-zhCN: ala天赋模拟器
 ## Title-zhTW: ala天賦模擬器
 ## SavedVariablesPerCharacter: 
@@ -12,6 +12,6 @@
 ## Author: |cff00ff00ALA|r
 ## Author-zhCN: |cff00ff00ALA|r
 ## Author-zhTW: |cff00ff00ALA|r
-## Version: 115r.250116
+## Version: 115r.250201
 
 TalentEmu.xml
