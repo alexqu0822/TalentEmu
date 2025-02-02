@@ -3397,7 +3397,7 @@ MT.BuildEnv('UI');
 		end
 		VT.ExportButtonMenuDefinition = {
 			handler = function(button, Frame, codec)
-				local code = codec.ExportCode(Frame, codec);
+				local code = codec:ExportCode(Frame);
 				if code ~= nil then
 					local EditBox = Frame.EditBox;
 					EditBox:SetText(code);
@@ -3540,7 +3540,7 @@ MT.BuildEnv('UI');
 				local code = self:GetText();
 				if code ~= nil and code ~= "" then
 					for media, codec in next, VT.ExternalCodec do
-						local class, level, data = codec.ImportCode(code, codec);
+						local class, level, data = codec:ImportCode(code);
 						if class ~= nil then
 							VT.ImportIndex = VT.ImportIndex + 1;
 							return MT.UI.FrameSetInfo(self.Frame, class, level, { data, nil, num = 1, active = 1, }, 1, "#" .. l10n.import .. "[" .. VT.ImportIndex .. "]");

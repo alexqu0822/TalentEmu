@@ -122,7 +122,7 @@ MT.BuildEnv('COMM');
 				);
 				--]]
 				VT.PrevQueryRequestSentTime[name] = Tick;
-				VT.__dep.__emulib.SendQueryRequest(shortname, realm, update_tal, update_gly, update_inv);
+				VT.__dep.__emulib._SendQueryRequest(shortname, realm, update_tal, update_gly, update_inv);
 				if not update_tal then
 					MT._TriggerCallback("CALLBACK_DATA_RECV", name);
 					MT._TriggerCallback("CALLBACK_TALENT_DATA_RECV", name, false);

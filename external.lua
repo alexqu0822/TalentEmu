@@ -14,8 +14,6 @@ local DT = __private.DT;
 	local tostring = tostring;
 	local RegisterAddonMessagePrefix = RegisterAddonMessagePrefix or C_ChatInfo.RegisterAddonMessagePrefix;
 	local IsAddonMessagePrefixRegistered = IsAddonMessagePrefixRegistered or C_ChatInfo.IsAddonMessagePrefixRegistered;
-	local GetRegisteredAddonMessagePrefixes = GetRegisteredAddonMessagePrefixes or C_ChatInfo.GetRegisteredAddonMessagePrefixes;
-	local SendAddonMessage = SendAddonMessage or C_ChatInfo.SendAddonMessage;
 	local Ambiguate = Ambiguate;
 	local _G = _G;
 
@@ -28,7 +26,7 @@ MT.BuildEnv('EXTERNAL');
 -->		predef
 -->		EXTERNAL
 	VT.ExternalCodec.wowhead = {
-		ImportCode = function(url, codec)
+		ImportCode = function(codec, url)
 			local class, data = nil;
 			if CT.BUILD == "CLASSIC" then
 				--	https://cn.classic.wowhead.com/talent-calc/embed/warrior/05004-055001-55250110500001051
@@ -84,7 +82,7 @@ MT.BuildEnv('EXTERNAL');
 			end
 			return nil;
 		end,
-		ExportCode = function(Frame, codec)
+		ExportCode = function(codec, Frame)
 			local TreeFrames = Frame.TreeFrames;
 			local ClassTDB = DT.TalentDB[Frame.class];
 			local SpecList = DT.ClassSpec[Frame.class];
@@ -152,7 +150,7 @@ MT.BuildEnv('EXTERNAL');
 		end,
 	};
 	VT.ExternalCodec.nfu = {
-		ImportCode = function(url, codec)
+		ImportCode = function(codec, url)
 			local class, data = nil;
 			if CT.BUILD == "CLASSIC" then
 				--	http://www.nfuwow.com/talents/60/warrior/tal/0530500030200000000000000000000000054250110530001051
@@ -174,7 +172,7 @@ MT.BuildEnv('EXTERNAL');
 			end
 			return nil;
 		end,
-		ExportCode = function(Frame, codec)
+		ExportCode = function(codec, Frame)
 			local TreeFrames = Frame.TreeFrames;
 			local ClassTDB = DT.TalentDB[Frame.class];
 			local SpecList = DT.ClassSpec[Frame.class];
@@ -345,7 +343,7 @@ MT.BuildEnv('EXTERNAL');
 		},
 		--	encode[p1p2] = code
 		--	decode[code] = p1p2
-		ImportCode = function(url, codec)
+		ImportCode = function(codec, url)
 			local class, data = nil;
 			if CT.BUILD == "CLASSIC" then
 				class, data = strmatch(url, "60%.wowfan%.net/[e]*[n]*[/]*%?talent#(.)(.+)");
@@ -418,7 +416,7 @@ MT.BuildEnv('EXTERNAL');
 			end
 			return nil;
 		end,
-		ExportCode = function(Frame, codec)
+		ExportCode = function(codec, Frame)
 			local TreeFrames = Frame.TreeFrames;
 			local ClassTDB = DT.TalentDB[Frame.class];
 			local SpecList = DT.ClassSpec[Frame.class];
