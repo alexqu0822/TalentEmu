@@ -64,7 +64,7 @@ MT.BuildEnv('MISC');
 					local TreeIndex, TalentIndex = PanelTemplates_GetSelectedTab(_TalentFrame), self:GetID();
 					local name, iconTexture, tier, column, rank, maxRank, isExceptional, available = GetTalentInfo(TreeIndex, TalentIndex);
 					local SpellID = MT.QueryTalentSpellID(CT.SELFCLASS, TreeIndex, Map.RMap[TreeIndex][TalentIndex], rank);
-					local link = MT.GetSpellLink(SpellID, name);
+					local link = VT._comptb.GetSpellLink(SpellID, name);
 					if link ~= nil then
 						local editBox = ChatEdit_ChooseBoxForSend();
 						editBox:Show();

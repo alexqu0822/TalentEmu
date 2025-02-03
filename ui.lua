@@ -2398,7 +2398,7 @@ MT.BuildEnv('UI');
 			if IsShiftKeyDown() then
 				local index = Node:GetDataIndex();
 				local data = Node.list[index];
-				local link = MT.GetSpellLink(data[2]);
+				local link = VT._comptb.GetSpellLink(data[2]);
 				if link then
 					local editBox = ChatEdit_ChooseBoxForSend();
 					editBox:Show();
@@ -3001,7 +3001,7 @@ MT.BuildEnv('UI');
 				local TreeTDB = TreeFrame.TreeTDB;
 				local TalentSet = TreeFrame.TalentSet;
 				local TalentSeq = Node.TalentSeq;
-				local link = MT.GetSpellLink(TreeTDB[TalentSeq][8][TalentSet[TalentSeq] == 0 and 1 or TalentSet[TalentSeq]]);
+				local link = VT._comptb.GetSpellLink(TreeTDB[TalentSeq][8][TalentSet[TalentSeq] == 0 and 1 or TalentSet[TalentSeq]]);
 				if link then
 					local editBox = ChatEdit_ChooseBoxForSend();
 					editBox:Show();

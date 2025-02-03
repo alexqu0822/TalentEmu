@@ -17,33 +17,20 @@ local DT = {  }; __private.DT = DT;		--	data
 	local setmetatable = setmetatable;
 	local rawset = rawset;
 	local next = next;
+	local select = select;
 	local tremove = table.remove;
 	local strrep = string.rep;
 	local IsLoggedIn =IsLoggedIn;
 	local UnitInBattleground = UnitInBattleground;
 	local GetBestMapForUnit = C_Map.GetBestMapForUnit;
 	local CreateFrame = CreateFrame;
+	local GetTalentTabInfo = GetTalentTabInfo;
 	local _G = _G;
 
 -->
 	local __ala_meta__ = _G.__ala_meta__;
 	__ala_meta__.emu = __private;
 	VT.__dep = __ala_meta__;
-
--->		Compatible
-	local _comptb = {  };
-	VT._comptb = _comptb;
-	if GetMouseFocus then
-		_comptb.GetMouseFocus = GetMouseFocus;
-	elseif GetMouseFoci then
-		local GetMouseFoci = GetMouseFoci;
-		_comptb.GetMouseFocus = function()
-			return GetMouseFoci()[1];
-		end
-	else
-		_comptb.GetMouseFocus = function()
-		end
-	end
 
 -->		Dev
 	local _GlobalRef = {  };
@@ -160,6 +147,55 @@ local DT = {  }; __private.DT = DT;		--	data
 
 	DT.IndexToClass = VT.__dep.__emulib.__classList;
 	DT.ClassToIndex = VT.__dep.__emulib.__classHash;
+
+-->		Compatible
+	local _comptb = {  };
+	VT._comptb = _comptb;
+	if GetMouseFocus then
+		_comptb.GetMouseFocus = GetMouseFocus;
+	elseif GetMouseFoci then
+		local GetMouseFoci = GetMouseFoci;
+		_comptb.GetMouseFocus = function()
+			return GetMouseFoci()[1];
+		end
+	else
+		_comptb.GetMouseFocus = function()
+		end
+	end
+	if CT.TOCVERSION >= 20000 and CT.TOCVERSION < 40000 then
+		_comptb.GetTreeNumPoints = function(index) return select(3, GetTalentTabInfo(index)) or 0 end
+	else
+		_comptb.GetTreeNumPoints = function(index) return select(5, GetTalentTabInfo(index)) or 0 end
+	end
+	if _G.GetSpellLink then
+		_comptb.GetSpellLink = _G.GetSpellLink;
+	elseif CT.TOCVERSION < 20000 then
+		local GetSpellInfo = GetSpellInfo;
+		_comptb.GetSpellLink = _comptb.GetSpellLink or function(id, name)
+			--|cff71d5ff|Hspell:id|h[name]|h|r
+			name = name or GetSpellInfo(id);
+			if name then
+				if __ala_meta__.chat and __ala_meta__.chat.alac_hyperLink and __ala_meta__.chat.alac_hyperLink() then
+					return "|cff71d5ff|Hspell:" .. id .. "|h[" .. name .. "]|h|r";
+				else
+					return name;
+				end
+			else
+				return nil;
+			end
+		end
+	elseif CT.TOCVERSION < 50000 then
+		local GetSpellInfo = GetSpellInfo;
+		_comptb.GetSpellLink = _comptb.GetSpellLink or function(id, name)
+			--|cff71d5ff|Hspell:id|h[name]|h|r
+			name = name or GetSpellInfo(id);
+			if name then
+				return "|cff71d5ff|Hspell:" .. id .. "|h[" .. name .. "]|h|r";
+			else
+				return nil;
+			end
+		end
+	end
 
 -->
 MT.BuildEnv('INIT');

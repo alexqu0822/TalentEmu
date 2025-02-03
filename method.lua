@@ -29,7 +29,6 @@ local DT = __private.DT;
 	local UIParent = UIParent;
 	local GameTooltip = GameTooltip;
 	local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
-	local GetTreeNumPoints = (CT.TOCVERSION >= 20000 and CT.TOCVERSION < 40000) and function(index) return select(3, GetTalentTabInfo(index)) or 0 end or function(index) return select(5, GetTalentTabInfo(index)) or 0 end
 
 -->
 	local l10n = CT.l10n;
@@ -40,36 +39,6 @@ MT.BuildEnv('METHOD');
 -->		predef
 -->		METHOD
 	--
-	if _G.GetSpellLink then
-		_G.ALA_GetSpellLink = _G.GetSpellLink;
-	elseif CT.TOCVERSION < 20000 then
-		local __ala_meta__ = _G.__ala_meta__;
-		_G.ALA_GetSpellLink = _G.ALA_GetSpellLink or function(id, name)
-			--|cff71d5ff|Hspell:id|h[name]|h|r
-			name = name or GetSpellInfo(id);
-			if name then
-				if __ala_meta__.chat and __ala_meta__.chat.alac_hyperLink and __ala_meta__.chat.alac_hyperLink() then
-					return "|cff71d5ff|Hspell:" .. id .. "|h[" .. name .. "]|h|r";
-				else
-					return name;
-				end
-			else
-				return nil;
-			end
-		end
-	elseif CT.TOCVERSION < 50000 then
-		_G.ALA_GetSpellLink = _G.ALA_GetSpellLink or function(id, name)
-			--|cff71d5ff|Hspell:id|h[name]|h|r
-			name = name or GetSpellInfo(id);
-			if name then
-				return "|cff71d5ff|Hspell:" .. id .. "|h[" .. name .. "]|h|r";
-			else
-				return nil;
-			end
-		end
-	end
-	MT.GetSpellLink = _G.ALA_GetSpellLink;
-
 	--		ItemLevel
 		local _ItemTryTimes = {  };
 		function MT.CalcItemLevel(class, EquData)
@@ -2124,7 +2093,7 @@ MT.BuildEnv('METHOD');
 				for TalentSeq = ApplyingTalents.TalentSeq, #TreeTDB do
 					ApplyingTalents.TalentSeq = TalentSeq;
 					if TryLearn(PrimaryTreeIndex, TalentSeq, TalentSet, TreeTDB) then
-						local num = GetTreeNumPoints(1) + GetTreeNumPoints(2) + GetTreeNumPoints(3);
+						local num = VT._comptb.GetTreeNumPoints(1) + VT._comptb.GetTreeNumPoints(2) + VT._comptb.GetTreeNumPoints(3);
 						Frame.ApplyTalentsProgress:SetText(num .. "/" .. ApplyingTalents.Total);
 						return;
 					end
@@ -2141,7 +2110,7 @@ MT.BuildEnv('METHOD');
 				for TalentSeq = ApplyingTalents.TalentSeq, #TreeTDB do
 					ApplyingTalents.TalentSeq = TalentSeq;
 					if TryLearn(TreeIndex, TalentSeq, TalentSet, TreeTDB) then
-						local num = GetTreeNumPoints(1) + GetTreeNumPoints(2) + GetTreeNumPoints(3);
+						local num = VT._comptb.GetTreeNumPoints(1) + VT._comptb.GetTreeNumPoints(2) + VT._comptb.GetTreeNumPoints(3);
 						Frame.ApplyTalentsProgress:SetText(num .. "/" .. ApplyingTalents.Total);
 						return;
 					end
