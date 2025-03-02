@@ -11,6 +11,7 @@ local DT = __private.DT;
 --		upvalue
 	local next, unpack = next, unpack;
 	local strsub, strsplit, strlower, strupper, strmatch = string.sub, string.split, string.lower, string.upper, string.match;
+	local tinsert = table.insert;
 	local tostring = tostring;
 	local RegisterAddonMessagePrefix = RegisterAddonMessagePrefix or C_ChatInfo.RegisterAddonMessagePrefix;
 	local IsAddonMessagePrefixRegistered = IsAddonMessagePrefixRegistered or C_ChatInfo.IsAddonMessagePrefixRegistered;
@@ -517,14 +518,11 @@ MT.BuildEnv('EXTERNAL');
 	VT.ExternalAddOn["D4C"] = {
 		addon = "DBM",
 		list = {  },
-		handler = function(self, sender, msg)
+		handler = function(self, sender, channel, msg)
 			local temp = { strsplit("\t", msg) };
 			if temp[1] == "V" or temp[1] == "GV" then
-				--	tremove(temp, 1);
-				temp[1] = tostring(temp[4]);
+				tinsert(temp, 1, temp[4]);
 				self.list[Ambiguate(sender, 'none')] = temp;
-				--	print(sender, "DBM Version", temp[4], unpack(temp));
-				--	print(sender, "DBM Version", temp[3]);	--	temp[3]
 				return true;
 			end
 		end,
@@ -532,14 +530,23 @@ MT.BuildEnv('EXTERNAL');
 	VT.ExternalAddOn["D4BC"] = {
 		addon = "DBM",
 		list = {  },
-		handler = function(self, sender, msg)
+		handler = function(self, sender, channel, msg)
 			local temp = { strsplit("\t", msg) };
 			if temp[1] == "V" or temp[1] == "GV" then
-				--	tremove(temp, 1);
-				temp[1] = tostring(temp[4]);
+				tinsert(temp, 1, temp[4]);
 				self.list[Ambiguate(sender, 'none')] = temp;
-				--	print(sender, "DBM Version", temp[4], unpack(temp));
-				--	print(sender, "DBM Version", temp[3]);	--	temp[3]
+				return true;
+			end
+		end,
+	};
+	VT.ExternalAddOn["D5"] = {
+		addon = "DBM",
+		list = {  },
+		handler = function(self, sender, channel, msg)
+			local temp = { strsplit("\t", msg) };
+			if temp[3] == "V" or temp[3] == "GV" then
+				tinsert(temp, 1, temp[6]);
+				self.list[Ambiguate(sender, 'none')] = temp;
 				return true;
 			end
 		end,
@@ -547,13 +554,11 @@ MT.BuildEnv('EXTERNAL');
 	VT.ExternalAddOn["BigWigs"] = {
 		addon = "BigWigs",
 		list = {  },
-		handler = function(self, sender, msg)
+		handler = function(self, sender, channel, msg)
 			local temp = { strsplit("^", msg) };
 			if temp[1] == "V" then
-				--	tremove(temp, 1);
-				temp[1] = temp[2] .. "-" .. temp[3];
+				tinsert(temp, 1, temp[2] .. "-" .. temp[3]);
 				self.list[Ambiguate(sender, 'none')] = temp;
-				--	print(sender, "BW Version", temp[1] .. "-" .. temp[2], unpack(temp));	--	temp[1] .. "-" .. temp[2]
 				return true;
 			end
 		end,

@@ -135,9 +135,9 @@ MT.BuildEnv('RAIDTOOL');
 							local A, T, M, R, Y, B, gstr = MT.ScanGemInfo(item, true);
 							if enchantable then
 								if gstr ~= "" then
-									GameTooltip:AddDoubleLine(l10n.SLOT[slot] .. " " .. link .. " |cffffffff(" .. level .. ")|r " .. gstr, enchanted and estr or l10n.MISS_ENCHANT);
+									GameTooltip:AddDoubleLine(l10n.SLOT[slot] .. " " .. link .. " |cffffffff(" .. level .. ")|r " .. gstr, enchanted and estr or l10n.RaidTool_MissingEnchant);
 								else
-									GameTooltip:AddDoubleLine(l10n.SLOT[slot] .. " " .. link .. " |cffffffff(" .. level .. ")|r", enchanted and estr or l10n.MISS_ENCHANT);
+									GameTooltip:AddDoubleLine(l10n.SLOT[slot] .. " " .. link .. " |cffffffff(" .. level .. ")|r", enchanted and estr or l10n.RaidTool_MissingEnchant);
 								end
 							else
 								if gstr ~= "" then
@@ -152,12 +152,12 @@ MT.BuildEnv('RAIDTOOL');
 								if loc == "INVTYPE_2HWEAPON" then
 									GameTooltip:AddLine(l10n.SLOT[slot] .. " -");
 								else
-									GameTooltip:AddLine(l10n.SLOT[slot] .. " " .. l10n.EMTPY_SLOT);
+									GameTooltip:AddLine(l10n.SLOT[slot] .. " " .. l10n.RaidTool_EmptySlot);
 								end
 							elseif slot == 18 and IGNORE_SLOT18[class] then
 								GameTooltip:AddLine(l10n.SLOT[slot] .. " -");
 							else
-								GameTooltip:AddLine(l10n.SLOT[slot] .. " " .. l10n.EMTPY_SLOT);
+								GameTooltip:AddLine(l10n.SLOT[slot] .. " " .. l10n.RaidTool_EmptySlot);
 							end
 						end
 					end
@@ -300,14 +300,13 @@ MT.BuildEnv('RAIDTOOL');
 						SpecIcon.Name:SetText("*");
 					end
 				end
-				local itemLevel1, itemLevel2, refresh_again = MT.CalcItemLevel(class, cache.EquData);
-				if itemLevel1 then
-					Node.ItemLevel:SetText(format("%.1f", itemLevel1));
+				if cache.EquData.AverageItemLevel then
+					Node.ItemLevel:SetText(format("%.1f", cache.EquData.AverageItemLevel));
 				else
 					Node.ItemLevel:SetText("");
 				end
-				if refresh_again then
-					MT._TimerStart(Node.Frame.UpdateScrollList, 0.2, 1);
+				if not cache.EquData.AverageItemLevel_OK then
+					MT._TimerStart(Node.Frame.UpdateScrollList, 0.5, 1);
 				end
 				local missItems, items, missEnchants, enchants, missGems, gems = SummaryItems(class, cache.EquData);
 				if missItems then
@@ -349,7 +348,7 @@ MT.BuildEnv('RAIDTOOL');
 					Node.GemSummary:SetText("");
 				end
 			end
-			local BossModInfo = VT.ExternalAddOn["D4C"].list[name] or VT.ExternalAddOn["D4BC"].list[name] or VT.ExternalAddOn["BigWigs"].list[name];
+			local BossModInfo = VT.ExternalAddOn["D5"].list[name] or VT.ExternalAddOn["D4C"].list[name] or VT.ExternalAddOn["D4BC"].list[name] or VT.ExternalAddOn["BigWigs"].list[name];
 			if BossModInfo then
 				Node.BossModInfo:SetText(BossModInfo[1]);
 			else
@@ -539,31 +538,31 @@ MT.BuildEnv('RAIDTOOL');
 				local RaidToolLableItemLevel = Frame:CreateFontString(nil, "OVERLAY");
 				RaidToolLableItemLevel:SetFont(TUISTYLE.RaidToolUIFont, TUISTYLE.RaidToolUIFontSize, TUISTYLE.RaidToolUIFontOutline);
 				RaidToolLableItemLevel:SetPoint("BOTTOMLEFT", ScrollList, "TOPLEFT", 164 + (TUISTYLE.RaidToolUIFrameButtonHeight - 4 + 24) * 3 + 12, 4);
-				RaidToolLableItemLevel:SetText(l10n.RaidToolLableItemLevel);
+				RaidToolLableItemLevel:SetText(l10n.RaidTool_LableItemLevel);
 				Frame.LableItemLevel = RaidToolLableItemLevel;
 				local RaidToolLableItemSummary = Frame:CreateFontString(nil, "OVERLAY");
 				RaidToolLableItemSummary:SetFont(TUISTYLE.RaidToolUIFont, TUISTYLE.RaidToolUIFontSize, TUISTYLE.RaidToolUIFontOutline);
 				RaidToolLableItemSummary:SetPoint("LEFT", RaidToolLableItemLevel, "LEFT", 36, 0);
-				RaidToolLableItemSummary:SetText(l10n.RaidToolLableItemSummary);
+				RaidToolLableItemSummary:SetText(l10n.RaidTool_LableItemSummary);
 				Frame.LableItemSummary = RaidToolLableItemSummary;
 				local RaidToolLableEnchantSummary = Frame:CreateFontString(nil, "OVERLAY");
 				RaidToolLableEnchantSummary:SetFont(TUISTYLE.RaidToolUIFont, TUISTYLE.RaidToolUIFontSize, TUISTYLE.RaidToolUIFontOutline);
 				RaidToolLableEnchantSummary:SetPoint("LEFT", RaidToolLableItemSummary, "LEFT", 60, 0);
-				RaidToolLableEnchantSummary:SetText(l10n.RaidToolLableEnchantSummary);
+				RaidToolLableEnchantSummary:SetText(l10n.RaidTool_LableEnchantSummary);
 				Frame.LableEnchantSummary = RaidToolLableEnchantSummary;
 				local RaidToolLableGemSummary = nil;
 				if VT.__support_gem then
 					RaidToolLableGemSummary = Frame:CreateFontString(nil, "OVERLAY");
 					RaidToolLableGemSummary:SetFont(TUISTYLE.RaidToolUIFont, TUISTYLE.RaidToolUIFontSize, TUISTYLE.RaidToolUIFontOutline);
 					RaidToolLableGemSummary:SetPoint("LEFT", RaidToolLableEnchantSummary, "LEFT", 60, 0);
-					RaidToolLableGemSummary:SetText(l10n.RaidToolLableGemSummary);
+					RaidToolLableGemSummary:SetText(l10n.RaidTool_LableGemSummary);
 					Frame.LableGemSummary = RaidToolLableGemSummary;
 				end
 				local RaidToolLableBossModInfo = Frame:CreateFontString(nil, "OVERLAY");
 				RaidToolLableBossModInfo:SetFont(TUISTYLE.RaidToolUIFont, TUISTYLE.RaidToolUIFontSize, TUISTYLE.RaidToolUIFontOutline);
 				RaidToolLableBossModInfo:SetPoint("LEFT", RaidToolLableGemSummary or RaidToolLableEnchantSummary, "LEFT", 60, 0);
 				RaidToolLableBossModInfo:SetWidth(120);
-				RaidToolLableBossModInfo:SetText(l10n.RaidToolLableBossModInfo);
+				RaidToolLableBossModInfo:SetText(l10n.RaidTool_LableBossModInfo);
 				Frame.LableBossModInfo = RaidToolLableBossModInfo;
 			--
 

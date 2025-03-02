@@ -26,6 +26,7 @@ local DT = __private.DT;
 		style = 1,
 		talents_in_tip = true,
 		talents_in_tip_icon = true,
+		itemlevel_in_tip = true,
 		inspectButtonOnUnitFrame = false,
 		show_equipment = true,
 		max_recv_msg = 16,
@@ -81,9 +82,9 @@ MT.BuildEnv('SETTING');
 					if extra == nil then
 						return "Style";
 					elseif extra == 1 then
-						return l10n.SetStyleAllTo1_LaterWin;
+						return l10n.Setting_TripleTrees;
 					elseif extra == 2 then
-						return l10n.SetStyleAllTo2_LaterWin;
+						return l10n.Setting_SingleTree;
 					end
 				end
 				return "|cffff0000" .. (key or "@key") .. "-" .. (extra or "@extra") .. "|r";
@@ -91,13 +92,14 @@ MT.BuildEnv('SETTING');
 			VT.SettingUI = VT.__dep.__settingfactory:CreateSettingUI(__addon, GetDefault, GetConfig, SetConfig, LookupText);
 			local settings = {
 				-- { "module", "key", 'boolean', nil, nil, nil, nil, "label", },
-				{ "module", "autoShowEquipmentFrame", 'boolean', nil, nil, nil, nil, l10n.AutoShowEquipmentFrame_TRUE, },
-				{ "module", "minimap", 'boolean', nil, nil, nil, nil, l10n.Minimap_TRUE, },
-				{ "module", "resizable_border", 'boolean', nil, nil, nil, nil, l10n.ResizableBorder_TRUE, },
-				{ "module", "singleFrame", 'boolean', nil, nil, nil, nil, l10n.SetSingleFrame_TRUE, },
+				{ "module", "autoShowEquipmentFrame", 'boolean', nil, nil, nil, nil, l10n.Setting_AutoShowEquipmentFrame, },
+				{ "module", "minimap", 'boolean', nil, nil, nil, nil, l10n.Setting_IconOnMinimap, },
+				{ "module", "resizable_border", 'boolean', nil, nil, nil, nil, l10n.Setting_ResizableBorder, },
+				{ "module", "singleFrame", 'boolean', nil, nil, nil, nil, l10n.Setting_SingleFrame, },
 				{ "module", "style", 'radio', { 1, 2, }, nil, nil, nil, },
-				{ "module", "talents_in_tip", 'boolean', nil, nil, nil, nil, l10n.TalentsInTip_TRUE, },
-				{ "module", "talents_in_tip_icon", 'boolean', nil, nil, nil, nil, l10n.TalentsInTipIcon_TRUE, },
+				{ "module", "talents_in_tip", 'boolean', nil, nil, nil, nil, l10n.Setting_TalentsInTip, },
+				{ "module", "talents_in_tip_icon", 'boolean', nil, nil, nil, nil, l10n.Setting_TalentsInTipIcon, },
+				{ "module", "itemlevel_in_tip", 'boolean', nil, nil, nil, nil, l10n.Setting_ItemLevelInTip, },
 			};
 			for _, setting in next, settings do
 				VT.SettingUI:AddSetting("GENERAL", setting);

@@ -527,7 +527,7 @@ MT.BuildEnv('UI');
 				end
 			else
 				local objects = Frame.objects;
-				objects.Name:SetText(l10n.Emu);
+				objects.Name:SetText(l10n.Emulator);
 				objects.PackLabel:Hide();
 				objects.ResetToEmuButton:Hide();
 				objects.ResetToSetButton:Hide();
@@ -636,15 +636,15 @@ MT.BuildEnv('UI');
 						TreeButton:SetNormalTexture(SpecTexture);
 						TreeButton:SetPushedTexture(SpecTexture);
 						TreeButton:SetHighlightTexture(SpecTexture);
-						TreeButton.information = l10n.DATA[SpecID];
-						TreeButton.Title:SetText(l10n.DATA[SpecID]);
+						TreeButton.information = l10n.SPEC[SpecID];
+						TreeButton.Title:SetText(l10n.SPEC[SpecID]);
 					else
 						TreeButton:SetNormalTexture(TTEXTURESET.UNK);
 						TreeButton:SetPushedTexture(TTEXTURESET.UNK);
 						TreeButton:SetHighlightTexture(TTEXTURESET.UNK);
 					end
 					TreeFrame.BG:SetTexture(DT.SpecBG[SpecID]);
-					TreeFrame.TreeLabel:SetText(l10n.DATA[SpecID]);
+					TreeFrame.TreeLabel:SetText(l10n.SPEC[SpecID]);
 					-- TreeFrame.TreeLabelBG:SetTexture(SpecTexture);
 					SetPortraitToTexture(TreeFrame.TreeLabelBG, SpecTexture)
 					for TalentSeq = 1, #TreeTDB do
@@ -870,23 +870,6 @@ MT.BuildEnv('UI');
 
 			return true;
 		end
-		function MT.UI.FrameSetReadOnly(Frame, readOnly)		--	READONLY CHANGED HERE ONLY	--	DISABLED, ALWAYS FALSE
-			readOnly = false;
-			if Frame.readOnly == readOnly then
-				return;
-			end
-			Frame.readOnly = readOnly;
-			local objects = Frame.objects;
-			if readOnly then
-				objects.ReadOnlyButton:GetNormalTexture():SetVertexColor(TTEXTURESET.LOCK.LOCKED_COLOR[1], TTEXTURESET.LOCK.LOCKED_COLOR[2], TTEXTURESET.LOCK.LOCKED_COLOR[3], TTEXTURESET.LOCK.LOCKED_COLOR[4]);
-				MT.UI.FrameNoRemainingPoints(Frame);
-			else
-				objects.ReadOnlyButton:GetNormalTexture():SetVertexColor(TTEXTURESET.LOCK.UNLOCKED_COLOR[1], TTEXTURESET.LOCK.UNLOCKED_COLOR[2], TTEXTURESET.LOCK.UNLOCKED_COLOR[3], TTEXTURESET.LOCK.UNLOCKED_COLOR[4]);
-				if Frame.TotalAvailablePoints > Frame.TotalUsedPoints then
-					MT.UI.FrameHasRemainingPoints(Frame);
-				end
-			end
-		end
 		function MT.UI.FrameSetEditByRule(Frame, rule)			--	LOCKED CHANGED HERE ONLY
 			rule = not not rule;
 			if Frame.rule == rule then
@@ -940,7 +923,6 @@ MT.BuildEnv('UI');
 				MT.UI.FrameSetTalent(Frame, TalData, activeGroup);
 			end
 			MT.UI.FrameSetLevel(Frame, level);
-			--	MT.UI.FrameSetReadOnly(Frame, readOnly);
 			MT.UI.FrameSetEditByRule(Frame, rule);
 			MT.UI.FrameSetName(Frame, name);
 
@@ -1292,7 +1274,6 @@ MT.BuildEnv('UI');
 				MT.UI.FrameSetName(Frame, nil);
 			end
 			if ResetSetting ~= false then
-				--	MT.UI.FrameSetReadOnly(Frame, false);
 				MT.UI.FrameSetEditByRule(Frame, false);
 			end
 
@@ -1377,9 +1358,9 @@ MT.BuildEnv('UI');
 		end
 		function MT.UI.FrameUpdateFooterText(Frame)
 			local objects = Frame.objects;
-			objects.CurPointsUsed:SetText(Frame.TotalUsedPoints);
-			objects.CurPointsReqLevel:SetText(MT.GetPointsReqLevel(Frame.class, Frame.TotalUsedPoints));
-			objects.CurPointsRemaining:SetText(MT.GetLevelAvailablePoints(Frame.class, Frame.level) - Frame.TotalUsedPoints);
+			objects.PointsUsed:SetText(Frame.TotalUsedPoints);
+			objects.PointsToLevel:SetText(MT.GetPointsReqLevel(Frame.class, Frame.TotalUsedPoints));
+			objects.PointsRemaining:SetText(MT.GetLevelAvailablePoints(Frame.class, Frame.level) - Frame.TotalUsedPoints);
 		end
 		function MT.UI.FrameSetStyle(Frame, style)
 			local TreeFrames = Frame.TreeFrames;
@@ -1414,9 +1395,9 @@ MT.BuildEnv('UI');
 					Frame.TreeFrameScale = scale;
 					Frame:SetWidth(scale * TUISTYLE.TreeFrameXSizeTriple + TUISTYLE.TreeFrameXToBorder * 2);
 
-					_TextureFunc.SetNormalTexture(Frame.objects.ExpanButton, TTEXTURESET.SHRINK, nil, nil, TTEXTURESET.CONTROL_NORMAL_COLOR);
-					_TextureFunc.SetPushedTexture(Frame.objects.ExpanButton, TTEXTURESET.SHRINK, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
-					_TextureFunc.SetHighlightTexture(Frame.objects.ExpanButton, TTEXTURESET.SHRINK, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
+					_TextureFunc.SetNormalTexture(Frame.objects.ExpandButton, TTEXTURESET.SHRINK, nil, nil, TTEXTURESET.CONTROL_NORMAL_COLOR);
+					_TextureFunc.SetPushedTexture(Frame.objects.ExpandButton, TTEXTURESET.SHRINK, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
+					_TextureFunc.SetHighlightTexture(Frame.objects.ExpandButton, TTEXTURESET.SHRINK, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
 				elseif style == 2 then
 					TreeFrames[1]:Hide();
 					TreeFrames[2]:Hide();
@@ -1447,9 +1428,9 @@ MT.BuildEnv('UI');
 					Frame.TreeFrameScale = scale;
 					Frame:SetWidth(scale * TUISTYLE.TreeFrameXSizeSingle + TUISTYLE.TreeFrameXToBorder * 2);
 
-					_TextureFunc.SetNormalTexture(Frame.objects.ExpanButton, TTEXTURESET.EXPAND, nil, nil, TTEXTURESET.CONTROL_NORMAL_COLOR);
-					_TextureFunc.SetPushedTexture(Frame.objects.ExpanButton, TTEXTURESET.EXPAND, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
-					_TextureFunc.SetHighlightTexture(Frame.objects.ExpanButton, TTEXTURESET.EXPAND, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
+					_TextureFunc.SetNormalTexture(Frame.objects.ExpandButton, TTEXTURESET.EXPAND, nil, nil, TTEXTURESET.CONTROL_NORMAL_COLOR);
+					_TextureFunc.SetPushedTexture(Frame.objects.ExpandButton, TTEXTURESET.EXPAND, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
+					_TextureFunc.SetHighlightTexture(Frame.objects.ExpandButton, TTEXTURESET.EXPAND, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
 				else
 					return;
 				end
@@ -1836,7 +1817,7 @@ MT.BuildEnv('UI');
 					if reqPts > pts then
 						Tooltip1LabelRight:SetTextColor(TUISTYLE.IconToolTipNextRankDisabledColor[1], TUISTYLE.IconToolTipNextRankDisabledColor[2], TUISTYLE.IconToolTipNextRankDisabledColor[3], TUISTYLE.IconToolTipNextRankDisabledColor[4]);
 						Tooltip1LabelRight:Show();
-						Tooltip1LabelRight:SetText(format(l10n.ReqPoints, pts, reqPts, l10n.DATA[SpecID]));
+						Tooltip1LabelRight:SetText(format(l10n.ReqPoints, pts, reqPts, l10n.SPEC[SpecID]));
 					end
 				end
 				--Tooltip1:Show();
@@ -2054,6 +2035,8 @@ MT.BuildEnv('UI');
 			end
 		end
 		function MT.UI.EquipmentContainerUpdate(EquipmentContainer, EquData)
+			MT._TimerHalt(EquipmentFrameDelayUpdate);
+			EquipmentContainer.AverageItemLevel:SetText(MT.ColorItemLevel(EquData.AverageItemLevel));
 			local recache = false;
 			local EquipmentNodes = EquipmentContainer.EquipmentNodes;
 			for slot = 0, 19 do
@@ -2068,13 +2051,13 @@ MT.BuildEnv('UI');
 						local r, g, b = color.r, color.g, color.b;
 						Node.Glow:SetVertexColor(r, g, b);
 						Node.Glow:Show();
-						Node.ILvl:SetVertexColor(r, g, b);
+						Node.ILvl:SetVertexColor(MT.GetItemLevelColor(level));
 						Node.ILvl:SetText(level);
 						Node.Name:SetVertexColor(r, g, b);
 						Node.Name:SetText(name);
 						local enchantable, enchanted, link, level, loc, estr = MT.GetEnchantInfo(CT.SELFLCLASS, slot, item);
 						if enchantable then
-							Node.Ench:SetText(enchanted and estr or l10n.MISS_ENCHANT);
+							Node.Ench:SetText(enchanted and estr or l10n.EquipmentList_MissingEnchant);
 						else
 							Node.Ench:SetText("");
 						end
@@ -2348,18 +2331,18 @@ MT.BuildEnv('UI');
 					return;
 				end
 				if data[5] and data[1] > 0 then
-					GameTooltip:AddDoubleLine(l10n.SpellListFrameGTTSpellLevel .. data[5], l10n.SpellListFrameGTTReqLevel .. data[1], 1.0, 0.75, 0.5, 1.0, 0.75, 0.5);
+					GameTooltip:AddDoubleLine(l10n.SpellList_GTTSpellLevel .. data[5], l10n.SpellList_GTTReqLevel .. data[1], 1.0, 0.75, 0.5, 1.0, 0.75, 0.5);
 				elseif data[5] then
-					GameTooltip:AddLine(l10n.SpellListFrameGTTSpellLevel .. data[5], 1.0, 0.75, 0.5);
+					GameTooltip:AddLine(l10n.SpellList_GTTSpellLevel .. data[5], 1.0, 0.75, 0.5);
 				elseif data[1] > 0 then
-					GameTooltip:AddLine(l10n.SpellListFrameGTTReqLevel .. data[1], 1.0, 0.75, 0.5);
+					GameTooltip:AddLine(l10n.SpellList_GTTReqLevel .. data[1], 1.0, 0.75, 0.5);
 				end
 				if CT.SELFCLASS == Node.list.class then
 					if not data[6] then
 						if FindSpellBookSlotBySpellID(data[2]) then
-							GameTooltip:AddLine(l10n.SpellAvailable);
+							GameTooltip:AddLine(l10n.SpellList_GTTAvailable);
 						else
-							GameTooltip:AddLine(l10n.SpellUnavailable);
+							GameTooltip:AddLine(l10n.SpellList_GTTUnavailable);
 						end
 					end
 				end
@@ -2377,14 +2360,14 @@ MT.BuildEnv('UI');
 					else
 						str = format("|cffffaf7f%d|r|TInterface\\MoneyFrame\\UI-CopperIcon:12:12:0:0|t", data[3]);
 					end
-					GameTooltip:AddDoubleLine(l10n.TrainCost, str, 1, 1, 1, 1, 1, 1);
+					GameTooltip:AddDoubleLine(l10n.SpellList_GTTTrainCost, str, 1, 1, 1, 1, 1, 1);
 				end
 				if data.race then
 					local str = nil;
 					for _, v in next, { strsplit("|", data.race) } do
-						str = str == nil and (l10n[v] or v) or (str .. ", " .. (l10n[v] or v));
+						str = str == nil and (l10n.RACE[v] or v) or (str .. ", " .. (l10n.RACE[v] or v));
 					end
-					GameTooltip:AddLine(l10n.RACE .. ": " .. str, 1.0, 0.5, 0.25);
+					GameTooltip:AddLine(l10n.RACE.RACE .. ": " .. str, 1.0, 0.5, 0.25);
 				end
 				GameTooltip:Show();
 			end);
@@ -2544,7 +2527,7 @@ MT.BuildEnv('UI');
 			SearchEditNote:SetFont(TUISTYLE.FrameFont, 12, TUISTYLE.FrameFontOutline);
 			SearchEditNote:SetTextColor(1.0, 1.0, 1.0, 0.5);
 			SearchEditNote:SetPoint("LEFT", 4, 0);
-			SearchEditNote:SetText(l10n.Search);
+			SearchEditNote:SetText(l10n.SpellList_Search);
 			SearchEditNote:Show();
 			SearchEdit.Note = SearchEditNote;
 			local SearchEditCancel = CreateFrame('BUTTON', nil, SearchEdit);
@@ -2573,7 +2556,7 @@ MT.BuildEnv('UI');
 			SearchEditOKText:SetFont(TUISTYLE.FrameFont, 12, TUISTYLE.FrameFontOutline);
 			SearchEditOKText:SetTextColor(1.0, 1.0, 1.0, 0.5);
 			SearchEditOKText:SetPoint("CENTER");
-			SearchEditOKText:SetText(l10n["OK"]);
+			SearchEditOKText:SetText(l10n.SpellList_SearchOKey);
 			SearchEditOK.Text = SearchEditOKText;
 			SearchEditOK:SetFontString(SearchEditOKText);
 			SearchEditOK:SetPushedTextOffset(1, -1);
@@ -2602,7 +2585,7 @@ MT.BuildEnv('UI');
 
 			local ShowAllSpellLabel = SpellListFrame:CreateFontString(nil, "ARTWORK");
 			ShowAllSpellLabel:SetFont(TUISTYLE.FrameFont, 10, TUISTYLE.FrameFontOutline);
-			ShowAllSpellLabel:SetText(l10n.ShowAllSpell);
+			ShowAllSpellLabel:SetText(l10n.SpellList_ShowAllSpell);
 			ShowAllSpell.Name = ShowAllSpellLabel;
 			ShowAllSpellLabel:SetPoint("RIGHT", ShowAllSpell, "LEFT", 0, 0);
 
@@ -2620,7 +2603,7 @@ MT.BuildEnv('UI');
 			CloseLabel:SetFont(TUISTYLE.FrameFont, 12, TUISTYLE.FrameFontOutline);
 			CloseLabel:SetTextColor(1.0, 1.0, 1.0, 0.5);
 			CloseLabel:SetPoint("CENTER");
-			CloseLabel:SetText(l10n["Hide"]);
+			CloseLabel:SetText(l10n.SpellList_Hide);
 			Close:SetFontString(CloseLabel);
 			Close:SetPushedTextOffset(1, -1);
 			Close.SpellListFrame = SpellListFrame;
@@ -2722,6 +2705,16 @@ MT.BuildEnv('UI');
 				EquipmentContainer:SetPoint("CENTER", EquipmentFrameContainer);
 			end
 			EquipmentContainer:Show();
+
+			local AverageItemLevelLabel = EquipmentContainer:CreateFontString(nil, "ARTWORK");
+			AverageItemLevelLabel:SetFont(TUISTYLE.FrameFont, 15, "OUTLINE");
+			AverageItemLevelLabel:SetPoint("BOTTOMRIGHT", EquipmentContainer, "TOP", -1, 2);
+			AverageItemLevelLabel:SetText(l10n.EquipmentList_AverageItemLevel);
+			local AverageItemLevel = EquipmentContainer:CreateFontString(nil, "ARTWORK");
+			AverageItemLevel:SetFont(TUISTYLE.FrameFont, 15, "OUTLINE");
+			AverageItemLevel:SetPoint("BOTTOMLEFT", EquipmentContainer, "TOP", 1, 2);
+			EquipmentContainer.AverageItemLevel = AverageItemLevel;
+
 			local EquipmentNodes = {  };
 			local EngravingNodes = {  };
 			for slot = 0, 19 do
@@ -3085,7 +3078,6 @@ MT.BuildEnv('UI');
 		function _TreeFunc.ResetButton_OnClick(ResetButton)
 			local TreeFrame = ResetButton.TreeFrame;
 			MT.UI.TreeFrameResetTalents(TreeFrame);
-			--	MT.UI.FrameSetReadOnly(TreeFrame.Frame, false);
 		end
 		function _TreeFunc.OnDragStart(TreeFrame, button)
 			local Frame = TreeFrame.Frame;
@@ -3228,14 +3220,6 @@ MT.BuildEnv('UI');
 		local function B()
 		end
 		--	Header
-		function _SideFunc.ReadOnlyButton_OnClick(self, button)
-			--	if button == "LeftButton" then
-			--		local Frame = self.Frame;
-			--		MT.UI.FrameSetReadOnly(Frame, not Frame.readOnly);
-			--	elseif button == "RightButton" then
-				MT.ShowMenu(self, self.Frame);
-			--	end
-		end
 		function _SideFunc.CloseButton_OnClick(self, button)
 			self.Frame:Hide();
 		end
@@ -3244,7 +3228,6 @@ MT.BuildEnv('UI');
 			MT.UI.FrameSetName(Frame, nil);
 			MT.UI.FrameSetTalent(Frame, nil);
 			MT.UI.FrameSetLevel(Frame, DT.MAX_LEVEL);
-			--	MT.UI.FrameSetReadOnly(Frame, false);
 			self:Hide();
 		end
 		function _SideFunc.ResetToSetButton_OnClick(self)
@@ -3301,7 +3284,6 @@ MT.BuildEnv('UI');
 		end
 		function _SideFunc.ResetAllButton_OnClick(self)
 			MT.UI.FrameResetTalents(self.Frame);
-			--	MT.UI.FrameSetReadOnly(self.Frame, false);
 		end
 		function _SideFunc.TreeButton_OnClick(self)
 			MT.UI.TreeUpdate(self.Frame, self.id);
@@ -3313,7 +3295,7 @@ MT.BuildEnv('UI');
 					VT.VAR.savedTalent[val[1]] = nil;
 				else
 					VT.ImportIndex = VT.ImportIndex + 1;
-					MT.ImportCode(Frame, val[2], "#" .. l10n.import .. "[" .. VT.ImportIndex .. "] " .. val[1]);
+					MT.ImportCode(Frame, val[2], "#" .. l10n.Import .. "[" .. VT.ImportIndex .. "] " .. val[1]);
 				end
 			end,
 			num = 0,
@@ -3356,8 +3338,8 @@ MT.BuildEnv('UI');
 		end
 		StaticPopupDialogs["TalentEmu_ApplyTalents"] = {
 			text = l10n.ApplyTalentsButton_Notify,
-			button1 = l10n.OK,
-			button2 = l10n.Cancel,
+			button1 = l10n.OKAY,
+			button2 = l10n.CANCEL,
 			--	OnShow = function(self) end,
 			OnAccept = function(self, Frame)
 				MT.ApplyTalents(Frame);
@@ -3410,7 +3392,7 @@ MT.BuildEnv('UI');
 			num = 1,
 			[1] = {
 				param = MT,
-				text = l10n.AllData,
+				text = l10n.ExportButton_AllData,
 			},
 		};
 		function _SideFunc.ExportButton_OnClick(self, button)
@@ -3443,7 +3425,7 @@ MT.BuildEnv('UI');
 					VT.VAR.savedTalent[val[1]] = nil;
 				else
 					VT.ImportIndex = VT.ImportIndex + 1;
-					MT.ImportCode(Frame, val[2], "#" .. l10n.import .. "[" .. VT.ImportIndex .. "] " .. val[1]);
+					MT.ImportCode(Frame, val[2], "#" .. l10n.Import .. "[" .. VT.ImportIndex .. "] " .. val[1]);
 				end
 			end,
 			num = 0,
@@ -3460,7 +3442,7 @@ MT.BuildEnv('UI');
 					end
 				else
 					VT.ImportIndex = VT.ImportIndex + 1;
-					MT.ImportCode(Frame, val[2], "#" .. l10n.import .. "[" .. VT.ImportIndex .. "] " .. val[3]);
+					MT.ImportCode(Frame, val[2], "#" .. l10n.Import .. "[" .. VT.ImportIndex .. "] " .. val[3]);
 				end
 			end,
 			num = 0,
@@ -3543,11 +3525,11 @@ MT.BuildEnv('UI');
 						local class, level, data = codec:ImportCode(code);
 						if class ~= nil then
 							VT.ImportIndex = VT.ImportIndex + 1;
-							return MT.UI.FrameSetInfo(self.Frame, class, level, { data, nil, num = 1, active = 1, }, 1, "#" .. l10n.import .. "[" .. VT.ImportIndex .. "]");
+							return MT.UI.FrameSetInfo(self.Frame, class, level, { data, nil, num = 1, active = 1, }, 1, "#" .. l10n.Import .. "[" .. VT.ImportIndex .. "]");
 						end
 					end
 					VT.ImportIndex = VT.ImportIndex + 1;
-					return MT.ImportCode(self.Frame, code, "#" .. l10n.import .. "[" .. VT.ImportIndex .. "]");
+					return MT.ImportCode(self.Frame, code, "#" .. l10n.Import .. "[" .. VT.ImportIndex .. "]");
 				end
 			elseif Type == "save" then
 				local title = self:GetText();
@@ -3596,22 +3578,6 @@ MT.BuildEnv('UI');
 				HeaderBG:SetColorTexture(0.0, 0.0, 0.0, 0.5);
 				Header.BG = HeaderBG;
 
-				local ReadOnlyButton = CreateFrame('BUTTON', nil, Header);
-				ReadOnlyButton:SetSize(TUISTYLE.ControlButtonSize, TUISTYLE.ControlButtonSize);
-				_TextureFunc.SetNormalTexture(ReadOnlyButton, TTEXTURESET.LOCK, nil, nil, TTEXTURESET.LOCK.UNLOCKED_COLOR);
-				_TextureFunc.SetPushedTexture(ReadOnlyButton, TTEXTURESET.LOCK, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
-				_TextureFunc.SetHighlightTexture(ReadOnlyButton, TTEXTURESET.LOCK, nil, nil, TTEXTURESET.CONTROL_HIGHLIGHT_COLOR);
-				ReadOnlyButton:SetPoint("CENTER", Header, "LEFT", TUISTYLE.FrameHeaderYSize * 0.5, 0);
-				ReadOnlyButton:Show();
-				ReadOnlyButton:RegisterForClicks("LeftButtonUp", "RightButtonUp");
-				ReadOnlyButton:SetScript("OnClick", _SideFunc.ReadOnlyButton_OnClick);
-				ReadOnlyButton:SetScript("OnEnter", MT.GeneralOnEnter);
-				ReadOnlyButton:SetScript("OnLeave", MT.GeneralOnLeave);
-				ReadOnlyButton.Frame = Frame;
-				ReadOnlyButton.information = l10n.ReadOnlyButton;
-				objects.ReadOnlyButton = ReadOnlyButton;
-				ReadOnlyButton:Hide();
-
 				local CloseButton = CreateFrame('BUTTON', nil, Header);
 				CloseButton:SetSize(TUISTYLE.ControlButtonSize, TUISTYLE.ControlButtonSize);
 				_TextureFunc.SetNormalTexture(CloseButton, TTEXTURESET.CLOSE, nil, nil, TTEXTURESET.CONTROL_NORMAL_COLOR);
@@ -3628,7 +3594,7 @@ MT.BuildEnv('UI');
 
 				local Name = Header:CreateFontString(nil, "ARTWORK");
 				Name:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeMid, TUISTYLE.FrameFontOutline);
-				Name:SetText(l10n.Emu);
+				Name:SetText(l10n.Emulator);
 				Name:SetPoint("CENTER", Header, "CENTER", 0, 0);
 				Name.Points1 = { "CENTER", Header, "CENTER", 0, 0, };
 				Name.Points2 = { "BOTTOM", Header, "TOP", 0, 4, };
@@ -3692,19 +3658,19 @@ MT.BuildEnv('UI');
 
 			--	<Footer>
 				--	Control
-					local ExpanButton = CreateFrame('BUTTON', nil, Frame);
-					ExpanButton:SetSize(TUISTYLE.ControlButtonSize, TUISTYLE.ControlButtonSize);
-					_TextureFunc.SetNormalTexture(ExpanButton, TTEXTURESET.EXPAND, nil, nil, TTEXTURESET.CONTROL_NORMAL_COLOR);
-					_TextureFunc.SetPushedTexture(ExpanButton, TTEXTURESET.EXPAND, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
-					_TextureFunc.SetHighlightTexture(ExpanButton, TTEXTURESET.EXPAND, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
-					ExpanButton:SetPoint("BOTTOMRIGHT", Frame, "BOTTOMRIGHT", -2, (TUISTYLE.FrameFooterYSize - TUISTYLE.ControlButtonSize) * 0.5);
-					ExpanButton:Show();
-					ExpanButton:SetScript("OnClick", _SideFunc.ExpandButton_OnClick);
-					ExpanButton:SetScript("OnEnter", MT.GeneralOnEnter);
-					ExpanButton:SetScript("OnLeave", MT.GeneralOnLeave);
-					ExpanButton.Frame = Frame;
-					ExpanButton.information = l10n.ExpanButton;
-					objects.ExpanButton = ExpanButton;
+					local ExpandButton = CreateFrame('BUTTON', nil, Frame);
+					ExpandButton:SetSize(TUISTYLE.ControlButtonSize, TUISTYLE.ControlButtonSize);
+					_TextureFunc.SetNormalTexture(ExpandButton, TTEXTURESET.EXPAND, nil, nil, TTEXTURESET.CONTROL_NORMAL_COLOR);
+					_TextureFunc.SetPushedTexture(ExpandButton, TTEXTURESET.EXPAND, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
+					_TextureFunc.SetHighlightTexture(ExpandButton, TTEXTURESET.EXPAND, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
+					ExpandButton:SetPoint("BOTTOMRIGHT", Frame, "BOTTOMRIGHT", -2, (TUISTYLE.FrameFooterYSize - TUISTYLE.ControlButtonSize) * 0.5);
+					ExpandButton:Show();
+					ExpandButton:SetScript("OnClick", _SideFunc.ExpandButton_OnClick);
+					ExpandButton:SetScript("OnEnter", MT.GeneralOnEnter);
+					ExpandButton:SetScript("OnLeave", MT.GeneralOnLeave);
+					ExpandButton.Frame = Frame;
+					ExpandButton.information = l10n.ExpandButton;
+					objects.ExpandButton = ExpandButton;
 
 					local ResetAllButton = CreateFrame('BUTTON', nil, Frame);
 					ResetAllButton:SetSize(TUISTYLE.ControlButtonSize, TUISTYLE.ControlButtonSize);
@@ -3722,43 +3688,43 @@ MT.BuildEnv('UI');
 
 					local CurPointsRemainingLabel = Frame:CreateFontString(nil, "ARTWORK");
 					CurPointsRemainingLabel:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeSmall, TUISTYLE.FrameFontOutline);
-					CurPointsRemainingLabel:SetText(l10n.CurPointsRemaining);
+					CurPointsRemainingLabel:SetText(l10n.PointsRemaining);
 					CurPointsRemainingLabel:SetPoint("CENTER", Frame, "BOTTOM", -15, TUISTYLE.FrameFooterYSize * 0.5);
-					local CurPointsRemaining = Frame:CreateFontString(nil, "ARTWORK");
-					CurPointsRemaining:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeMid, TUISTYLE.FrameFontOutline);
-					CurPointsRemaining:SetText("51");
-					CurPointsRemaining:SetPoint("LEFT", CurPointsRemainingLabel, "RIGHT", 2, 0);
+					local PointsRemaining = Frame:CreateFontString(nil, "ARTWORK");
+					PointsRemaining:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeMid, TUISTYLE.FrameFontOutline);
+					PointsRemaining:SetText("51");
+					PointsRemaining:SetPoint("LEFT", CurPointsRemainingLabel, "RIGHT", 2, 0);
 					CurPointsRemainingLabel:SetTextColor(0.5, 1.0, 1.0, 1.0);
-					CurPointsRemaining:SetTextColor(0.5, 1.0, 1.0, 1.0);
+					PointsRemaining:SetTextColor(0.5, 1.0, 1.0, 1.0);
 
-					local CurPointsUsed = Frame:CreateFontString(nil, "ARTWORK");
-					CurPointsUsed:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeMid, TUISTYLE.FrameFontOutline);
-					CurPointsUsed:SetText("0");
-					CurPointsUsed:SetPoint("RIGHT", CurPointsRemainingLabel, "LEFT", -8, 0);
+					local PointsUsed = Frame:CreateFontString(nil, "ARTWORK");
+					PointsUsed:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeMid, TUISTYLE.FrameFontOutline);
+					PointsUsed:SetText("0");
+					PointsUsed:SetPoint("RIGHT", CurPointsRemainingLabel, "LEFT", -8, 0);
 					local CurPointsUsedLabel = Frame:CreateFontString(nil, "ARTWORK");
 					CurPointsUsedLabel:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeMid, TUISTYLE.FrameFontOutline);
-					CurPointsUsedLabel:SetText(l10n.CurPointsUsed);
-					CurPointsUsedLabel:SetPoint("RIGHT", CurPointsUsed, "LEFT", -2, 0);
+					CurPointsUsedLabel:SetText(l10n.PointsUsed);
+					CurPointsUsedLabel:SetPoint("RIGHT", PointsUsed, "LEFT", -2, 0);
 					CurPointsUsedLabel:SetTextColor(0.5, 1.0, 0.5, 1.0);
-					CurPointsUsed:SetTextColor(0.5, 1.0, 0.5, 1.0);
+					PointsUsed:SetTextColor(0.5, 1.0, 0.5, 1.0);
 
 					local CurPointsReqLevelLabel = Frame:CreateFontString(nil, "ARTWORK");
 					CurPointsReqLevelLabel:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeMid, TUISTYLE.FrameFontOutline);
-					CurPointsReqLevelLabel:SetText(l10n.CurPointsReqLevel);
-					CurPointsReqLevelLabel:SetPoint("LEFT", CurPointsRemaining, "RIGHT", 8, 0);
-					local CurPointsReqLevel = Frame:CreateFontString(nil, "ARTWORK");
-					CurPointsReqLevel:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeMid, TUISTYLE.FrameFontOutline);
-					CurPointsReqLevel:SetText("10");
-					CurPointsReqLevel:SetPoint("LEFT", CurPointsReqLevelLabel, "RIGHT", 2, 0);
+					CurPointsReqLevelLabel:SetText(l10n.PointsToLevel);
+					CurPointsReqLevelLabel:SetPoint("LEFT", PointsRemaining, "RIGHT", 8, 0);
+					local PointsToLevel = Frame:CreateFontString(nil, "ARTWORK");
+					PointsToLevel:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeMid, TUISTYLE.FrameFontOutline);
+					PointsToLevel:SetText("10");
+					PointsToLevel:SetPoint("LEFT", CurPointsReqLevelLabel, "RIGHT", 2, 0);
 					CurPointsReqLevelLabel:SetTextColor(1.0, 1.0, 0.5, 1.0);
-					CurPointsReqLevel:SetTextColor(1.0, 1.0, 0.5, 1.0);
+					PointsToLevel:SetTextColor(1.0, 1.0, 0.5, 1.0);
 
 					objects.CurPointsRemainingLabel = CurPointsRemainingLabel;
-					objects.CurPointsRemaining = CurPointsRemaining;
+					objects.PointsRemaining = PointsRemaining;
 					objects.CurPointsUsedLabel = CurPointsUsedLabel;
-					objects.CurPointsUsed = CurPointsUsed;
+					objects.PointsUsed = PointsUsed;
 					objects.CurPointsReqLevelLabel = CurPointsReqLevelLabel;
-					objects.CurPointsReqLevel = CurPointsReqLevel;
+					objects.PointsToLevel = PointsToLevel;
 				--
 
 				--	Tree
@@ -3833,7 +3799,7 @@ MT.BuildEnv('UI');
 						ClassButton.id = index;
 						ClassButton.class = class;
 						ClassButton.Frame = Frame;
-						ClassButton.information = "|c" .. RAID_CLASS_COLORS[class].colorStr .. l10n.DATA[class] .. "|r" .. l10n.ClassButton;
+						ClassButton.information = "|c" .. RAID_CLASS_COLORS[class].colorStr .. l10n.CLASS[class] .. "|r" .. l10n.ClassButton;
 						ClassButtons[index] = ClassButton;
 					end
 					Frame.ClassButtons = ClassButtons;
@@ -4010,7 +3976,7 @@ MT.BuildEnv('UI');
 					EquipmentFrameButton:SetScript("OnClick", _SideFunc.EquipmentFrameButton_OnClick);
 					EquipmentFrameButton:SetScript("OnEnter", MT.GeneralOnEnter);
 					EquipmentFrameButton:SetScript("OnLeave", MT.GeneralOnLeave);
-					EquipmentFrameButton.information = l10n.EquipmentFrameButton;
+					EquipmentFrameButton.information = l10n.EquipmentListButton;
 					EquipmentFrameButton.Frame = Frame;
 					Frame.objects.EquipmentFrameButton = EquipmentFrameButton;
 				--
@@ -4179,7 +4145,6 @@ MT.BuildEnv('UI');
 			MT.UI.FrameSetLevel(Frame, nil);
 			MT.UI.FrameSetClass(Frame, CT.SELFCLASS);
 			MT.UI.FrameSetTalent(Frame, nil);
-			--	MT.UI.FrameSetReadOnly(Frame, false);
 			Frame.initialized = false;
 
 			MT.UI.FrameSetStyle(Frame, VT.SET.style);

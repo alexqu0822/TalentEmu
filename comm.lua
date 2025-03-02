@@ -237,8 +237,12 @@ MT.BuildEnv('COMM');
 				VT.TQueryCache[name] = cache;
 			end
 			local EquData = cache.EquData;
-			if Decoder(EquData, code) then
+			local valid, _, changed = Decoder(EquData, code);
+			if valid then
 				EquData.Tick = MT.GetUnifiedTime();
+				if changed then
+					MT._TriggerCallback("CALLBACK_INVENTORY_DATA_CHANGED", name);
+				end
 				if not overheard then
 					MT._TriggerCallback("CALLBACK_DATA_RECV", name);
 					MT._TriggerCallback("CALLBACK_INVENTORY_DATA_RECV", name, true);
@@ -308,7 +312,7 @@ MT.BuildEnv('COMM');
 		local meta = VT.ExternalAddOn[prefix];
 		if meta ~= nil then
 			local name = Ambiguate(sender, 'none');
-			if meta.handler(meta, name, msg) then
+			if meta.handler(meta, name, channel, msg) then
 				MT._TriggerCallback("CALLBACK_DATA_RECV", name);
 			end
 		end
@@ -453,6 +457,7 @@ MT.BuildEnv('COMM');
 		end
 		MT._RegisterCallback("CALLBACK_INVENTORY_DATA_RECV", MT.CALLBACK.OnInventoryDataRecv);
 		MT._RegisterCallback("CALLBACK_ENGRAVING_DATA_RECV", MT.CALLBACK.OnEngravingDataRecv);
+		MT._RegisterCallback("CALLBACK_INVENTORY_DATA_CHANGED", MT.CALLBACK.OnInventoryDataChanged);
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_SYSTEM", ChatFilter_CHAT_MSG_SYSTEM);
 		-- hooksecurefunc("SendChatMessage", function(_msg, _type, _lang, _target)
 		-- 	if _type == "WHISPER" then

@@ -70,7 +70,10 @@ MT.BuildEnv('INSPECT');
 					TalData.active = activeGroup;
 					TalData.code = code;
 					TalData.Tick = MT.GetUnifiedTime();
-					VT.__dep.__emulib.GetEquipmentData(cache.EquData, unit);
+					local _, changed = VT.__dep.__emulib.GetEquipmentData(cache.EquData, unit);
+					if changed then
+						MT._TriggerCallback("CALLBACK_INVENTORY_DATA_CHANGED", name);
+					end
 					MT._TriggerCallback("CALLBACK_DATA_RECV", name);
 					MT._TriggerCallback("CALLBACK_TALENT_DATA_RECV", name, false);
 					MT._TriggerCallback("CALLBACK_INVENTORY_DATA_RECV", name, false);

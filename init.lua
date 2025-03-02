@@ -271,15 +271,18 @@ MT.BuildEnv('INIT');
 	local _CallbackPrivate = {  };
 	function MT._RegisterCallback(event, callback)
 		if callback ~= nil and type(callback) == 'function' then
-			_CallbackPrivate[event] = _CallbackPrivate[event] or {  };
 			local E = _CallbackPrivate[event];
-			local N = #E;
-			for index = 1, N do
-				if E[index] == callback then
-					return;
+			if E == nil then
+				_CallbackPrivate[event] = { callback, };
+			else
+				local N = #E;
+				for index = 1, N do
+					if E[index] == callback then
+						return;
+					end
 				end
+				E[N + 1] = callback;
 			end
-			E[N + 1] = callback;
 		end
 	end
 	function MT._UnregisterCallback(event, callback)

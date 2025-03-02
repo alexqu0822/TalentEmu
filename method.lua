@@ -15,7 +15,7 @@ local DT = __private.DT;
 	local select = select;
 	local concat = table.concat;
 	local strupper, strsub, strmatch, format = string.upper, string.sub, string.match, string.format;
-	local max = math.max;
+	local min, max = math.min, math.max;
 	local tonumber = tonumber;
 	local random = random;
 	local UnitLevel = UnitLevel;
@@ -75,7 +75,65 @@ MT.BuildEnv('METHOD');
 			if num1 == 0 or num2 == 0 then
 				return;
 			end
-			return total / num1, total / num2, refresh_again;
+			local lv1 = total / num1 + 0.05;
+			lv1 = lv1 - lv1 % 0.1;
+			local lv2 = total / num2 + 0.05;
+			lv2 = lv2 - lv2 % 0.1;
+			return lv1, lv2, refresh_again;
+		end
+		local function _CalcItemLevel()
+			local continue = false;
+			for name, cache in next, VT.TQueryCache do
+				local class = cache.class
+				local EquData = cache.EquData;
+				if class and EquData and not EquData.AverageItemLevel_OK then
+					local itemLevel1, itemLevel2, refresh_again = MT.CalcItemLevel(class, EquData);
+					EquData.AverageItemLevel = itemLevel1;
+					EquData.AverageItemLevel_ = itemLevel2;
+					if not refresh_again then
+						EquData.AverageItemLevel_OK = true;
+						MT.CALLBACK.OnInventoryDataRecv(name, false, false);
+						MT._TriggerCallback("CALLBACK_AVERAGE_ITEM_LEVEL_OK", name);
+					else
+						continue = true;
+					end
+				end
+			end
+			if continue then
+				MT._TimerStart(_CalcItemLevel, 0.2, 1);
+			end
+		end
+		function MT.ScheduleCalcItemLevel()
+			MT._TimerStart(_CalcItemLevel, 0.2, 1);
+		end
+		function MT.GetItemLevelColor(level)
+			local seq = DT.ItemLevelColor.seq;
+			local col = DT.ItemLevelColor.color;
+			local len = min(#seq, #col);
+			if level <= seq[1] then
+				local c = col[1];
+				return c[1], c[2], c[3];
+			elseif level > seq[len] then
+				local c = col[len];
+				return c[1], c[2], c[3];
+			else
+				for i = 2, len do
+					if level == seq[i] then
+						local c = col[i];
+						return c[1], c[2], c[3];
+					elseif level < seq[i] then
+						local c1 = col[i - 1];
+						local c2 = col[i];
+						local r = (level - seq[i - 1]) / (seq[i] - seq[i - 1]);
+						return c1[1] + r * (c2[1] - c1[1]), c1[2] + r * (c2[2] - c1[2]), c1[3] + r * (c2[3] - c1[3]);
+					end
+				end
+			end
+			return 1.0, 0.0, 0.0;
+		end
+		function MT.ColorItemLevel(level)
+			local r, g, b = MT.GetItemLevelColor(level);
+			return format("|cff%.2x%.2x%.2x%.1f|r", r * 255, g * 255, b * 255, level);
 		end
 	-->		Enchant
 		--	old
@@ -1492,21 +1550,21 @@ MT.BuildEnv('METHOD');
 					local id, class, subClass, _, icon, classID, subClassID = GetItemInfoInstant(v);
 					if classID == CLASSID_GEM then
 						if subClassID == ItemGemSubclass.Red then
-							S[index] = l10n.Gem.Red;
+							S[index] = l10n.EquipmentList_Gem.Red;
 						elseif subClassID == ItemGemSubclass.Orange then
-							S[index] = l10n.Gem.Orange;
+							S[index] = l10n.EquipmentList_Gem.Orange;
 						elseif subClassID == ItemGemSubclass.Yellow then
-							S[index] = l10n.Gem.Yellow;
+							S[index] = l10n.EquipmentList_Gem.Yellow;
 						elseif subClassID == ItemGemSubclass.Green then
-							S[index] = l10n.Gem.Green;
+							S[index] = l10n.EquipmentList_Gem.Green;
 						elseif subClassID == ItemGemSubclass.Blue then
-							S[index] = l10n.Gem.Blue;
+							S[index] = l10n.EquipmentList_Gem.Blue;
 						elseif subClassID == ItemGemSubclass.Purple then
-							S[index] = l10n.Gem.Purple;
+							S[index] = l10n.EquipmentList_Gem.Purple;
 						elseif subClassID == ItemGemSubclass.Prismatic then
-							S[index] = l10n.Gem.Prismatic;
+							S[index] = l10n.EquipmentList_Gem.Prismatic;
 						elseif subClassID == ItemGemSubclass.Meta then
-							S[index] = l10n.Gem.Meta;
+							S[index] = l10n.EquipmentList_Gem.Meta;
 						else
 						end
 					else
@@ -1533,29 +1591,29 @@ MT.BuildEnv('METHOD');
 						T = T + 1;
 						B = B + 1;
 						if returnStr then
-							returnStr = returnStr .. l10n.MissGem.Blue;
+							returnStr = returnStr .. l10n.EquipmentList_MissGem.Blue;
 						end
 					elseif v == 136257 then		--	M	136257	Inerface\ItemSocketingFrame\UI-EmptySocket-Blue.blp
 						T = T + 1;
 						M = M + 1;
 						if returnStr then
-							returnStr = returnStr .. l10n.MissGem.Meta;
+							returnStr = returnStr .. l10n.EquipmentList_MissGem.Meta;
 						end
 					elseif v == 136258 then		--	R	136258	Inerface\ItemSocketingFrame\UI-EmptySocket-Red.blp
 						T = T + 1;
 						R = R + 1;
 						if returnStr then
-							returnStr = returnStr .. l10n.MissGem.Red;
+							returnStr = returnStr .. l10n.EquipmentList_MissGem.Red;
 						end
 					elseif v == 136259 then		--	Y	136259	Inerface\ItemSocketingFrame\UI-EmptySocket-Yellow.blp
 						T = T + 1;
 						Y = Y + 1;
 						if returnStr then
-							returnStr = returnStr .. l10n.MissGem.Yellow;
+							returnStr = returnStr .. l10n.EquipmentList_MissGem.Yellow;
 						end
 					else
 						if returnStr then
-							returnStr = returnStr .. l10n.MissGem["?"];
+							returnStr = returnStr .. l10n.EquipmentList_MissGem["?"];
 						end
 					end
 				end
@@ -1646,22 +1704,22 @@ MT.BuildEnv('METHOD');
 	function MT.GenerateTitle(class, stats, uncolored)
 		local SpecList = DT.ClassSpec[class];
 		if uncolored then
-			local title = l10n.DATA[class];
+			local title = l10n.CLASS[class];
 			for TreeIndex = 1, 3 do
-				title = title .. " " .. l10n.DATA[SpecList[TreeIndex]] .. format("%2d", stats[TreeIndex]);
+				title = title .. " " .. l10n.SPEC[SpecList[TreeIndex]] .. format("%2d", stats[TreeIndex]);
 			end
 			return title;
 		else
-			local title = "|c" .. RAID_CLASS_COLORS[class].colorStr .. l10n.DATA[class] .. "|r-";
+			local title = "|c" .. RAID_CLASS_COLORS[class].colorStr .. l10n.CLASS[class] .. "|r-";
 			local temp = max(stats[1], stats[2], stats[3]);
 			if temp == stats[1] and temp == stats[2] and temp == stats[3] then
 				temp = temp + 1023;
 			end
 			for TreeIndex = 1, 3 do
 				if temp == stats[TreeIndex] then
-					title = title .. " |cff7fbfff" .. l10n.DATA[SpecList[TreeIndex]] .. format("%2d|r", stats[TreeIndex]);
+					title = title .. " |cff7fbfff" .. l10n.SPEC[SpecList[TreeIndex]] .. format("%2d|r", stats[TreeIndex]);
 				else
-					title = title .. " " .. l10n.DATA[SpecList[TreeIndex]] .. format("%2d", stats[TreeIndex]);
+					title = title .. " " .. l10n.SPEC[SpecList[TreeIndex]] .. format("%2d", stats[TreeIndex]);
 				end
 			end
 			return title;
@@ -1905,7 +1963,7 @@ MT.BuildEnv('METHOD');
 		local Tick = MT.GetUnifiedTime();
 		if name == nil then
 			VT.ImportIndex = VT.ImportIndex + 1;
-			name = "#" .. l10n.import .. "[" .. VT.ImportIndex .. "]";
+			name = "#" .. l10n.Import .. "[" .. VT.ImportIndex .. "]";
 		end
 		VT.QuerySent[name] = Tick;
 		VT.AutoShowEquipmentFrameOnComm[name] = Tick;
@@ -2120,7 +2178,7 @@ MT.BuildEnv('METHOD');
 		end
 		--
 		MT._TimerHalt(ApplyTalentsTicker);
-		MT.Notice(l10n.ApplyTalentsFinished);
+		MT.Notice(l10n.ApplyTalentsButton_Finished);
 		Frame.ApplyTalentsProgress:SetText("");
 		MT.UpdateApplyingTalentsStatus(nil);
 	end
@@ -2209,178 +2267,6 @@ MT.BuildEnv('METHOD');
 				MT._TimerStart(ApplyTalentsTicker, 0.1);
 			end
 		end
-	end
-
-	local MenuElements = {
-		{
-			v = "autoShowEquipmentFrame",
-			[true] = {
-				handler = function(Button)
-					VT.SET.autoShowEquipmentFrame = false;
-				end,
-				param = nil,
-				text = l10n.AutoShowEquipmentFrame_FALSE,
-			},
-			[false] = {
-				handler = function(Button)
-					VT.SET.autoShowEquipmentFrame = true;
-				end,
-				param = nil,
-				text = l10n.AutoShowEquipmentFrame_TRUE,
-			},
-		},
-		{
-			v = "minimap",
-			[true] = {
-				handler = function(Button)
-					VT.SET.minimap = false;
-					MT.CALLBACK["minimap"](false);
-				end,
-				param = nil,
-				text = l10n.Minimap_FALSE,
-			},
-			[false] = {
-				handler = function(Button)
-					VT.SET.minimap = true;
-					MT.CALLBACK["minimap"](true);
-				end,
-				param = nil,
-				text = l10n.Minimap_TRUE,
-			},
-		},
-		{
-			v = "resizable_border",
-			[true] = {
-				handler = function(Button)
-					VT.SET.resizable_border = false;
-				end,
-				param = nil,
-				text = l10n.ResizableBorder_FALSE,
-			},
-			[false] = {
-				handler = function(Button)
-					VT.SET.resizable_border = true;
-				end,
-				param = nil,
-				text = l10n.ResizableBorder_TRUE,
-			},
-		},
-		{
-			v = "singleFrame",
-			[true] = {
-				handler = function(Button, Frame)
-					VT.SET.singleFrame = false;
-				end,
-				param = nil,
-				text = l10n.SetSingleFrame_FALSE,
-			},
-			[false] = {
-				handler = function(Button, Frame)
-					VT.SET.singleFrame = true;
-					local last = Frame or MT.UI.GetLastFrame();
-					MT.UI.ReleaseAllFramesButOne(last and last.id or nil);
-				end,
-				param = nil,
-				text = l10n.SetSingleFrame_TRUE,
-			},
-		},
-		{
-			v = "style",
-			[1] = {
-				handler = function(Button)
-					VT.SET.style = 2;
-					for i = 1, VT.Frames.used do
-						MT.UI.FrameSetStyle(VT.Frames[i], 2);
-					end
-				end,
-				param = nil,
-				text = l10n.SetStyleAllTo2_LaterWin,
-			},
-			[2] = {
-				handler = function(Button)
-					VT.SET.style = 1;
-					for i = 1, VT.Frames.used do
-						MT.UI.FrameSetStyle(VT.Frames[i], 1);
-					end
-				end,
-				param = nil,
-				text = l10n.SetStyleAllTo1_LaterWin,
-			},
-			["*"] = {
-				{
-					handler = function(Button, Frame)
-						MT.UI.FrameSetStyle(Frame, 1);
-					end,
-					param = nil,
-					text = l10n.SetStyleAllTo1_ThisWin,
-				},
-				{
-					handler = function(Button, Frame)
-						MT.UI.FrameSetStyle(Frame, 2);
-					end,
-					param = nil,
-					text = l10n.SetStyleAllTo2_ThisWin,
-				},
-			},
-		},
-		{
-			v = "talents_in_tip",
-			[true] = {
-				handler = function(Button)
-					VT.SET.talents_in_tip = false;
-				end,
-				param = nil,
-				text = l10n.TalentsInTip_FALSE,
-			},
-			[false] = {
-				handler = function(Button)
-					VT.SET.talents_in_tip = true;
-				end,
-				param = nil,
-				text = l10n.TalentsInTip_TRUE,
-			},
-		},
-		{
-			v = "talents_in_tip_icon",
-			[true] = {
-				handler = function(Button)
-					VT.SET.talents_in_tip_icon = false;
-				end,
-				param = nil,
-				text = l10n.TalentsInTipIcon_FALSE,
-			},
-			[false] = {
-				handler = function(Button)
-					VT.SET.talents_in_tip_icon = true;
-				end,
-				param = nil,
-				text = l10n.TalentsInTipIcon_TRUE,
-			},
-		},
-	};
-	local MenuDefinition = {
-		num = 0,
-	};
-	function MT.ShowMenu(Parent, Frame)
-		local SET = VT.SET;
-		local pos = 0;
-		for index = 1, #MenuElements do
-			local Def = MenuElements[index];
-			local v = SET[Def.v];
-			if Def[v] ~= nil then
-				pos = pos + 1;
-				MenuDefinition[pos] = Def[v];
-				local dim = Def["*"];
-				if dim ~= nil then
-					for i = 1, #dim do
-						pos = pos + 1;
-						MenuDefinition[pos] = dim[i];
-					end
-				end
-			end
-		end
-		MenuDefinition.num = pos;
-		VT.__dep.__menulib.ShowMenu(Parent, "BOTTOMLEFT", MenuDefinition, Frame);
 	end
 
 	function MT.CALLBACK.OnTalentDataRecv(name, iscomm)
@@ -2486,6 +2372,15 @@ MT.BuildEnv('METHOD');
 					end
 				end
 			end
+		end
+	end
+	function MT.CALLBACK.OnInventoryDataChanged(name)
+		local cache = VT.TQueryCache[name];
+		if cache and cache.EquData then
+			cache.EquData.AverageItemLevel = nil;
+			cache.EquData.AverageItemLevel_ = nil;
+			cache.EquData.AverageItemLevel_OK = nil;
+			MT.ScheduleCalcItemLevel();
 		end
 	end
 
