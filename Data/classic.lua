@@ -1419,7 +1419,7 @@ for i = 10, DT.MAX_LEVEL do DT.LevelAvailablePointsTable[i] = i - 9; end
 DT.LevelAvailablePointsTableClass = {  };
 
 DT.ItemLevelColor = {
-	seq = {
+	step = {
 		0,	--	灰色
 		0,	--	白色
 		48,	--	绿色
@@ -1427,7 +1427,7 @@ DT.ItemLevelColor = {
 		63,	--	紫色
 		84,	--	橙色
 	},
-	color = {
+	list = {
 		{ 0.5, 0.5, 0.5, },	--	灰色
 		{ 1.0, 1.0, 1.0, },	--	白色
 		{ 0.0, 1.0, 0.0, },	--	绿色

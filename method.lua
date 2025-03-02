@@ -106,25 +106,25 @@ MT.BuildEnv('METHOD');
 		function MT.ScheduleCalcItemLevel()
 			MT._TimerStart(_CalcItemLevel, 0.2, 1);
 		end
+		local _ColorStep = DT.ItemLevelColor.step;
+		local _ColorList = DT.ItemLevelColor.list;
+		local _ColorLen = min(#_ColorStep, #_ColorList);
 		function MT.GetItemLevelColor(level)
-			local seq = DT.ItemLevelColor.seq;
-			local col = DT.ItemLevelColor.color;
-			local len = min(#seq, #col);
-			if level <= seq[1] then
-				local c = col[1];
+			if level <= _ColorStep[1] then
+				local c = _ColorList[1];
 				return c[1], c[2], c[3];
-			elseif level > seq[len] then
-				local c = col[len];
+			elseif level > _ColorStep[_ColorLen] then
+				local c = _ColorList[_ColorLen];
 				return c[1], c[2], c[3];
 			else
-				for i = 2, len do
-					if level == seq[i] then
-						local c = col[i];
+				for i = 2, _ColorLen do
+					if level == _ColorStep[i] then
+						local c = _ColorList[i];
 						return c[1], c[2], c[3];
-					elseif level < seq[i] then
-						local c1 = col[i - 1];
-						local c2 = col[i];
-						local r = (level - seq[i - 1]) / (seq[i] - seq[i - 1]);
+					elseif level < _ColorStep[i] then
+						local c1 = _ColorList[i - 1];
+						local c2 = _ColorList[i];
+						local r = (level - _ColorStep[i - 1]) / (_ColorStep[i] - _ColorStep[i - 1]);
 						return c1[1] + r * (c2[1] - c1[1]), c1[2] + r * (c2[2] - c1[2]), c1[3] + r * (c2[3] - c1[3]);
 					end
 				end
