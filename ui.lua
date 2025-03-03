@@ -59,9 +59,10 @@ local DT = __private.DT;
 		FrameFooterYSize = 24,
 
 		FrameFont = SystemFont_Shadow_Med1:GetFont(),--=="Fonts\ARKai_T.ttf"
-		FrameFontSize = 16,
-		FrameFontSizeMid = 14,
-		FrameFontSizeSmall = 12,
+		FrameFontSizeLarge = 16,
+		FrameFontSize = 14,
+		FrameFontSizeMedium = 13,
+		FrameFontSizeSmall = 10,
 		FrameFontOutline = "NORMAL",
 
 		TreeFrameXToBorder = 1,
@@ -96,7 +97,7 @@ local DT = __private.DT;
 		EquipmentFrameXSize = CT.TOCVERSION < 20000 and 280 or 340,
 		EquipmentFrameXMaxSize = CT.TOCVERSION < 20000 and 640 or 765,
 		EquipmentNodeSize = CT.TOCVERSION < 20000 and 36 or 38,
-		EquipmentNodeGap = 6,
+		EquipmentNodeGap = CT.TOCVERSION < 20000 and 4 or 6,
 		EquipmentNodeXToBorder = 8,
 		EquipmentNodeYToBorder = 8,
 		EquipmentNodeTextGap = 4,
@@ -2508,7 +2509,7 @@ MT.BuildEnv('UI');
 
 			local SearchEdit = CreateFrame('EDITBOX', nil, SpellListFrame);
 			SearchEdit:SetSize(TUISTYLE.SpellListFrameXSize - 2 * TUISTYLE.SpellListFrameXToBorder - 36, 16);
-			SearchEdit:SetFont(TUISTYLE.FrameFont, 10, "OUTLINE");
+			SearchEdit:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeSmall, "OUTLINE");
 			SearchEdit:SetAutoFocus(false);
 			SearchEdit:SetJustifyH("LEFT");
 			SearchEdit:Show();
@@ -2524,7 +2525,7 @@ MT.BuildEnv('UI');
 			SearchEditTexture:SetVertexColor(0.25, 0.25, 0.25);
 			SearchEdit.Texture = SearchEditTexture;
 			local SearchEditNote = SearchEdit:CreateFontString(nil, "OVERLAY");
-			SearchEditNote:SetFont(TUISTYLE.FrameFont, 12, TUISTYLE.FrameFontOutline);
+			SearchEditNote:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeMedium, TUISTYLE.FrameFontOutline);
 			SearchEditNote:SetTextColor(1.0, 1.0, 1.0, 0.5);
 			SearchEditNote:SetPoint("LEFT", 4, 0);
 			SearchEditNote:SetText(l10n.SpellList_Search);
@@ -2553,7 +2554,7 @@ MT.BuildEnv('UI');
 			SearchEditOKTexture:SetBlendMode("ADD");
 			SearchEditOK.Texture = SearchEditOKTexture;
 			local SearchEditOKText = SearchEditOK:CreateFontString(nil, "OVERLAY");
-			SearchEditOKText:SetFont(TUISTYLE.FrameFont, 12, TUISTYLE.FrameFontOutline);
+			SearchEditOKText:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeMedium, TUISTYLE.FrameFontOutline);
 			SearchEditOKText:SetTextColor(1.0, 1.0, 1.0, 0.5);
 			SearchEditOKText:SetPoint("CENTER");
 			SearchEditOKText:SetText(l10n.SpellList_SearchOKey);
@@ -2584,7 +2585,7 @@ MT.BuildEnv('UI');
 			SpellListFrame.ShowAllSpell = ShowAllSpell;
 
 			local ShowAllSpellLabel = SpellListFrame:CreateFontString(nil, "ARTWORK");
-			ShowAllSpellLabel:SetFont(TUISTYLE.FrameFont, 10, TUISTYLE.FrameFontOutline);
+			ShowAllSpellLabel:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeSmall, TUISTYLE.FrameFontOutline);
 			ShowAllSpellLabel:SetText(l10n.SpellList_ShowAllSpell);
 			ShowAllSpell.Name = ShowAllSpellLabel;
 			ShowAllSpellLabel:SetPoint("RIGHT", ShowAllSpell, "LEFT", 0, 0);
@@ -2600,7 +2601,7 @@ MT.BuildEnv('UI');
 			CloseTexture:SetAlpha(0.75);
 			CloseTexture:SetBlendMode("ADD");
 			local CloseLabel = Close:CreateFontString(nil, "OVERLAY");
-			CloseLabel:SetFont(TUISTYLE.FrameFont, 12, TUISTYLE.FrameFontOutline);
+			CloseLabel:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeMedium, TUISTYLE.FrameFontOutline);
 			CloseLabel:SetTextColor(1.0, 1.0, 1.0, 0.5);
 			CloseLabel:SetPoint("CENTER");
 			CloseLabel:SetText(l10n.SpellList_Hide);
@@ -2702,16 +2703,16 @@ MT.BuildEnv('UI');
 			if VT.__support_glyph then
 				EquipmentContainer:SetPoint("TOP", EquipmentFrameContainer);
 			else
-				EquipmentContainer:SetPoint("CENTER", EquipmentFrameContainer);
+				EquipmentContainer:SetPoint("BOTTOM", EquipmentFrameContainer);
 			end
 			EquipmentContainer:Show();
 
 			local AverageItemLevelLabel = EquipmentContainer:CreateFontString(nil, "ARTWORK");
-			AverageItemLevelLabel:SetFont(TUISTYLE.FrameFont, 15, "OUTLINE");
+			AverageItemLevelLabel:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSize, "OUTLINE");
 			AverageItemLevelLabel:SetPoint("BOTTOMRIGHT", EquipmentContainer, "TOP", -1, 2);
 			AverageItemLevelLabel:SetText(l10n.EquipmentList_AverageItemLevel);
 			local AverageItemLevel = EquipmentContainer:CreateFontString(nil, "ARTWORK");
-			AverageItemLevel:SetFont(TUISTYLE.FrameFont, 15, "OUTLINE");
+			AverageItemLevel:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSize, "OUTLINE");
 			AverageItemLevel:SetPoint("BOTTOMLEFT", EquipmentContainer, "TOP", 1, 2);
 			EquipmentContainer.AverageItemLevel = AverageItemLevel;
 
@@ -2740,20 +2741,20 @@ MT.BuildEnv('UI');
 				Node.Glow = Glow;
 
 				local ILvl = Node:CreateFontString(nil, "OVERLAY");
-				ILvl:SetFont(TUISTYLE.FrameFont, 13, "OUTLINE");
+				ILvl:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeMedium, "OUTLINE");
 				ILvl:SetPoint("BOTTOMRIGHT", Node, "BOTTOMRIGHT", 0, 2);
 				Node.ILvl = ILvl;
 
 				local Name = Node:CreateFontString(nil, "OVERLAY");
-				Name:SetFont(TUISTYLE.FrameFont, 13, TUISTYLE.FrameFontOutline);
+				Name:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeMedium, TUISTYLE.FrameFontOutline);
 				Node.Name = Name;
 
 				local Ench = Node:CreateFontString(nil, "OVERLAY");
-				Ench:SetFont(TUISTYLE.FrameFont, 13, TUISTYLE.FrameFontOutline);
+				Ench:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeMedium, TUISTYLE.FrameFontOutline);
 				Node.Ench = Ench;
 
 				local Gem = Node:CreateFontString(nil, "OVERLAY");
-				Gem:SetFont(TUISTYLE.FrameFont, 13, TUISTYLE.FrameFontOutline);
+				Gem:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeMedium, TUISTYLE.FrameFontOutline);
 				Node.Gem = Gem;
 
 				Node.EquipmentContainer = EquipmentContainer;
@@ -3175,14 +3176,14 @@ MT.BuildEnv('UI');
 				ResetButton.TreeFrame = TreeFrame;
 
 				local TreePoints = TreeFrame:CreateFontString(nil, "ARTWORK");
-				TreePoints:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSize, TUISTYLE.FrameFontOutline);
+				TreePoints:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeLarge, TUISTYLE.FrameFontOutline);
 				TreePoints:SetPoint("CENTER", ResetButton);
 				TreePoints:SetTextColor(0.0, 1.0, 0.0, 1.0);
 				TreePoints:SetText("0");
 				TreeFrame.TreePoints = TreePoints;
 
 				local TreeLabel = TreeFrame:CreateFontString(nil, "ARTWORK");
-				TreeLabel:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeMid, "OUTLINE");
+				TreeLabel:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSize, "OUTLINE");
 				TreeLabel:SetPoint("CENTER", TreeFrame, "BOTTOM", 0, TUISTYLE.TreeFrameFooterYSize * 0.5);
 				TreeLabel:SetTextColor(0.9, 0.9, 0.9, 1.0);
 				TreeFrame.TreeLabel = TreeLabel;
@@ -3593,7 +3594,7 @@ MT.BuildEnv('UI');
 				objects.CloseButton = CloseButton;
 
 				local Name = Header:CreateFontString(nil, "ARTWORK");
-				Name:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeMid, TUISTYLE.FrameFontOutline);
+				Name:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSize, TUISTYLE.FrameFontOutline);
 				Name:SetText(l10n.Emulator);
 				Name:SetPoint("CENTER", Header, "CENTER", 0, 0);
 				Name.Points1 = { "CENTER", Header, "CENTER", 0, 0, };
@@ -3615,14 +3616,14 @@ MT.BuildEnv('UI');
 				objects.ResetToEmuButton = ResetToEmuButton;
 
 				local PackLabel = Header:CreateFontString(nil, "ARTWORK");
-				PackLabel:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSize, TUISTYLE.FrameFontOutline);
+				PackLabel:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeLarge, TUISTYLE.FrameFontOutline);
 				PackLabel:SetText("");
 				PackLabel:SetPoint("BOTTOM", Name, "TOP", 0, 4);
 				PackLabel:Hide();
 				objects.PackLabel = PackLabel;
 
 				local Label = Header:CreateFontString(nil, "ARTWORK");
-				Label:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeMid, TUISTYLE.FrameFontOutline);
+				Label:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSize, TUISTYLE.FrameFontOutline);
 				Label:SetPoint("CENTER", Header, "CENTER", 0, 0);
 				Label:Hide();
 				objects.Label = Label;
@@ -3687,33 +3688,33 @@ MT.BuildEnv('UI');
 					objects.ResetAllButton = ResetAllButton;
 
 					local CurPointsRemainingLabel = Frame:CreateFontString(nil, "ARTWORK");
-					CurPointsRemainingLabel:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeSmall, TUISTYLE.FrameFontOutline);
+					CurPointsRemainingLabel:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeMedium, TUISTYLE.FrameFontOutline);
 					CurPointsRemainingLabel:SetText(l10n.PointsRemaining);
 					CurPointsRemainingLabel:SetPoint("CENTER", Frame, "BOTTOM", -15, TUISTYLE.FrameFooterYSize * 0.5);
 					local PointsRemaining = Frame:CreateFontString(nil, "ARTWORK");
-					PointsRemaining:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeMid, TUISTYLE.FrameFontOutline);
+					PointsRemaining:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSize, TUISTYLE.FrameFontOutline);
 					PointsRemaining:SetText("51");
 					PointsRemaining:SetPoint("LEFT", CurPointsRemainingLabel, "RIGHT", 2, 0);
 					CurPointsRemainingLabel:SetTextColor(0.5, 1.0, 1.0, 1.0);
 					PointsRemaining:SetTextColor(0.5, 1.0, 1.0, 1.0);
 
 					local PointsUsed = Frame:CreateFontString(nil, "ARTWORK");
-					PointsUsed:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeMid, TUISTYLE.FrameFontOutline);
+					PointsUsed:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSize, TUISTYLE.FrameFontOutline);
 					PointsUsed:SetText("0");
 					PointsUsed:SetPoint("RIGHT", CurPointsRemainingLabel, "LEFT", -8, 0);
 					local CurPointsUsedLabel = Frame:CreateFontString(nil, "ARTWORK");
-					CurPointsUsedLabel:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeMid, TUISTYLE.FrameFontOutline);
+					CurPointsUsedLabel:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSize, TUISTYLE.FrameFontOutline);
 					CurPointsUsedLabel:SetText(l10n.PointsUsed);
 					CurPointsUsedLabel:SetPoint("RIGHT", PointsUsed, "LEFT", -2, 0);
 					CurPointsUsedLabel:SetTextColor(0.5, 1.0, 0.5, 1.0);
 					PointsUsed:SetTextColor(0.5, 1.0, 0.5, 1.0);
 
 					local CurPointsReqLevelLabel = Frame:CreateFontString(nil, "ARTWORK");
-					CurPointsReqLevelLabel:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeMid, TUISTYLE.FrameFontOutline);
+					CurPointsReqLevelLabel:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSize, TUISTYLE.FrameFontOutline);
 					CurPointsReqLevelLabel:SetText(l10n.PointsToLevel);
 					CurPointsReqLevelLabel:SetPoint("LEFT", PointsRemaining, "RIGHT", 8, 0);
 					local PointsToLevel = Frame:CreateFontString(nil, "ARTWORK");
-					PointsToLevel:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeMid, TUISTYLE.FrameFontOutline);
+					PointsToLevel:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSize, TUISTYLE.FrameFontOutline);
 					PointsToLevel:SetText("10");
 					PointsToLevel:SetPoint("LEFT", CurPointsReqLevelLabel, "RIGHT", 2, 0);
 					CurPointsReqLevelLabel:SetTextColor(1.0, 1.0, 0.5, 1.0);
@@ -3746,7 +3747,7 @@ MT.BuildEnv('UI');
 						TreeButton.id = TreeIndex;
 						TreeButton.information = nil;
 						local Title = TreeButton:CreateFontString(nil, "OVERLAY");
-						Title:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeSmall, "OUTLINE");
+						Title:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeMedium, "OUTLINE");
 						Title:SetTextColor(0.9, 0.9, 0.9, 1.0);
 						Title:SetPoint("CENTER");
 						Title:SetWidth(TUISTYLE.TreeButtonXSize);
@@ -3848,7 +3849,7 @@ MT.BuildEnv('UI');
 					ApplyTalentsButton.information = l10n.ApplyTalentsButton;
 					Frame.ApplyTalentsButton = ApplyTalentsButton;
 					local ApplyTalentsButtonProgress = ApplyTalentsButton:CreateFontString(nil, "ARTWORK");
-					ApplyTalentsButtonProgress:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeSmall, TUISTYLE.FrameFontOutline);
+					ApplyTalentsButtonProgress:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeMedium, TUISTYLE.FrameFontOutline);
 					ApplyTalentsButtonProgress:SetPoint("LEFT", ApplyTalentsButton, "RIGHT", 4, 0);
 					ApplyTalentsButton.Progress = ApplyTalentsButtonProgress;
 					Frame.ApplyTalentsProgress = ApplyTalentsButtonProgress;
@@ -4353,7 +4354,7 @@ MT.BuildEnv('UI');
 
 	MT.RegisterOnInit('UI', function(LoggedIn)
 		if CT.LOCALE == 'zhCN' or CT.LOCALE == 'zhTW' then
-			TUISTYLE.FrameFontSizeSmall = TUISTYLE.FrameFontSizeMid;
+			TUISTYLE.FrameFontSizeSmall = TUISTYLE.FrameFontSizeMedium;
 		end
 		TUISTYLE.TreeFrameXSizeSingle = TUISTYLE.TreeNodeSize * DT.MAX_NUM_COL + TUISTYLE.TreeNodeXGap * (DT.MAX_NUM_COL - 1) + TUISTYLE.TreeNodeXToBorder * 2;
 		TUISTYLE.TreeFrameXSizeTriple = TUISTYLE.TreeFrameXSizeSingle * 3;
