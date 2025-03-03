@@ -620,7 +620,7 @@ MT.BuildEnv('RAIDTOOL');
 				GuildListLabel:SetFont(TUISTYLE.RaidToolUIFont, TUISTYLE.RaidToolUIFontSize - 1, TUISTYLE.RaidToolUIFontOutline);
 				GuildListLabel:SetText(l10n.GuildList);
 				GuildList.Name = GuildListLabel;
-				GuildListLabel:SetPoint("RIGHT", GuildList, "LEFT", 0, 0);
+				GuildListLabel:SetPoint("RIGHT", GuildList, "LEFT", -2, 0);
 			end
 		--	Script
 			MT._RegisterCallback("CALLBACK_DATA_RECV", function()

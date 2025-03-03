@@ -2643,7 +2643,7 @@ MT.BuildEnv('UI');
 			ShowAllSpellLabel:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeSmall, TUISTYLE.FrameFontOutline);
 			ShowAllSpellLabel:SetText(l10n.SpellList_ShowAllSpell);
 			ShowAllSpell.Name = ShowAllSpellLabel;
-			ShowAllSpellLabel:SetPoint("RIGHT", ShowAllSpell, "LEFT", 0, 0);
+			ShowAllSpellLabel:SetPoint("RIGHT", ShowAllSpell, "LEFT", -2, 0);
 
 			local Close = CreateFrame('BUTTON', nil, SpellListFrame);
 			Close:SetSize(32, 16);
