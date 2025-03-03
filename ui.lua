@@ -3329,8 +3329,14 @@ MT.BuildEnv('UI');
 			local Frame = self.Frame;
 			if Frame.style ~= 2 then
 				MT.UI.FrameSetStyle(Frame, 2);
+				if VT.SET.singleFrame then
+					VT.SET.style = 2;
+				end
 			else
 				MT.UI.FrameSetStyle(Frame, 1);
+				if VT.SET.singleFrame then
+					VT.SET.style = 1;
+				end
 			end
 		end
 		function _SideFunc.ResetAllButton_OnClick(self)
