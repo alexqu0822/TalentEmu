@@ -118,7 +118,7 @@ MT.BuildEnv('TOOLTIP');
 			if EquData ~= nil then
 				local Line = PrevTipItemLine[Tip];
 				if Line and Line:IsVisible() and Line:GetText() == PrevTipItemLineText[Tip] then
-					if EquData.AverageItemLevel_OK then
+					if EquData.AverageItemLevel_OKay then
 						local Text = format(l10n.Tooltip_ItemLevel, MT.ColorItemLevel(EquData.AverageItemLevel));
 						Line:SetText(Text);
 						PrevTipItemLineText[Tip] = Text;
@@ -126,7 +126,7 @@ MT.BuildEnv('TOOLTIP');
 				else
 					local List = TipTextLeft[Tip];
 					local Text = l10n.Tooltip_CalaculatingItemLevel;
-					if EquData.AverageItemLevel_OK then
+					if EquData.AverageItemLevel_OKay then
 						Text = format(l10n.Tooltip_ItemLevel, MT.ColorItemLevel(EquData.AverageItemLevel));
 					end
 					Tip:AddLine(Text);

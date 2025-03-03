@@ -38,6 +38,7 @@ local DT = __private.DT;
 
 -->
 	local l10n = CT.l10n;
+	local _TextureFunc = MT._TextureFunc;
 
 -->		constant
 	local TUISTYLE = {
@@ -50,10 +51,42 @@ local DT = __private.DT;
 	};
 	local TTEXTURESET = {
 		UNK = CT.TEXTUREUNK,
-		CONTROL_NORMAL_COLOR = { 1.0, 1.0, 1.0, 1.0, },
+		CONTROL = {
+			NORMAL_COLOR = { 0.75, 0.75, 0.75, 1.0, },
+			PUSHED_COLOR = { 0.25, 0.25, 0.25, 1.0, },
+			DISABLED_COLOR = { 0.25, 0.25, 0.25, 1.0, },
+			HIGHLIGHT_COLOR = { 0.25, 0.25, 0.5, 1.0, },
+			CHECKED_COLOR = { 0.75, 0.75, 0.75, 1.0, },
+			CHECKEDDISABLED_COLOR = { 0.25, 0.25, 0.25, 1.0, },
+		},
 		CONTROL_PUSHED_COLOR = { 0.5, 0.5, 0.5, 1.0, },
-		CONTROL_DISABLED_COLOR = { 0.25, 0.25, 0.25, 1.0, },
 		CONTROL_HIGHLIGHT_COLOR = { 0.25, 0.25, 0.5, 0.5, },
+		CLOSE = {
+			Path = CT.TEXTUREPATH .. [[Close]],
+		},
+		REFRESH = {
+			Path = CT.TEXTUREPATH .. [[Reset]],
+		},
+		CHECK = {
+			Normal = {
+				Path = CT.TEXTUREPATH .. [[CheckButtonBorder]],
+			},
+			Pushed = {
+				Path = CT.TEXTUREPATH .. [[CheckButtonBorder]],
+			},
+			Highlight = {
+				Path = CT.TEXTUREPATH .. [[CheckButtonBorder]],
+			},
+			Disabled = {
+				Path = CT.TEXTUREPATH .. [[CheckButtonBorder]],
+			},
+			Checked = {
+				Path = CT.TEXTUREPATH .. [[CheckButtonCenter]],
+			},
+			CheckedDisabled = {
+				Path = CT.TEXTUREPATH .. [[CheckButtonCenter]],
+			},
+		},
 		CLASS = CT.TEXTUREPATH .. [[UI-Classes-Circles]],
 	};
 	local QUERY_DATA_VALIDATION = 60;
@@ -305,7 +338,7 @@ MT.BuildEnv('RAIDTOOL');
 				else
 					Node.ItemLevel:SetText("");
 				end
-				if not cache.EquData.AverageItemLevel_OK then
+				if not cache.EquData.AverageItemLevel_OKay then
 					MT._TimerStart(Node.Frame.UpdateScrollList, 0.5, 1);
 				end
 				local missItems, items, missEnchants, enchants, missGems, gems = SummaryItems(class, cache.EquData);
@@ -510,11 +543,9 @@ MT.BuildEnv('RAIDTOOL');
 
 			local Close = CreateFrame('BUTTON', nil, Frame);
 			Close:SetSize(16, 16);
-			Close:SetNormalTexture("interface\\buttons\\ui-stopbutton");
-			Close:SetPushedTexture("interface\\buttons\\ui-stopbutton");
-			Close:GetPushedTexture():SetVertexColor(TTEXTURESET.CONTROL_PUSHED_COLOR[1], TTEXTURESET.CONTROL_PUSHED_COLOR[2], TTEXTURESET.CONTROL_PUSHED_COLOR[3], TTEXTURESET.CONTROL_PUSHED_COLOR[4]);
-			Close:SetHighlightTexture("interface\\buttons\\ui-stopbutton");
-			Close:GetHighlightTexture():SetVertexColor(TTEXTURESET.CONTROL_HIGHLIGHT_COLOR[1], TTEXTURESET.CONTROL_HIGHLIGHT_COLOR[2], TTEXTURESET.CONTROL_HIGHLIGHT_COLOR[3], TTEXTURESET.CONTROL_HIGHLIGHT_COLOR[4]);
+			_TextureFunc.SetNormalTexture(Close, TTEXTURESET.CLOSE, nil, nil, TTEXTURESET.CONTROL.NORMAL_COLOR);
+			_TextureFunc.SetPushedTexture(Close, TTEXTURESET.CLOSE, nil, nil, TTEXTURESET.CONTROL.PUSHED_COLOR);
+			_TextureFunc.SetHighlightTexture(Close, TTEXTURESET.CLOSE, nil, nil, TTEXTURESET.CONTROL.HIGHLIGHT_COLOR);
 			Close:SetPoint("TOPRIGHT", Frame, "TOPRIGHT", -4, -4);
 			Close:SetScript("OnClick", function()
 				Frame:Hide();
@@ -523,11 +554,9 @@ MT.BuildEnv('RAIDTOOL');
 
 			local Refresh = CreateFrame('BUTTON', nil, Frame);
 			Refresh:SetSize(16, 16);
-			Refresh:SetNormalTexture("interface\\buttons\\ui-refreshbutton");
-			Refresh:SetPushedTexture("interface\\buttons\\ui-refreshbutton");
-			Refresh:GetPushedTexture():SetVertexColor(TTEXTURESET.CONTROL_PUSHED_COLOR[1], TTEXTURESET.CONTROL_PUSHED_COLOR[2], TTEXTURESET.CONTROL_PUSHED_COLOR[3], TTEXTURESET.CONTROL_PUSHED_COLOR[4]);
-			Refresh:SetHighlightTexture("interface\\buttons\\ui-refreshbutton");
-			Refresh:GetHighlightTexture():SetVertexColor(TTEXTURESET.CONTROL_HIGHLIGHT_COLOR[1], TTEXTURESET.CONTROL_HIGHLIGHT_COLOR[2], TTEXTURESET.CONTROL_HIGHLIGHT_COLOR[3], TTEXTURESET.CONTROL_HIGHLIGHT_COLOR[4]);
+			_TextureFunc.SetNormalTexture(Refresh, TTEXTURESET.REFRESH, nil, nil, TTEXTURESET.CONTROL.NORMAL_COLOR);
+			_TextureFunc.SetPushedTexture(Refresh, TTEXTURESET.REFRESH, nil, nil, TTEXTURESET.CONTROL.PUSHED_COLOR);
+			_TextureFunc.SetHighlightTexture(Refresh, TTEXTURESET.REFRESH, nil, nil, TTEXTURESET.CONTROL.HIGHLIGHT_COLOR);
 			Refresh:SetPoint("RIGHT", Close, "LEFT", -4, 0);
 			Refresh:SetScript("OnClick", function()
 				Frame.Update(true);
@@ -568,7 +597,11 @@ MT.BuildEnv('RAIDTOOL');
 
 			if VT.__supreme then
 				local GuildList = CreateFrame('CHECKBUTTON', nil, Frame, "OptionsBaseCheckButtonTemplate");
-				GuildList:SetSize(16, 16);
+				_TextureFunc.SetNormalTexture(GuildList, TTEXTURESET.CHECK.Normal, nil, nil, TTEXTURESET.CONTROL.NORMAL_COLOR);
+				_TextureFunc.SetPushedTexture(GuildList, TTEXTURESET.CHECK.Pushed, nil, nil, TTEXTURESET.CONTROL.PUSHED_COLOR);
+				_TextureFunc.SetHighlightTexture(GuildList, TTEXTURESET.CHECK.Highlight, nil, nil, TTEXTURESET.CONTROL.HIGHLIGHT_COLOR);
+				_TextureFunc.SetCheckedTexture(GuildList, TTEXTURESET.CHECK.Checked, nil, nil, TTEXTURESET.CONTROL.NORMAL_COLOR);
+				GuildList:SetSize(12, 12);
 				GuildList:SetHitRectInsets(0, 0, 0, 0);
 				GuildList:ClearAllPoints();
 				GuildList:Show();

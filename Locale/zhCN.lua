@@ -102,7 +102,7 @@ l10n.Setting_ItemLevelInTip = "鼠标提示显示装等";
 
 --	技能列表
 l10n.SpellList_Search = "搜索";
-l10n.SpellList_SearchOKey = "确定";
+l10n.SpellList_SearchOKay = "确定";
 l10n.SpellList_GTTSpellLevel = "技能等级: ";
 l10n.SpellList_GTTReqLevel = "需要等级: ";
 l10n.SpellList_GTTAvailable = "|cff00ff00技能可用|r";
@@ -119,6 +119,7 @@ l10n.RaidTool_LableGemSummary = "宝石";
 l10n.RaidTool_LableBossModInfo = "DBM版本";
 l10n.RaidTool_EmptySlot = "|cffff0000未装备|r";
 l10n.RaidTool_MissingEnchant = "|cffff0000缺少附魔|r";
+l10n.GuildList = "公会列表";
 
 --	Data
 l10n.CLASS = {

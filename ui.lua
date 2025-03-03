@@ -70,7 +70,7 @@ local DT = __private.DT;
 		TreeFrameHeaderYSize = 0,
 		TreeFrameFooterYSize = 20,
 		TreeFrameSeqWidth = 1,
-		TreeFrameLabelBGTexCoord = { 0.05, 0.95, 0.05, 0.95, },
+		TreeFrameLabelBackgroundTexCoord = { 0.05, 0.95, 0.05, 0.95, },
 		TreeNodeSize = 40,
 		TreeNodeXGap = 12,
 		TreeNodeYGap = 12,
@@ -89,10 +89,13 @@ local DT = __private.DT;
 		SpellListFrameFont = SystemFont_Shadow_Med1:GetFont(),--=="Fonts\ARKai_T.ttf"
 		SpellListFrameFontSize = 14,
 		SpellListFrameFontOutline = "NORMAL",
-		SpellListFrameXToBorder = 4,
-		SpellListFrameYToTop = 32,
-		SpellListFrameYToBottom = 32,
+		SpellListFrameXToBorder = 2,
+		SpellListFrameYToTop = 20,
+		SpellListFrameYToBottom = 24,
 		SpellListNodeHeight = 24,
+		SpellListNodeIconTexCoord = { 0.05, 0.95, 0.05, 0.95, },
+		SpellListSearchEditYSize = 16,
+		SpellListSearchEditOkayXSize = 32,
 
 		EquipmentFrameXSize = CT.TOCVERSION < 20000 and 280 or 340,
 		EquipmentFrameXMaxSize = CT.TOCVERSION < 20000 and 640 or 765,
@@ -136,16 +139,47 @@ local DT = __private.DT;
 	local TTEXTURESET = {
 		LIBDBICON = CT.TEXTUREICON,
 		UNK = CT.TEXTUREUNK,
-		SQUARE_HIGHLIGHT = CT.TEXTUREPATH .. [[CheckButtonHilight]],
+		SQUARE_HIGHLIGHT = CT.TEXTUREPATH .. [[CheckButtonHighlight]],
 		NORMAL_HIGHLIGHT = CT.TEXTUREPATH .. [[UI-Panel-MinimizeButton-Highlight]],
-		SEP_HORIZONTAL = CT.TEXTUREPATH .. [[UI-ChatFrame-BorderLeft]],
-		SEP_HORIZONTAL_COORD = { 0.25, 0.3125, 0.0, 1.0, },
-		SEP_VERTICAL = CT.TEXTUREPATH .. [[UI-ChatFrame-BorderTop]],
-		SEP_VERTICAL_COORD = { 0.0, 1.0, 0.25, 0.3125, },
-		CONTROL_NORMAL_COLOR = { 0.75, 0.75, 0.75, 1.0, },
-		CONTROL_PUSHED_COLOR = { 0.25, 0.25, 0.25, 1.0, },
-		CONTROL_DISABLED_COLOR = { 0.25, 0.25, 0.25, 1.0, },
-		CONTROL_HIGHLIGHT_COLOR = { 0.25, 0.25, 0.5, 1.0, },
+
+		SEP_HORIZONTAL = {
+			Path = CT.TEXTUREPATH .. [[UI-ChatFrame-BorderLeft]],
+			Coord = { 0.25, 0.3125, 0.0, 1.0, },
+		},
+		SEP_VERTICAL = {
+			Path = CT.TEXTUREPATH .. [[UI-ChatFrame-BorderTop]],
+			Coord = { 0.0, 1.0, 0.25, 0.3125, },
+		},
+
+		CONTROL = {
+			NORMAL_COLOR = { 0.75, 0.75, 0.75, 1.0, },
+			PUSHED_COLOR = { 0.25, 0.25, 0.25, 1.0, },
+			DISABLED_COLOR = { 0.25, 0.25, 0.25, 1.0, },
+			HIGHLIGHT_COLOR = { 0.25, 0.25, 0.5, 1.0, },
+			CHECKED_COLOR = { 0.75, 0.75, 0.75, 1.0, },
+			CHECKEDDISABLED_COLOR = { 0.25, 0.25, 0.25, 1.0, },
+		},
+
+		CHECK = {
+			Normal = {
+				Path = CT.TEXTUREPATH .. [[CheckButtonBorder]],
+			},
+			Pushed = {
+				Path = CT.TEXTUREPATH .. [[CheckButtonBorder]],
+			},
+			Highlight = {
+				Path = CT.TEXTUREPATH .. [[CheckButtonBorder]],
+			},
+			Disabled = {
+				Path = CT.TEXTUREPATH .. [[CheckButtonBorder]],
+			},
+			Checked = {
+				Path = CT.TEXTUREPATH .. [[CheckButtonCenter]],
+			},
+			CheckedDisabled = {
+				Path = CT.TEXTUREPATH .. [[CheckButtonCenter]],
+			},
+		},
 
 		ARROW = CT.TEXTUREPATH .. [[UI-TalentArrows]],
 		ARROW_COORD = {
@@ -169,24 +203,21 @@ local DT = __private.DT;
 		ICON_HIGHLIGHT = {
 			Coord = { 0.08, 0.92, 0.08, 0.92, },
 			Color = { 0.0, 1.0, 1.0, },
+			Blend = "ADD",
 		},
 
-		TALENT_RESET_BG = {
-			Path = CT.TEXTUREPATH .. [[Arcane_Circular_Frame]],
-			Coord = { 12 / 128, 118 / 128, 12 / 128, 118 / 128, },
-			Color = { 0.25, 0.25, 0.25, },
-		},
-		TALENT_RESET_HIGHLIGHT = {
-			Path = CT.TEXTUREPATH .. [[Arcane_Circular_Flash]],
-			Coord = { 12 / 128, 118 / 128, 12 / 128, 118 / 128, },
+		RESETTREE = {
+			Backgroud = {
+				Path = CT.TEXTUREPATH .. [[Arcane_Circular_Frame]],
+				Coord = { 12 / 128, 118 / 128, 12 / 128, 118 / 128, },
+				Color = { 0.25, 0.25, 0.25, },
+			},
+			Highlight = {
+				Path = CT.TEXTUREPATH .. [[Arcane_Circular_Flash]],
+				Coord = { 12 / 128, 118 / 128, 12 / 128, 118 / 128, },
+			},
 		},
 
-		LOCK = {
-			Path = [[Interface\Buttons\UI-OptionsButton]],	--CT.TEXTUREPATH .. [[Config]],
-			NORMAL_COLOR = { 1.0, 1.0, 1.0, 1.0, },
-			LOCKED_COLOR = { 0.5, 0.5, 0.5, 1.0, },
-			UNLOCKED_COLOR = { 1.0, 1.0, 1.0, 1.0, },
-		},
 		CLOSE = {
 			Path = CT.TEXTUREPATH .. [[Close]],
 		},
@@ -209,24 +240,26 @@ local DT = __private.DT;
 			Path = CT.TEXTUREPATH .. [[Reset]],
 		},
 
-		TREEBUTTON_NORMAL = {
-			Path = CT.TEXTUREUNK,
-			Coord = { 0.05, 0.95, 0.40, 0.70, },
-			Color = { 1.0, 1.0, 1.0, 0.5 },
-		},
-		TREEBUTTON_PUSHED = {
-			Path = CT.TEXTUREUNK,
-			Coord = { 0.05, 0.95, 0.40, 0.70, },
-			Color = { 1.0, 1.0, 1.0, 0.25 },
-		},
-		TREEBUTTON_HIGHLIGHT = {
-			Path = CT.TEXTUREUNK,
-			Coord = { 0.05, 0.95, 0.40, 0.70, },
-			Color = { 1.0, 1.0, 1.0, 0.15 },
-		},
-		TREEBUTTON_INDICATOR = {
-			Coord = { 0.10, 0.90, 0.08, 0.92, },
-			Color = { 0.0, 1.0, 1.0, },
+		TREEBUTTON = {
+			Normal = {
+				Path = CT.TEXTUREUNK,
+				Coord = { 0.05, 0.95, 0.40, 0.70, },
+				Color = { 1.0, 1.0, 1.0, 0.5 },
+			},
+			Pushed = {
+				Path = CT.TEXTUREUNK,
+				Coord = { 0.05, 0.95, 0.40, 0.70, },
+				Color = { 1.0, 1.0, 1.0, 0.25 },
+			},
+			Highlight = {
+				-- Path = CT.TEXTUREUNK,
+				Coord = { 0.05, 0.95, 0.40, 0.70, },
+				Color = { 1.0, 1.0, 1.0, 0.15 },
+			},
+			Indicator = {
+				Coord = { 0.10, 0.90, 0.08, 0.92, },
+				Color = { 0.0, 1.0, 1.0, },
+			},
 		},
 
 		SPELLTAB = {
@@ -250,64 +283,72 @@ local DT = __private.DT;
 		SEND = {
 			Path = CT.TEXTUREPATH .. [[Send]],
 		},
-		EDIT_OK = {
+		EDIT_OKAY = {
 			Path = CT.TEXTUREPATH .. [[Apply]],
 		},
 
 		CLASS = {
-			Path = CT.TEXTUREPATH .. [[UI-Classes-Circles]],
-		},
-		CLASS_HIGHLIGHT = {
-			Path = CT.TEXTUREPATH .. [[UI-Calendar-Button-Glow]],
-			Coord = { 6 / 64, 57 / 64, 6 / 64, 57 / 64, },
-			Color = { 0.0, 1.0, 0.0, 1.0, },
-		},
-		CLASS_INDICATOR = {
-			Path = CT.TEXTUREPATH .. [[EventNotificationGlow]],
-			Coord = { 4 / 64, 60 / 64, 5 / 64, 61 / 64, },
-			Color = { 0.0, 1.0, 0.0, 1.0, },
+			Normal = {
+				Path = CT.TEXTUREPATH .. [[UI-Classes-Circles]],
+			},
+			Pushed = {
+				Path = CT.TEXTUREPATH .. [[UI-Classes-Circles]],
+			},
+			Highlight = {
+				Path = CT.TEXTUREPATH .. [[UI-Calendar-Button-Glow]],
+				Coord = { 6 / 64, 57 / 64, 6 / 64, 57 / 64, },
+				Color = { 0.0, 1.0, 0.0, 1.0, },
+			},
+			Indicator = {
+				Path = CT.TEXTUREPATH .. [[EventNotificationGlow]],
+				Coord = { 4 / 64, 60 / 64, 5 / 64, 61 / 64, },
+				Color = { 0.0, 1.0, 0.0, 1.0, },
+			},
 		},
 
+		EQUIPMENTTOGGLE = {
+			Path = CT.TEXTUREPATH .. [[Equipment]],
+		},
 		EQUIPMENT = {
-			Path = [[Interface\Buttons\Spell-Reset]],
-			Coord = { 6 / 64, 58 / 64, 6 / 64, 58 / 64, },
-		},
-		EQUIPMENT_GLOW = {
-			Path = [[Interface\Buttons\UI-ActionButton-Border]],
-			Coord = { 0.25, 0.75, 0.25, 0.75, },
-		},
-		EQUIPMENT_HIGHLIGHT = {
-			Path = [[Interface\Buttons\ActionbarFlyoutButton-FlyoutMidLeft]],
-			Coord = { 8 / 32, 24 / 32, 8 / 64, 24 / 64, },
-		},
-		EQUIPMENT_EMPTY = {
-			[0] = [[Interface\Paperdoll\UI-PaperDoll-Slot-Ammo]],
-			[1] = [[Interface\Paperdoll\UI-PaperDoll-Slot-Head]],
-			[2] = [[Interface\Paperdoll\UI-PaperDoll-Slot-Neck]],
-			[3] = [[Interface\Paperdoll\UI-PaperDoll-Slot-Shoulder]],
-			[4] = [[Interface\Paperdoll\UI-PaperDoll-Slot-Shirt]],
-			[5] = [[Interface\Paperdoll\UI-PaperDoll-Slot-Chest]],
-			[6] = [[Interface\Paperdoll\UI-PaperDoll-Slot-Waist]],
-			[7] = [[Interface\Paperdoll\UI-PaperDoll-Slot-Legs]],
-			[8] = [[Interface\Paperdoll\UI-PaperDoll-Slot-Feet]],
-			[9] = [[Interface\Paperdoll\UI-PaperDoll-Slot-Wrists]],
-			[10] = [[Interface\Paperdoll\UI-PaperDoll-Slot-Hands]],
-			[11] = [[Interface\Paperdoll\UI-PaperDoll-Slot-Finger]],
-			[12] = [[Interface\Paperdoll\UI-PaperDoll-Slot-Rfinger]],
-			[13] = [[Interface\Paperdoll\UI-PaperDoll-Slot-Trinket]],
-			[14] = [[Interface\Paperdoll\UI-PaperDoll-Slot-Trinket]],
-			[15] = [[Interface\Paperdoll\UI-Backpack-EmptySlot]],
-			[16] = [[Interface\Paperdoll\UI-PaperDoll-Slot-Mainhand]],
-			[17] = [[Interface\Paperdoll\UI-PaperDoll-Slot-SecondaryHand]],
-			[18] = [[Interface\Paperdoll\UI-PaperDoll-Slot-Ranged]],
-			[19] = [[Interface\Paperdoll\UI-PaperDoll-Slot-Tabard]],
+			Glow = {
+				Path = [[Interface\Buttons\UI-ActionButton-Border]],
+				Coord = { 0.25, 0.75, 0.25, 0.75, },
+			},
+			Highlight = {
+				Path = [[Interface\Buttons\ActionbarFlyoutButton-FlyoutMidLeft]],
+				Coord = { 8 / 32, 24 / 32, 8 / 64, 24 / 64, },
+			},
+			Empty = {
+				[0] = [[Interface\Paperdoll\UI-PaperDoll-Slot-Ammo]],
+				[1] = [[Interface\Paperdoll\UI-PaperDoll-Slot-Head]],
+				[2] = [[Interface\Paperdoll\UI-PaperDoll-Slot-Neck]],
+				[3] = [[Interface\Paperdoll\UI-PaperDoll-Slot-Shoulder]],
+				[4] = [[Interface\Paperdoll\UI-PaperDoll-Slot-Shirt]],
+				[5] = [[Interface\Paperdoll\UI-PaperDoll-Slot-Chest]],
+				[6] = [[Interface\Paperdoll\UI-PaperDoll-Slot-Waist]],
+				[7] = [[Interface\Paperdoll\UI-PaperDoll-Slot-Legs]],
+				[8] = [[Interface\Paperdoll\UI-PaperDoll-Slot-Feet]],
+				[9] = [[Interface\Paperdoll\UI-PaperDoll-Slot-Wrists]],
+				[10] = [[Interface\Paperdoll\UI-PaperDoll-Slot-Hands]],
+				[11] = [[Interface\Paperdoll\UI-PaperDoll-Slot-Finger]],
+				[12] = [[Interface\Paperdoll\UI-PaperDoll-Slot-Rfinger]],
+				[13] = [[Interface\Paperdoll\UI-PaperDoll-Slot-Trinket]],
+				[14] = [[Interface\Paperdoll\UI-PaperDoll-Slot-Trinket]],
+				[15] = [[Interface\Paperdoll\UI-Backpack-EmptySlot]],
+				[16] = [[Interface\Paperdoll\UI-PaperDoll-Slot-Mainhand]],
+				[17] = [[Interface\Paperdoll\UI-PaperDoll-Slot-SecondaryHand]],
+				[18] = [[Interface\Paperdoll\UI-PaperDoll-Slot-Ranged]],
+				[19] = [[Interface\Paperdoll\UI-PaperDoll-Slot-Tabard]],
+			},
 		},
 		ENGRAVING = {
-			Path = CT.TEXTUREUNK,
-		},
-		ENGRAVING_HIGHLIGHT = {
-			Path = [[Interface\Buttons\ActionbarFlyoutButton-FlyoutMidLeft]],
-			Coord = { 8 / 32, 24 / 32, 8 / 64, 24 / 64, },
+			Normal = {
+				Path = CT.TEXTUREUNK,
+			},
+			Highlight = {
+				Path = [[Interface\Buttons\ActionbarFlyoutButton-FlyoutMidLeft]],
+				Coord = { 8 / 32, 24 / 32, 8 / 64, 24 / 64, },
+			},
 		},
 	};
 
@@ -369,12 +410,15 @@ MT.BuildEnv('UI');
 
 		return Border;
 	end
-	local _TextureFunc = {};
-	function _TextureFunc._SetTexture(Texture, Path, Coord, Color)
+	local _TextureFunc = {  };
+	function _TextureFunc._SetTexture(Texture, Path, Coord, Color, Blend)
 		if Path then
 			Texture:SetTexture(Path);
 			if Color then
 				Texture:SetVertexColor(Color[1] or 0.0, Color[2] or 0.0, Color[3] or 0.0, Color[4] or 1.0);
+			end
+			if Blend then
+				Texture:SetBlendMode(Blend);
 			end
 		elseif Color then
 			Texture:SetColorTexture(Color[1] or 0.0, Color[2] or 0.0, Color[3] or 0.0, Color[4] or 1.0);
@@ -384,67 +428,68 @@ MT.BuildEnv('UI');
 		end
 		return Texture;
 	end
-	function _TextureFunc.SetTexture(Texture, def, Path, Coord, Color)
+	function _TextureFunc.SetTexture(Texture, def, Path, Coord, Color, Blend)
 		if def then
-			return _TextureFunc._SetTexture(Texture, def.Path or Path, def.Coord or Coord, def.Color or Color);
+			return _TextureFunc._SetTexture(Texture, def.Path or Path, def.Coord or Coord, def.Color or Color, def.Blend or Blend);
 		else
-			return _TextureFunc._SetTexture(Texture, Path, Coord, Color);
+			return _TextureFunc._SetTexture(Texture, Path, Coord, Color, Blend);
 		end
 	end
-	function _TextureFunc.SetNormalTexture(Widget, def, Path, Coord, Color)
+	function _TextureFunc.SetNormalTexture(Widget, def, Path, Coord, Color, Blend)
 		local Texture = Widget:GetNormalTexture();
 		if Texture == nil then
 			Texture = Widget:CreateTexture(nil, "ARTWORK");
 			Texture:SetAllPoints();
 			Widget:SetNormalTexture(Texture);
 		end
-		return _TextureFunc.SetTexture(Texture, def, Path, Coord, Color);
+		return _TextureFunc.SetTexture(Texture, def, Path, Coord, Color, Blend);
 	end
-	function _TextureFunc.SetPushedTexture(Widget, def, Path, Coord, Color)
+	function _TextureFunc.SetPushedTexture(Widget, def, Path, Coord, Color, Blend)
 		local Texture = Widget:GetPushedTexture();
 		if Texture == nil then
 			Texture = Widget:CreateTexture(nil, "ARTWORK");
 			Texture:SetAllPoints();
 			Widget:SetPushedTexture(Texture);
 		end
-		return _TextureFunc.SetTexture(Texture, def, Path, Coord, Color);
+		return _TextureFunc.SetTexture(Texture, def, Path, Coord, Color, Blend);
 	end
-	function _TextureFunc.SetDisabledTexture(Widget, def, Path, Coord, Color)
+	function _TextureFunc.SetDisabledTexture(Widget, def, Path, Coord, Color, Blend)
 		local Texture = Widget:GetDisabledTexture();
 		if Texture == nil then
 			Texture = Widget:CreateTexture(nil, "ARTWORK");
 			Texture:SetAllPoints();
 			Widget:SetDisabledTexture(Texture);
 		end
-		return _TextureFunc.SetTexture(Texture, def, Path, Coord, Color);
+		return _TextureFunc.SetTexture(Texture, def, Path, Coord, Color, Blend);
 	end
-	function _TextureFunc.SetHighlightTexture(Widget, def, Path, Coord, Color)
+	function _TextureFunc.SetHighlightTexture(Widget, def, Path, Coord, Color, Blend)
 		local Texture = Widget:GetHighlightTexture();
 		if Texture == nil then
 			Texture = Widget:CreateTexture(nil, "HIGHLIGHT");
 			Texture:SetAllPoints();
 			Widget:SetHighlightTexture(Texture);
 		end
-		return _TextureFunc.SetTexture(Texture, def, Path, Coord, Color);
+		return _TextureFunc.SetTexture(Texture, def, Path, Coord, Color, Blend);
 	end
-	function _TextureFunc.SetCheckedTexture(Widget, def, Path, Coord, Color)
+	function _TextureFunc.SetCheckedTexture(Widget, def, Path, Coord, Color, Blend)
 		local Texture = Widget:GetCheckedTexture();
 		if Texture == nil then
 			Texture = Widget:CreateTexture(nil, "OVERLAY");
 			Texture:SetAllPoints();
 			Widget:SetCheckedTexture(Texture);
 		end
-		return _TextureFunc.SetTexture(Texture, def, Path, Coord, Color);
+		return _TextureFunc.SetTexture(Texture, def, Path, Coord, Color, Blend);
 	end
-	function _TextureFunc.SetDisabledCheckedTexture(Widget, def, Path, Coord, Color)
+	function _TextureFunc.SetDisabledCheckedTexture(Widget, def, Path, Coord, Color, Blend)
 		local Texture = Widget:GetDisabledCheckedTexture();
 		if Texture == nil then
 			Texture = Widget:CreateTexture(nil, "OVERLAY");
 			Texture:SetAllPoints();
 			Widget:SetDisabledCheckedTexture(Texture);
 		end
-		return _TextureFunc.SetTexture(Texture, def, Path, Coord, Color);
+		return _TextureFunc.SetTexture(Texture, def, Path, Coord, Color, Blend);
 	end
+	MT._TextureFunc = _TextureFunc;
 	--[==[	Frame Definition
 		Frame
 					initialized		(bool)
@@ -472,7 +517,7 @@ MT.BuildEnv('UI');
 													HSeq				(texture)
 													VSep				(texture)
 													TreeLabel			(fontstring)
-													TreeLabelBG			(texture)
+													TreeLabelBackground			(texture)
 													TalentSet			(table)
 																					total
 																					CountByTier			(num table)
@@ -644,10 +689,10 @@ MT.BuildEnv('UI');
 						TreeButton:SetPushedTexture(TTEXTURESET.UNK);
 						TreeButton:SetHighlightTexture(TTEXTURESET.UNK);
 					end
-					TreeFrame.BG:SetTexture(DT.SpecBG[SpecID]);
+					TreeFrame.Background:SetTexture(DT.SpecBackground[SpecID]);
 					TreeFrame.TreeLabel:SetText(l10n.SPEC[SpecID]);
-					-- TreeFrame.TreeLabelBG:SetTexture(SpecTexture);
-					SetPortraitToTexture(TreeFrame.TreeLabelBG, SpecTexture)
+					-- TreeFrame.TreeLabelBackground:SetTexture(SpecTexture);
+					SetPortraitToTexture(TreeFrame.TreeLabelBackground, SpecTexture)
 					for TalentSeq = 1, #TreeTDB do
 						local TalentDef = TreeTDB[TalentSeq];
 						if TalentDef[1] ~= nil then
@@ -695,7 +740,7 @@ MT.BuildEnv('UI');
 				local color = RAID_CLASS_COLORS[class];
 				Frame.objects.Name:SetTextColor(color.r, color.g, color.b, 1.0);
 				Frame.objects.Label:SetTextColor(color.r, color.g, color.b, 1.0);
-				Frame.BG:SetTexture(DT.ClassBG[class][random(1, #DT.ClassBG[class])]);
+				Frame.Background:SetTexture(DT.ClassBackground[class][random(1, #DT.ClassBackground[class])]);
 
 				Frame.class = class;
 				Frame.ClassTDB = ClassTDB;
@@ -1382,9 +1427,9 @@ MT.BuildEnv('UI');
 					TreeFrames[1].TreeLabel:Show();
 					TreeFrames[2].TreeLabel:Show();
 					TreeFrames[3].TreeLabel:Show();
-					TreeFrames[1].TreeLabelBG:Show();
-					TreeFrames[2].TreeLabelBG:Show();
-					TreeFrames[3].TreeLabelBG:Show();
+					TreeFrames[1].TreeLabelBackground:Show();
+					TreeFrames[2].TreeLabelBackground:Show();
+					TreeFrames[3].TreeLabelBackground:Show();
 					Frame.TreeButtonsBar:Hide();
 					if Frame.SetResizeBounds ~= nil then
 						Frame:SetResizeBounds(TUISTYLE.FrameXSizeMin_Style1, TUISTYLE.FrameYSizeMin_Style1, 9999, 9999);
@@ -1396,9 +1441,9 @@ MT.BuildEnv('UI');
 					Frame.TreeFrameScale = scale;
 					Frame:SetWidth(scale * TUISTYLE.TreeFrameXSizeTriple + TUISTYLE.TreeFrameXToBorder * 2);
 
-					_TextureFunc.SetNormalTexture(Frame.objects.ExpandButton, TTEXTURESET.SHRINK, nil, nil, TTEXTURESET.CONTROL_NORMAL_COLOR);
-					_TextureFunc.SetPushedTexture(Frame.objects.ExpandButton, TTEXTURESET.SHRINK, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
-					_TextureFunc.SetHighlightTexture(Frame.objects.ExpandButton, TTEXTURESET.SHRINK, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
+					_TextureFunc.SetNormalTexture(Frame.objects.ExpandButton, TTEXTURESET.SHRINK, nil, nil, TTEXTURESET.CONTROL.NORMAL_COLOR);
+					_TextureFunc.SetPushedTexture(Frame.objects.ExpandButton, TTEXTURESET.SHRINK, nil, nil, TTEXTURESET.CONTROL.PUSHED_COLOR);
+					_TextureFunc.SetHighlightTexture(Frame.objects.ExpandButton, TTEXTURESET.SHRINK, nil, nil, TTEXTURESET.CONTROL.PUSHED_COLOR);
 				elseif style == 2 then
 					TreeFrames[1]:Hide();
 					TreeFrames[2]:Hide();
@@ -1415,9 +1460,9 @@ MT.BuildEnv('UI');
 					TreeFrames[1].TreeLabel:Hide();
 					TreeFrames[2].TreeLabel:Hide();
 					TreeFrames[3].TreeLabel:Hide();
-					TreeFrames[1].TreeLabelBG:Hide();
-					TreeFrames[2].TreeLabelBG:Hide();
-					TreeFrames[3].TreeLabelBG:Hide();
+					TreeFrames[1].TreeLabelBackground:Hide();
+					TreeFrames[2].TreeLabelBackground:Hide();
+					TreeFrames[3].TreeLabelBackground:Hide();
 					Frame.TreeButtonsBar:Show();
 					if Frame.SetResizeBounds ~= nil then
 						Frame:SetResizeBounds(TUISTYLE.FrameXSizeMin_Style2, TUISTYLE.FrameYSizeMin_Style2, 9999, 9999);
@@ -1429,9 +1474,9 @@ MT.BuildEnv('UI');
 					Frame.TreeFrameScale = scale;
 					Frame:SetWidth(scale * TUISTYLE.TreeFrameXSizeSingle + TUISTYLE.TreeFrameXToBorder * 2);
 
-					_TextureFunc.SetNormalTexture(Frame.objects.ExpandButton, TTEXTURESET.EXPAND, nil, nil, TTEXTURESET.CONTROL_NORMAL_COLOR);
-					_TextureFunc.SetPushedTexture(Frame.objects.ExpandButton, TTEXTURESET.EXPAND, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
-					_TextureFunc.SetHighlightTexture(Frame.objects.ExpandButton, TTEXTURESET.EXPAND, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
+					_TextureFunc.SetNormalTexture(Frame.objects.ExpandButton, TTEXTURESET.EXPAND, nil, nil, TTEXTURESET.CONTROL.NORMAL_COLOR);
+					_TextureFunc.SetPushedTexture(Frame.objects.ExpandButton, TTEXTURESET.EXPAND, nil, nil, TTEXTURESET.CONTROL.PUSHED_COLOR);
+					_TextureFunc.SetHighlightTexture(Frame.objects.ExpandButton, TTEXTURESET.EXPAND, nil, nil, TTEXTURESET.CONTROL.PUSHED_COLOR);
 				else
 					return;
 				end
@@ -2037,7 +2082,11 @@ MT.BuildEnv('UI');
 		end
 		function MT.UI.EquipmentContainerUpdate(EquipmentContainer, EquData)
 			MT._TimerHalt(EquipmentFrameDelayUpdate);
-			EquipmentContainer.AverageItemLevel:SetText(MT.ColorItemLevel(EquData.AverageItemLevel));
+			if EquData.AverageItemLevel_OKay then
+				EquipmentContainer.AverageItemLevel:SetText(MT.ColorItemLevel(EquData.AverageItemLevel));
+			else
+				EquipmentContainer.AverageItemLevel:SetText(nil);
+			end
 			local recache = false;
 			local EquipmentNodes = EquipmentContainer.EquipmentNodes;
 			for slot = 0, 19 do
@@ -2068,7 +2117,7 @@ MT.BuildEnv('UI');
 						end
 						Node.link = link;
 					else
-						Node:SetNormalTexture(TTEXTURESET.EQUIPMENT_EMPTY[Node.slot]);
+						Node:SetNormalTexture(TTEXTURESET.EQUIPMENT.Empty[Node.slot]);
 						Node.Glow:Hide();
 						Node.ILvl:SetText("");
 						Node.Name:SetText("");
@@ -2078,7 +2127,7 @@ MT.BuildEnv('UI');
 						recache = true;
 					end
 				else
-					Node:SetNormalTexture(TTEXTURESET.EQUIPMENT_EMPTY[Node.slot]);
+					Node:SetNormalTexture(TTEXTURESET.EQUIPMENT.Empty[Node.slot]);
 					Node.Glow:Hide();
 					Node.ILvl:SetText("");
 					Node.Name:SetText("");
@@ -2403,13 +2452,14 @@ MT.BuildEnv('UI');
 		function _SpellListFrameFunc.CreateNode(Parent, index, buttonHeight)
 			local Node = CreateFrame('BUTTON', nil, Parent);
 			Node:SetHeight(buttonHeight);
-			VT.__dep.uireimp._SetSimpleBackdrop(Node, 0, 1, 0.0, 0.0, 0.0, 0.75, 0.0, 0.0, 0.0, 1.0);
+			VT.__dep.uireimp._SetSimpleBackdrop(Node, 0, 1, 0.0, 0.0, 0.0, 0.25, 0.5, 0.5, 0.5, 0.25);
 			Node:SetHighlightTexture("Interface\\FriendsFrame\\UI-FriendsFrame-HighlightBar");
 			Node:EnableMouse(true);
 			Node:Show();
 
 			local Icon = Node:CreateTexture(nil, "OVERLAY");
 			Icon:SetTexture("Interface\\Icons\\inv_misc_questionmark");
+			Icon:SetTexCoord(TUISTYLE.SpellListNodeIconTexCoord[1], TUISTYLE.SpellListNodeIconTexCoord[2], TUISTYLE.SpellListNodeIconTexCoord[3], TUISTYLE.SpellListNodeIconTexCoord[4]);
 			Icon:SetSize(buttonHeight - 4, buttonHeight - 4);
 			Icon:SetPoint("LEFT", 4, 0);
 			Node.Icon = Icon;
@@ -2436,7 +2486,8 @@ MT.BuildEnv('UI');
 			local list = Node.list;
 			if data_index <= #list then
 				local name, _, texture = GetSpellInfo(list[data_index][2]);
-				Node.Icon:SetTexture(texture);
+				SetPortraitToTexture(Node.Icon, texture);
+				-- Node.Icon:SetTexture(texture);
 				Node.Title:SetText(name);
 				Node:Show();
 				if GetMouseFocus() == Node then
@@ -2450,14 +2501,14 @@ MT.BuildEnv('UI');
 			SearchEditCancel.Edit:SetText("");
 			SearchEditCancel.Edit:ClearFocus();
 		end
-		function _SpellListFrameFunc.SearchEditOK_OnClick(SearchEditOK)
-			SearchEditOK.Edit:ClearFocus();
+		function _SpellListFrameFunc.SearchEditOKay_OnClick(SearchEditOKay)
+			SearchEditOKay.Edit:ClearFocus();
 		end
-		function _SpellListFrameFunc.SearchEditOK_OnEnable(SearchEditOK)
-			SearchEditOK.Text:SetTextColor(1.0, 1.0, 1.0, 1.0);
+		function _SpellListFrameFunc.SearchEditOKay_OnEnable(SearchEditOKay)
+			SearchEditOKay.Text:SetTextColor(1.0, 1.0, 1.0, 1.0);
 		end
-		function _SpellListFrameFunc.SearchEditOK_OnDisable(SearchEditOK)
-			SearchEditOK.Text:SetTextColor(1.0, 1.0, 1.0, 0.5);
+		function _SpellListFrameFunc.SearchEditOKay_OnDisable(SearchEditOKay)
+			SearchEditOKay.Text:SetTextColor(1.0, 1.0, 1.0, 0.5);
 		end
 		function _SpellListFrameFunc.SearchEdit_OnEnterPressed(SearchEdit)
 			SearchEdit:ClearFocus();
@@ -2478,11 +2529,11 @@ MT.BuildEnv('UI');
 		end
 		function _SpellListFrameFunc.SearchEdit_OnEditFocusGained(SearchEdit)
 			SearchEdit.Note:Hide();
-			SearchEdit.OK:Enable();
+			SearchEdit.OKay:Enable();
 		end
 		function _SpellListFrameFunc.SearchEdit_OnEditFocusLost(SearchEdit)
 			if SearchEdit:GetText() == "" then SearchEdit.Note:Show(); end
-			SearchEdit.OK:Disable();
+			SearchEdit.OKay:Disable();
 		end
 		function _SpellListFrameFunc.ShowAllSpell_OnClick(ShowAllSpell)
 			MT.UI.SpellListFrameUpdate(ShowAllSpell.SpellListFrame, ShowAllSpell.SpellListFrame.Frame.class, MT.GetPointsReqLevel(ShowAllSpell.SpellListFrame.Frame.class, ShowAllSpell.SpellListFrame.Frame.TotalUsedPoints));
@@ -2503,18 +2554,18 @@ MT.BuildEnv('UI');
 			SpellListFrame:Show();
 			SpellListFrame.list = {  };
 			local ScrollList = VT.__dep.__scrolllib.CreateScrollFrame(SpellListFrame, nil, nil, TUISTYLE.SpellListNodeHeight, _SpellListFrameFunc.CreateNode, _SpellListFrameFunc.SetNode);
-			ScrollList:SetPoint("BOTTOMLEFT", TUISTYLE.SpellListFrameXToBorder, TUISTYLE.SpellListFrameYToTop);
-			ScrollList:SetPoint("TOPRIGHT", -TUISTYLE.SpellListFrameXToBorder, -TUISTYLE.SpellListFrameYToBottom);
+			ScrollList:SetPoint("BOTTOMLEFT", TUISTYLE.SpellListFrameXToBorder, TUISTYLE.SpellListFrameYToBottom);
+			ScrollList:SetPoint("TOPRIGHT", -TUISTYLE.SpellListFrameXToBorder, -TUISTYLE.SpellListFrameYToTop);
 			SpellListFrame.ScrollList = ScrollList;
 
 			local SearchEdit = CreateFrame('EDITBOX', nil, SpellListFrame);
-			SearchEdit:SetSize(TUISTYLE.SpellListFrameXSize - 2 * TUISTYLE.SpellListFrameXToBorder - 36, 16);
+			SearchEdit:SetSize(TUISTYLE.SpellListFrameXSize - 2 * TUISTYLE.SpellListFrameXToBorder - 2 - TUISTYLE.SpellListSearchEditOkayXSize, TUISTYLE.SpellListSearchEditYSize);
 			SearchEdit:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeSmall, "OUTLINE");
 			SearchEdit:SetAutoFocus(false);
 			SearchEdit:SetJustifyH("LEFT");
 			SearchEdit:Show();
 			SearchEdit:EnableMouse(true);
-			SearchEdit:SetPoint("TOPLEFT", SpellListFrame, TUISTYLE.SpellListFrameXToBorder, -6);
+			SearchEdit:SetPoint("TOPLEFT", SpellListFrame, TUISTYLE.SpellListFrameXToBorder, -2);
 			local SearchEditTexture = SearchEdit:CreateTexture(nil, "ARTWORK");
 			SearchEditTexture:SetPoint("TOPLEFT");
 			SearchEditTexture:SetPoint("BOTTOMRIGHT");
@@ -2532,37 +2583,37 @@ MT.BuildEnv('UI');
 			SearchEditNote:Show();
 			SearchEdit.Note = SearchEditNote;
 			local SearchEditCancel = CreateFrame('BUTTON', nil, SearchEdit);
-			SearchEditCancel:SetSize(16, 16);
+			SearchEditCancel:SetSize(TUISTYLE.SpellListSearchEditYSize, TUISTYLE.SpellListSearchEditYSize);
 			SearchEditCancel:SetPoint("RIGHT", SearchEdit);
 			SearchEditCancel:SetScript("OnClick", _SpellListFrameFunc.SearchEditCancel_OnClick);
 			SearchEditCancel:Hide();
 			SearchEditCancel:SetNormalTexture("interface\\petbattles\\deadpeticon");
 			SearchEditCancel.Edit = SearchEdit;
 			SearchEdit.Cancel = SearchEditCancel;
-			local SearchEditOK = CreateFrame('BUTTON', nil, SpellListFrame);
-			SearchEditOK:SetSize(32, 16);
-			SearchEditOK:SetPoint("LEFT", SearchEdit, "RIGHT", 4, 0);
-			SearchEditOK:SetScript("OnClick", _SpellListFrameFunc.SearchEditOK_OnClick);
-			SearchEditOK:Disable();
-			SearchEditOK.Edit = SearchEdit;
-			SearchEdit.OK = SearchEditOK;
-			local SearchEditOKTexture = SearchEditOK:CreateTexture(nil, "ARTWORK");
-			SearchEditOKTexture:SetPoint("TOPLEFT");
-			SearchEditOKTexture:SetPoint("BOTTOMRIGHT");
-			SearchEditOKTexture:SetColorTexture(0.25, 0.25, 0.25, 0.5);
-			SearchEditOKTexture:SetAlpha(0.75);
-			SearchEditOKTexture:SetBlendMode("ADD");
-			SearchEditOK.Texture = SearchEditOKTexture;
-			local SearchEditOKText = SearchEditOK:CreateFontString(nil, "OVERLAY");
-			SearchEditOKText:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeMedium, TUISTYLE.FrameFontOutline);
-			SearchEditOKText:SetTextColor(1.0, 1.0, 1.0, 0.5);
-			SearchEditOKText:SetPoint("CENTER");
-			SearchEditOKText:SetText(l10n.SpellList_SearchOKey);
-			SearchEditOK.Text = SearchEditOKText;
-			SearchEditOK:SetFontString(SearchEditOKText);
-			SearchEditOK:SetPushedTextOffset(1, -1);
-			SearchEditOK:SetScript("OnEnable", _SpellListFrameFunc.SearchEditOK_OnEnable);
-			SearchEditOK:SetScript("OnDisable", _SpellListFrameFunc.SearchEditOK_OnDisable);
+			local SearchEditOKay = CreateFrame('BUTTON', nil, SpellListFrame);
+			SearchEditOKay:SetSize(TUISTYLE.SpellListSearchEditOkayXSize, TUISTYLE.SpellListSearchEditYSize);
+			SearchEditOKay:SetPoint("LEFT", SearchEdit, "RIGHT", 4, 0);
+			SearchEditOKay:SetScript("OnClick", _SpellListFrameFunc.SearchEditOKay_OnClick);
+			SearchEditOKay:Disable();
+			SearchEditOKay.Edit = SearchEdit;
+			SearchEdit.OKay = SearchEditOKay;
+			local SearchEditOKayTexture = SearchEditOKay:CreateTexture(nil, "ARTWORK");
+			SearchEditOKayTexture:SetPoint("TOPLEFT");
+			SearchEditOKayTexture:SetPoint("BOTTOMRIGHT");
+			SearchEditOKayTexture:SetColorTexture(0.25, 0.25, 0.25, 0.5);
+			SearchEditOKayTexture:SetAlpha(0.75);
+			SearchEditOKayTexture:SetBlendMode("ADD");
+			SearchEditOKay.Texture = SearchEditOKayTexture;
+			local SearchEditOKayText = SearchEditOKay:CreateFontString(nil, "OVERLAY");
+			SearchEditOKayText:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeMedium, TUISTYLE.FrameFontOutline);
+			SearchEditOKayText:SetTextColor(1.0, 1.0, 1.0, 0.5);
+			SearchEditOKayText:SetPoint("CENTER");
+			SearchEditOKayText:SetText(l10n.SpellList_SearchOKay);
+			SearchEditOKay.Text = SearchEditOKayText;
+			SearchEditOKay:SetFontString(SearchEditOKayText);
+			SearchEditOKay:SetPushedTextOffset(1, -1);
+			SearchEditOKay:SetScript("OnEnable", _SpellListFrameFunc.SearchEditOKay_OnEnable);
+			SearchEditOKay:SetScript("OnDisable", _SpellListFrameFunc.SearchEditOKay_OnDisable);
 			SearchEdit:SetScript("OnEnterPressed", _SpellListFrameFunc.SearchEdit_OnEnterPressed);
 			SearchEdit:SetScript("OnEscapePressed", _SpellListFrameFunc.SearchEdit_OnEscapePressed);
 			SearchEdit:SetScript("OnTextChanged", _SpellListFrameFunc.SearchEdit_OnTextChanged);
@@ -2571,10 +2622,14 @@ MT.BuildEnv('UI');
 			SearchEdit:ClearFocus();
 			SearchEdit.SpellListFrame = SpellListFrame;
 			SpellListFrame.SearchEdit = SearchEdit;
-			SpellListFrame.SearchEditOK = SearchEditOK;
+			SpellListFrame.SearchEditOKay = SearchEditOKay;
 
-			local ShowAllSpell = CreateFrame('CHECKBUTTON', nil, SpellListFrame, "OptionsBaseCheckButtonTemplate");
-			ShowAllSpell:SetSize(16, 16);
+			local ShowAllSpell = CreateFrame('CHECKBUTTON', nil, SpellListFrame);
+			_TextureFunc.SetNormalTexture(ShowAllSpell, TTEXTURESET.CHECK.Normal, nil, nil, TTEXTURESET.CONTROL.NORMAL_COLOR);
+			_TextureFunc.SetPushedTexture(ShowAllSpell, TTEXTURESET.CHECK.Pushed, nil, nil, TTEXTURESET.CONTROL.PUSHED_COLOR);
+			_TextureFunc.SetHighlightTexture(ShowAllSpell, TTEXTURESET.CHECK.Highlight, nil, nil, TTEXTURESET.CONTROL.HIGHLIGHT_COLOR);
+			_TextureFunc.SetCheckedTexture(ShowAllSpell, TTEXTURESET.CHECK.Checked, nil, nil, TTEXTURESET.CONTROL.NORMAL_COLOR);
+			ShowAllSpell:SetSize(12, 12);
 			ShowAllSpell:SetHitRectInsets(0, 0, 0, 0);
 			ShowAllSpell:ClearAllPoints();
 			ShowAllSpell:Show();
@@ -2729,14 +2784,14 @@ MT.BuildEnv('UI');
 				Node:SetScript("OnClick", _LeftFunc.Node_OnClick);
 
 				Node:SetNormalTexture(TTEXTURESET.UNK);
-				_TextureFunc.SetHighlightTexture(Node, TTEXTURESET.EQUIPMENT_HIGHLIGHT);
+				_TextureFunc.SetHighlightTexture(Node, TTEXTURESET.EQUIPMENT.Highlight);
 
 				Node.Border = CreateFlatBorder(Node, 3);
 
 				local Glow = Node:CreateTexture(nil, "OVERLAY");
 				Glow:SetAllPoints();
 				Glow:SetBlendMode("ADD");
-				_TextureFunc.SetTexture(Glow, TTEXTURESET.EQUIPMENT_GLOW);
+				_TextureFunc.SetTexture(Glow, TTEXTURESET.EQUIPMENT.Glow);
 				Glow:Show();
 				Node.Glow = Glow;
 
@@ -2770,8 +2825,8 @@ MT.BuildEnv('UI');
 				Engr:SetScript("OnLeave", _LeftFunc.EngravingNode_OnLeave);
 				Engr:SetScript("OnClick", _LeftFunc.EngravingNode_OnClick);
 
-				_TextureFunc.SetNormalTexture(Engr, TTEXTURESET.ENGRAVING);
-				_TextureFunc.SetHighlightTexture(Engr, TTEXTURESET.ENGRAVING_HIGHLIGHT);
+				_TextureFunc.SetNormalTexture(Engr, TTEXTURESET.ENGRAVING.Normal);
+				_TextureFunc.SetHighlightTexture(Engr, TTEXTURESET.ENGRAVING.Highlight);
 
 				Engr.EquipmentContainer = EquipmentContainer;
 				Engr.slot = slot;
@@ -3076,8 +3131,8 @@ MT.BuildEnv('UI');
 
 			return TreeNodes;
 		end
-		function _TreeFunc.ResetButton_OnClick(ResetButton)
-			local TreeFrame = ResetButton.TreeFrame;
+		function _TreeFunc.ResetTreeButton_OnClick(ResetTreeButton)
+			local TreeFrame = ResetTreeButton.TreeFrame;
 			MT.UI.TreeFrameResetTalents(TreeFrame);
 		end
 		function _TreeFunc.OnDragStart(TreeFrame, button)
@@ -3111,20 +3166,17 @@ MT.BuildEnv('UI');
 				HSeq[1]:SetHeight(TUISTYLE.TreeFrameSeqWidth);
 				HSeq[1]:SetPoint("LEFT", TreeFrame, "TOPLEFT", 0, 0);
 				HSeq[1]:SetPoint("RIGHT", TreeFrame, "TOPRIGHT", 0, 0);
-				HSeq[1]:SetTexture(TTEXTURESET.SEP_HORIZONTAL);
-				HSeq[1]:SetTexCoord(TTEXTURESET.SEP_HORIZONTAL_COORD[1], TTEXTURESET.SEP_HORIZONTAL_COORD[2], TTEXTURESET.SEP_HORIZONTAL_COORD[3], TTEXTURESET.SEP_HORIZONTAL_COORD[4]);
+				_TextureFunc.SetTexture(HSeq[1], TTEXTURESET.SEP_HORIZONTAL);
 				HSeq[2] = TreeFrame:CreateTexture(nil, "ARTWORK");
 				HSeq[2]:SetHeight(TUISTYLE.TreeFrameSeqWidth);
 				HSeq[2]:SetPoint("LEFT", TreeFrame, "BOTTOMLEFT", 0, 0);
 				HSeq[2]:SetPoint("RIGHT", TreeFrame, "BOTTOMRIGHT", 0, 0);
-				HSeq[2]:SetTexture(TTEXTURESET.SEP_HORIZONTAL);
-				HSeq[2]:SetTexCoord(TTEXTURESET.SEP_HORIZONTAL_COORD[1], TTEXTURESET.SEP_HORIZONTAL_COORD[2], TTEXTURESET.SEP_HORIZONTAL_COORD[3], TTEXTURESET.SEP_HORIZONTAL_COORD[4]);
+				_TextureFunc.SetTexture(HSeq[2], TTEXTURESET.SEP_HORIZONTAL);
 				HSeq[3] = TreeFrame:CreateTexture(nil, "ARTWORK");
 				HSeq[3]:SetHeight(TUISTYLE.TreeFrameSeqWidth);
 				HSeq[3]:SetPoint("LEFT", TreeFrame, "BOTTOMLEFT", 0, TUISTYLE.TreeFrameFooterYSize);
 				HSeq[3]:SetPoint("RIGHT", TreeFrame, "BOTTOMRIGHT", 0, TUISTYLE.TreeFrameFooterYSize);
-				HSeq[3]:SetTexture(TTEXTURESET.SEP_HORIZONTAL);
-				HSeq[3]:SetTexCoord(TTEXTURESET.SEP_HORIZONTAL_COORD[1], TTEXTURESET.SEP_HORIZONTAL_COORD[2], TTEXTURESET.SEP_HORIZONTAL_COORD[3], TTEXTURESET.SEP_HORIZONTAL_COORD[4]);
+				_TextureFunc.SetTexture(HSeq[3], TTEXTURESET.SEP_HORIZONTAL);
 				TreeFrame.HSeq = HSeq;
 
 				local VSep = {  };
@@ -3132,52 +3184,50 @@ MT.BuildEnv('UI');
 				VSep[1]:SetWidth(TUISTYLE.TreeFrameSeqWidth);
 				VSep[1]:SetPoint("TOP", TreeFrame, "TOPLEFT", 0, 0);
 				VSep[1]:SetPoint("BOTTOM", TreeFrame, "BOTTOMLEFT", 0, 0);
-				VSep[1]:SetTexture(TTEXTURESET.SEP_VERTICAL);
-				VSep[1]:SetTexCoord(TTEXTURESET.SEP_VERTICAL_COORD[1], TTEXTURESET.SEP_VERTICAL_COORD[2], TTEXTURESET.SEP_VERTICAL_COORD[3], TTEXTURESET.SEP_VERTICAL_COORD[4]);
+				_TextureFunc.SetTexture(VSep[1], TTEXTURESET.SEP_VERTICAL);
 				VSep[2] = TreeFrame:CreateTexture(nil, "ARTWORK");
 				VSep[2]:SetWidth(TUISTYLE.TreeFrameSeqWidth);
 				VSep[2]:SetPoint("TOP", TreeFrame, "TOPRIGHT", 0, 0);
 				VSep[2]:SetPoint("BOTTOM", TreeFrame, "BOTTOMRIGHT", 0, 0);
-				VSep[2]:SetTexture(TTEXTURESET.SEP_VERTICAL);
-				VSep[2]:SetTexCoord(TTEXTURESET.SEP_VERTICAL_COORD[1], TTEXTURESET.SEP_VERTICAL_COORD[2], TTEXTURESET.SEP_VERTICAL_COORD[3], TTEXTURESET.SEP_VERTICAL_COORD[4]);
+				_TextureFunc.SetTexture(VSep[2], TTEXTURESET.SEP_VERTICAL);
 				TreeFrame.VSep = VSep;
 
-				local BG = TreeFrame:CreateTexture(nil, "BORDER");
-				BG:SetAllPoints();
-				BG:SetAlpha(0.6);
+				local Background = TreeFrame:CreateTexture(nil, "BORDER");
+				Background:SetAllPoints();
+				Background:SetAlpha(0.6);
 				local ratio = TUISTYLE.TreeFrameXSizeSingle / TUISTYLE.TreeFrameYSize;
 				if ratio > 1.0 then
-					BG:SetTexCoord(0.0, 1.0, (1.0 - ratio) * 0.5, (1.0 + ratio) * 0.5);
+					Background:SetTexCoord(0.0, 1.0, (1.0 - ratio) * 0.5, (1.0 + ratio) * 0.5);
 				elseif ratio < 1.0 then
-					BG:SetTexCoord((1.0 - ratio) * 0.5, (1.0 + ratio) * 0.5, 0.0, 1.0);
+					Background:SetTexCoord((1.0 - ratio) * 0.5, (1.0 + ratio) * 0.5, 0.0, 1.0);
 				end
-				TreeFrame.BG = BG;
+				TreeFrame.Background = Background;
 
 				TreeFrame.TreeNodes = _TreeFunc.CreateNodes(TreeFrame);
 
-				local ResetButtonBG = TreeFrame:CreateTexture(nil, "ARTWORK");
-				ResetButtonBG:SetSize(TUISTYLE.TreeNodeSize, TUISTYLE.TreeNodeSize);
-				ResetButtonBG:SetPoint("CENTER", TreeFrame.TreeNodes[DT.MAX_NUM_TALENTS]);
-				_TextureFunc.SetTexture(ResetButtonBG, TTEXTURESET.TALENT_RESET_BG);
-				TreeFrame.ResetButtonBG = ResetButtonBG;
+				local ResetTreeButtonBackgroud = TreeFrame:CreateTexture(nil, "ARTWORK");
+				ResetTreeButtonBackgroud:SetSize(TUISTYLE.TreeNodeSize, TUISTYLE.TreeNodeSize);
+				ResetTreeButtonBackgroud:SetPoint("CENTER", TreeFrame.TreeNodes[DT.MAX_NUM_TALENTS]);
+				_TextureFunc.SetTexture(ResetTreeButtonBackgroud, TTEXTURESET.RESETTREE.Backgroud);
+				TreeFrame.ResetTreeButtonBackgroud = ResetTreeButtonBackgroud;
 
-				local ResetButton = CreateFrame('BUTTON', nil, TreeFrame);
-				ResetButton:SetSize(TUISTYLE.ControlButtonSize, TUISTYLE.ControlButtonSize);
-				ResetButton:SetPoint("CENTER", ResetButtonBG);
-				_TextureFunc.SetHighlightTexture(ResetButton, TTEXTURESET.TALENT_RESET_HIGHLIGHT);
-				ResetButton:GetHighlightTexture():ClearAllPoints();
-				ResetButton:GetHighlightTexture():SetPoint("CENTER");
-				ResetButton:GetHighlightTexture():SetSize(TUISTYLE.TreeNodeSize, TUISTYLE.TreeNodeSize);
-				ResetButton:SetScript("OnClick", _TreeFunc.ResetButton_OnClick);
-				ResetButton:SetScript("OnEnter", MT.GeneralOnEnter);
-				ResetButton:SetScript("OnLeave", MT.GeneralOnLeave);
-				ResetButton.information = l10n.ResetButton;
-				TreeFrame.ResetButton = ResetButton;
-				ResetButton.TreeFrame = TreeFrame;
+				local ResetTreeButton = CreateFrame('BUTTON', nil, TreeFrame);
+				ResetTreeButton:SetSize(TUISTYLE.ControlButtonSize, TUISTYLE.ControlButtonSize);
+				ResetTreeButton:SetPoint("CENTER", ResetTreeButtonBackgroud);
+				_TextureFunc.SetHighlightTexture(ResetTreeButton, TTEXTURESET.RESETTREE.Highlight);
+				ResetTreeButton:GetHighlightTexture():ClearAllPoints();
+				ResetTreeButton:GetHighlightTexture():SetPoint("CENTER");
+				ResetTreeButton:GetHighlightTexture():SetSize(TUISTYLE.TreeNodeSize, TUISTYLE.TreeNodeSize);
+				ResetTreeButton:SetScript("OnClick", _TreeFunc.ResetTreeButton_OnClick);
+				ResetTreeButton:SetScript("OnEnter", MT.GeneralOnEnter);
+				ResetTreeButton:SetScript("OnLeave", MT.GeneralOnLeave);
+				ResetTreeButton.information = l10n.ResetTreeButton;
+				TreeFrame.ResetTreeButton = ResetTreeButton;
+				ResetTreeButton.TreeFrame = TreeFrame;
 
 				local TreePoints = TreeFrame:CreateFontString(nil, "ARTWORK");
 				TreePoints:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeLarge, TUISTYLE.FrameFontOutline);
-				TreePoints:SetPoint("CENTER", ResetButton);
+				TreePoints:SetPoint("CENTER", ResetTreeButton);
 				TreePoints:SetTextColor(0.0, 1.0, 0.0, 1.0);
 				TreePoints:SetText("0");
 				TreeFrame.TreePoints = TreePoints;
@@ -3187,13 +3237,13 @@ MT.BuildEnv('UI');
 				TreeLabel:SetPoint("CENTER", TreeFrame, "BOTTOM", 0, TUISTYLE.TreeFrameFooterYSize * 0.5);
 				TreeLabel:SetTextColor(0.9, 0.9, 0.9, 1.0);
 				TreeFrame.TreeLabel = TreeLabel;
-				local TreeLabelBG = TreeFrame:CreateTexture(nil, "ARTWORK");
-				TreeLabelBG:SetSize(TUISTYLE.TreeFrameFooterYSize, TUISTYLE.TreeFrameFooterYSize);
-				-- TreeLabelBG:SetPoint("BOTTOMLEFT", TreeFrame, "BOTTOMLEFT", 0, 0);
-				-- TreeLabelBG:SetPoint("TOPRIGHT", TreeFrame, "BOTTOMRIGHT", 0, TUISTYLE.TreeFrameFooterYSize);
-				TreeLabelBG:SetPoint("RIGHT", TreeLabel, "LEFT", -4, 0);
-				TreeLabelBG:SetTexCoord(TUISTYLE.TreeFrameLabelBGTexCoord[1], TUISTYLE.TreeFrameLabelBGTexCoord[2], TUISTYLE.TreeFrameLabelBGTexCoord[3], TUISTYLE.TreeFrameLabelBGTexCoord[4]);
-				TreeFrame.TreeLabelBG = TreeLabelBG;
+				local TreeLabelBackground = TreeFrame:CreateTexture(nil, "ARTWORK");
+				TreeLabelBackground:SetSize(TUISTYLE.TreeFrameFooterYSize, TUISTYLE.TreeFrameFooterYSize);
+				-- TreeLabelBackground:SetPoint("BOTTOMLEFT", TreeFrame, "BOTTOMLEFT", 0, 0);
+				-- TreeLabelBackground:SetPoint("TOPRIGHT", TreeFrame, "BOTTOMRIGHT", 0, TUISTYLE.TreeFrameFooterYSize);
+				TreeLabelBackground:SetPoint("RIGHT", TreeLabel, "LEFT", -4, 0);
+				TreeLabelBackground:SetTexCoord(TUISTYLE.TreeFrameLabelBackgroundTexCoord[1], TUISTYLE.TreeFrameLabelBackgroundTexCoord[2], TUISTYLE.TreeFrameLabelBackgroundTexCoord[3], TUISTYLE.TreeFrameLabelBackgroundTexCoord[4]);
+				TreeFrame.TreeLabelBackground = TreeLabelBackground;
 
 				TreeFrame.Frame = Frame;
 				TreeFrame.id = TreeIndex;
@@ -3371,9 +3421,9 @@ MT.BuildEnv('UI');
 				EditBox:SetText("");
 				EditBox:Show();
 				EditBox:SetFocus();
-				EditBox.OKButton:ClearAllPoints();
-				EditBox.OKButton:SetPoint("LEFT", self, "RIGHT", 4, 0);
-				--	EditBox.OKButton:Show();
+				EditBox.OKayButton:ClearAllPoints();
+				EditBox.OKayButton:SetPoint("LEFT", self, "RIGHT", 4, 0);
+				--	EditBox.OKayButton:Show();
 				EditBox.Parent = self;
 				EditBox.type = "import";
 			end
@@ -3404,8 +3454,8 @@ MT.BuildEnv('UI');
 			else
 				EditBox:ClearAllPoints();
 				EditBox:SetPoint("LEFT", self, "RIGHT", 4, 0);
-				EditBox.OKButton:ClearAllPoints();
-				EditBox.OKButton:SetPoint("LEFT", EditBox, "RIGHT", 0, 0);
+				EditBox.OKayButton:ClearAllPoints();
+				EditBox.OKayButton:SetPoint("LEFT", EditBox, "RIGHT", 0, 0);
 				EditBox.Parent = self;
 				if button == "LeftButton" then
 					EditBox:SetText(MT.EncodeTalent(Frame));
@@ -3459,8 +3509,8 @@ MT.BuildEnv('UI');
 					EditBox:SetPoint("LEFT", self, "RIGHT", TUISTYLE.EditBoxYSize + 4, 0);
 					EditBox:SetText(MT.GenerateTitleFromRawData(Frame));
 					EditBox:Show();
-					EditBox.OKButton:ClearAllPoints();
-					EditBox.OKButton:SetPoint("LEFT", self, "RIGHT", 4, 0);
+					EditBox.OKayButton:ClearAllPoints();
+					EditBox.OKayButton:SetPoint("LEFT", self, "RIGHT", 4, 0);
 					EditBox.Parent = self;
 					EditBox.type = "save";
 				end
@@ -3540,7 +3590,7 @@ MT.BuildEnv('UI');
 				VT.VAR.savedTalent[title] = MT.EncodeTalent(self.Frame);
 			end
 		end
-		function _SideFunc.EditBoxOKButton_OnClick(self)
+		function _SideFunc.EditBoxOKayButton_OnClick(self)
 			return _SideFunc.EditBox_OnEnterPressed(self.EditBox);
 		end
 		function _SideFunc.EditBox_OnEscapePressed(EditBox)
@@ -3574,16 +3624,16 @@ MT.BuildEnv('UI');
 				Header:SetPoint("TOPRIGHT");
 				Header:SetHeight(TUISTYLE.FrameHeaderYSize);
 				Frame.Header = Header;
-				local HeaderBG = Header:CreateTexture(nil, "BACKGROUND");
-				HeaderBG:SetAllPoints();
-				HeaderBG:SetColorTexture(0.0, 0.0, 0.0, 0.5);
-				Header.BG = HeaderBG;
+				local Background = Header:CreateTexture(nil, "BACKGROUND");
+				Background:SetAllPoints();
+				Background:SetColorTexture(0.0, 0.0, 0.0, 0.5);
+				Header.Background = Background;
 
 				local CloseButton = CreateFrame('BUTTON', nil, Header);
 				CloseButton:SetSize(TUISTYLE.ControlButtonSize, TUISTYLE.ControlButtonSize);
-				_TextureFunc.SetNormalTexture(CloseButton, TTEXTURESET.CLOSE, nil, nil, TTEXTURESET.CONTROL_NORMAL_COLOR);
-				_TextureFunc.SetPushedTexture(CloseButton, TTEXTURESET.CLOSE, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
-				_TextureFunc.SetHighlightTexture(CloseButton, TTEXTURESET.CLOSE, nil, nil, TTEXTURESET.CONTROL_HIGHLIGHT_COLOR);
+				_TextureFunc.SetNormalTexture(CloseButton, TTEXTURESET.CLOSE, nil, nil, TTEXTURESET.CONTROL.NORMAL_COLOR);
+				_TextureFunc.SetPushedTexture(CloseButton, TTEXTURESET.CLOSE, nil, nil, TTEXTURESET.CONTROL.PUSHED_COLOR);
+				_TextureFunc.SetHighlightTexture(CloseButton, TTEXTURESET.CLOSE, nil, nil, TTEXTURESET.CONTROL.HIGHLIGHT_COLOR);
 				CloseButton:SetPoint("CENTER", Header, "RIGHT", -TUISTYLE.FrameHeaderYSize * 0.5, 0);
 				CloseButton:Show();
 				CloseButton:SetScript("OnClick", _SideFunc.CloseButton_OnClick);
@@ -3603,9 +3653,9 @@ MT.BuildEnv('UI');
 
 				local ResetToEmuButton = CreateFrame('BUTTON', nil, Header);
 				ResetToEmuButton:SetSize(TUISTYLE.ControlButtonSize, TUISTYLE.ControlButtonSize);
-				_TextureFunc.SetNormalTexture(ResetToEmuButton, TTEXTURESET.RESETTOEMU, nil, nil, TTEXTURESET.CONTROL_NORMAL_COLOR);
-				_TextureFunc.SetPushedTexture(ResetToEmuButton, TTEXTURESET.RESETTOEMU, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
-				_TextureFunc.SetHighlightTexture(ResetToEmuButton, TTEXTURESET.RESETTOEMU, nil, nil, TTEXTURESET.CONTROL_HIGHLIGHT_COLOR);
+				_TextureFunc.SetNormalTexture(ResetToEmuButton, TTEXTURESET.RESETTOEMU, nil, nil, TTEXTURESET.CONTROL.NORMAL_COLOR);
+				_TextureFunc.SetPushedTexture(ResetToEmuButton, TTEXTURESET.RESETTOEMU, nil, nil, TTEXTURESET.CONTROL.PUSHED_COLOR);
+				_TextureFunc.SetHighlightTexture(ResetToEmuButton, TTEXTURESET.RESETTOEMU, nil, nil, TTEXTURESET.CONTROL.HIGHLIGHT_COLOR);
 				ResetToEmuButton:SetFrameLevel(ResetToEmuButton:GetFrameLevel() + 1);
 				ResetToEmuButton:SetPoint("RIGHT", Name, "LEFT", 0, 0);
 				ResetToEmuButton:SetScript("OnClick", _SideFunc.ResetToEmuButton_OnClick);
@@ -3630,9 +3680,9 @@ MT.BuildEnv('UI');
 
 				local ResetToSetButton = CreateFrame('BUTTON', nil, Header);
 				ResetToSetButton:SetSize(TUISTYLE.ControlButtonSize, TUISTYLE.ControlButtonSize);
-				_TextureFunc.SetNormalTexture(ResetToSetButton, TTEXTURESET.RESETTOSET, nil, nil, TTEXTURESET.CONTROL_NORMAL_COLOR);
-				_TextureFunc.SetPushedTexture(ResetToSetButton, TTEXTURESET.RESETTOSET, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
-				_TextureFunc.SetHighlightTexture(ResetToSetButton, TTEXTURESET.RESETTOSET, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
+				_TextureFunc.SetNormalTexture(ResetToSetButton, TTEXTURESET.RESETTOSET, nil, nil, TTEXTURESET.CONTROL.NORMAL_COLOR);
+				_TextureFunc.SetPushedTexture(ResetToSetButton, TTEXTURESET.RESETTOSET, nil, nil, TTEXTURESET.CONTROL.PUSHED_COLOR);
+				_TextureFunc.SetHighlightTexture(ResetToSetButton, TTEXTURESET.RESETTOSET, nil, nil, TTEXTURESET.CONTROL.PUSHED_COLOR);
 				ResetToSetButton:SetFrameLevel(ResetToSetButton:GetFrameLevel() + 1);
 				ResetToSetButton:SetPoint("LEFT", Label, "RIGHT", 0, 0);
 				ResetToSetButton:SetScript("OnClick", _SideFunc.ResetToSetButton_OnClick);
@@ -3644,9 +3694,9 @@ MT.BuildEnv('UI');
 
 				local TalentGroupSelect = CreateFrame('BUTTON', nil, Header);
 				TalentGroupSelect:SetSize(TUISTYLE.ControlButtonSize, TUISTYLE.ControlButtonSize);
-				_TextureFunc.SetNormalTexture(TalentGroupSelect, TTEXTURESET.DROP, nil, nil, TTEXTURESET.CONTROL_NORMAL_COLOR);
-				_TextureFunc.SetPushedTexture(TalentGroupSelect, TTEXTURESET.DROP, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
-				_TextureFunc.SetHighlightTexture(TalentGroupSelect, TTEXTURESET.DROP, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
+				_TextureFunc.SetNormalTexture(TalentGroupSelect, TTEXTURESET.DROP, nil, nil, TTEXTURESET.CONTROL.NORMAL_COLOR);
+				_TextureFunc.SetPushedTexture(TalentGroupSelect, TTEXTURESET.DROP, nil, nil, TTEXTURESET.CONTROL.PUSHED_COLOR);
+				_TextureFunc.SetHighlightTexture(TalentGroupSelect, TTEXTURESET.DROP, nil, nil, TTEXTURESET.CONTROL.PUSHED_COLOR);
 				TalentGroupSelect:SetPoint("RIGHT", Label, "LEFT", 0, 0);
 				TalentGroupSelect:SetScript("OnClick", _SideFunc.TalentGroupSelect_OnClick);
 				TalentGroupSelect:SetScript("OnEnter", MT.GeneralOnEnter);
@@ -3661,9 +3711,9 @@ MT.BuildEnv('UI');
 				--	Control
 					local ExpandButton = CreateFrame('BUTTON', nil, Frame);
 					ExpandButton:SetSize(TUISTYLE.ControlButtonSize, TUISTYLE.ControlButtonSize);
-					_TextureFunc.SetNormalTexture(ExpandButton, TTEXTURESET.EXPAND, nil, nil, TTEXTURESET.CONTROL_NORMAL_COLOR);
-					_TextureFunc.SetPushedTexture(ExpandButton, TTEXTURESET.EXPAND, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
-					_TextureFunc.SetHighlightTexture(ExpandButton, TTEXTURESET.EXPAND, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
+					_TextureFunc.SetNormalTexture(ExpandButton, TTEXTURESET.EXPAND, nil, nil, TTEXTURESET.CONTROL.NORMAL_COLOR);
+					_TextureFunc.SetPushedTexture(ExpandButton, TTEXTURESET.EXPAND, nil, nil, TTEXTURESET.CONTROL.PUSHED_COLOR);
+					_TextureFunc.SetHighlightTexture(ExpandButton, TTEXTURESET.EXPAND, nil, nil, TTEXTURESET.CONTROL.PUSHED_COLOR);
 					ExpandButton:SetPoint("BOTTOMRIGHT", Frame, "BOTTOMRIGHT", -2, (TUISTYLE.FrameFooterYSize - TUISTYLE.ControlButtonSize) * 0.5);
 					ExpandButton:Show();
 					ExpandButton:SetScript("OnClick", _SideFunc.ExpandButton_OnClick);
@@ -3675,9 +3725,9 @@ MT.BuildEnv('UI');
 
 					local ResetAllButton = CreateFrame('BUTTON', nil, Frame);
 					ResetAllButton:SetSize(TUISTYLE.ControlButtonSize, TUISTYLE.ControlButtonSize);
-					_TextureFunc.SetNormalTexture(ResetAllButton, TTEXTURESET.RESETALL, nil, nil, TTEXTURESET.CONTROL_NORMAL_COLOR);
-					_TextureFunc.SetPushedTexture(ResetAllButton, TTEXTURESET.RESETALL, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
-					_TextureFunc.SetHighlightTexture(ResetAllButton, TTEXTURESET.RESETALL, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
+					_TextureFunc.SetNormalTexture(ResetAllButton, TTEXTURESET.RESETALL, nil, nil, TTEXTURESET.CONTROL.NORMAL_COLOR);
+					_TextureFunc.SetPushedTexture(ResetAllButton, TTEXTURESET.RESETALL, nil, nil, TTEXTURESET.CONTROL.PUSHED_COLOR);
+					_TextureFunc.SetHighlightTexture(ResetAllButton, TTEXTURESET.RESETALL, nil, nil, TTEXTURESET.CONTROL.PUSHED_COLOR);
 					ResetAllButton:SetPoint("BOTTOMLEFT", Frame, "BOTTOMLEFT", 2, (TUISTYLE.FrameFooterYSize - TUISTYLE.ControlButtonSize) * 0.5);
 					ResetAllButton:Show();
 					ResetAllButton:SetScript("OnClick", _SideFunc.ResetAllButton_OnClick);
@@ -3737,9 +3787,9 @@ MT.BuildEnv('UI');
 					for TreeIndex = 1, 3 do
 						local TreeButton = CreateFrame('BUTTON', nil, TreeButtonsBar);
 						TreeButton:SetSize(TUISTYLE.TreeButtonXSize, TUISTYLE.TreeButtonYSize);
-						_TextureFunc.SetNormalTexture(TreeButton, TTEXTURESET.TREEBUTTON_NORMAL);
-						_TextureFunc.SetPushedTexture(TreeButton, TTEXTURESET.TREEBUTTON_PUSHED);
-						_TextureFunc.SetHighlightTexture(TreeButton, TTEXTURESET.TREEBUTTON_HIGHLIGHT, TTEXTURESET.NORMAL_HIGHLIGHT);
+						_TextureFunc.SetNormalTexture(TreeButton, TTEXTURESET.TREEBUTTON.Normal);
+						_TextureFunc.SetPushedTexture(TreeButton, TTEXTURESET.TREEBUTTON.Pushed);
+						_TextureFunc.SetHighlightTexture(TreeButton, TTEXTURESET.TREEBUTTON.Highlight, TTEXTURESET.NORMAL_HIGHLIGHT);
 						TreeButton:Show();
 						TreeButton:SetScript("OnClick", _SideFunc.TreeButton_OnClick);
 						TreeButton:SetScript("OnEnter", MT.GeneralOnEnter);
@@ -3764,7 +3814,7 @@ MT.BuildEnv('UI');
 					local CurTreeIndicator = TreeButtonsBar:CreateTexture(nil, "OVERLAY");
 					CurTreeIndicator:SetSize(TUISTYLE.TreeButtonXSize + 4, TUISTYLE.TreeButtonYSize + 4);
 					CurTreeIndicator:SetBlendMode("ADD");
-					_TextureFunc.SetTexture(CurTreeIndicator, TTEXTURESET.TREEBUTTON_INDICATOR, TTEXTURESET.SQUARE_HIGHLIGHT);
+					_TextureFunc.SetTexture(CurTreeIndicator, TTEXTURESET.TREEBUTTON.Indicator, TTEXTURESET.SQUARE_HIGHLIGHT);
 					CurTreeIndicator:Hide();
 					TreeButtonsBar.CurTreeIndicator = CurTreeIndicator;
 				--
@@ -3784,13 +3834,13 @@ MT.BuildEnv('UI');
 						ClassButton:SetSize(TUISTYLE.SideButtonSize, TUISTYLE.SideButtonSize);
 						local coord = CLASS_ICON_TCOORDS[class];
 						if coord then
-							_TextureFunc.SetNormalTexture(ClassButton, TTEXTURESET.CLASS, nil, { coord[1] + 1 / 256, coord[2] - 1 / 256, coord[3] + 1 / 256, coord[4] - 1 / 256, });
-							_TextureFunc.SetPushedTexture(ClassButton, TTEXTURESET.CLASS, nil, { coord[1] + 1 / 256, coord[2] - 1 / 256, coord[3] + 0 / 256, coord[4] - 2 / 256, }, TTEXTURESET.CONTROL_PUSHED_COLOR);
+							_TextureFunc.SetNormalTexture(ClassButton, TTEXTURESET.CLASS.Normal, nil, { coord[1] + 1 / 256, coord[2] - 1 / 256, coord[3] + 1 / 256, coord[4] - 1 / 256, });
+							_TextureFunc.SetPushedTexture(ClassButton, TTEXTURESET.CLASS.Pushed, nil, { coord[1] + 1 / 256, coord[2] - 1 / 256, coord[3] + 0 / 256, coord[4] - 2 / 256, }, TTEXTURESET.CONTROL.PUSHED_COLOR);
 						else
-							_TextureFunc.SetNormalTexture(ClassButton, TTEXTURESET.CLASS, nil, { 0.75, 1.00, 0.75, 1.00, });
-							_TextureFunc.SetPushedTexture(ClassButton, TTEXTURESET.CLASS, nil, { 0.75, 1.00, 0.75, 1.00, }, TTEXTURESET.CONTROL_PUSHED_COLOR);
+							_TextureFunc.SetNormalTexture(ClassButton, TTEXTURESET.CLASS.Normal, nil, { 0.75, 1.00, 0.75, 1.00, });
+							_TextureFunc.SetPushedTexture(ClassButton, TTEXTURESET.CLASS.Pushed, nil, { 0.75, 1.00, 0.75, 1.00, }, TTEXTURESET.CONTROL.PUSHED_COLOR);
 						end
-						_TextureFunc.SetHighlightTexture(ClassButton, TTEXTURESET.CLASS_HIGHLIGHT);
+						_TextureFunc.SetHighlightTexture(ClassButton, TTEXTURESET.CLASS.Highlight);
 						ClassButton:SetPoint("TOPLEFT", SideAnchorTop, "TOPLEFT", 0, -(TUISTYLE.SideButtonSize + TUISTYLE.SideButtonGap) * (index - 1));
 						ClassButton:Show();
 						ClassButton:RegisterForClicks("LeftButtonUp", "RightButtonUp");
@@ -3808,7 +3858,7 @@ MT.BuildEnv('UI');
 					local CurClassIndicator = Frame:CreateTexture(nil, "OVERLAY");
 					CurClassIndicator:SetSize(TUISTYLE.CurClassIndicatorSize, TUISTYLE.CurClassIndicatorSize);
 					CurClassIndicator:SetBlendMode("ADD");
-					_TextureFunc.SetTexture(CurClassIndicator, TTEXTURESET.CLASS_INDICATOR);
+					_TextureFunc.SetTexture(CurClassIndicator, TTEXTURESET.CLASS.Indicator);
 					CurClassIndicator:Show();
 					Frame.objects.CurClassIndicator = CurClassIndicator;
 				--
@@ -3821,9 +3871,9 @@ MT.BuildEnv('UI');
 				--	Control
 					local SpellListButton = CreateFrame('BUTTON', nil, SideAnchorBottom);
 					SpellListButton:SetSize(TUISTYLE.SideButtonSize, TUISTYLE.SideButtonSize);
-					_TextureFunc.SetNormalTexture(SpellListButton, TTEXTURESET.SPELLTAB, nil, nil, TTEXTURESET.CONTROL_NORMAL_COLOR);
-					_TextureFunc.SetPushedTexture(SpellListButton, TTEXTURESET.SPELLTAB, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
-					_TextureFunc.SetHighlightTexture(SpellListButton, TTEXTURESET.SPELLTAB, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
+					_TextureFunc.SetNormalTexture(SpellListButton, TTEXTURESET.SPELLTAB, nil, nil, TTEXTURESET.CONTROL.NORMAL_COLOR);
+					_TextureFunc.SetPushedTexture(SpellListButton, TTEXTURESET.SPELLTAB, nil, nil, TTEXTURESET.CONTROL.PUSHED_COLOR);
+					_TextureFunc.SetHighlightTexture(SpellListButton, TTEXTURESET.SPELLTAB, nil, nil, TTEXTURESET.CONTROL.PUSHED_COLOR);
 					SpellListButton:SetPoint("BOTTOMLEFT", SideAnchorBottom, "BOTTOMLEFT", 0, 0);
 					SpellListButton:Show();
 					SpellListButton:SetScript("OnClick", _SideFunc.SpellListButton_OnClick);
@@ -3835,11 +3885,10 @@ MT.BuildEnv('UI');
 
 					local ApplyTalentsButton = CreateFrame('BUTTON', nil, SideAnchorBottom);
 					ApplyTalentsButton:SetSize(TUISTYLE.SideButtonSize, TUISTYLE.SideButtonSize);
-					_TextureFunc.SetNormalTexture(ApplyTalentsButton, TTEXTURESET.APPLY, nil, nil, TTEXTURESET.CONTROL_NORMAL_COLOR);
-					_TextureFunc.SetPushedTexture(ApplyTalentsButton, TTEXTURESET.APPLY, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
-					_TextureFunc.SetHighlightTexture(ApplyTalentsButton, TTEXTURESET.APPLY, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
-					ApplyTalentsButton:SetDisabledTexture(TTEXTURESET.APPLY.Path);
-					ApplyTalentsButton:GetDisabledTexture():SetVertexColor(TTEXTURESET.CONTROL_DISABLED_COLOR[1], TTEXTURESET.CONTROL_DISABLED_COLOR[2], TTEXTURESET.CONTROL_DISABLED_COLOR[3], TTEXTURESET.CONTROL_DISABLED_COLOR[4]);
+					_TextureFunc.SetNormalTexture(ApplyTalentsButton, TTEXTURESET.APPLY, nil, nil, TTEXTURESET.CONTROL.NORMAL_COLOR);
+					_TextureFunc.SetPushedTexture(ApplyTalentsButton, TTEXTURESET.APPLY, nil, nil, TTEXTURESET.CONTROL.PUSHED_COLOR);
+					_TextureFunc.SetHighlightTexture(ApplyTalentsButton, TTEXTURESET.APPLY, nil, nil, TTEXTURESET.CONTROL.PUSHED_COLOR);
+					_TextureFunc.SetDisabledTexture(ApplyTalentsButton, TTEXTURESET.APPLY, nil, nil, TTEXTURESET.CONTROL.DISABLED_COLOR);
 					ApplyTalentsButton:SetPoint("BOTTOM", SpellListButton, "TOP", 0, TUISTYLE.SideButtonGap);
 					ApplyTalentsButton:Show();
 					ApplyTalentsButton:SetScript("OnClick", _SideFunc.ApplyTalentsButton_OnClick);
@@ -3856,9 +3905,9 @@ MT.BuildEnv('UI');
 
 					local SettingButton = CreateFrame('BUTTON', nil, SideAnchorBottom);
 					SettingButton:SetSize(TUISTYLE.SideButtonSize, TUISTYLE.SideButtonSize);
-					_TextureFunc.SetNormalTexture(SettingButton, TTEXTURESET.SETTING, nil, nil, TTEXTURESET.CONTROL_NORMAL_COLOR);
-					_TextureFunc.SetPushedTexture(SettingButton, TTEXTURESET.SETTING, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
-					_TextureFunc.SetHighlightTexture(SettingButton, TTEXTURESET.SETTING, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
+					_TextureFunc.SetNormalTexture(SettingButton, TTEXTURESET.SETTING, nil, nil, TTEXTURESET.CONTROL.NORMAL_COLOR);
+					_TextureFunc.SetPushedTexture(SettingButton, TTEXTURESET.SETTING, nil, nil, TTEXTURESET.CONTROL.PUSHED_COLOR);
+					_TextureFunc.SetHighlightTexture(SettingButton, TTEXTURESET.SETTING, nil, nil, TTEXTURESET.CONTROL.PUSHED_COLOR);
 					SettingButton:SetPoint("BOTTOM", ApplyTalentsButton, "TOP", 0, TUISTYLE.SideButtonGap);
 					SettingButton:Show();
 					SettingButton:RegisterForClicks("LeftButtonUp", "RightButtonUp");
@@ -3891,25 +3940,25 @@ MT.BuildEnv('UI');
 					Texture:SetAlpha(0.36);
 					Texture:SetVertexColor(1.0, 1.0, 1.0);
 					EditBox.Texture = Texture;
-					local EditBoxOKButton = CreateFrame('BUTTON', nil, EditBox);
-					EditBoxOKButton:SetSize(TUISTYLE.EditBoxYSize, TUISTYLE.EditBoxYSize);
-					_TextureFunc.SetNormalTexture(EditBoxOKButton, TTEXTURESET.EDIT_OK, nil, nil, TTEXTURESET.CONTROL_NORMAL_COLOR);
-					_TextureFunc.SetPushedTexture(EditBoxOKButton, TTEXTURESET.EDIT_OK, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
-					_TextureFunc.SetHighlightTexture(EditBoxOKButton, TTEXTURESET.EDIT_OK, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
-					EditBoxOKButton:SetPoint("LEFT", EditBox, "RIGHT", 0, 4);
-					EditBoxOKButton:Show();
-					EditBoxOKButton:SetScript("OnClick", _SideFunc.EditBoxOKButton_OnClick);
-					EditBoxOKButton:SetScript("OnEnter", MT.GeneralOnEnter);
-					EditBoxOKButton:SetScript("OnLeave", MT.GeneralOnLeave);
-					EditBoxOKButton.EditBox = EditBox;
-					EditBoxOKButton.information = l10n.EditBoxOKButton;
-					EditBox.OKButton = EditBoxOKButton;
+					local EditBoxOKayButton = CreateFrame('BUTTON', nil, EditBox);
+					EditBoxOKayButton:SetSize(TUISTYLE.EditBoxYSize, TUISTYLE.EditBoxYSize);
+					_TextureFunc.SetNormalTexture(EditBoxOKayButton, TTEXTURESET.EDIT_OKAY, nil, nil, TTEXTURESET.CONTROL.NORMAL_COLOR);
+					_TextureFunc.SetPushedTexture(EditBoxOKayButton, TTEXTURESET.EDIT_OKAY, nil, nil, TTEXTURESET.CONTROL.PUSHED_COLOR);
+					_TextureFunc.SetHighlightTexture(EditBoxOKayButton, TTEXTURESET.EDIT_OKAY, nil, nil, TTEXTURESET.CONTROL.PUSHED_COLOR);
+					EditBoxOKayButton:SetPoint("LEFT", EditBox, "RIGHT", 0, 4);
+					EditBoxOKayButton:Show();
+					EditBoxOKayButton:SetScript("OnClick", _SideFunc.EditBoxOKayButton_OnClick);
+					EditBoxOKayButton:SetScript("OnEnter", MT.GeneralOnEnter);
+					EditBoxOKayButton:SetScript("OnLeave", MT.GeneralOnLeave);
+					EditBoxOKayButton.EditBox = EditBox;
+					EditBoxOKayButton.information = l10n.EditBoxOKayButton;
+					EditBox.OKayButton = EditBoxOKayButton;
 
 					local ImportButton = CreateFrame('BUTTON', nil, SideAnchorBottom);
 					ImportButton:SetSize(TUISTYLE.SideButtonSize, TUISTYLE.SideButtonSize);
-					_TextureFunc.SetNormalTexture(ImportButton, TTEXTURESET.IMPORT, nil, nil, TTEXTURESET.CONTROL_NORMAL_COLOR);
-					_TextureFunc.SetPushedTexture(ImportButton, TTEXTURESET.IMPORT, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
-					_TextureFunc.SetHighlightTexture(ImportButton, TTEXTURESET.IMPORT, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
+					_TextureFunc.SetNormalTexture(ImportButton, TTEXTURESET.IMPORT, nil, nil, TTEXTURESET.CONTROL.NORMAL_COLOR);
+					_TextureFunc.SetPushedTexture(ImportButton, TTEXTURESET.IMPORT, nil, nil, TTEXTURESET.CONTROL.PUSHED_COLOR);
+					_TextureFunc.SetHighlightTexture(ImportButton, TTEXTURESET.IMPORT, nil, nil, TTEXTURESET.CONTROL.PUSHED_COLOR);
 					ImportButton:SetPoint("BOTTOM", SettingButton, "TOP", 0, TUISTYLE.SideButtonGap);
 					ImportButton:Show();
 					ImportButton:RegisterForClicks("LeftButtonUp", "RightButtonUp");
@@ -3922,9 +3971,9 @@ MT.BuildEnv('UI');
 
 					local ExportButton = CreateFrame('BUTTON', nil, SideAnchorBottom);
 					ExportButton:SetSize(TUISTYLE.SideButtonSize, TUISTYLE.SideButtonSize);
-					_TextureFunc.SetNormalTexture(ExportButton, TTEXTURESET.EXPORT, nil, nil, TTEXTURESET.CONTROL_NORMAL_COLOR);
-					_TextureFunc.SetPushedTexture(ExportButton, TTEXTURESET.EXPORT, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
-					_TextureFunc.SetHighlightTexture(ExportButton, TTEXTURESET.EXPORT, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
+					_TextureFunc.SetNormalTexture(ExportButton, TTEXTURESET.EXPORT, nil, nil, TTEXTURESET.CONTROL.NORMAL_COLOR);
+					_TextureFunc.SetPushedTexture(ExportButton, TTEXTURESET.EXPORT, nil, nil, TTEXTURESET.CONTROL.PUSHED_COLOR);
+					_TextureFunc.SetHighlightTexture(ExportButton, TTEXTURESET.EXPORT, nil, nil, TTEXTURESET.CONTROL.PUSHED_COLOR);
 					ExportButton:SetPoint("BOTTOM", ImportButton, "TOP", 0, TUISTYLE.SideButtonGap);
 					ExportButton:Show();
 					ExportButton:RegisterForClicks("LeftButtonUp", "RightButtonUp");
@@ -3937,9 +3986,9 @@ MT.BuildEnv('UI');
 
 					local SaveButton = CreateFrame('BUTTON', nil, SideAnchorBottom);
 					SaveButton:SetSize(TUISTYLE.SideButtonSize, TUISTYLE.SideButtonSize);
-					_TextureFunc.SetNormalTexture(SaveButton, TTEXTURESET.SAVE, nil, nil, TTEXTURESET.CONTROL_NORMAL_COLOR);
-					_TextureFunc.SetPushedTexture(SaveButton, TTEXTURESET.SAVE, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
-					_TextureFunc.SetHighlightTexture(SaveButton, TTEXTURESET.SAVE, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
+					_TextureFunc.SetNormalTexture(SaveButton, TTEXTURESET.SAVE, nil, nil, TTEXTURESET.CONTROL.NORMAL_COLOR);
+					_TextureFunc.SetPushedTexture(SaveButton, TTEXTURESET.SAVE, nil, nil, TTEXTURESET.CONTROL.PUSHED_COLOR);
+					_TextureFunc.SetHighlightTexture(SaveButton, TTEXTURESET.SAVE, nil, nil, TTEXTURESET.CONTROL.PUSHED_COLOR);
 					SaveButton:SetPoint("BOTTOM", ExportButton, "TOP", 0, TUISTYLE.SideButtonGap);
 					SaveButton:Show();
 					SaveButton:RegisterForClicks("LeftButtonUp", "RightButtonUp");
@@ -3952,9 +4001,9 @@ MT.BuildEnv('UI');
 
 					local SendButton = CreateFrame('BUTTON', nil, SideAnchorBottom);
 					SendButton:SetSize(TUISTYLE.SideButtonSize, TUISTYLE.SideButtonSize);
-					_TextureFunc.SetNormalTexture(SendButton, TTEXTURESET.SEND, nil, nil, TTEXTURESET.CONTROL_NORMAL_COLOR);
-					_TextureFunc.SetPushedTexture(SendButton, TTEXTURESET.SEND, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
-					_TextureFunc.SetHighlightTexture(SendButton, TTEXTURESET.SEND, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
+					_TextureFunc.SetNormalTexture(SendButton, TTEXTURESET.SEND, nil, nil, TTEXTURESET.CONTROL.NORMAL_COLOR);
+					_TextureFunc.SetPushedTexture(SendButton, TTEXTURESET.SEND, nil, nil, TTEXTURESET.CONTROL.PUSHED_COLOR);
+					_TextureFunc.SetHighlightTexture(SendButton, TTEXTURESET.SEND, nil, nil, TTEXTURESET.CONTROL.PUSHED_COLOR);
 					SendButton:SetPoint("BOTTOM", SaveButton, "TOP", 0, TUISTYLE.SideButtonGap);
 					SendButton:Show();
 					SendButton:RegisterForClicks("LeftButtonUp", "RightButtonUp");
@@ -3969,9 +4018,9 @@ MT.BuildEnv('UI');
 				--	Left
 					local EquipmentFrameButton = CreateFrame('BUTTON', nil, Frame);
 					EquipmentFrameButton:SetSize(TUISTYLE.SideButtonSize, TUISTYLE.SideButtonSize);
-					_TextureFunc.SetNormalTexture(EquipmentFrameButton, TTEXTURESET.EQUIPMENT);
-					_TextureFunc.SetPushedTexture(EquipmentFrameButton, TTEXTURESET.EQUIPMENT, nil, nil, TTEXTURESET.CONTROL_PUSHED_COLOR);
-					EquipmentFrameButton:SetHighlightTexture(TTEXTURESET.NORMAL_HIGHLIGHT);
+					_TextureFunc.SetNormalTexture(EquipmentFrameButton, TTEXTURESET.EQUIPMENTTOGGLE, nil, nil, TTEXTURESET.CONTROL.NORMAL_COLOR);
+					_TextureFunc.SetPushedTexture(EquipmentFrameButton, TTEXTURESET.EQUIPMENTTOGGLE, nil, nil, TTEXTURESET.CONTROL.PUSHED_COLOR);
+					_TextureFunc.SetHighlightTexture(EquipmentFrameButton, TTEXTURESET.EQUIPMENTTOGGLE, nil, nil, TTEXTURESET.CONTROL.PUSHED_COLOR);
 					EquipmentFrameButton:SetPoint("BOTTOMRIGHT", Frame, "BOTTOMLEFT", -2, 0);
 					EquipmentFrameButton:Hide();
 					EquipmentFrameButton:SetScript("OnClick", _SideFunc.EquipmentFrameButton_OnClick);
@@ -3990,14 +4039,14 @@ MT.BuildEnv('UI');
 			width = Frame:GetWidth();
 			height = Frame:GetHeight();
 			Frame:SetClampRectInsets(width * 0.75, -width * 0.75, -height * 0.75, height * 0.75);
-			--	BG 0,512;0,360
+			--	Background 0,512;0,360
 			local ratio = height / width;
 			if ratio > 360 / 512 then
-				Frame.BG:SetTexCoord(0.5 - 180 / 512 / ratio, 0.5 + 180 / 512 / ratio, 0.0, 360 / 512);
+				Frame.Background:SetTexCoord(0.5 - 180 / 512 / ratio, 0.5 + 180 / 512 / ratio, 0.0, 360 / 512);
 			elseif ratio < 360 / 512 then
-				Frame.BG:SetTexCoord(0.0, 1.0, 180 / 512 - ratio / 2, 180 / 512 + ratio / 2);
+				Frame.Background:SetTexCoord(0.0, 1.0, 180 / 512 - ratio / 2, 180 / 512 + ratio / 2);
 			else
-				Frame.BG:SetTexCoord(0.0, 1.0, 0.0, 360 / 512);
+				Frame.Background:SetTexCoord(0.0, 1.0, 0.0, 360 / 512);
 			end
 			MT.UI.TreeFrameUpdateSize(Frame, width, height);
 			for _, obj in next, Frame.objects do
@@ -4116,11 +4165,11 @@ MT.BuildEnv('UI');
 				Frame:SetSize(TUISTYLE.FrameXSizeDefault_Style2, TUISTYLE.FrameYSizeDefault_Style2);
 			end
 
-			local BG = Frame:CreateTexture(nil, "BORDER");
-			BG:SetAlpha(0.6);
-			BG:SetPoint("BOTTOMLEFT");
-			BG:SetPoint("TOPRIGHT");
-			Frame.BG = BG;
+			local Background = Frame:CreateTexture(nil, "BORDER");
+			Background:SetAlpha(0.6);
+			Background:SetPoint("BOTTOMLEFT");
+			Background:SetPoint("TOPRIGHT");
+			Frame.Background = Background;
 
 			Frame.TreeFrames = MT.UI.CreateTreeFrames(Frame);
 			Frame.SpellListFrame, Frame.SpellListFrameContainer = MT.UI.CreateSpellListFrame(Frame);

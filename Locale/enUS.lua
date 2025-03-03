@@ -102,7 +102,7 @@ l10n.Setting_ItemLevelInTip = "Average Item Level in Tip";
 
 --	Spell List
 l10n.SpellList_Search = "Search";
-l10n.SpellList_SearchOKey = "OK";
+l10n.SpellList_SearchOKay = "OK";
 l10n.SpellList_GTTSpellLevel = "Spell level: ";
 l10n.SpellList_GTTReqLevel = "Level: ";
 l10n.SpellList_GTTAvailable = "|cff00ff00Available|r";
@@ -119,6 +119,7 @@ l10n.RaidTool_LableGemSummary = "Gems";
 l10n.RaidTool_LableBossModInfo = "Version of DBM";
 l10n.RaidTool_EmptySlot = "|cffff0000Empty|r";
 l10n.RaidTool_MissingEnchant = "|cffff0000Miss enchant|r";
+l10n.GuildList = "Guild Roster List";
 
 --	Data
 l10n.CLASS = {

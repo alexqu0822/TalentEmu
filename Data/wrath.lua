@@ -1752,7 +1752,7 @@ DT.TalentSpecIcon = {
 	[411] = "Interface\\Icons\\Ability_Hunter_CombatExperience",
 };
 
-DT.ClassBG = {
+DT.ClassBackground = {
 	DEATHKNIGHT = {
 		"Interface\\TalentFrame\\bg-deathknight-blood",
 		"Interface\\TalentFrame\\bg-deathknight-frost",
@@ -1811,7 +1811,7 @@ DT.ClassBG = {
 	},
 };
 
-DT.SpecBG = {
+DT.SpecBackground = {
 		[283] = "Interface\\TalentFrame\\DruidBalance-TopLeft",
 		[281] = "Interface\\TalentFrame\\DruidFeralCombat-TopLeft",
 		[282] = "Interface\\TalentFrame\\DruidRestoration-TopLeft",

@@ -86,12 +86,12 @@ MT.BuildEnv('METHOD');
 			for name, cache in next, VT.TQueryCache do
 				local class = cache.class
 				local EquData = cache.EquData;
-				if class and EquData and not EquData.AverageItemLevel_OK then
+				if class and EquData and not EquData.AverageItemLevel_OKay then
 					local itemLevel1, itemLevel2, refresh_again = MT.CalcItemLevel(class, EquData);
 					EquData.AverageItemLevel = itemLevel1;
 					EquData.AverageItemLevel_ = itemLevel2;
 					if not refresh_again then
-						EquData.AverageItemLevel_OK = true;
+						EquData.AverageItemLevel_OKay = true;
 						MT.CALLBACK.OnInventoryDataRecv(name, false, false);
 						MT._TriggerCallback("CALLBACK_AVERAGE_ITEM_LEVEL_OK", name);
 					else
@@ -110,7 +110,7 @@ MT.BuildEnv('METHOD');
 		local _ColorList = DT.ItemLevelColor.list;
 		local _ColorLen = min(#_ColorStep, #_ColorList);
 		function MT.GetItemLevelColor(level)
-			if level <= _ColorStep[1] then
+			if not level or level <= _ColorStep[1] then
 				local c = _ColorList[1];
 				return c[1], c[2], c[3];
 			elseif level > _ColorStep[_ColorLen] then
@@ -133,7 +133,7 @@ MT.BuildEnv('METHOD');
 		end
 		function MT.ColorItemLevel(level)
 			local r, g, b = MT.GetItemLevelColor(level);
-			return format("|cff%.2x%.2x%.2x%.1f|r", r * 255, g * 255, b * 255, level);
+			return format("|cff%.2x%.2x%.2x%.1f|r", r * 255, g * 255, b * 255, level or 0);
 		end
 	-->		Enchant
 		--	old
@@ -2379,7 +2379,7 @@ MT.BuildEnv('METHOD');
 		if cache and cache.EquData then
 			cache.EquData.AverageItemLevel = nil;
 			cache.EquData.AverageItemLevel_ = nil;
-			cache.EquData.AverageItemLevel_OK = nil;
+			cache.EquData.AverageItemLevel_OKay = nil;
 			MT.ScheduleCalcItemLevel();
 		end
 	end
