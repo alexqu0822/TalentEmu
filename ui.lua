@@ -95,7 +95,7 @@ local DT = __private.DT;
 
 		EquipmentFrameXSize = CT.TOCVERSION < 20000 and 280 or 340,
 		EquipmentFrameXMaxSize = CT.TOCVERSION < 20000 and 640 or 765,
-		EquipmentNodeSize = 38,
+		EquipmentNodeSize = CT.TOCVERSION < 20000 and 36 or 38,
 		EquipmentNodeGap = 6,
 		EquipmentNodeXToBorder = 8,
 		EquipmentNodeYToBorder = 8,

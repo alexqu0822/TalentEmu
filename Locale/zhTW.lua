@@ -46,7 +46,7 @@ l10n.ExpandButton = "擴展";
 
 --	左
 l10n.EquipmentListButton = "裝備列表";
-l10n.EquipmentList_AverageItemLevel = "平均裝等: ";
+l10n.EquipmentList_AverageItemLevel = "裝等 ";
 l10n.EquipmentList_MissingEnchant = "|cffff0000缺少附魔|r";
 l10n.EquipmentList_Gem = {
 	Red = "|cffff0000紅|r",
