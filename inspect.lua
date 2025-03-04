@@ -24,7 +24,7 @@ MT.BuildEnv('INSPECT');
 -->		predef
 -->		INSPECT
 	local _InspectInfo = {  };
-	local UnitList = { 'target', 'focus', };
+	local UnitList = { 'target', 'focus', 'mouseover', };
 	for i = 1, 4 do UnitList[#UnitList + 1] = 'party' .. i; end
 	for i = 1, 40 do UnitList[#UnitList + 1] = 'raid' .. i; end
 	local function OnEvent(Driver, event, GUID)

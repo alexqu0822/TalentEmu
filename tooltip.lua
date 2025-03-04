@@ -15,6 +15,7 @@ local DT = __private.DT;
 	local tonumber = tonumber;
 	local UnitName = UnitName;
 	local UnitIsPlayer, UnitFactionGroup, UnitIsConnected = UnitIsPlayer, UnitFactionGroup, UnitIsConnected;
+	local CanInspect, CheckInteractDistance, NotifyInspect = CanInspect, CheckInteractDistance, NotifyInspect;
 	local GetSpellBookItemName = GetSpellBookItemName;
 	local GetActionInfo = GetActionInfo;
 	local GetMacroSpell = GetMacroSpell;
@@ -204,11 +205,17 @@ MT.BuildEnv('TOOLTIP');
 		if VT.SET.talents_in_tip then
 			PrevTipUnitName[Tip] = nil;
 			local _, unit = Tip:GetUnit();
-			if unit ~= nil and UnitIsPlayer(unit) and UnitIsConnected(unit) and UnitFactionGroup(unit) == CT.SELFFACTION then
+			if unit ~= nil and UnitIsPlayer(unit) and UnitIsConnected(unit) then
 				local name, realm = UnitName(unit);
-				local _, tal = MT.CacheEmulateComm(name, realm, false, true, false, false);
-				if not tal then
-					VT.TooltipUpdateFrame:Waiting(Tip, name, realm);
+				local _, tal, gly, inv = MT.CacheEmulateComm(name, realm, false, true, false, false);
+				if not tal or not inv then
+					if UnitFactionGroup(unit) == CT.SELFFACTION then
+						VT.TooltipUpdateFrame:Waiting(Tip, name, realm);
+					end
+					local InspectFrame = _G.InspectFrame;
+					if (InspectFrame == nil or not InspectFrame:IsShown()) and CanInspect(unit) and CheckInteractDistance(unit, 1) then
+						NotifyInspect(unit);
+					end
 				end
 			end
 		end
