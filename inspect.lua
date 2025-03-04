@@ -23,12 +23,17 @@ local DT = __private.DT;
 MT.BuildEnv('INSPECT');
 -->		predef
 -->		INSPECT
+	local Driver = CreateFrame('FRAME', nil, UIParent);
+
 	local _InspectInfo = {  };
 	local UnitList = { 'target', 'focus', 'mouseover', };
 	for i = 1, 4 do UnitList[#UnitList + 1] = 'party' .. i; end
 	for i = 1, 40 do UnitList[#UnitList + 1] = 'raid' .. i; end
-	local function OnEvent(Driver, event, GUID)
+	function Driver:OnEvent(event, GUID)
 		local info = _InspectInfo[GUID];
+		if info ~= nil and UnitGUID(info[1]) ~= GUID then
+			info = nil;
+		end
 		if info == nil then
 			for i = 1, #UnitList do
 				local unit = UnitList[i];
@@ -43,48 +48,54 @@ MT.BuildEnv('INSPECT');
 			end
 		end
 		if info ~= nil then
+			_InspectInfo[GUID] = info;
 			local unit = info[1];
-			if UnitGUID(unit) == GUID then
-				local name = info[2];
-				local class = info[3];
-				local level = info[4];
-				local code, numGroup, activeGroup, data1, data2 = VT.__dep.__emulib.EncodeInspectTalentDataV2(class, level);
-				if code ~= nil then
-					local cache = VT.TQueryCache[name];
-					if cache == nil then
-						cache = { TalData = {  }, GlyData = {  }, EquData = {  }, EngData = {  }, PakData = {  }, };
-						VT.TQueryCache[name] = cache;
-					end
-					cache.class = class;
-					cache.level = level;
-					local TalData = cache.TalData;
-					TalData[1] = data1;
-					TalData[2] = data2;
-					if data1 == nil then
-						MT.Debug("Inspect Data1 == nil", unit);
-					end
-					if data2 == nil and numGroup > 1 then
-						MT.Debug("Inspect Data2 == nil", unit);
-					end
-					TalData.num = numGroup;
-					TalData.active = activeGroup;
-					TalData.code = code;
-					TalData.Tick = MT.GetUnifiedTime();
-					local _, changed = VT.__dep.__emulib.GetEquipmentData(cache.EquData, unit);
-					if changed then
-						MT._TriggerCallback("CALLBACK_INVENTORY_DATA_CHANGED", name);
-					end
-					MT._TriggerCallback("CALLBACK_DATA_RECV", name);
-					MT._TriggerCallback("CALLBACK_TALENT_DATA_RECV", name, false);
-					MT._TriggerCallback("CALLBACK_INVENTORY_DATA_RECV", name, false);
+			local name = info[2];
+			local class = info[3];
+			local level = info[4];
+			local code, numGroup, activeGroup, data1, data2 = VT.__dep.__emulib.EncodeInspectTalentDataV2(class, level);
+			if code ~= nil then
+				local cache = VT.TQueryCache[name];
+				if cache == nil then
+					cache = { TalData = {  }, GlyData = {  }, EquData = {  }, EngData = {  }, PakData = {  }, };
+					VT.TQueryCache[name] = cache;
 				end
+				cache.class = class;
+				cache.level = level;
+				local TalData = cache.TalData;
+				TalData[1] = data1;
+				TalData[2] = data2;
+				if data1 == nil then
+					MT.Debug("Inspect Data1 == nil", unit);
+				end
+				if data2 == nil and numGroup > 1 then
+					MT.Debug("Inspect Data2 == nil", unit);
+				end
+				TalData.num = numGroup;
+				TalData.active = activeGroup;
+				TalData.code = code;
+				TalData.Tick = MT.GetUnifiedTime();
+				local _, changed = VT.__dep.__emulib.GetEquipmentData(cache.EquData, unit);
+				if changed then
+					MT._TriggerCallback("CALLBACK_INVENTORY_DATA_CHANGED", name);
+				end
+				MT._TriggerCallback("CALLBACK_DATA_RECV", name);
+				MT._TriggerCallback("CALLBACK_TALENT_DATA_RECV", name, false);
+				MT._TriggerCallback("CALLBACK_INVENTORY_DATA_RECV", name, false);
 			end
+			return Driver:ScheduleEvent(event, GUID);
 		end
 	end
+	function Driver.DelayCache()
+		return Driver:OnEvent("INSPECT_READY", Driver.GUID);
+	end
+	function Driver:ScheduleEvent(event, GUID)
+		self.GUID = GUID;
+		MT._TimerStart(Driver.DelayCache, 0.1, 1);
+	end
 	MT.RegisterOnInit('INSPECT', function(LoggedIn)
-		local Driver = CreateFrame('FRAME', nil, UIParent);
 		Driver:RegisterEvent("INSPECT_READY");
-		Driver:SetScript("OnEvent", OnEvent);
+		Driver:SetScript("OnEvent", Driver.OnEvent);
 		hooksecurefunc("NotifyInspect", function(unit)
 			local GUID = UnitGUID(unit);
 			if GUID ~= nil then

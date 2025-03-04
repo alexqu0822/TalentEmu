@@ -241,6 +241,28 @@ l10n.SLOT = {
 	[18] = "Ranged",
 	[19] = "Tabard",
 };
+l10n.SLOTSHORT = {
+	[0] = "Ammo",
+	[1] = "Head",
+	[2] = "Neck",
+	[3] = "Shoulder",
+	[4] = "Skirt",
+	[5] = "Chest",
+	[6] = "Waist",
+	[7] = "Leg",
+	[8] = "Feet",
+	[9] = "Wrist",
+	[10] = "Glove",
+	[11] = "Finger",
+	[12] = "Finger",
+	[13] = "Trinet",
+	[14] = "Trinet",
+	[15] = "Cloak",
+	[16] = "Main",
+	[17] = "Off",
+	[18] = "Ranged",
+	[19] = "Tabard",
+};
 
 --	Others
 l10n.Tooltip_CalaculatingItemLevel = "|cffffffffItemLevel|r|cff9f9f9f:|r |cff9f9f9fInspecting...|r";
