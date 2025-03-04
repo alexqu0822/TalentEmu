@@ -83,14 +83,18 @@ MT.BuildEnv('INSPECT');
 				MT._TriggerCallback("CALLBACK_TALENT_DATA_RECV", name, false);
 				MT._TriggerCallback("CALLBACK_INVENTORY_DATA_RECV", name, false);
 			end
-			return Driver:ScheduleEvent(event, GUID);
+			if not self.Scheduled then
+				return self:ScheduleEvent(event, GUID);
+			end
 		end
+		self.Scheduled = nil;
 	end
 	function Driver.DelayCache()
 		return Driver:OnEvent("INSPECT_READY", Driver.GUID);
 	end
 	function Driver:ScheduleEvent(event, GUID)
 		self.GUID = GUID;
+		self.Scheduled = true;
 		MT._TimerStart(Driver.DelayCache, 0.1, 1);
 	end
 	MT.RegisterOnInit('INSPECT', function(LoggedIn)
