@@ -213,7 +213,7 @@ MT.BuildEnv('TOOLTIP');
 						VT.TooltipUpdateFrame:Waiting(Tip, name, realm);
 					end
 					local InspectFrame = _G.InspectFrame;
-					if (InspectFrame == nil or not InspectFrame:IsShown()) and CanInspect(unit) and CheckInteractDistance(unit, 1) then
+					if (InspectFrame == nil or not InspectFrame:IsShown()) and CheckInteractDistance(unit, 1) and CanInspect(unit) then
 						NotifyInspect(unit);
 					end
 				end

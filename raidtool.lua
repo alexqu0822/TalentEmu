@@ -678,7 +678,7 @@ MT.BuildEnv('RAIDTOOL');
 							MT.SendQueryRequest(name, nil, false, false);
 							info[5] = Frame._Ticker + QUERY_DATA_VALIDATION;
 							local unit = info[4];
-							if unit and CheckInteractDistance(unit, 4) and CanInspect(unit) then
+							if unit and CheckInteractDistance(unit, 1) and CanInspect(unit) then
 								NotifyInspect(unit);
 							end
 						end
@@ -694,7 +694,7 @@ MT.BuildEnv('RAIDTOOL');
 							MT.SendQueryRequest(name, nil, false, false);
 							info[5] = Frame._Ticker + QUERY_DATA_VALIDATION;
 							local unit = info[4];
-							if unit and CheckInteractDistance(unit, 4) and CanInspect(unit) then
+							if unit and CheckInteractDistance(unit, 1) and CanInspect(unit) then
 								NotifyInspect(unit);
 							end
 						end
