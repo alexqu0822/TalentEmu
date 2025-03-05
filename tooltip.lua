@@ -193,11 +193,7 @@ MT.BuildEnv('TOOLTIP');
 			local _, unit = Tip:GetUnit();
 			if unit ~= nil and UnitIsPlayer(unit) and UnitIsConnected(unit) and UnitFactionGroup(unit) == CT.SELFFACTION then
 				local name, realm = UnitName(unit);
-				if VT.SET.itemlevel_in_tip then
-					MT.SendQueryRequest(name, realm, false, false, true, true, true);
-				else
-					MT.SendQueryRequest(name, realm, false, false, true, false, false);
-				end
+				MT.SendQueryRequest(name, realm, false, false, true, VT.SET.itemlevel_in_tip, VT.SET.itemlevel_in_tip);
 			end
 		end
 	end
@@ -207,7 +203,7 @@ MT.BuildEnv('TOOLTIP');
 			local _, unit = Tip:GetUnit();
 			if unit ~= nil and UnitIsPlayer(unit) and UnitIsConnected(unit) then
 				local name, realm = UnitName(unit);
-				local _, tal, gly, inv = MT.CacheEmulateComm(name, realm, false, true, false, false);
+				local _, tal, gly, inv = MT.CacheEmulateComm(name, realm, false, true, VT.SET.itemlevel_in_tip, VT.SET.itemlevel_in_tip);
 				if not tal or not inv then
 					if UnitFactionGroup(unit) == CT.SELFFACTION then
 						VT.TooltipUpdateFrame:Waiting(Tip, name, realm);
@@ -270,11 +266,7 @@ MT.BuildEnv('TOOLTIP');
 				if unit ~= nil and UnitIsPlayer(unit) and UnitIsConnected(unit) and UnitFactionGroup(unit) == CT.SELFFACTION then
 					local name, realm = UnitName(unit);
 					if name == UpdateFrame.name and realm == UpdateFrame.realm then
-						if VT.SET.itemlevel_in_tip then
-							MT.SendQueryRequest(name, realm, false, false, true, true, true);
-						else
-							MT.SendQueryRequest(name, realm, false, false, true, false, false);
-						end
+						MT.SendQueryRequest(name, realm, false, false, true, VT.SET.itemlevel_in_tip, VT.SET.itemlevel_in_tip);
 					end
 				end
 			end

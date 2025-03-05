@@ -54,7 +54,7 @@ MT.BuildEnv('INSPECT');
 			local class = info[3];
 			local level = info[4];
 			local code, numGroup, activeGroup, data1, data2 = VT.__dep.__emulib.EncodeInspectTalentDataV2(class, level);
-			if code ~= nil then
+			if data1 ~= nil and (numGroup == 1 or data2 ~= nil) and code ~= nil then
 				local cache = VT.TQueryCache[name];
 				if cache == nil then
 					cache = { TalData = {  }, GlyData = {  }, EquData = {  }, EngData = {  }, PakData = {  }, };
@@ -65,12 +65,6 @@ MT.BuildEnv('INSPECT');
 				local TalData = cache.TalData;
 				TalData[1] = data1;
 				TalData[2] = data2;
-				if data1 == nil then
-					MT.Debug("Inspect Data1 == nil", unit);
-				end
-				if data2 == nil and numGroup > 1 then
-					MT.Debug("Inspect Data2 == nil", unit);
-				end
 				TalData.num = numGroup;
 				TalData.active = activeGroup;
 				TalData.code = code;
