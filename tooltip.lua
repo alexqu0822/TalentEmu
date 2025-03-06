@@ -12,6 +12,7 @@ local DT = __private.DT;
 	local hooksecurefunc = hooksecurefunc;
 	local strmatch, format = string.match, string.format;
 	local max = math.max;
+	local concat = table.concat;
 	local tonumber = tonumber;
 	local UnitName = UnitName;
 	local UnitIsPlayer, UnitFactionGroup, UnitIsConnected = UnitIsPlayer, UnitFactionGroup, UnitIsConnected;
@@ -34,53 +35,15 @@ MT.BuildEnv('TOOLTIP');
 -->		TOOLTIP
 	--
 	local PrevTipUnitName = {  };
-	local function TipAddTalentInfo(Tip, _name)
-		local cache = VT.TQueryCache[_name];
-		if cache ~= nil then
-			local TalData = cache.TalData;
-			local class = cache.class;
-			if TalData ~= nil and TalData.num ~= nil and class ~= nil then
-				if TalData.num > 0 then
-					if VT.SET.talents_in_tip_icon then
-						Tip:AddLine(" ");
-					end
-					for group = 1, TalData.num do
-						local line = group == TalData.active and "|cff00ff00>|r" or "|cff000000>|r";
-						local stats = MT.CountTreePoints(TalData[group], class);
-						local SpecList = DT.ClassSpec[class];
-						local cap = -1;
-						if stats[1] ~= stats[2] or stats[1] ~= stats[3] then
-							cap = max(stats[1], stats[2], stats[3]);
-						end
-						for TreeIndex = 1, 3 do
-							local SpecID = SpecList[TreeIndex];
-							if cap == stats[TreeIndex] then
-								if VT.SET.talents_in_tip_icon then
-									line = line .. "  |T" .. (DT.TalentSpecIcon[SpecID] or CT.TEXTUREUNK) .. format(":16|t |cffff7f1f%2d|r", stats[TreeIndex]);
-								else
-									line = line .. "  |cffff7f1f" .. l10n.SPEC[SpecID] .. format(":%2d|r", stats[TreeIndex]);
-								end
-							else
-								if VT.SET.talents_in_tip_icon then
-									line = line .. "  |T" .. (DT.TalentSpecIcon[SpecID] or CT.TEXTUREUNK) .. format(":16|t |cffffffff%2d|r", stats[TreeIndex]);
-								else
-									line = line .. "  |cffbfbfff" .. l10n.SPEC[SpecID] .. format(":%2d|r", stats[TreeIndex]);
-								end
-							end
-						end
-						line = line .. (group == TalData.active and "  |cff00ff00<|r" or "  |cff000000<|r");
-						Tip:AddLine(line);
-					end
-				end
-				if VT.__supreme and cache.PakData[1] ~= nil then
-					local _, info = VT.__dep.__emulib.DecodeAddOnPackData(cache.PakData[1]);
-					if info ~= nil then
-						Tip:AddLine("|cffffffffPack|r: " .. info, 0.75, 1.0, 0.25);
-					end
-				end
-				Tip:Show();
-			end
-		end
+	--
+	local NumReservedLines = 5;
+	local ReservedLinePlaceHolder = {  };
+	local ReservedLine = {  };
+	for i = 1, NumReservedLines do
+		local ReservedText = "__[[Reserved Line Place Holder]]__ = " .. i;
+		ReservedLinePlaceHolder[i] = ReservedText;
+		ReservedLinePlaceHolder[ReservedText] = i;
+		ReservedLine[i] = {  };
 	end
 	local function BuildTipTextList(Tip)
 		local name = Tip:GetName();
@@ -110,42 +73,93 @@ MT.BuildEnv('TOOLTIP');
 			return List;
 		end,
 	});
-	local PrevTipItemLine = {  };
-	local PrevTipItemLineText = {  };
-	local function TipAddItemInfo(Tip, _name)
+	local function AddReservedLines(Tip)
+		for i = 1, NumReservedLines do
+			Tip:AddLine(ReservedLinePlaceHolder[i]);
+			ReservedLine[i][Tip] = nil;
+		end
+		-- Tip:Show();
+		local List = TipTextLeft[Tip];
+		for i = 1, Tip:NumLines() do
+			local Line = List[i];
+			if Line then
+				local Text = Line:GetText();
+				local index = ReservedLinePlaceHolder[Text];
+				if index then
+					ReservedLine[index][Tip] = Line;
+				end
+			end
+		end
+		for i = 1, NumReservedLines do
+			ReservedLine[i][Tip]:SetText(nil);
+		end
+		-- Tip:Show();
+	end
+	local function TipAddTalentInfo(Tip, _name)
 		local cache = VT.TQueryCache[_name];
 		if cache ~= nil then
-			local EquData = cache.EquData;
-			if EquData ~= nil then
-				local Line = PrevTipItemLine[Tip];
-				if Line and Line:IsVisible() and Line:GetText() == PrevTipItemLineText[Tip] then
-					if EquData.AverageItemLevel_OKay then
-						local Text = format(l10n.Tooltip_ItemLevel, MT.ColorItemLevel(EquData.AverageItemLevel));
-						Line:SetText(Text);
-						PrevTipItemLineText[Tip] = Text;
+			local TalData = cache.TalData;
+			local class = cache.class;
+			if TalData ~= nil and TalData.num ~= nil and class ~= nil then
+				if TalData.num > 0 then
+					if VT.SET.talents_in_tip_icon then
+						ReservedLine[1][Tip]:SetText(" ");
 					end
-				else
-					local List = TipTextLeft[Tip];
-					local Text = l10n.Tooltip_CalaculatingItemLevel;
-					if EquData.AverageItemLevel_OKay then
-						Text = format(l10n.Tooltip_ItemLevel, MT.ColorItemLevel(EquData.AverageItemLevel));
-					end
-					Tip:AddLine(Text);
-					for i = 1, Tip:NumLines() do
-						local Line = List[i];
-						if Line and Line:IsVisible() and Line:GetText() == Text then
-							PrevTipItemLine[Tip] = Line;
-							PrevTipItemLineText[Tip] = Text;
-							break;
+					for group = 1, TalData.num do
+						local line = group == TalData.active and "|cff00ff00>|r" or "|cff000000>|r";
+						local stats = MT.CountTreePoints(TalData[group], class);
+						local SpecList = DT.ClassSpec[class];
+						local cap = -1;
+						if stats[1] ~= stats[2] or stats[1] ~= stats[3] then
+							cap = max(stats[1], stats[2], stats[3]);
 						end
+						for TreeIndex = 1, 3 do
+							local SpecID = SpecList[TreeIndex];
+							if cap == stats[TreeIndex] then
+								if VT.SET.talents_in_tip_icon then
+									line = line .. "  |T" .. (DT.TalentSpecIcon[SpecID] or CT.TEXTUREUNK) .. format(":16|t |cffff7f1f%2d|r", stats[TreeIndex]);
+								else
+									line = line .. "  |cffff7f1f" .. l10n.SPEC[SpecID] .. format(":%2d|r", stats[TreeIndex]);
+								end
+							else
+								if VT.SET.talents_in_tip_icon then
+									line = line .. "  |T" .. (DT.TalentSpecIcon[SpecID] or CT.TEXTUREUNK) .. format(":16|t |cffffffff%2d|r", stats[TreeIndex]);
+								else
+									line = line .. "  |cffbfbfff" .. l10n.SPEC[SpecID] .. format(":%2d|r", stats[TreeIndex]);
+								end
+							end
+						end
+						line = line .. (group == TalData.active and "  |cff00ff00<|r" or "  |cff000000<|r");
+						ReservedLine[group + 1][Tip]:SetText(line);
+					end
+				end
+				if VT.__supreme and cache.PakData[1] ~= nil then
+					local _, info = VT.__dep.__emulib.DecodeAddOnPackData(cache.PakData[1]);
+					if info ~= nil then
+						local line = "|cffffffffPack|r: " .. info;
+						ReservedLine[5][Tip]:SetText(line);
 					end
 				end
 				Tip:Show();
 			end
 		end
 	end
+	local function TipAddItemInfo(Tip, _name)
+		local cache = VT.TQueryCache[_name];
+		if cache ~= nil then
+			local EquData = cache.EquData;
+			if EquData ~= nil then
+				local Line = ReservedLine[4][Tip];
+				if EquData.AverageItemLevel_OKay then
+					local Text = format(l10n.Tooltip_ItemLevel, MT.ColorItemLevel(EquData.AverageItemLevel));
+					Line:SetText(Text);
+					Tip:Show();
+				end
+			end
+		end
+	end
 	local function TipAddInfo(Tip, _name)
-		if Tip:IsVisible() then
+		-- if Tip:IsVisible() then
 			if PrevTipUnitName[Tip] == nil then
 				local _, unit = Tip:GetUnit();
 				if unit ~= nil then
@@ -164,7 +178,7 @@ MT.BuildEnv('TOOLTIP');
 						return true;
 					end
 				end
-			elseif VT.SET.itemlevel_in_tip and PrevTipItemLine[Tip] ~= nil then
+			elseif VT.SET.itemlevel_in_tip then
 				local _, unit = Tip:GetUnit();
 				if unit ~= nil then
 					local name, realm = UnitName(unit);
@@ -179,7 +193,7 @@ MT.BuildEnv('TOOLTIP');
 					end
 				end
 			end
-		end
+		-- end
 	end
 	local function OnTalentDataRecv(name)
 		if VT.SET.talents_in_tip or VT.SET.itemlevel_in_tip then
@@ -192,8 +206,16 @@ MT.BuildEnv('TOOLTIP');
 			PrevTipUnitName[Tip] = nil;
 			local _, unit = Tip:GetUnit();
 			if unit ~= nil and UnitIsPlayer(unit) and UnitIsConnected(unit) and UnitFactionGroup(unit) == CT.SELFFACTION then
+				AddReservedLines(Tip);
+				--
 				local name, realm = UnitName(unit);
-				MT.SendQueryRequest(name, realm, false, false, true, VT.SET.itemlevel_in_tip, VT.SET.itemlevel_in_tip);
+				if UnitFactionGroup(unit) == CT.SELFFACTION then
+					MT.SendQueryRequest(name, realm, false, false, true, VT.SET.itemlevel_in_tip, VT.SET.itemlevel_in_tip);
+				end
+				local InspectFrame = _G.InspectFrame;
+				if (InspectFrame == nil or not InspectFrame:IsShown()) and CheckInteractDistance(unit, 1) and CanInspect(unit) then
+					NotifyInspect(unit);
+				end
 			end
 		end
 	end
@@ -202,6 +224,8 @@ MT.BuildEnv('TOOLTIP');
 			PrevTipUnitName[Tip] = nil;
 			local _, unit = Tip:GetUnit();
 			if unit ~= nil and UnitIsPlayer(unit) and UnitIsConnected(unit) then
+				AddReservedLines(Tip);
+				--
 				local name, realm = UnitName(unit);
 				local _, tal, gly, inv = MT.CacheEmulateComm(name, realm, false, true, VT.SET.itemlevel_in_tip, VT.SET.itemlevel_in_tip);
 				if not tal or not inv then
