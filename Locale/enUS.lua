@@ -69,6 +69,8 @@ l10n.EquipmentList_MissGem = {
 	Meta = "|cff7f7f7fM|r",
 	Prismatic = "|cff7f7f7fP|r",
 };
+l10n.MAJOR_GLYPH = MAJOR_GLYPH;
+l10n.MINOR_GLYPH = MINOR_GLYPH;
 
 --	Right
 l10n.ClassButton = "\n|cff00ff00LeftClick|r Toggle class\n|cff00ff00RightClick|r Load saved talents\n|cff00ff00Shift and LeftClick in Menu|r Delete saved talent";

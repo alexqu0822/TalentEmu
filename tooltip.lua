@@ -23,7 +23,6 @@ local DT = __private.DT;
 	local _G = _G;
 	local GameTooltip = GameTooltip;
 	local ItemRefTooltip = ItemRefTooltip;
-	local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
 
 -->
 	local l10n = CT.l10n;
@@ -34,6 +33,7 @@ MT.BuildEnv('TOOLTIP');
 -->		predef
 -->		TOOLTIP
 	--
+	local TooltipUpdateFrame = {  };
 	local PrevTipUnitName = {  };
 	--
 	local NumReservedLines = 5;
@@ -45,8 +45,8 @@ MT.BuildEnv('TOOLTIP');
 		ReservedLinePlaceHolder[ReservedText] = i;
 		ReservedLine[i] = {  };
 	end
-	local function BuildTipTextList(Tip)
-		local name = Tip:GetName();
+	local function BuildTipTextList(Tooltip)
+		local name = Tooltip:GetName();
 		if name then
 			return setmetatable(
 				{
@@ -67,35 +67,35 @@ MT.BuildEnv('TOOLTIP');
 		end
 	end
 	local TipTextLeft = setmetatable({  }, {
-		__index = function(tbl, Tip)
-			local List = BuildTipTextList(Tip);
-			tbl[Tip] = List;
+		__index = function(tbl, Tooltip)
+			local List = BuildTipTextList(Tooltip);
+			tbl[Tooltip] = List;
 			return List;
 		end,
 	});
-	local function AddReservedLines(Tip)
+	local function AddReservedLines(Tooltip)
 		for i = 1, NumReservedLines do
-			Tip:AddLine(ReservedLinePlaceHolder[i]);
-			ReservedLine[i][Tip] = nil;
+			Tooltip:AddLine(ReservedLinePlaceHolder[i]);
+			ReservedLine[i][Tooltip] = nil;
 		end
-		-- Tip:Show();
-		local List = TipTextLeft[Tip];
-		for i = 1, Tip:NumLines() do
+		-- Tooltip:Show();
+		local List = TipTextLeft[Tooltip];
+		for i = 1, Tooltip:NumLines() do
 			local Line = List[i];
 			if Line then
 				local Text = Line:GetText();
 				local index = ReservedLinePlaceHolder[Text];
 				if index then
-					ReservedLine[index][Tip] = Line;
+					ReservedLine[index][Tooltip] = Line;
 				end
 			end
 		end
 		for i = 1, NumReservedLines do
-			ReservedLine[i][Tip]:SetText(nil);
+			ReservedLine[i][Tooltip]:SetText(nil);
 		end
-		-- Tip:Show();
+		-- Tooltip:Show();
 	end
-	local function TipAddTalentInfo(Tip, _name)
+	local function TipAddTalentInfo(Tooltip, _name)
 		local cache = VT.TQueryCache[_name];
 		if cache ~= nil then
 			local TalData = cache.TalData;
@@ -103,7 +103,7 @@ MT.BuildEnv('TOOLTIP');
 			if TalData ~= nil and TalData.num ~= nil and class ~= nil then
 				if TalData.num > 0 then
 					if VT.SET.talents_in_tip_icon then
-						ReservedLine[1][Tip]:SetText(" ");
+						ReservedLine[1][Tooltip]:SetText(" ");
 					end
 					for group = 1, TalData.num do
 						local line = group == TalData.active and "|cff00ff00>|r" or "|cff000000>|r";
@@ -130,70 +130,52 @@ MT.BuildEnv('TOOLTIP');
 							end
 						end
 						line = line .. (group == TalData.active and "  |cff00ff00<|r" or "  |cff000000<|r");
-						ReservedLine[group + 1][Tip]:SetText(line);
+						ReservedLine[group + 1][Tooltip]:SetText(line);
 					end
 				end
 				if VT.__supreme and cache.PakData[1] ~= nil then
 					local _, info = VT.__dep.__emulib.DecodeAddOnPackData(cache.PakData[1]);
 					if info ~= nil then
 						local line = "|cffffffffPack|r: " .. info;
-						ReservedLine[5][Tip]:SetText(line);
+						ReservedLine[5][Tooltip]:SetText(line);
 					end
 				end
-				Tip:Show();
+				Tooltip:Show();
 			end
 		end
 	end
-	local function TipAddItemInfo(Tip, _name)
+	local function TipAddItemInfo(Tooltip, _name)
 		local cache = VT.TQueryCache[_name];
 		if cache ~= nil then
 			local EquData = cache.EquData;
 			if EquData ~= nil then
-				local Line = ReservedLine[4][Tip];
+				local Line = ReservedLine[4][Tooltip];
 				if EquData.AverageItemLevel_OKay then
 					local Text = format(l10n.Tooltip_ItemLevel, MT.ColorItemLevel(EquData.AverageItemLevel));
 					Line:SetText(Text);
-					Tip:Show();
+					Tooltip:Show();
 				end
 			end
 		end
 	end
-	local function TipAddInfo(Tip, _name)
-		-- if Tip:IsVisible() then
-			if PrevTipUnitName[Tip] == nil then
-				local _, unit = Tip:GetUnit();
-				if unit ~= nil then
-					local name, realm = UnitName(unit);
-					if realm ~= nil and realm ~= "" and realm ~= CT.SELFREALM then
-						name = name .. "-" .. realm;
-					end
-					if name == _name then
-						if VT.SET.talents_in_tip then
-							TipAddTalentInfo(Tip, _name);
-						end
-						if VT.SET.itemlevel_in_tip then
-							TipAddItemInfo(Tip, _name);
-						end
-						PrevTipUnitName[Tip] = _name;
-						return true;
-					end
-				end
-			elseif VT.SET.itemlevel_in_tip then
-				local _, unit = Tip:GetUnit();
-				if unit ~= nil then
-					local name, realm = UnitName(unit);
-					if realm ~= nil and realm ~= "" and realm ~= CT.SELFREALM then
-						name = name .. "-" .. realm;
-					end
-					if name == _name then
-						if VT.SET.itemlevel_in_tip then
-							TipAddItemInfo(Tip, _name);
-						end
-						return true;
-					end
-				end
+	local function TipAddInfo(Tooltip, _name)
+		local _, unit = Tooltip:GetUnit();
+		if unit ~= nil then
+			local name, realm = UnitName(unit);
+			if realm ~= nil and realm ~= "" and realm ~= CT.SELFREALM then
+				name = name .. "-" .. realm;
 			end
-		-- end
+			if name == _name then
+				PrevTipUnitName[Tooltip] = name;
+				if VT.SET.talents_in_tip then
+					TipAddTalentInfo(Tooltip, _name);
+				end
+				if VT.SET.itemlevel_in_tip then
+					TipAddItemInfo(Tooltip, _name);
+				end
+				return true;
+			end
+		end
 	end
 	local function OnTalentDataRecv(name)
 		if VT.SET.talents_in_tip or VT.SET.itemlevel_in_tip then
@@ -201,37 +183,45 @@ MT.BuildEnv('TOOLTIP');
 			TipAddInfo(ItemRefTooltip, name);
 		end
 	end
-	local function OnTooltipSetUnitImmdiate(Tip)
-		if VT.SET.talents_in_tip then
-			PrevTipUnitName[Tip] = nil;
-			local _, unit = Tip:GetUnit();
+	local function OnTooltipSetUnitImmdiate(Tooltip)
+		if VT.SET.talents_in_tip or VT.SET.itemlevel_in_tip then
+			PrevTipUnitName[Tooltip] = nil;
+			local _, unit = Tooltip:GetUnit();
 			if unit ~= nil and UnitIsPlayer(unit) and UnitIsConnected(unit) and UnitFactionGroup(unit) == CT.SELFFACTION then
-				AddReservedLines(Tip);
+				AddReservedLines(Tooltip);
 				--
 				local name, realm = UnitName(unit);
-				if UnitFactionGroup(unit) == CT.SELFFACTION then
-					MT.SendQueryRequest(name, realm, false, false, true, VT.SET.itemlevel_in_tip, VT.SET.itemlevel_in_tip);
+				if realm ~= nil and realm ~= "" and realm ~= CT.SELFREALM then
+					name = name .. "-" .. realm;
 				end
-				local InspectFrame = _G.InspectFrame;
-				if (InspectFrame == nil or not InspectFrame:IsShown()) and CheckInteractDistance(unit, 1) and CanInspect(unit) then
-					NotifyInspect(unit);
+				local _, tal, gly, inv = MT.CacheEmulateComm(name, realm, false, VT.SET.talents_in_tip, VT.SET.itemlevel_in_tip, VT.SET.itemlevel_in_tip);
+				if not tal or not inv then
+					TooltipUpdateFrame[Tooltip]:Waiting(name, realm);
+					if UnitFactionGroup(unit) == CT.SELFFACTION then
+						MT.SendQueryRequest(name, realm, false, false, not tal, not inv, not inv and not gly);
+					end
+					local InspectFrame = _G.InspectFrame;
+					if (InspectFrame == nil or not InspectFrame:IsShown()) and CheckInteractDistance(unit, 1) and CanInspect(unit) then
+						NotifyInspect(unit);
+					end
 				end
 			end
 		end
 	end
-	local function OnTooltipSetUnit(Tip)
-		if VT.SET.talents_in_tip then
-			PrevTipUnitName[Tip] = nil;
-			local _, unit = Tip:GetUnit();
+	local function OnTooltipSetUnit(Tooltip)
+		if VT.SET.talents_in_tip or VT.SET.itemlevel_in_tip then
+			PrevTipUnitName[Tooltip] = nil;
+			local _, unit = Tooltip:GetUnit();
 			if unit ~= nil and UnitIsPlayer(unit) and UnitIsConnected(unit) then
-				AddReservedLines(Tip);
+				AddReservedLines(Tooltip);
 				--
 				local name, realm = UnitName(unit);
-				local _, tal, gly, inv = MT.CacheEmulateComm(name, realm, false, true, VT.SET.itemlevel_in_tip, VT.SET.itemlevel_in_tip);
+				if realm ~= nil and realm ~= "" and realm ~= CT.SELFREALM then
+					name = name .. "-" .. realm;
+				end
+				local _, tal, gly, inv = MT.CacheEmulateComm(name, realm, false, VT.SET.talents_in_tip, VT.SET.itemlevel_in_tip, VT.SET.itemlevel_in_tip);
 				if not tal or not inv then
-					if UnitFactionGroup(unit) == CT.SELFFACTION then
-						VT.TooltipUpdateFrame:Waiting(Tip, name, realm);
-					end
+					TooltipUpdateFrame[Tooltip]:Waiting(name, realm);
 					local InspectFrame = _G.InspectFrame;
 					if (InspectFrame == nil or not InspectFrame:IsShown()) and CheckInteractDistance(unit, 1) and CanInspect(unit) then
 						NotifyInspect(unit);
@@ -244,7 +234,7 @@ MT.BuildEnv('TOOLTIP');
 	local function TipAddSpellInfo(self, SpellID)
 		local class, TreeIndex, SpecID, TalentSeq, row, col, rank = MT.QueryTalentInfoBySpellID(SpellID);
 		if class ~= nil then
-			local color = RAID_CLASS_COLORS[class];
+			local color = CT.RAID_CLASS_COLORS[class];
 			self:AddDoubleLine(l10n.TALENT, l10n.CLASS[class] .. "-" .. l10n.SPEC[SpecID] .. " R" .. (row + 1) .. "-C" .. (col + 1) .. "-L" .. rank, 1.0, 1.0, 1.0, color.r, color.g, color.b);
 			self:Show();
 		end
@@ -282,56 +272,74 @@ MT.BuildEnv('TOOLTIP');
 	end
 
 	local function UpdateFrameOnUpdate(UpdateFrame, elasped)
-		if UpdateFrame.Tip:IsVisible() then
+		if UpdateFrame.Tooltip:IsVisible() then
 			UpdateFrame.wait = UpdateFrame.wait + elasped;
 			if UpdateFrame.wait >= CT.TOOLTIP_WAIT_BEFORE_QUERY_UNIT then
-				UpdateFrame:Hide();
-				local _, unit = UpdateFrame.Tip:GetUnit();
-				if unit ~= nil and UnitIsPlayer(unit) and UnitIsConnected(unit) and UnitFactionGroup(unit) == CT.SELFFACTION then
+				if PrevTipUnitName[UpdateFrame.Tooltip] ~= nil then
+					UpdateFrame:Hide();
+				end
+				UpdateFrame.wait = 0.0;
+				local _, unit = UpdateFrame.Tooltip:GetUnit();
+				if unit ~= nil and UnitIsPlayer(unit) and UnitIsConnected(unit) then
 					local name, realm = UnitName(unit);
-					if name == UpdateFrame.name and realm == UpdateFrame.realm then
-						MT.SendQueryRequest(name, realm, false, false, true, VT.SET.itemlevel_in_tip, VT.SET.itemlevel_in_tip);
+					if realm ~= nil and realm ~= "" and realm ~= CT.SELFREALM then
+						name = name .. "-" .. realm;
 					end
+					if name == UpdateFrame.name and realm == UpdateFrame.realm then
+						local _, tal, gly, inv = MT.CacheEmulateComm(name, realm, false, VT.SET.talents_in_tip, VT.SET.itemlevel_in_tip, VT.SET.itemlevel_in_tip);
+						if not tal or not inv then
+							if UnitFactionGroup(unit) == CT.SELFFACTION then
+								MT.SendQueryRequest(name, realm, false, false, not tal, not inv, not inv and not gly);
+							end
+							local InspectFrame = _G.InspectFrame;
+							if (InspectFrame == nil or not InspectFrame:IsShown()) and CheckInteractDistance(unit, 1) and CanInspect(unit) then
+								NotifyInspect(unit);
+							end
+						else
+							UpdateFrame:Hide();
+						end
+					end
+				else
+					UpdateFrame:Hide();
 				end
 			end
 		else
 			UpdateFrame:Hide();
 		end
 	end
-	local function UpdateFrameWaiting(UpdateFrame, Tip, name, realm)
-		UpdateFrame.Tip = Tip;
+	local function UpdateFrameWaiting(UpdateFrame, name, realm)
 		UpdateFrame.name = name;
 		UpdateFrame.realm = realm;
 		UpdateFrame.wait = 0;
 		UpdateFrame:Show();
 	end
 
+	local function HookTooltip(Tooltip, OnTooltipSetUnit)
+		--	hooksecurefunc(Tooltip, "SetUnit", OnTooltipSetUnit);
+		Tooltip:HookScript("OnTooltipSetUnit", OnTooltipSetUnit);
+		--
+		hooksecurefunc(Tooltip, "SetHyperlink", HookSetHyperlink);
+		hooksecurefunc(Tooltip, "SetSpellBookItem", HookSetSpellBookItem);
+		hooksecurefunc(Tooltip, "SetSpellByID", HookSetSpellByID);
+		hooksecurefunc(Tooltip, "SetAction", HookSetAction);
+
+		UpdateFrame = CreateFrame('FRAME');
+		UpdateFrame:Hide();
+		UpdateFrame:SetSize(1, 1);
+		UpdateFrame:SetAlpha(0);
+		UpdateFrame:EnableMouse(false);
+		UpdateFrame:SetPoint("BOTTOM");
+		UpdateFrame:SetScript("OnUpdate", UpdateFrameOnUpdate);
+		UpdateFrame.Tooltip = Tooltip;
+		UpdateFrame.Waiting = UpdateFrameWaiting;
+		TooltipUpdateFrame[Tooltip] = UpdateFrame;
+	end
 	MT.RegisterOnInit('TOOLTIP', function(LoggedIn)
-		--	hooksecurefunc(GameTooltip, "SetUnit", OnTooltipSetUnit);
-		--	hooksecurefunc(ItemRefTooltip, "SetUnit", OnTooltipSetUnit);
-		GameTooltip:HookScript("OnTooltipSetUnit", OnTooltipSetUnit);
-		ItemRefTooltip:HookScript("OnTooltipSetUnit", OnTooltipSetUnitImmdiate);
 		MT._RegisterCallback("CALLBACK_TALENT_DATA_RECV", OnTalentDataRecv);
 		MT._RegisterCallback("CALLBACK_AVERAGE_ITEM_LEVEL_OK", OnTalentDataRecv);
-		--
-		hooksecurefunc(GameTooltip, "SetHyperlink", HookSetHyperlink);
-		hooksecurefunc(GameTooltip, "SetSpellBookItem", HookSetSpellBookItem);
-		hooksecurefunc(GameTooltip, "SetSpellByID", HookSetSpellByID);
-		hooksecurefunc(GameTooltip, "SetAction", HookSetAction);
 
-		hooksecurefunc(ItemRefTooltip, "SetHyperlink", HookSetHyperlink);
-		hooksecurefunc(ItemRefTooltip, "SetSpellBookItem", HookSetSpellBookItem);
-		hooksecurefunc(ItemRefTooltip, "SetSpellByID", HookSetSpellByID);
-		hooksecurefunc(ItemRefTooltip, "SetAction", HookSetAction);
-
-		VT.TooltipUpdateFrame = CreateFrame('FRAME');
-		VT.TooltipUpdateFrame:Hide();
-		VT.TooltipUpdateFrame:SetSize(1, 1);
-		VT.TooltipUpdateFrame:SetAlpha(0);
-		VT.TooltipUpdateFrame:EnableMouse(false);
-		VT.TooltipUpdateFrame:SetPoint("BOTTOM");
-		VT.TooltipUpdateFrame:SetScript("OnUpdate", UpdateFrameOnUpdate);
-		VT.TooltipUpdateFrame.Waiting = UpdateFrameWaiting;
+		HookTooltip(GameTooltip, OnTooltipSetUnit);
+		HookTooltip(ItemRefTooltip, OnTooltipSetUnitImmdiate);
 	end);
 	MT.RegisterOnLogin('TOOLTIP', function(LoggedIn)
 	end);

@@ -34,15 +34,8 @@ local DT = __private.DT;
 	local ChatEdit_ChooseBoxForSend = ChatEdit_ChooseBoxForSend;
 	local UIParent = UIParent;
 	local GameTooltip = GameTooltip;
-	local GameFontNormal = GameFontNormal;
-	local GameFontHighlight = GameFontHighlight;
-	local GameFontHighlightSmall = GameFontHighlightSmall;
-	local CLASS_ICON_TCOORDS = CLASS_ICON_TCOORDS;
-	local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
-	local ITEM_QUALITY_COLORS = ITEM_QUALITY_COLORS;
 	local StaticPopupDialogs = StaticPopupDialogs;
 	local StaticPopup_Show = StaticPopup_Show;
-	local MAJOR_GLYPH, MINOR_GLYPH = MAJOR_GLYPH, MINOR_GLYPH;
 
 -->
 	local l10n = CT.l10n;
@@ -63,7 +56,7 @@ local DT = __private.DT;
 		FrameFontSize = 14,
 		FrameFontSizeMedium = 13,
 		FrameFontSizeSmall = 10,
-		FrameFontOutline = "NORMAL",
+		FrameFontOutline = "OUTLINE",
 
 		TreeFrameXToBorder = 1,
 		TreeFrameYToBorder = 0,
@@ -79,7 +72,7 @@ local DT = __private.DT;
 		TreeNodeYToBottom = 10,
 		TreeNodeFont = NumberFont_Shadow_Med:GetFont(),--=[[Fonts\ARHei.ttf]]--[[Fonts\FRIZQT__.TTF]],
 		TreeNodeFontSize = 16,
-		TreeNodeFontOutline = "NORMAL",
+		TreeNodeFontOutline = "OUTLINE",
 
 		TalentDepArrowXSize = 16,
 		TalentDepArrowYSize = 20,
@@ -88,7 +81,7 @@ local DT = __private.DT;
 		SpellListFrameXSize = 200,
 		SpellListFrameFont = SystemFont_Shadow_Med1:GetFont(),--=="Fonts\ARKai_T.ttf"
 		SpellListFrameFontSize = 14,
-		SpellListFrameFontOutline = "NORMAL",
+		SpellListFrameFontOutline = "OUTLINE",
 		SpellListFrameXToBorder = 2,
 		SpellListFrameYToTop = 20,
 		SpellListFrameYToBottom = 24,
@@ -120,7 +113,7 @@ local DT = __private.DT;
 		SideButtonSize = 25,
 		SideButtonGap = 2,
 		EditBoxXSize = 240,
-		EditBoxYSize = 32,
+		EditBoxYSize = 24,
 		CurClassIndicatorSize = 34,
 
 		TreeButtonXSize = 68,
@@ -737,7 +730,7 @@ MT.BuildEnv('UI');
 					TreeFrame.TreeTDB = TreeTDB;
 				end
 
-				local color = RAID_CLASS_COLORS[class];
+				local color = CT.RAID_CLASS_COLORS[class];
 				Frame.objects.Name:SetTextColor(color.r, color.g, color.b, 1.0);
 				Frame.objects.Label:SetTextColor(color.r, color.g, color.b, 1.0);
 				Frame.Background:SetTexture(DT.ClassBackground[class][random(1, #DT.ClassBackground[class])]);
@@ -2097,7 +2090,7 @@ MT.BuildEnv('UI');
 					local name, link, quality, level, _, _, _, _, _, texture = GetItemInfo(item);
 					if link ~= nil then
 						Node:SetNormalTexture(texture);
-						local color = ITEM_QUALITY_COLORS[quality];
+						local color = CT.ITEM_QUALITY_COLORS[quality];
 						local r, g, b = color.r, color.g, color.b;
 						Node.Glow:SetVertexColor(r, g, b);
 						Node.Glow:Show();
@@ -3016,7 +3009,7 @@ MT.BuildEnv('UI');
 						Shine:SetTexCoord(0.9609375, 1.0, 0.921875, 0.9609375);
 					end
 					Node.Type = def[1];
-					Node.TypeText = def[1] == 1 and MAJOR_GLYPH or MINOR_GLYPH;
+					Node.TypeText = def[1] == 1 and l10n.MAJOR_GLYPH or l10n.MINOR_GLYPH;
 					Node.ID = index;
 					Node.Highlight = Highlight;
 					Node.Glyph = Glyph;
@@ -3838,7 +3831,7 @@ MT.BuildEnv('UI');
 						local class = DT.IndexToClass[index];
 						local ClassButton = CreateFrame('BUTTON', nil, SideAnchorTop);
 						ClassButton:SetSize(TUISTYLE.SideButtonSize, TUISTYLE.SideButtonSize);
-						local coord = CLASS_ICON_TCOORDS[class];
+						local coord = CT.CLASS_ICON_TCOORDS[class];
 						if coord then
 							_TextureFunc.SetNormalTexture(ClassButton, TTEXTURESET.CLASS.Normal, nil, { coord[1] + 1 / 256, coord[2] - 1 / 256, coord[3] + 1 / 256, coord[4] - 1 / 256, });
 							_TextureFunc.SetPushedTexture(ClassButton, TTEXTURESET.CLASS.Pushed, nil, { coord[1] + 1 / 256, coord[2] - 1 / 256, coord[3] + 0 / 256, coord[4] - 2 / 256, }, TTEXTURESET.CONTROL.PUSHED_COLOR);
@@ -3856,7 +3849,7 @@ MT.BuildEnv('UI');
 						ClassButton.id = index;
 						ClassButton.class = class;
 						ClassButton.Frame = Frame;
-						ClassButton.information = "|c" .. RAID_CLASS_COLORS[class].colorStr .. l10n.CLASS[class] .. "|r" .. l10n.ClassButton;
+						ClassButton.information = "|c" .. CT.RAID_CLASS_COLORS[class].colorStr .. l10n.CLASS[class] .. "|r" .. l10n.ClassButton;
 						ClassButtons[index] = ClassButton;
 					end
 					Frame.ClassButtons = ClassButtons;
@@ -3926,7 +3919,7 @@ MT.BuildEnv('UI');
 
 					local EditBox = CreateFrame('EDITBOX', nil, Frame);
 					EditBox:SetSize(TUISTYLE.EditBoxXSize, TUISTYLE.EditBoxYSize);
-					EditBox:SetFontObject(GameFontHighlightSmall);
+					EditBox:SetFont(TUISTYLE.FrameFont, TUISTYLE.FrameFontSizeLarge, TUISTYLE.FrameFontOutline);
 					EditBox:SetAutoFocus(false);
 					EditBox:SetJustifyH("LEFT");
 					EditBox:Hide();

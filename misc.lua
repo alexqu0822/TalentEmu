@@ -20,7 +20,6 @@ local DT = __private.DT;
 	local ChatEdit_ChooseBoxForSend = ChatEdit_ChooseBoxForSend;
 	local PanelTemplates_GetSelectedTab = PanelTemplates_GetSelectedTab;
 	local UIParent = UIParent;
-	local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
 
 -->
 	local l10n = CT.l10n;
@@ -153,7 +152,7 @@ MT.BuildEnv('MISC');
 			if Def.text == nil then
 				local lClass, class, lRace, race, sex, name, realm = GetPlayerInfoByGUID(Def.param[1]);
 				if class ~= nil and name ~= nil then
-					Def.text = "|c" .. RAID_CLASS_COLORS[class].colorStr .. name .. "|r";
+					Def.text = "|c" .. CT.RAID_CLASS_COLORS[class].colorStr .. name .. "|r";
 					Def.param[3] = name;
 				else
 					halt = false;

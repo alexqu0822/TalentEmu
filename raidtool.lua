@@ -31,10 +31,7 @@ local DT = __private.DT;
 	local _G = _G;
 	local UIParent = UIParent;
 	local GameTooltip = GameTooltip;
-	local GameFontHighlight = GameFontHighlight;
 	local UISpecialFrames = UISpecialFrames;
-	local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
-	local CLASS_ICON_TCOORDS = CLASS_ICON_TCOORDS;
 
 -->
 	local l10n = CT.l10n;
@@ -154,7 +151,7 @@ MT.BuildEnv('RAIDTOOL');
 				class = cache.class;
 			end
 			if class then
-				GameTooltip:SetText("|c" .. RAID_CLASS_COLORS[class].colorStr .. RosterList[data_index] .. "|r");
+				GameTooltip:SetText("|c" .. CT.RAID_CLASS_COLORS[class].colorStr .. RosterList[data_index] .. "|r");
 			else
 				GameTooltip:SetText(RosterList[data_index]);
 			end
@@ -301,9 +298,9 @@ MT.BuildEnv('RAIDTOOL');
 				Node.Title:SetText("**: " .. name);
 			end
 			if class ~= nil then
-				local color = RAID_CLASS_COLORS[class];
+				local color = CT.RAID_CLASS_COLORS[class] or CT.UNK_CLASS_COLORS;
 				Node.Title:SetVertexColor(color.r, color.g, color.b, 1.0);
-				local coord = CLASS_ICON_TCOORDS[class];
+				local coord = CT.CLASS_ICON_TCOORDS[class] or CT.UNK_CLASS_COORDS;
 				if coord ~= nil then
 					Node.Icon:SetTexCoord(coord[1] + 1 / 256, coord[2] - 1 / 256, coord[3] + 1 / 256, coord[4] - 1 / 256);
 				else

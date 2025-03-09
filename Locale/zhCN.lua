@@ -69,6 +69,8 @@ l10n.EquipmentList_MissGem = {
 	Meta = "|cff7f7f7f彩|r",
 	Prismatic = "|cff7f7f7f棱|r",
 };
+l10n.MAJOR_GLYPH = MAJOR_GLYPH;
+l10n.MINOR_GLYPH = MINOR_GLYPH;
 
 --	右
 l10n.ClassButton = "\n|cff00ff00左键|r切换职业\n|cff00ff00右键|r加载已保存的天赋\n|cff00ff00子菜单中Shift+左键|r删除保存的天赋";

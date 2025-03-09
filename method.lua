@@ -28,7 +28,6 @@ local DT = __private.DT;
 	local _G = _G;
 	local UIParent = UIParent;
 	local GameTooltip = GameTooltip;
-	local RAID_CLASS_COLORS = RAID_CLASS_COLORS;
 
 -->
 	local l10n = CT.l10n;
@@ -1710,7 +1709,7 @@ MT.BuildEnv('METHOD');
 			end
 			return title;
 		else
-			local title = "|c" .. RAID_CLASS_COLORS[class].colorStr .. l10n.CLASS[class] .. "|r-";
+			local title = "|c" .. CT.RAID_CLASS_COLORS[class].colorStr .. l10n.CLASS[class] .. "|r-";
 			local temp = max(stats[1], stats[2], stats[3]);
 			if temp == stats[1] and temp == stats[2] and temp == stats[3] then
 				temp = temp + 1023;
@@ -1735,7 +1734,7 @@ MT.BuildEnv('METHOD');
 		end
 	end
 	function MT.GenerateLink(title, class, code)
-		return "|Hemu:" .. code .. "|h|c" .. RAID_CLASS_COLORS[class].colorStr .. "[" .. title .. "]|r|h";
+		return "|Hemu:" .. code .. "|h|c" .. CT.RAID_CLASS_COLORS[class].colorStr .. "[" .. title .. "]|r|h";
 	end
 	function MT.GetTreeNodeIndex(TalentDef)
 		return TalentDef[1] * DT.MAX_NUM_COL + TalentDef[2] + 1;

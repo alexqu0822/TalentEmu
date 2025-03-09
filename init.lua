@@ -87,6 +87,11 @@ local DT = {  }; __private.DT = DT;		--	data
 	end
 
 -->		constant
+	CT.RAID_CLASS_COLORS = RAID_CLASS_COLORS;
+	CT.UNK_CLASS_COLORS = { r = 1.0, g = 0.5, b = 0.5, a = 1.0, };
+	CT.CLASS_ICON_TCOORDS = CLASS_ICON_TCOORDS;
+	CT.UNK_CLASS_COORDS = { 0.75, 1.0, 0.75, 1.0, };
+	CT.ITEM_QUALITY_COLORS = ITEM_QUALITY_COLORS;
 	CT.LOCALE = GetLocale();
 	CT.BNTAG = select(2, BNGetInfo());
 	CT.SELFREALM = GetRealmName();
