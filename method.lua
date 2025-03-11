@@ -1896,7 +1896,7 @@ MT.BuildEnv('METHOD');
 			for index = 1, 6 do
 				local Node = GlyphNodes[index];
 				if Node.SpellID ~= nil then
-					data[index] = { 1, Node.type, Node.SpellID, Node.Glyph:GetTexture(), };
+					data[index] = { 1, Node.Type, Node.SpellID, Node.Texture, };
 				end
 			end
 			return VT.__dep.__emulib.EncodeGlyphDataV2(1, 1, data);
@@ -1958,7 +1958,7 @@ MT.BuildEnv('METHOD');
 			return MT.EncodeTalent(_1, _2, _3);
 		end
 	end
-	function MT.ImportCode(Frame, code, name)
+	function MT:ImportCode(Frame, code, name)
 		local Tick = MT.GetUnifiedTime();
 		if name == nil then
 			VT.ImportIndex = VT.ImportIndex + 1;
@@ -1973,7 +1973,7 @@ MT.BuildEnv('METHOD');
 		end
 		return VT.__dep.__emulib.CHAT_MSG_ADDON(VT.__dep.__emulib.CT.COMM_PREFIX, code, "WHISPER", name);
 	end
-	function MT.ExportCode(Frame)
+	function MT:ExportCode(Frame)
 		if Frame == nil then
 			return nil;
 		end

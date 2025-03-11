@@ -71,6 +71,7 @@ l10n.EquipmentList_MissGem = {
 };
 l10n.MAJOR_GLYPH = MAJOR_GLYPH;
 l10n.MINOR_GLYPH = MINOR_GLYPH;
+l10n.PRIME_GLYPH = PRIME_GLYPH;
 
 --	右
 l10n.ClassButton = "\n|cff00ff00左键|r切换职业\n|cff00ff00右键|r加载已保存的天赋\n|cff00ff00子菜单中Shift+左键|r删除保存的天赋";

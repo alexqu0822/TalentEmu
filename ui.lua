@@ -2169,6 +2169,7 @@ MT.BuildEnv('UI');
 					Node.info = info;
 					if info ~= nil then
 						Node.SpellID = info[3];
+						Node.Texture = info[4];
 						Node.Glyph:Show();
 						-- Node.Glyph:SetTexture(info[4]);
 						SetPortraitToTexture(Node.Glyph, info[4]);
@@ -2178,6 +2179,7 @@ MT.BuildEnv('UI');
 						end
 					else
 						Node.SpellID = nil;
+						Node.Texture = nil;
 						Node.Glyph:Hide();
 						local d0 = Node.d0;
 						if CT.BUILD == "WRATH" then
@@ -2188,7 +2190,9 @@ MT.BuildEnv('UI');
 			else
 				for index = 1, #GlyphNodes do
 					local Node = GlyphNodes[index];
+					Node.info = nil;
 					Node.SpellID = nil;
+					Node.Texture = info[4];
 					Node.Glyph:Hide();
 					local d0 = Node.d0;
 					if CT.BUILD == "WRATH" then
@@ -3009,14 +3013,19 @@ MT.BuildEnv('UI');
 						Shine:SetTexCoord(0.9609375, 1.0, 0.921875, 0.9609375);
 					end
 					Node.Type = def[1];
-					Node.TypeText = def[1] == 1 and l10n.MAJOR_GLYPH or l10n.MINOR_GLYPH;
+					if Node.Type == 1 then
+						Node.TypeText = l10n.MAJOR_GLYPH;
+					elseif Node.Type == 2 then
+						Node.TypeText = l10n.MINOR_GLYPH;
+					else
+						Node.TypeText = l10n.PRIME_GLYPH;
+					end
 					Node.ID = index;
 					Node.Highlight = Highlight;
 					Node.Glyph = Glyph;
 					Node.Ring = Ring;
 					Node.Shine = Shine;
 					Node.def = def;
-					Node.type = def[1];
 					Node.d0 = NodesDef[0];
 					GlyphNodes[index] = Node;
 				end
@@ -3345,7 +3354,7 @@ MT.BuildEnv('UI');
 					VT.VAR.savedTalent[val[1]] = nil;
 				else
 					VT.ImportIndex = VT.ImportIndex + 1;
-					MT.ImportCode(Frame, val[2], "#" .. l10n.Import .. "[" .. VT.ImportIndex .. "] " .. val[1]);
+					MT:ImportCode(Frame, val[2], "#" .. l10n.Import .. "[" .. VT.ImportIndex .. "] " .. val[1]);
 				end
 			end,
 			num = 0,
@@ -3475,7 +3484,7 @@ MT.BuildEnv('UI');
 					VT.VAR.savedTalent[val[1]] = nil;
 				else
 					VT.ImportIndex = VT.ImportIndex + 1;
-					MT.ImportCode(Frame, val[2], "#" .. l10n.Import .. "[" .. VT.ImportIndex .. "] " .. val[1]);
+					MT:ImportCode(Frame, val[2], "#" .. l10n.Import .. "[" .. VT.ImportIndex .. "] " .. val[1]);
 				end
 			end,
 			num = 0,
@@ -3492,7 +3501,7 @@ MT.BuildEnv('UI');
 					end
 				else
 					VT.ImportIndex = VT.ImportIndex + 1;
-					MT.ImportCode(Frame, val[2], "#" .. l10n.Import .. "[" .. VT.ImportIndex .. "] " .. val[3]);
+					MT:ImportCode(Frame, val[2], "#" .. l10n.Import .. "[" .. VT.ImportIndex .. "] " .. val[3]);
 				end
 			end,
 			num = 0,
@@ -3579,7 +3588,7 @@ MT.BuildEnv('UI');
 						end
 					end
 					VT.ImportIndex = VT.ImportIndex + 1;
-					return MT.ImportCode(self.Frame, code, "#" .. l10n.Import .. "[" .. VT.ImportIndex .. "]");
+					return MT:ImportCode(self.Frame, code, "#" .. l10n.Import .. "[" .. VT.ImportIndex .. "]");
 				end
 			elseif Type == "save" then
 				local title = self:GetText();
