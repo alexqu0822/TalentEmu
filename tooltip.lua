@@ -187,7 +187,11 @@ MT.BuildEnv('TOOLTIP');
 		if VT.SET.talents_in_tip or VT.SET.itemlevel_in_tip then
 			PrevTipUnitName[Tooltip] = nil;
 			local _, unit = Tooltip:GetUnit();
-			if unit ~= nil and UnitIsPlayer(unit) and UnitIsConnected(unit) and UnitFactionGroup(unit) == CT.SELFFACTION then
+			if unit == 'player' then
+				AddReservedLines(Tooltip);
+				--
+				MT.SendQueryRequest(CT.SELFNAME, CT.SELFREALM, false, false, true, true, true);
+			elseif unit ~= nil and UnitIsPlayer(unit) and UnitIsConnected(unit) and UnitFactionGroup(unit) == CT.SELFFACTION then
 				AddReservedLines(Tooltip);
 				--
 				local name, realm = UnitName(unit);
@@ -212,7 +216,11 @@ MT.BuildEnv('TOOLTIP');
 		if VT.SET.talents_in_tip or VT.SET.itemlevel_in_tip then
 			PrevTipUnitName[Tooltip] = nil;
 			local _, unit = Tooltip:GetUnit();
-			if unit ~= nil and UnitIsPlayer(unit) and UnitIsConnected(unit) then
+			if unit == 'player' then
+				AddReservedLines(Tooltip);
+				--
+				MT.SendQueryRequest(CT.SELFNAME, CT.SELFREALM, false, false, true, true, true);
+			elseif unit ~= nil and UnitIsPlayer(unit) and UnitIsConnected(unit) then
 				AddReservedLines(Tooltip);
 				--
 				local name, realm = UnitName(unit);
