@@ -2171,8 +2171,8 @@ MT.BuildEnv('UI');
 						Node.SpellID = info[3];
 						Node.Texture = info[4];
 						Node.Glyph:Show();
-						-- Node.Glyph:SetTexture(info[4]);
-						SetPortraitToTexture(Node.Glyph, info[4]);
+						Node.Glyph:SetTexture(info[4]);
+						-- SetPortraitToTexture(Node.Glyph, info[4]);
 						local def = Node.def;
 						if CT.BUILD == "WRATH" then
 							Node.Background:SetTexCoord(def[7], def[8], def[9], def[10]);
