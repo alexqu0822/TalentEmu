@@ -138,10 +138,6 @@ MT.BuildEnv('MISC');
 			Agent:SetScript("OnEvent", HookTalentFrame);
 			Agent = nil;
 		end
-
-		--GameTooltip:SetHyperlink("itemString" or "itemLink")
-		--GameTooltip:SetSpellBookItem(SpellBookID, BookType)
-		--GameTooltip:SetSpellByID(SpellID)
 	--
 
 	local trytimes = 0;

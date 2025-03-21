@@ -19,11 +19,15 @@ local DT = __private.DT;
 	local tonumber = tonumber;
 	local random = random;
 	local UnitLevel = UnitLevel;
+	local UnitIsDeadOrGhost = UnitIsDeadOrGhost;
 	local GetSpellInfo = GetSpellInfo;
 	local GetTalentTabInfo, GetNumTalents, GetTalentInfo, LearnTalent = GetTalentTabInfo, GetNumTalents, GetTalentInfo, LearnTalent;
 	local GetPrimaryTalentTree, SetPrimaryTalentTree = GetPrimaryTalentTree, SetPrimaryTalentTree;
 	local GetItemInfoInstant = GetItemInfoInstant;
 	local GetItemInfo = GetItemInfo;
+	local InCombatLockdown = InCombatLockdown;
+	local CheckInteractDistance = CheckInteractDistance;
+	local CanInspect = CanInspect;
 	local CreateFrame = CreateFrame;
 	local _G = _G;
 	local UIParent = UIParent;
@@ -2266,6 +2270,17 @@ MT.BuildEnv('METHOD');
 				MT._TimerStart(ApplyTalentsTicker, 0.1);
 			end
 		end
+	end
+
+	function MT.CanInspect(unit)
+		if unit == nil or UnitIsDeadOrGhost('player') or UnitIsDeadOrGhost(unit) or InCombatLockdown() or not CheckInteractDistance(unit, 1) or not CanInspect(unit) then
+			return false;
+		end
+		local InspectFrame = _G.InspectFrame;
+		if InspectFrame and InspectFrame:IsShown() then
+			return false;
+		end
+		return true;
 	end
 
 	function MT.CALLBACK.OnTalentDataRecv(name, iscomm)

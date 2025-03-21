@@ -16,7 +16,7 @@ local DT = __private.DT;
 	local tonumber = tonumber;
 	local UnitName = UnitName;
 	local UnitIsPlayer, UnitFactionGroup, UnitIsConnected = UnitIsPlayer, UnitFactionGroup, UnitIsConnected;
-	local CanInspect, CheckInteractDistance, NotifyInspect = CanInspect, CheckInteractDistance, NotifyInspect;
+	local NotifyInspect = NotifyInspect;
 	local GetSpellBookItemName = GetSpellBookItemName;
 	local GetActionInfo = GetActionInfo;
 	local GetMacroSpell = GetMacroSpell;
@@ -204,8 +204,7 @@ MT.BuildEnv('TOOLTIP');
 					if UnitFactionGroup(unit) == CT.SELFFACTION then
 						MT.SendQueryRequest(name, realm, false, false, not tal, not inv, not inv and not gly);
 					end
-					local InspectFrame = _G.InspectFrame;
-					if (InspectFrame == nil or not InspectFrame:IsShown()) and CheckInteractDistance(unit, 1) and CanInspect(unit) then
+					if MT.CanInspect(unit) then
 						NotifyInspect(unit);
 					end
 				end
@@ -230,8 +229,7 @@ MT.BuildEnv('TOOLTIP');
 				local _, tal, gly, inv = MT.CacheEmulateComm(name, realm, false, VT.SET.talents_in_tip, VT.SET.itemlevel_in_tip, VT.SET.itemlevel_in_tip);
 				if not tal or not inv then
 					TooltipUpdateFrame[Tooltip]:Waiting(name, realm);
-					local InspectFrame = _G.InspectFrame;
-					if (InspectFrame == nil or not InspectFrame:IsShown()) and CheckInteractDistance(unit, 1) and CanInspect(unit) then
+					if MT.CanInspect(unit) then
 						NotifyInspect(unit);
 					end
 				end
@@ -299,8 +297,7 @@ MT.BuildEnv('TOOLTIP');
 							if UnitFactionGroup(unit) == CT.SELFFACTION then
 								MT.SendQueryRequest(name, realm, false, false, not tal, not inv, not inv and not gly);
 							end
-							local InspectFrame = _G.InspectFrame;
-							if (InspectFrame == nil or not InspectFrame:IsShown()) and CheckInteractDistance(unit, 1) and CanInspect(unit) then
+							if MT.CanInspect(unit) then
 								NotifyInspect(unit);
 							end
 						else
