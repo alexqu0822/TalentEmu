@@ -59,7 +59,7 @@ MT.BuildEnv('SETTING');
 			local SetConfig = function(module, key, val, loading)
 				VT.SET[key] = val;
 				if key == "minimap" then
-					MT.CALLBACK["minimap"](value);
+					MT.CALLBACK["minimap"](val);
 				elseif key == "singleFrame" then
 					if val then
 						local last = Frame or MT.UI.GetLastFrame();
