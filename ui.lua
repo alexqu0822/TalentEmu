@@ -2011,7 +2011,6 @@ MT.BuildEnv('UI');
 					end
 				end
 				SpellListFrame.ScrollList:SetNumValue(#list);
-				SpellListFrame.ScrollList:Update();
 			end
 		end
 		function MT.UI.SpellListFrameToggle(Frame)
