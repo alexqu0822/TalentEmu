@@ -194,7 +194,7 @@ MT.BuildEnv('COMM');
 			if cache ~= nil and addon ~= nil then
 				local TalData = cache.TalData;
 				if TalData.Tick and Tick - TalData.Tick < 1.0 then
-					MT.Debug("Ignore Talent", prefix);
+					MT.Debug("Ignore Talent", name, prefix);
 					return;
 				end
 			end
@@ -250,7 +250,7 @@ MT.BuildEnv('COMM');
 			if cache ~= nil and addon ~= nil then
 				local GlyData = cache.GlyData;
 				if GlyData.Tick and Tick - GlyData.Tick < 1.0 then
-					MT.Debug("Ignore Glyph", prefix);
+					MT.Debug("Ignore Glyph", name, prefix);
 					return;
 				end
 			end
@@ -293,7 +293,7 @@ MT.BuildEnv('COMM');
 			elseif addon ~= nil then
 				EquData = cache.EquData;
 				if EquData.Tick and Tick - EquData.Tick < 1.0 then
-					MT.Debug("Ignore Equipment", prefix);
+					MT.Debug("Ignore Equipment", name, prefix);
 					return;
 				end
 			else

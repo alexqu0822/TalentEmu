@@ -618,7 +618,7 @@ MT.BuildEnv('EXTERNAL');
 				if G then msg = msg .. G; end
 				if E then msg = msg .. E; end
 				if N then msg = msg .. N; end
-				MT.Debug("tdInspect\nT =", T, "\nG =", G, "\nE =", E, "\nN =", N);
+				-- MT.Debug("tdInspect\nT =", T, "\nG =", G, "\nE =", E, "\nN =", N);
 				return VT.__dep.__emulib.ProcV2Message("tdInspect", msg, channel, sender);
 			end
 		end,
