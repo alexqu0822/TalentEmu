@@ -1,4 +1,7 @@
 
+2025-05-05
+Wont mark wand enchantable.
+
 2025-04-28
 Update lib.
 
