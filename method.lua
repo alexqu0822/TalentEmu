@@ -1293,8 +1293,8 @@ MT.BuildEnv('METHOD');
 				for i = 1, #Frames do
 					Frames[i].objects.EquipmentFrameButton:Show();
 					if Frames[i].EquipmentFrameContainer:IsShown() then
-						MT.UI.EquipmentContainerUpdate(Frames[i].EquipmentContainer, cache.EquData);
-						MT.UI.EngravingContainerUpdate(Frames[i].EquipmentContainer, cache.EngData);
+						MT.UI.EquipmentContainerUpdate(Frames[i].EquipmentContainer, cache);
+						MT.UI.EngravingContainerUpdate(Frames[i].EquipmentContainer, cache);
 					end
 				end
 			end
@@ -1319,7 +1319,7 @@ MT.BuildEnv('METHOD');
 				for i = 1, #Frames do
 					Frames[i].objects.EquipmentFrameButton:Show();
 					if Frames[i].EquipmentFrameContainer:IsShown() then
-						MT.UI.EngravingContainerUpdate(Frames[i].EquipmentContainer, cache.EngData);
+						MT.UI.EngravingContainerUpdate(Frames[i].EquipmentContainer, cache);
 					end
 				end
 			end
