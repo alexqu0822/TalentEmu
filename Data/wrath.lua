@@ -11,7 +11,7 @@ local DT = __private.DT;
 if CT.TOCVERSION >= 40000 or CT.TOCVERSION < 30400 then
 	return;
 end
--- if WOW_PROJECT_ID ~= WOW_PROJECT_BURNING_CRUSADE_CLASSIC then
+-- if WOW_PROJECT_ID ~= WOW_PROJECT_WRATH_CLASSIC then
 -- 	return;
 -- end
 
