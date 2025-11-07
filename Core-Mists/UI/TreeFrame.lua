@@ -186,7 +186,6 @@ MT.BuildEnv('UI-TreeFrame');
 		for tier = 0, DT.MAX_NUM_TALENTS - 1 do
 			TreeFrame.TalentSet[tier + 1] = 0;
 		end
-		TreeFrame.TalentChanged = {  };
 
 		TreeFrames[1] = TreeFrame;
 

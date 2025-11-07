@@ -43,6 +43,7 @@ l10n.PointsUsed = "已用";
 l10n.PointsRemaining = "剩余";
 l10n.PointsToLevel = "等级";
 l10n.ExpandButton = "扩展";
+l10n.DisplaySpecSpell = "选择一个专精查看其主要技能";
 
 --	左
 l10n.EquipmentListButton = "装备列表";

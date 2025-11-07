@@ -220,7 +220,7 @@ MT.BuildEnv('UI-SpellListFrame');
 
 		local SearchEdit = CreateFrame('EDITBOX', nil, SpellListFrame);
 		SearchEdit:SetSize(CT.TUISTYLE.SpellListFrameXSize - 2 * CT.TUISTYLE.SpellListFrameXToBorder - 2 - CT.TUISTYLE.SpellListSearchEditOkayXSize, CT.TUISTYLE.SpellListSearchEditYSize);
-		SearchEdit:SetFont(CT.TUISTYLE.FrameFont, CT.TUISTYLE.FrameFontSizeSmall, "OUTLINE");
+		SearchEdit:SetFont(CT.TUISTYLE.FrameFont, CT.TUISTYLE.FrameFontSizeSmall, CT.TUISTYLE.FrameFontOutline);
 		SearchEdit:SetAutoFocus(false);
 		SearchEdit:SetJustifyH("LEFT");
 		SearchEdit:Show();

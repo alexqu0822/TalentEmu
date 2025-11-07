@@ -228,7 +228,7 @@ MT.BuildEnv('UI-TreeFrame');
 			TreeFrame.TreePoints = TreePoints;
 
 			local TreeLabel = TreeFrame:CreateFontString(nil, "ARTWORK");
-			TreeLabel:SetFont(CT.TUISTYLE.FrameFont, CT.TUISTYLE.FrameFontSize, "OUTLINE");
+			TreeLabel:SetFont(CT.TUISTYLE.FrameFont, CT.TUISTYLE.FrameFontSize, CT.TUISTYLE.FrameFontOutline);
 			TreeLabel:SetPoint("CENTER", TreeFrame, "BOTTOM", 0, CT.TUISTYLE.TreeButtonsBarYSize * 0.5);
 			TreeLabel:SetTextColor(0.9, 0.9, 0.9, 1.0);
 			TreeFrame.TreeLabel = TreeLabel;

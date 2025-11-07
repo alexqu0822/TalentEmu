@@ -8,7 +8,7 @@
     <script file = "SpecSpellFrame.lua" />
     <!-- <script file = "SpellListFrame.lua" /> -->
     <!-- <script file = "EquipmentContainer.lua" /> -->
-    <script file = "SubObjects.lua" />
+    <!-- <script file = "SubObjects.lua" /> -->
     <script file = "TooltipFrame.lua" />
     <script file = "Method.lua" />
     <script file = "UI.lua" />

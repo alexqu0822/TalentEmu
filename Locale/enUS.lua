@@ -43,6 +43,7 @@ l10n.PointsUsed = "Used";
 l10n.PointsRemaining = "Idle";
 l10n.PointsToLevel = "Lv";
 l10n.ExpandButton = "Expand";
+l10n.DisplaySpecSpell = "Display primary spells after selecting a spec";
 
 --	Left
 l10n.EquipmentListButton = "Equipment list";

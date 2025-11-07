@@ -122,11 +122,11 @@ MT.BuildEnv('UI-EquipmentContainer');
 		EquipmentContainer:Show();
 
 		local AverageItemLevelLabel = EquipmentContainer:CreateFontString(nil, "ARTWORK");
-		AverageItemLevelLabel:SetFont(CT.TUISTYLE.FrameFont, CT.TUISTYLE.FrameFontSize, "OUTLINE");
+		AverageItemLevelLabel:SetFont(CT.TUISTYLE.FrameFont, CT.TUISTYLE.FrameFontSize, CT.TUISTYLE.FrameFontOutline);
 		AverageItemLevelLabel:SetPoint("BOTTOMRIGHT", EquipmentContainer, "TOP", -1, 2);
 		AverageItemLevelLabel:SetText(l10n.EquipmentList_AverageItemLevel);
 		local AverageItemLevel = EquipmentContainer:CreateFontString(nil, "ARTWORK");
-		AverageItemLevel:SetFont(CT.TUISTYLE.FrameFont, CT.TUISTYLE.FrameFontSize, "OUTLINE");
+		AverageItemLevel:SetFont(CT.TUISTYLE.FrameFont, CT.TUISTYLE.FrameFontSize, CT.TUISTYLE.FrameFontOutline);
 		AverageItemLevel:SetPoint("BOTTOMLEFT", EquipmentContainer, "TOP", 1, 2);
 		EquipmentContainer.AverageItemLevel = AverageItemLevel;
 
@@ -155,7 +155,7 @@ MT.BuildEnv('UI-EquipmentContainer');
 			Node.Glow = Glow;
 
 			local ILvl = Node:CreateFontString(nil, "OVERLAY");
-			ILvl:SetFont(CT.TUISTYLE.FrameFont, CT.TUISTYLE.FrameFontSizeMedium, "OUTLINE");
+			ILvl:SetFont(CT.TUISTYLE.FrameFont, CT.TUISTYLE.FrameFontSizeMedium, CT.TUISTYLE.FrameFontOutline);
 			ILvl:SetPoint("BOTTOMRIGHT", Node, "BOTTOMRIGHT", 0, 2);
 			Node.ILvl = ILvl;
 

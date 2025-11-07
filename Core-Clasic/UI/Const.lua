@@ -89,6 +89,9 @@ local DT = __private.DT;
 		TreeButtonXSize = 68,
 		TreeButtonYSize = 18,
 		TreeButtonGap = 4,
+		TreeButtonsFont = SystemFont_Shadow_Med1:GetFont(),--=="Fonts\ARKai_T.ttf"
+		TreeButtonsFontSize = 13,
+		TreeButtonsFontOutline = "OUTLINE",
 
 		IconTextDisabledColor = { 1.0, 1.0, 1.0, 1.0, },
 		IconTextAvailableColor = { 0.0, 1.0, 0.0, 1.0, },

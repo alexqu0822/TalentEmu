@@ -59,7 +59,6 @@ MT.BuildEnv('UI-Method');
 			end
 			objects.CurClassIndicator:Hide();
 			local TreeFrame = Frame.TreeFrames[1];
-			wipe(TreeFrame.TalentChanged);
 			if name ~= l10n.message then
 				MT.UI.FrameSetBinding(Frame, name);
 				if cache == nil or cache.EquData.Tick == nil then
@@ -364,6 +363,8 @@ MT.BuildEnv('UI-Method');
 		end
 		local TalentSet = TreeFrame.TalentSet;
 		TalentSet[tier + 1] = value;
+
+		MT.UI.FrameUpdateLabelText(TreeFrame.Frame);
 	end
 	function MT.UI.FrameResetTalents(Frame)
 		local TreeFrame = Frame.TreeFrames[1];
@@ -407,16 +408,7 @@ MT.BuildEnv('UI-Method');
 	function MT.UI.FrameUpdateLabelText(Frame)
 		local objects = Frame.objects;
 		if Frame.name ~= nil then
-			local should_show = false;
-			local TreeFrame = Frame.TreeFrames[1];
-			local TalentChanged = TreeFrame.TalentChanged;
-			for i = 1, DT.MAX_NUM_TALENTS do
-				if TalentChanged[i] then
-					should_show = true;
-					break;
-				end
-			end
-			if should_show then
+			if MT.GetFrameData(Frame) ~= Frame.TalData[Frame.activeGroup] then
 				objects.ResetToSetButton:Show();
 				if Frame.label ~= nil then
 					objects.Label:SetText(Frame.label .. l10n.LabelPointsChanged);
@@ -788,6 +780,7 @@ MT.BuildEnv('UI-Method');
 		else
 			MT._SpecSpellFunc.SetSpellList(Frame.SpecSpellFrame, {  });
 		end
+		MT.UI.FrameUpdateLabelText(Frame);
 	end
 
 -->

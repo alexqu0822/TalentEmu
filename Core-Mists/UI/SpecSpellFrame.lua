@@ -141,6 +141,11 @@ MT.BuildEnv('UI-SpecSpellFrame');
 			id = id + 1;
 			x = x + 1;
 		end
+		if id == 1 then
+			SpecSpellFrame.Note:Show();
+		else
+			SpecSpellFrame.Note:Hide();
+		end
 		while SpecSpellFrame.SpecSpellNodes[id] do
 			SpecSpellFrame.SpecSpellNodes[id]:Hide();
 			id = id + 1;
@@ -171,6 +176,13 @@ MT.BuildEnv('UI-SpecSpellFrame');
 		HSeq:SetPoint("RIGHT", SpecSpellFrame, "TOPRIGHT", 0, 0);
 		MT._TextureFunc.SetTexture(HSeq, CT.TTEXTURESET.SEP_HORIZONTAL);
 		SpecSpellFrame.HSeq = HSeq;
+
+		local Note = SpecSpellFrame:CreateFontString(nil, "ARTWORK");
+		Note:SetPoint("CENTER");
+		Note:SetFont(CT.TUISTYLE.FrameFont, CT.TUISTYLE.FrameFontSizeLarge, CT.TUISTYLE.FrameFontOutline);
+		Note:SetText(l10n.DisplaySpecSpell);
+		Note:Show();
+		SpecSpellFrame.Note = Note;
 
 		SpecSpellFrame.SpecSpellNodes = {  };
 

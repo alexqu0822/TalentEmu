@@ -70,11 +70,9 @@ MT.BuildEnv('UI-SubObjects');
 		local TalData = Frame.TalData;
 		if TalData.num > 1 then
 			for group = 1, TalData.num do
-				local val = TalData[group];
-				local stats = MT.CountTreePoints(val, Frame.class);
 				VT.TalentGroupSelectMenuDefinition[group] = {
 					param = group,
-					text = (group == Frame.activeGroup) and ("|cff00ff00>|r " .. stats[1] .. "-" .. stats[2] .. "-" .. stats[3] .. " |cff00ff00<|r") or ("|cff000000>|r " .. stats[1] .. "-" .. stats[2] .. "-" .. stats[3] .. " |cff000000<|r"),
+					text = (group == Frame.activeGroup) and ("|cff00ff00>|r" .. MT.GenerateTitle(Frame.class, TalData[group]) .. "|cff00ff00<|r") or ("|cff000000>|r" .. MT.GenerateTitle(Frame.class, TalData[group]) .. "|cff000000<|r"),
 				};
 			end
 			VT.TalentGroupSelectMenuDefinition.num = TalData.num;
@@ -454,7 +452,7 @@ MT.BuildEnv('UI-SubObjects');
 		objects.ResetToSetButton = ResetToSetButton;
 
 		local TalentGroupSelect = CreateFrame('BUTTON', nil, Header);
-		TalentGroupSelect:SetSize(CT.TUISTYLE.ControlButtonSize, CT.TUISTYLE.ControlButtonSize);
+		TalentGroupSelect:SetSize(CT.TUISTYLE.ControlButtonSize * 0.75, CT.TUISTYLE.ControlButtonSize);
 		MT._TextureFunc.SetNormalTexture(TalentGroupSelect, CT.TTEXTURESET.DROP, nil, nil, CT.TTEXTURESET.CONTROL.NORMAL_COLOR);
 		MT._TextureFunc.SetPushedTexture(TalentGroupSelect, CT.TTEXTURESET.DROP, nil, nil, CT.TTEXTURESET.CONTROL.PUSHED_COLOR);
 		MT._TextureFunc.SetHighlightTexture(TalentGroupSelect, CT.TTEXTURESET.DROP, nil, nil, CT.TTEXTURESET.CONTROL.PUSHED_COLOR);
@@ -470,19 +468,21 @@ MT.BuildEnv('UI-SubObjects');
 	function MT.UI.CreateFooterControl(Frame)
 		local objects = Frame.objects;
 
-		local ExpandButton = CreateFrame('BUTTON', nil, Frame);
-		ExpandButton:SetSize(CT.TUISTYLE.ControlButtonSize, CT.TUISTYLE.ControlButtonSize);
-		MT._TextureFunc.SetNormalTexture(ExpandButton, CT.TTEXTURESET.EXPAND, nil, nil, CT.TTEXTURESET.CONTROL.NORMAL_COLOR);
-		MT._TextureFunc.SetPushedTexture(ExpandButton, CT.TTEXTURESET.EXPAND, nil, nil, CT.TTEXTURESET.CONTROL.PUSHED_COLOR);
-		MT._TextureFunc.SetHighlightTexture(ExpandButton, CT.TTEXTURESET.EXPAND, nil, nil, CT.TTEXTURESET.CONTROL.PUSHED_COLOR);
-		ExpandButton:SetPoint("BOTTOMRIGHT", Frame, "BOTTOMRIGHT", -2, (CT.TUISTYLE.FrameFooterYSize - CT.TUISTYLE.ControlButtonSize) * 0.5);
-		ExpandButton:Show();
-		ExpandButton:SetScript("OnClick", MT._SideFunc.ExpandButton_OnClick);
-		ExpandButton:SetScript("OnEnter", MT.GeneralOnEnter);
-		ExpandButton:SetScript("OnLeave", MT.GeneralOnLeave);
-		ExpandButton.Frame = Frame;
-		ExpandButton.information = l10n.ExpandButton;
-		objects.ExpandButton = ExpandButton;
+		if CT.TOCVERSION < 50000 then
+			local ExpandButton = CreateFrame('BUTTON', nil, Frame);
+			ExpandButton:SetSize(CT.TUISTYLE.ControlButtonSize, CT.TUISTYLE.ControlButtonSize);
+			MT._TextureFunc.SetNormalTexture(ExpandButton, CT.TTEXTURESET.EXPAND, nil, nil, CT.TTEXTURESET.CONTROL.NORMAL_COLOR);
+			MT._TextureFunc.SetPushedTexture(ExpandButton, CT.TTEXTURESET.EXPAND, nil, nil, CT.TTEXTURESET.CONTROL.PUSHED_COLOR);
+			MT._TextureFunc.SetHighlightTexture(ExpandButton, CT.TTEXTURESET.EXPAND, nil, nil, CT.TTEXTURESET.CONTROL.PUSHED_COLOR);
+			ExpandButton:SetPoint("BOTTOMRIGHT", Frame, "BOTTOMRIGHT", -2, (CT.TUISTYLE.FrameFooterYSize - CT.TUISTYLE.ControlButtonSize) * 0.5);
+			ExpandButton:Show();
+			ExpandButton:SetScript("OnClick", MT._SideFunc.ExpandButton_OnClick);
+			ExpandButton:SetScript("OnEnter", MT.GeneralOnEnter);
+			ExpandButton:SetScript("OnLeave", MT.GeneralOnLeave);
+			ExpandButton.Frame = Frame;
+			ExpandButton.information = l10n.ExpandButton;
+			objects.ExpandButton = ExpandButton;
+		end
 
 		local ResetAllButton = CreateFrame('BUTTON', nil, Frame);
 		ResetAllButton:SetSize(CT.TUISTYLE.ControlButtonSize, CT.TUISTYLE.ControlButtonSize);
@@ -498,45 +498,47 @@ MT.BuildEnv('UI-SubObjects');
 		ResetAllButton.information = l10n.ResetAllButton;
 		objects.ResetAllButton = ResetAllButton;
 
-		local CurPointsRemainingLabel = Frame:CreateFontString(nil, "ARTWORK");
-		CurPointsRemainingLabel:SetFont(CT.TUISTYLE.FrameFont, CT.TUISTYLE.FrameFontSizeMedium, CT.TUISTYLE.FrameFontOutline);
-		CurPointsRemainingLabel:SetText(l10n.PointsRemaining);
-		CurPointsRemainingLabel:SetPoint("CENTER", Frame, "BOTTOM", -15, CT.TUISTYLE.FrameFooterYSize * 0.5);
-		local PointsRemaining = Frame:CreateFontString(nil, "ARTWORK");
-		PointsRemaining:SetFont(CT.TUISTYLE.FrameFont, CT.TUISTYLE.FrameFontSize, CT.TUISTYLE.FrameFontOutline);
-		PointsRemaining:SetText("51");
-		PointsRemaining:SetPoint("LEFT", CurPointsRemainingLabel, "RIGHT", 2, 0);
-		CurPointsRemainingLabel:SetTextColor(0.5, 1.0, 1.0, 1.0);
-		PointsRemaining:SetTextColor(0.5, 1.0, 1.0, 1.0);
+		if CT.TOCVERSION < 50000 then
+			local CurPointsRemainingLabel = Frame:CreateFontString(nil, "ARTWORK");
+			CurPointsRemainingLabel:SetFont(CT.TUISTYLE.FrameFont, CT.TUISTYLE.FrameFontSizeMedium, CT.TUISTYLE.FrameFontOutline);
+			CurPointsRemainingLabel:SetText(l10n.PointsRemaining);
+			CurPointsRemainingLabel:SetPoint("CENTER", Frame, "BOTTOM", -15, CT.TUISTYLE.FrameFooterYSize * 0.5);
+			local PointsRemaining = Frame:CreateFontString(nil, "ARTWORK");
+			PointsRemaining:SetFont(CT.TUISTYLE.FrameFont, CT.TUISTYLE.FrameFontSize, CT.TUISTYLE.FrameFontOutline);
+			PointsRemaining:SetText("51");
+			PointsRemaining:SetPoint("LEFT", CurPointsRemainingLabel, "RIGHT", 2, 0);
+			CurPointsRemainingLabel:SetTextColor(0.5, 1.0, 1.0, 1.0);
+			PointsRemaining:SetTextColor(0.5, 1.0, 1.0, 1.0);
 
-		local PointsUsed = Frame:CreateFontString(nil, "ARTWORK");
-		PointsUsed:SetFont(CT.TUISTYLE.FrameFont, CT.TUISTYLE.FrameFontSize, CT.TUISTYLE.FrameFontOutline);
-		PointsUsed:SetText("0");
-		PointsUsed:SetPoint("RIGHT", CurPointsRemainingLabel, "LEFT", -8, 0);
-		local CurPointsUsedLabel = Frame:CreateFontString(nil, "ARTWORK");
-		CurPointsUsedLabel:SetFont(CT.TUISTYLE.FrameFont, CT.TUISTYLE.FrameFontSize, CT.TUISTYLE.FrameFontOutline);
-		CurPointsUsedLabel:SetText(l10n.PointsUsed);
-		CurPointsUsedLabel:SetPoint("RIGHT", PointsUsed, "LEFT", -2, 0);
-		CurPointsUsedLabel:SetTextColor(0.5, 1.0, 0.5, 1.0);
-		PointsUsed:SetTextColor(0.5, 1.0, 0.5, 1.0);
+			local PointsUsed = Frame:CreateFontString(nil, "ARTWORK");
+			PointsUsed:SetFont(CT.TUISTYLE.FrameFont, CT.TUISTYLE.FrameFontSize, CT.TUISTYLE.FrameFontOutline);
+			PointsUsed:SetText("0");
+			PointsUsed:SetPoint("RIGHT", CurPointsRemainingLabel, "LEFT", -8, 0);
+			local CurPointsUsedLabel = Frame:CreateFontString(nil, "ARTWORK");
+			CurPointsUsedLabel:SetFont(CT.TUISTYLE.FrameFont, CT.TUISTYLE.FrameFontSize, CT.TUISTYLE.FrameFontOutline);
+			CurPointsUsedLabel:SetText(l10n.PointsUsed);
+			CurPointsUsedLabel:SetPoint("RIGHT", PointsUsed, "LEFT", -2, 0);
+			CurPointsUsedLabel:SetTextColor(0.5, 1.0, 0.5, 1.0);
+			PointsUsed:SetTextColor(0.5, 1.0, 0.5, 1.0);
 
-		local CurPointsReqLevelLabel = Frame:CreateFontString(nil, "ARTWORK");
-		CurPointsReqLevelLabel:SetFont(CT.TUISTYLE.FrameFont, CT.TUISTYLE.FrameFontSize, CT.TUISTYLE.FrameFontOutline);
-		CurPointsReqLevelLabel:SetText(l10n.PointsToLevel);
-		CurPointsReqLevelLabel:SetPoint("LEFT", PointsRemaining, "RIGHT", 8, 0);
-		local PointsToLevel = Frame:CreateFontString(nil, "ARTWORK");
-		PointsToLevel:SetFont(CT.TUISTYLE.FrameFont, CT.TUISTYLE.FrameFontSize, CT.TUISTYLE.FrameFontOutline);
-		PointsToLevel:SetText("10");
-		PointsToLevel:SetPoint("LEFT", CurPointsReqLevelLabel, "RIGHT", 2, 0);
-		CurPointsReqLevelLabel:SetTextColor(1.0, 1.0, 0.5, 1.0);
-		PointsToLevel:SetTextColor(1.0, 1.0, 0.5, 1.0);
+			local CurPointsReqLevelLabel = Frame:CreateFontString(nil, "ARTWORK");
+			CurPointsReqLevelLabel:SetFont(CT.TUISTYLE.FrameFont, CT.TUISTYLE.FrameFontSize, CT.TUISTYLE.FrameFontOutline);
+			CurPointsReqLevelLabel:SetText(l10n.PointsToLevel);
+			CurPointsReqLevelLabel:SetPoint("LEFT", PointsRemaining, "RIGHT", 8, 0);
+			local PointsToLevel = Frame:CreateFontString(nil, "ARTWORK");
+			PointsToLevel:SetFont(CT.TUISTYLE.FrameFont, CT.TUISTYLE.FrameFontSize, CT.TUISTYLE.FrameFontOutline);
+			PointsToLevel:SetText("10");
+			PointsToLevel:SetPoint("LEFT", CurPointsReqLevelLabel, "RIGHT", 2, 0);
+			CurPointsReqLevelLabel:SetTextColor(1.0, 1.0, 0.5, 1.0);
+			PointsToLevel:SetTextColor(1.0, 1.0, 0.5, 1.0);
 
-		objects.CurPointsRemainingLabel = CurPointsRemainingLabel;
-		objects.PointsRemaining = PointsRemaining;
-		objects.CurPointsUsedLabel = CurPointsUsedLabel;
-		objects.PointsUsed = PointsUsed;
-		objects.CurPointsReqLevelLabel = CurPointsReqLevelLabel;
-		objects.PointsToLevel = PointsToLevel;
+			objects.CurPointsRemainingLabel = CurPointsRemainingLabel;
+			objects.PointsRemaining = PointsRemaining;
+			objects.CurPointsUsedLabel = CurPointsUsedLabel;
+			objects.PointsUsed = PointsUsed;
+			objects.CurPointsReqLevelLabel = CurPointsReqLevelLabel;
+			objects.PointsToLevel = PointsToLevel;
+		end
 	end
 	function MT.UI.CreateFooterTreeButtons(Frame)
 		local objects = Frame.objects;
@@ -559,7 +561,7 @@ MT.BuildEnv('UI-SubObjects');
 			TreeButton.id = TreeIndex;
 			TreeButton.information = nil;
 			local Title = TreeButton:CreateFontString(nil, "OVERLAY");
-			Title:SetFont(CT.TUISTYLE.FrameFont, CT.TUISTYLE.FrameFontSizeMedium, "OUTLINE");
+			Title:SetFont(CT.TUISTYLE.TreeButtonsFont, CT.TUISTYLE.TreeButtonsFontSize, CT.TUISTYLE.TreeButtonsFontOutline);
 			Title:SetTextColor(0.9, 0.9, 0.9, 1.0);
 			Title:SetPoint("CENTER");
 			Title:SetWidth(CT.TUISTYLE.TreeButtonXSize);

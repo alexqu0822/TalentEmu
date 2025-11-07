@@ -13,6 +13,7 @@ local DT = __private.DT;
 	local type = type;
 	local next = next;
 	local tremove, concat = table.remove, table.concat;
+	local strsplit = string.split;
 	local strfind = string.find;
 	local strtrim, strupper, strsub, strmatch, format, gsub = string.trim, string.upper, string.sub, string.match, string.format, string.gsub;
 	local min, max = math.min, math.max;
@@ -676,12 +677,6 @@ MT.BuildEnv('METHOD');
 		end
 	end
 
-	--	arg			code, useCodeLevel
-	--	return		class, level, data
-	function MT.DecodeTalent(code)
-		local version, class, level, numGroup, activeGroup, data1, data2 = VT.__dep.__emulib.DecodeTalentData(code);
-		return class, level, numGroup, activeGroup, data1, data2;
-	end
 	--	arg			Frame
 	--	return		data
 	function MT.GetFrameData(Frame)
@@ -691,6 +686,12 @@ MT.BuildEnv('METHOD');
 			data = data .. (TalentSet[tier + 1] or "0");
 		end
 		return data;
+	end
+	--	arg			code, useCodeLevel
+	--	return		class, level, data
+	function MT.DecodeTalent(code)
+		local version, class, level, numGroup, activeGroup, data1, data2 = VT.__dep.__emulib.DecodeTalentData(code);
+		return class, level, numGroup, activeGroup, data1, data2;
 	end
 	--	arg			[Frame] or [class, level, data]
 	--	return		code
@@ -846,7 +847,7 @@ MT.BuildEnv('METHOD');
 		VT.QuerySent[name] = Tick;
 		VT.AutoShowEquipmentFrameOnComm[name] = Tick;
 		VT.ImportTargetFrame[name] = { Frame, };
-		local verkey = strsub(code, 1, 1);
+		local verkey = code:sub(1, 1);
 		if verkey ~= "_" and verkey ~= "!" then
 			return MT._CommDistributor.OnTalent("", name, code, "V1", VT.__dep.__emulib.DecodeTalentDataV1, false);
 		end
@@ -953,6 +954,7 @@ MT.BuildEnv('METHOD');
 
 	function MT.CreateEmulator(Frame, class, level, data, name, readOnly, rule, style)
 		Frame = Frame or MT.UI.GetFrame(VT.SET.singleFrame and 1 or nil);
+		MT.UI.FrameSetStyle(Frame, style or VT.SET.style);
 		Frame:Show();
 		if class == nil or class == "" then
 			class = CT.SELFCLASS;
