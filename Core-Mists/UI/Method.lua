@@ -251,11 +251,11 @@ MT.BuildEnv('UI-Method');
 			Frame.ClassTDB = ClassTDB;
 			Frame.initialized = true;
 
-			if CT.SELFCLASS == class then
-				Frame.ApplyTalentsButton:Show();
-			else
-				Frame.ApplyTalentsButton:Hide();
-			end
+			-- if CT.SELFCLASS == class then
+			-- 	Frame.ApplyTalentsButton:Show();
+			-- else
+			-- 	Frame.ApplyTalentsButton:Hide();
+			-- end
 
 			MT.UI.SpellListFrameUpdate(Frame.SpellListFrame, class, MT.GetPointsReqLevel(class, Frame.TotalUsedPoints));
 		end
@@ -407,7 +407,7 @@ MT.BuildEnv('UI-Method');
 	end
 	function MT.UI.FrameUpdateLabelText(Frame)
 		local objects = Frame.objects;
-		if Frame.name ~= nil then
+		if Frame.name ~= nil and Frame.TalData ~= nil then
 			if MT.GetFrameData(Frame) ~= Frame.TalData[Frame.activeGroup] then
 				objects.ResetToSetButton:Show();
 				if Frame.label ~= nil then
@@ -431,11 +431,13 @@ MT.BuildEnv('UI-Method');
 		Node:GetNormalTexture():SetVertexColor(CT.TTEXTURESET.ICON_LIGHT_COLOR[1], CT.TTEXTURESET.ICON_LIGHT_COLOR[2], CT.TTEXTURESET.ICON_LIGHT_COLOR[3], CT.TTEXTURESET.ICON_LIGHT_COLOR[4]);
 		Node:GetPushedTexture():SetVertexColor(CT.TTEXTURESET.ICON_LIGHT_COLOR[1], CT.TTEXTURESET.ICON_LIGHT_COLOR[2], CT.TTEXTURESET.ICON_LIGHT_COLOR[3], CT.TTEXTURESET.ICON_LIGHT_COLOR[4]);
 		Node.Name:SetTextColor(1.0, 1.0, 1.0, 1.0);
+		Node.Border:SetColorTexture(1.0, 0.5, 0.25, 0.75);
 	end
 	function MT.UI.TreeNodeUnlight(Node)
 		Node:GetNormalTexture():SetVertexColor(CT.TTEXTURESET.ICON_UNLIGHT_COLOR[1], CT.TTEXTURESET.ICON_UNLIGHT_COLOR[2], CT.TTEXTURESET.ICON_UNLIGHT_COLOR[3], CT.TTEXTURESET.ICON_UNLIGHT_COLOR[4]);
 		Node:GetPushedTexture():SetVertexColor(CT.TTEXTURESET.ICON_UNLIGHT_COLOR[1], CT.TTEXTURESET.ICON_UNLIGHT_COLOR[2], CT.TTEXTURESET.ICON_UNLIGHT_COLOR[3], CT.TTEXTURESET.ICON_UNLIGHT_COLOR[4]);
 		Node.Name:SetTextColor(0.75, 0.75, 0.75, 1.0);
+		Node.Border:SetColorTexture(0.0, 0.0, 0.0, 1.0);
 	end
 
 	local function TooltipFrame_OnUpdate_Tooltip1(TooltipFrame, elasped)
@@ -732,7 +734,7 @@ MT.BuildEnv('UI-Method');
 				local Node = GlyphNodes[index];
 				Node.info = nil;
 				Node.SpellID = nil;
-				Node.Texture = info[4];
+				Node.Texture = nil;
 				Node.Glyph:Hide();
 				local d0 = Node.d0;
 				if CT.BUILD == "WRATH" then

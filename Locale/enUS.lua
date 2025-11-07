@@ -141,7 +141,7 @@ l10n.CLASS = {
 	MONK = "monk",
 };
 l10n.SPEC = {
-	[0] = "NoSpec",
+	[0] = "None",
 
 	[398] = "Blood",
 	[399] = "Frost",
@@ -273,6 +273,9 @@ l10n.SLOTSHORT = {
 };
 
 --	Others
+l10n.Tooltip_SpecLabel = "|cffffffffSpecialization|r|cff9f9f9f:|r |cffffffff%s|r";
+l10n.Tooltip_SpecPrimary = "|cff00ff00Primary|r|cff9f9f9f:|r |cffffffff%s|r";
+l10n.Tooltip_SpecSecondary = "|cffffffffSecondary|r|cff9f9f9f:|r |cffffffff%s|r";
 l10n.Tooltip_CalaculatingItemLevel = "|cffffffffItemLevel|r|cff9f9f9f:|r |cff9f9f9fInspecting...|r";
 l10n.Tooltip_ItemLevel = "|cffffffffItemLevel|r|cff9f9f9f:|r |cffffffff%s|r";
 

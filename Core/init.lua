@@ -110,7 +110,7 @@ local DT = {  }; __private.DT = DT;		--	data
 	elseif CT.TOCVERSION < 50000 then
 		CT.BUILD = "CATA"
 	elseif CT.TOCVERSION < 60000 then
-		CT.BUILD = "PANDARIA";
+		CT.BUILD = "MISTS";
 	else
 	end
 	CT.ADDONVERSION = GetAddOnMetadata(__addon, "version");

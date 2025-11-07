@@ -141,7 +141,7 @@ l10n.CLASS = {
 	MONK = "武僧",
 };
 l10n.SPEC = {
-	[0] = "无专精",
+	[0] = "无",
 
 	[398] = "鲜血",
 	[399] = "冰霜",
@@ -273,6 +273,9 @@ l10n.SLOTSHORT = {
 };
 
 --	其它
+l10n.Tooltip_SpecLabel = "|cffffffff专精|r|cff9f9f9f:|r |cffffffff%s|r";
+l10n.Tooltip_SpecPrimary = "|cff00ff00主要|r|cff9f9f9f:|r |cffffffff%s|r";
+l10n.Tooltip_SpecSecondary = "|cffffffff次要|r|cff9f9f9f:|r |cffffffff%s|r";
 l10n.Tooltip_CalaculatingItemLevel = "|cffffffff装等|r|cff9f9f9f:|r |cff9f9f9f正在读取...|r";
 l10n.Tooltip_ItemLevel = "|cffffffff装等|r|cff9f9f9f:|r |cffffffff%s|r";
 

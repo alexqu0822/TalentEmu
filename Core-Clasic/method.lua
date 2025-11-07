@@ -678,8 +678,8 @@ MT.BuildEnv('METHOD');
 	function MT.GenerateLink(title, class, code)
 		return "|Hemu:" .. code .. "|h|c" .. CT.RAID_CLASS_COLORS[class].colorStr .. "[" .. title .. "]|r|h";
 	end
-	function MT.GenerateTalentString(class, data)
-		local line = "";
+	function MT.GenerateTalentTipString(class, data)
+		local line = nil;
 		local stats = MT.CountTreePoints(data, class);
 		local SpecList = DT.ClassSpec[class];
 		local cap = -1;
@@ -690,19 +690,36 @@ MT.BuildEnv('METHOD');
 			local SpecID = SpecList[TreeIndex];
 			if cap == stats[TreeIndex] then
 				if VT.SET.talents_in_tip_icon then
-					line = line .. "  |T" .. (DT.TalentSpecIcon[SpecID] or CT.TEXTUREUNK) .. format(":16|t |cffff7f1f%2d|r", stats[TreeIndex]);
+					if line == nil then
+						line = "|T" .. (DT.TalentSpecIcon[SpecID] or CT.TEXTUREUNK) .. format(":16|t |cffff7f1f%2d|r", stats[TreeIndex]);
+					else
+						line = line .. "  |T" .. (DT.TalentSpecIcon[SpecID] or CT.TEXTUREUNK) .. format(":16|t |cffff7f1f%2d|r", stats[TreeIndex]);
+					end
 				else
-					line = line .. "  |cffff7f1f" .. l10n.SPEC[SpecID] .. format(":%2d|r", stats[TreeIndex]);
+					if line == nil then
+						line = "|cffff7f1f" .. l10n.SPEC[SpecID] .. format(":%2d|r", stats[TreeIndex]);
+					else
+						line = line .. "  |cffff7f1f" .. l10n.SPEC[SpecID] .. format(":%2d|r", stats[TreeIndex]);
+					end
 				end
 			else
 				if VT.SET.talents_in_tip_icon then
-					line = line .. "  |T" .. (DT.TalentSpecIcon[SpecID] or CT.TEXTUREUNK) .. format(":16|t |cffffffff%2d|r", stats[TreeIndex]);
+					if line == nil then
+						line = "|T" .. (DT.TalentSpecIcon[SpecID] or CT.TEXTUREUNK) .. format(":16|t |cffffffff%2d|r", stats[TreeIndex]);
+					else
+						line = line .. "  |T" .. (DT.TalentSpecIcon[SpecID] or CT.TEXTUREUNK) .. format(":16|t |cffffffff%2d|r", stats[TreeIndex]);
+					end
 				else
+					if line == nil then
+						line = "|cffbfbfff" .. l10n.SPEC[SpecID] .. format(":%2d|r", stats[TreeIndex]);
+					else
+						line = line .. "  |cffbfbfff" .. l10n.SPEC[SpecID] .. format(":%2d|r", stats[TreeIndex]);
+					end
 					line = line .. "  |cffbfbfff" .. l10n.SPEC[SpecID] .. format(":%2d|r", stats[TreeIndex]);
 				end
 			end
 		end
-		return line .. "  ";
+		return line;
 	end
 	function MT.GetTreeNodeIndex(TalentDef)
 		return TalentDef[1] * DT.MAX_NUM_COL + TalentDef[2] + 1;

@@ -52,7 +52,6 @@ local DT = __private.DT;
 
 		SpecSpellFrameXToBorder = 1,
 		SpecSpellFrameYToBorder = 12,
-		SpecSpellFrameYToBottom = 12,
 		SpecSpellFrameHeaderYSize = 0,
 		SpecSpellFrameFooterYSize = 0,
 		SpecSpellFrameSeqWidth = 4,
@@ -84,15 +83,16 @@ local DT = __private.DT;
 
 		EquipmentFrameXSize = CT.TOCVERSION < 20000 and 280 or 340,
 		EquipmentFrameXMaxSize = CT.TOCVERSION < 20000 and 640 or 765,
-		EquipmentNodeSize = CT.TOCVERSION < 20000 and 36 or 38,
-		EquipmentNodeGap = CT.TOCVERSION < 20000 and 4 or 6,
+		EquipmentNodeSize = CT.TOCVERSION < 20000 and 36 or (CT.TOCVERSION < 50000 and 38 or 42),
+		EquipmentNodeGap = CT.TOCVERSION < 20000 and 4 or (CT.TOCVERSION < 50000 and 6 or 8),
 		EquipmentNodeXToBorder = 8,
 		EquipmentNodeYToBorder = 8,
 		EquipmentNodeTextGap = 4,
 		EquipmentNodeLayout = {
 			L = {  1,  2,  3, 15,  5, 19,  4,  9, },
 			R = { 10,  6,  7,  8, 11, 12, 13, 14, },
-			B = { 16, 17, 18,  0, },
+			B = { 16, 17, },
+			H = { 18,  0, },
 		},
 		EngravingNodeSize = 16;
 

@@ -78,12 +78,18 @@ MT.BuildEnv('TOOLTIP');
 						ReservedLine[1][Tooltip]:SetText(" ");
 					end
 					for group = 1, TalData.num do
-						local desc = MT.GenerateTalentString(class, TalData[group]);
+						local desc = MT.GenerateTalentTipString(class, TalData[group]);
 						if desc then
 							if group == TalData.active then
-								ReservedLine[group + 1][Tooltip]:SetText("|cff00ff00>|r" .. desc .. "|cff00ff00<|r");
+								if TalData.num < 2 then
+									ReservedLine[group + 1][Tooltip]:SetText(format(l10n.Tooltip_SpecLabel, desc));
+								else
+									ReservedLine[group + 1][Tooltip]:SetText(format(l10n.Tooltip_SpecPrimary, desc));
+								end
+								-- ReservedLine[group + 1][Tooltip]:SetText("|cff00ff00>|r" .. desc .. "|cff00ff00<|r");
 							else
-								ReservedLine[group + 1][Tooltip]:SetText("|cff000000>|r" .. desc .. "|cff000000<|r");
+								ReservedLine[group + 1][Tooltip]:SetText(format(l10n.Tooltip_SpecSecondary, desc));
+								-- ReservedLine[group + 1][Tooltip]:SetText("|cff000000>|r" .. desc .. "|cff000000<|r");
 							end
 						end
 					end

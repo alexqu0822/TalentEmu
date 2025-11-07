@@ -64,7 +64,7 @@ MT.BuildEnv('UI');
 		CT.TUISTYLE.FrameYSizeDefault_Style1 = CT.TUISTYLE.FrameHeaderYSize + CT.TUISTYLE.TreeFrameYSize + CT.TUISTYLE.TreeFrameYToBorder * 2 + CT.TUISTYLE.TreeButtonsBarYSize + CT.TUISTYLE.FrameFooterYSize;
 		CT.TUISTYLE.FrameXSizeDefault_Style2 = CT.TUISTYLE.FrameXSizeDefault_Style1;
 		CT.TUISTYLE.FrameYSizeDefault_Style2 = CT.TUISTYLE.FrameYSizeDefault_Style1;
-		CT.TUISTYLE.EquipmentContainerYSize = CT.TUISTYLE.EquipmentNodeYToBorder + CT.TUISTYLE.EquipmentNodeSize * 10 + CT.TUISTYLE.EquipmentNodeGap * 11 + CT.TUISTYLE.EquipmentNodeYToBorder;
+		CT.TUISTYLE.EquipmentContainerYSize = CT.TUISTYLE.EquipmentNodeYToBorder + CT.TUISTYLE.EquipmentNodeSize * 9 + CT.TUISTYLE.EquipmentNodeGap * 10 + CT.TUISTYLE.EquipmentNodeYToBorder;
 		VT.TooltipFrame = MT.UI.CreateTooltipFrame();
 	end);
 	MT.RegisterOnLogin('UI', function(LoggedIn)

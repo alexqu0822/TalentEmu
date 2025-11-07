@@ -16,7 +16,9 @@ local DT = __private.DT;
 	local strsplit = string.split;
 	local strfind = string.find;
 	local strtrim, strupper, strsub, strmatch, format, gsub = string.trim, string.upper, string.sub, string.match, string.format, string.gsub;
-	local min, max = math.min, math.max;
+	local min = math.min;
+	local max = math.max;
+	local abs = math.abs;
 	local band = bit.band;
 	local tonumber = tonumber;
 	local random = random;
@@ -37,11 +39,60 @@ local DT = __private.DT;
 	local UIParent = UIParent;
 	local GameTooltip = GameTooltip;
 	local GetSpecializationInfoByID = GetSpecializationInfoByID;				--	(id)	--	id, name, description, icon, role, class, loc-class
+	local GetAtlasInfo = C_Texture.GetAtlasInfo;
 
 -->
 	local l10n = CT.l10n;
 
 -->		constant
+-->
+	local RoleIcon = {
+		UNK = "|T" .. CT.TEXTUREUNK .. ":16|t",
+	}
+	local RoleAtlas = {
+		TANK = "UI-LFG-RoleIcon-Tank-Micro",
+		HEALER = "UI-LFG-RoleIcon-Healer-Micro",
+		DAMAGER = "UI-LFG-RoleIcon-DPS-Micro",
+	};
+	local temp = {  };
+	function MT.GetRoleIcon(role)
+		if RoleIcon[role] then
+			return RoleIcon[role];
+		elseif RoleAtlas[role] then
+			local atlas = RoleAtlas[role];
+			local AtlasInfo = GetAtlasInfo(atlas);
+			if AtlasInfo then
+				local w, h;
+				if temp[AtlasInfo.file] then
+					w = temp[AtlasInfo.file][1];
+					h = temp[AtlasInfo.file][2];
+				else
+					w = AtlasInfo.width / abs(AtlasInfo.rightTexCoord - AtlasInfo.leftTexCoord);
+					h = AtlasInfo.height / abs(AtlasInfo.bottomTexCoord - AtlasInfo.topTexCoord);
+					local b = 1;
+					while w > b do
+						b = b * 2;
+						if w <= b then
+							break;
+						end
+					end
+					b = 1;
+					while h > b do
+						b = b * 2;
+						if h <= b then
+							break;
+						end
+					end
+					temp[AtlasInfo.file] = { w, h, };
+				end
+				-- RoleIcon[role] = "|T" .. AtlasInfo.file .. ":16:16:0:0:" .. w .. ":" .. h .. ":" .. (AtlasInfo.leftTexCoord * w) .. ":" .. (AtlasInfo.rightTexCoord * w) .. ":" .. (AtlasInfo.topTexCoord * h) .. ":" .. (AtlasInfo.bottomTexCoord * h) .. "|t";
+				RoleIcon[role] = format("|T%d:16:16:0:0:%d:%d:%d:%d:%d:%d|t", AtlasInfo.file, w, h, (AtlasInfo.leftTexCoord * w), (AtlasInfo.rightTexCoord * w), (AtlasInfo.topTexCoord * h), (AtlasInfo.bottomTexCoord * h))
+				return RoleIcon[role];
+			end
+		end
+		return RoleIcon.UNK;
+	end
+
 -->
 MT.BuildEnv('METHOD');
 -->		predef
@@ -636,7 +687,7 @@ MT.BuildEnv('METHOD');
 			if SpecIndex then
 				local SpecID = SpecList[SpecIndex];
 				if SpecID then
-					local _, name, _, icon = GetSpecializationInfoByID(SpecID);
+					local _, name, _, icon, role = GetSpecializationInfoByID(SpecID);
 					return title .. (name or l10n.SPEC[0] .. " (" .. SpecIndex .. ")") .. ": " .. strsub(data, 2);
 				else
 					return title .. (l10n.SPEC[0] .. " (" .. SpecIndex .. ")") .. ": " .. strsub(data, 2);
@@ -656,22 +707,22 @@ MT.BuildEnv('METHOD');
 	function MT.GenerateLink(title, class, code)
 		return "|Hemu:" .. code .. "|h|c" .. CT.RAID_CLASS_COLORS[class].colorStr .. "[" .. title .. "]|r|h";
 	end
-	function MT.GenerateTalentString(class, data)
+	function MT.GenerateTalentTipString(class, data)
 		local SpecIndex = tonumber(strsub(data, 1, 1));
 		if SpecIndex then
 			local SpecID = DT.ClassSpec[class][SpecIndex];
 			if SpecID then
-				local _, name, _, icon = GetSpecializationInfoByID(SpecID);
+				local _, name, _, icon, role = GetSpecializationInfoByID(SpecID);
 				if VT.SET.talents_in_tip_icon then
-					return "  |T" .. (icon or DT.TalentSpecIcon[SpecID] or CT.TEXTUREUNK) .. ":16|t |cffff7f1f" .. strsub(data, 2) .. "|r  ";
+					return MT.GetRoleIcon(role) .. "|T" .. (icon or DT.TalentSpecIcon[SpecID] or CT.TEXTUREUNK) .. ":16|t  |cffff7f1f" .. (name or l10n.SPEC[0]) .. "  " .. strsub(data, 2) .. "|r";
 				else
-					return "  |cffff7f1f" .. (name or l10n.SPEC[0] .. " (" .. SpecIndex .. ")") .. ": " .. strsub(data, 2) .. "|r  ";
+					return MT.GetRoleIcon(role) .. "|cffff7f1f" .. (name or l10n.SPEC[0]) .. "  " .. strsub(data, 2) .. "|r";
 				end
 			else
 				if VT.SET.talents_in_tip_icon then
-					return "  |T" .. CT.TEXTUREUNK .. ":16|t |cffff7f1f" .. strsub(data, 2) .. "|r  ";
+					return MT.GetRoleIcon(role) .. "|T" .. CT.TEXTUREUNK .. ":16|t  |cffff7f1f" .. l10n.SPEC[0] .. "  " .. strsub(data, 2) .. "|r";
 				else
-					return "  |cffff7f1f" .. (l10n.SPEC[0] .. " (" .. SpecIndex .. ")") .. ": " .. strsub(data, 2) .. "|r  ";
+					return MT.GetRoleIcon(role) .. "|cffff7f1f" .. l10n.SPEC[0]  .. "  " .. strsub(data, 2) .. "|r";
 				end
 			end
 		end

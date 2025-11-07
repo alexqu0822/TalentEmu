@@ -662,6 +662,9 @@ MT.BuildEnv('UI-SubObjects');
 		ApplyTalentsButtonProgress:SetPoint("LEFT", ApplyTalentsButton, "RIGHT", 4, 0);
 		ApplyTalentsButton.Progress = ApplyTalentsButtonProgress;
 		Frame.ApplyTalentsProgress = ApplyTalentsButtonProgress;
+		if CT.TOCVERSION >= 50000 then
+			ApplyTalentsButton:Hide();
+		end
 
 		local SettingButton = CreateFrame('BUTTON', nil, Frame.SideAnchorBottom);
 		SettingButton:SetSize(CT.TUISTYLE.SideButtonSize, CT.TUISTYLE.SideButtonSize);

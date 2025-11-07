@@ -191,7 +191,7 @@ MT.BuildEnv('UI-EquipmentContainer');
 			Engr.slot = slot;
 			EngravingNodes[slot] = Engr;
 		end
-		local L, R, B = CT.TUISTYLE.EquipmentNodeLayout.L, CT.TUISTYLE.EquipmentNodeLayout.R, CT.TUISTYLE.EquipmentNodeLayout.B;
+		local L, R, B, H = CT.TUISTYLE.EquipmentNodeLayout.L, CT.TUISTYLE.EquipmentNodeLayout.R, CT.TUISTYLE.EquipmentNodeLayout.B, CT.TUISTYLE.EquipmentNodeLayout.H;
 		for index, slot in next, L do
 			local Node = EquipmentNodes[slot];
 			Node:SetPoint("TOPLEFT", CT.TUISTYLE.EquipmentNodeXToBorder, -CT.TUISTYLE.EquipmentNodeYToBorder - (CT.TUISTYLE.EquipmentNodeSize + CT.TUISTYLE.EquipmentNodeGap) * (index - 1));
@@ -210,11 +210,12 @@ MT.BuildEnv('UI-EquipmentContainer');
 			local Engr = EngravingNodes[slot];
 			Engr:SetPoint("TOPRIGHT", 2, 2);
 		end
+		local top = ceil(#B * 0.5) - 1;
 		for index, slot in next, B do
 			local Node = EquipmentNodes[slot];
 			Node:SetPoint("BOTTOM",
 				((index - 1) % 2 - 0.5) * (CT.TUISTYLE.EquipmentNodeSize + CT.TUISTYLE.EquipmentNodeGap),
-				(1 - floor((index - 1) / 2)) * (CT.TUISTYLE.EquipmentNodeSize + CT.TUISTYLE.EquipmentNodeGap) + CT.TUISTYLE.EquipmentNodeYToBorder);
+				(top - floor((index - 1) / 2)) * (CT.TUISTYLE.EquipmentNodeSize + CT.TUISTYLE.EquipmentNodeGap) + CT.TUISTYLE.EquipmentNodeYToBorder);
 			if (index - 1) % 2 == 0 then
 				Node.Name:SetPoint("TOPRIGHT", Node, "TOPLEFT", -CT.TUISTYLE.EquipmentNodeTextGap, 0);
 				Node.Ench:SetPoint("RIGHT", Node, "LEFT", -CT.TUISTYLE.EquipmentNodeTextGap, 0);
@@ -227,6 +228,12 @@ MT.BuildEnv('UI-EquipmentContainer');
 				Node.Gem:SetPoint("BOTTOMLEFT", Node, "BOTTOMRIGHT", CT.TUISTYLE.EquipmentNodeTextGap, 0);
 				local Engr = EngravingNodes[slot];
 				Engr:SetPoint("TOPRIGHT", -2, 2);
+			end
+		end
+		if H then
+			for index, slot in next, H do
+				local Node = EquipmentNodes[slot];
+				Node:Hide();
 			end
 		end
 		EquipmentContainer.Frame = Frame;
@@ -262,6 +269,17 @@ MT.BuildEnv('UI-EquipmentContainer');
 					235	Minor = 2
 					789	PRIME = 3
 			--]]
+			local SIZELOOKUP = {
+				[1] = CT.TUISTYLE.MajorGlyphNodeSize,
+				[2] = CT.TUISTYLE.MinorGlyphNodeSize,
+				[3] = CT.TUISTYLE.PrimeGlyphNodeSize,
+			};
+			--local R = CT.TUISTYLE.GlyphFrameSize * 0.5 - size * 0.5 - 2;
+			local RADIUSLOOKUP = {
+				[1] = CT.TUISTYLE.MinorGlyphNodeSize * 0.5 + CT.TUISTYLE.MajorGlyphNodeSize * 0.5,
+				[2] = CT.TUISTYLE.MinorGlyphNodeSize * 0.5,
+				[3] = CT.TUISTYLE.MinorGlyphNodeSize * 0.75 + CT.TUISTYLE.PrimeGlyphNodeSize * 0.5,
+			};
 			local NodesDef, RingCoord, HighlightCoord;
 			if CT.BUILD == "WRATH" then
 				NodesDef = {
@@ -281,6 +299,33 @@ MT.BuildEnv('UI-EquipmentContainer');
 				HighlightCoord = {
 					[1] = { 0.765625, 0.927734375, 0.15625, 0.31640625, },
 					[2] = { 0.765625, 0.927734375, 0.15625, 0.31640625, },
+				};
+			elseif CT.BUILD == "MISTS" then
+				SIZELOOKUP = {
+					[1] = CT.TUISTYLE.PrimeGlyphNodeSize,
+					[2] = CT.TUISTYLE.MajorGlyphNodeSize,
+				};
+				--local R = CT.TUISTYLE.GlyphFrameSize * 0.5 - size * 0.5 - 2;
+				RADIUSLOOKUP = {
+					[1] = CT.TUISTYLE.MinorGlyphNodeSize * 0.75 + CT.TUISTYLE.PrimeGlyphNodeSize * 0.5,
+					[2] = CT.TUISTYLE.MinorGlyphNodeSize * 0.5 + CT.TUISTYLE.MajorGlyphNodeSize * 0.5,
+				};
+				NodesDef = {
+					[0] = { 0,   0, 1.00, 1.00, 1.00, 1.00, 0.0, 1.0, 0.0, 1.0, },
+					[1] = { 2,  60, 1.00, 1.00, 1.00, 1.00, 0.0, 1.0, 0.0, 1.0, },
+					[2] = { 1,   0, 1.00, 1.00, 1.00, 1.00, 0.0, 1.0, 0.0, 1.0, },
+					[3] = { 2, 300, 1.00, 1.00, 1.00, 1.00, 0.0, 1.0, 0.0, 1.0, },
+					[4] = { 1, 240, 1.00, 1.00, 1.00, 1.00, 0.0, 1.0, 0.0, 1.0, },
+					[5] = { 2, 180, 1.00, 1.00, 1.00, 1.00, 0.0, 1.0, 0.0, 1.0, },
+					[6] = { 1, 120, 1.00, 1.00, 1.00, 1.00, 0.0, 1.0, 0.0, 1.0, },
+				};
+				RingCoord = {
+					[1] = { 0.85839844, 0.93847656, 0.22265625, 0.30273438, },
+					[2] = { 0.85839844, 0.92285156, 0.00097656, 0.06542969, },
+				};
+				HighlightCoord = {
+					[1] = { 0.85839844, 0.95214844, 0.30468750, 0.39843750, },
+					[2] = { 0.85839844, 0.93652344, 0.06738281, 0.14550781, },
 				};
 			else
 				NodesDef = {
@@ -306,17 +351,6 @@ MT.BuildEnv('UI-EquipmentContainer');
 					[3] = { 0.85839844, 0.95214844, 0.30468750, 0.39843750, },
 				};
 			end
-			local SIZELOOKUP = {
-				[1] = CT.TUISTYLE.MajorGlyphNodeSize,
-				[2] = CT.TUISTYLE.MinorGlyphNodeSize,
-				[3] = CT.TUISTYLE.PrimeGlyphNodeSize,
-			};
-			--local R = CT.TUISTYLE.GlyphFrameSize * 0.5 - size * 0.5 - 2;
-			local RADIUSLOOKUP = {
-				[1] = CT.TUISTYLE.MinorGlyphNodeSize * 0.5 + CT.TUISTYLE.MajorGlyphNodeSize * 0.5,
-				[2] = CT.TUISTYLE.MinorGlyphNodeSize * 0.5,
-				[3] = CT.TUISTYLE.MinorGlyphNodeSize * 0.75 + CT.TUISTYLE.PrimeGlyphNodeSize * 0.5,
-			};
 			for index = 1, #NodesDef do
 				local def = NodesDef[index];
 				local size = SIZELOOKUP[def[1]];
