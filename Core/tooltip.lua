@@ -20,7 +20,7 @@ local DT = __private.DT;
 	local GetSpellBookItemName = GetSpellBookItemName;
 	local GetActionInfo = GetActionInfo;
 	local GetMacroSpell = GetMacroSpell;
-	local _G = _G;
+	local CreateFrame = CreateFrame;
 	local GameTooltip = GameTooltip;
 	local ItemRefTooltip = ItemRefTooltip;
 
@@ -78,31 +78,14 @@ MT.BuildEnv('TOOLTIP');
 						ReservedLine[1][Tooltip]:SetText(" ");
 					end
 					for group = 1, TalData.num do
-						local line = group == TalData.active and "|cff00ff00>|r" or "|cff000000>|r";
-						local stats = MT.CountTreePoints(TalData[group], class);
-						local SpecList = DT.ClassSpec[class];
-						local cap = -1;
-						if stats[1] ~= stats[2] or stats[1] ~= stats[3] then
-							cap = max(stats[1], stats[2], stats[3]);
-						end
-						for TreeIndex = 1, 3 do
-							local SpecID = SpecList[TreeIndex];
-							if cap == stats[TreeIndex] then
-								if VT.SET.talents_in_tip_icon then
-									line = line .. "  |T" .. (DT.TalentSpecIcon[SpecID] or CT.TEXTUREUNK) .. format(":16|t |cffff7f1f%2d|r", stats[TreeIndex]);
-								else
-									line = line .. "  |cffff7f1f" .. l10n.SPEC[SpecID] .. format(":%2d|r", stats[TreeIndex]);
-								end
+						local desc = MT.GenerateTalentString(class, TalData[group]);
+						if desc then
+							if group == TalData.active then
+								ReservedLine[group + 1][Tooltip]:SetText("|cff00ff00>|r" .. desc .. "|cff00ff00<|r");
 							else
-								if VT.SET.talents_in_tip_icon then
-									line = line .. "  |T" .. (DT.TalentSpecIcon[SpecID] or CT.TEXTUREUNK) .. format(":16|t |cffffffff%2d|r", stats[TreeIndex]);
-								else
-									line = line .. "  |cffbfbfff" .. l10n.SPEC[SpecID] .. format(":%2d|r", stats[TreeIndex]);
-								end
+								ReservedLine[group + 1][Tooltip]:SetText("|cff000000>|r" .. desc .. "|cff000000<|r");
 							end
 						end
-						line = line .. (group == TalData.active and "  |cff00ff00<|r" or "  |cff000000<|r");
-						ReservedLine[group + 1][Tooltip]:SetText(line);
 					end
 				end
 				if VT.__supreme and cache.PakData[1] ~= nil then
@@ -300,7 +283,7 @@ MT.BuildEnv('TOOLTIP');
 		hooksecurefunc(Tooltip, "SetSpellByID", HookSetSpellByID);
 		hooksecurefunc(Tooltip, "SetAction", HookSetAction);
 
-		UpdateFrame = CreateFrame('FRAME');
+		local UpdateFrame = CreateFrame('FRAME');
 		UpdateFrame:Hide();
 		UpdateFrame:SetSize(1, 1);
 		UpdateFrame:SetAlpha(0);

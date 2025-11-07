@@ -12,7 +12,6 @@ local DT = __private.DT;
 	local next = next;
 	local tremove = table.remove;
 	local RequestLoadSpellData = C_Spell.RequestLoadSpellData;
-	local _G = _G;
 
 -->
 	local l10n = CT.l10n;
@@ -28,29 +27,10 @@ MT.BuildEnv('DATA');
 		-- 1---- 2--- 3-- 4-------- 5------- 6------ 7----- 8-------- 9------- 10--------- 11-------------------- 12
 		--tier, col, id, maxPoint, reqTier, reqCol, reqId, Spell[5], texture, icon-index, req-index[] in TreeTDB, { req-by-index } in TreeTDB
 		for class, ClassTDB in next, DT.TalentDB do
-			for SpecID, TreeTDB in next, ClassTDB do
-				for TalentSeq = 1, #TreeTDB do
-					local TalentDef = TreeTDB[TalentSeq];
-					if TalentDef[1] ~= nil then
-						TalentDef[10] = TalentDef[1] * DT.MAX_NUM_COL + TalentDef[2] + 1;
-						if TalentDef[5] ~= nil and TalentDef[6] ~= nil then
-							for Seq, Def in next, TreeTDB do
-								if Def[1] == TalentDef[5] and Def[2] == TalentDef[6] then
-									TalentDef[11] = Seq;
-									local depby = Def[12];
-									if depby ~= nil then
-										depby[#depby + 1] = TalentSeq;
-									else
-										Def[12] = { TalentSeq, };
-									end
-									break;
-								end
-							end
-							if TalentDef[11] == nil then
-								MT.Debug("Data.OnInit.ProcDB", 1, "req of ", TalentDef[1], TalentDef[2], TalentDef[5], TalentDef[6], "missing");
-							end
-						end
-					end
+			for TalentSeq = 1, #ClassTDB do
+				local TalentDef = ClassTDB[TalentSeq];
+				if TalentDef[1] ~= nil then
+					TalentDef[10] = TalentDef[1] * DT.MAX_NUM_COL + TalentDef[2] + 1;
 				end
 			end
 		end
@@ -83,19 +63,14 @@ MT.BuildEnv('DATA');
 					local rid = SpellDef.require or SpellDef[1][2];
 					local ClassTDB = DT.TalentDB[class];
 					local SpecList = DT.ClassSpec[class];
-					for TreeIndex = 1, 3 do
-						local SpecID = SpecList[TreeIndex];
-						local TreeTDB = ClassTDB[SpecID];
-						if SpellDef.requireIndex ~= nil then
+					if SpellDef.requireIndex ~= nil then
+						break;
+					end
+					for TalentSeq = 1, #ClassTDB do
+						local TalentDef = ClassTDB[TalentSeq];
+						if TalentDef[8][1] == rid then
+							SpellDef.requireIndex = TalentSeq;
 							break;
-						end
-						for TalentSeq = 1, #TreeTDB do
-							local TalentDef = TreeTDB[TalentSeq];
-							if TalentDef[8][1] == rid then
-								SpellDef.requireSpecIndex = TreeIndex;
-								SpellDef.requireIndex = TalentSeq;
-								break;
-							end
 						end
 					end
 				end
@@ -104,12 +79,10 @@ MT.BuildEnv('DATA');
 	end
 	local function PreLoad()	--	unnecessary
 		for class, ClassTDB in next, DT.TalentDB do
-			for SpecID, TreeTDB in next, ClassTDB do
-				for TalentSeq = 1, #TreeTDB do
-					local TalentDef = TreeTDB[TalentSeq];
-					for Level = 1, TalentDef[4] do
-						RequestLoadSpellData(TalentDef[8][Level]);
-					end
+			for TalentSeq = 1, #ClassTDB do
+				local TalentDef = ClassTDB[TalentSeq];
+				for Level = 1, TalentDef[4] do
+					RequestLoadSpellData(TalentDef[8][Level]);
 				end
 			end
 		end

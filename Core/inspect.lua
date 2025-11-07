@@ -12,7 +12,6 @@ local DT = __private.DT;
 	local hooksecurefunc = hooksecurefunc;
 	local UnitGUID, UnitName, UnitLevel, UnitClassBase = UnitGUID, UnitName, UnitLevel, UnitClassBase;
 	local CreateFrame = CreateFrame;
-	local _G = _G;
 	local UIParent = UIParent;
 
 -->
@@ -53,7 +52,7 @@ MT.BuildEnv('INSPECT');
 			local name = info[2];
 			local class = info[3];
 			local level = info[4];
-			local code, numGroup, activeGroup, data1, data2 = VT.__dep.__emulib.EncodeInspectTalentDataV2(class, level);
+			local code, numGroup, activeGroup, data1, data2 = VT.__dep.__emulib.EncodeInspectTalentDataV2(class, level, unit);
 			if data1 ~= nil and (numGroup == 1 or data2 ~= nil) and code ~= nil then
 				local cache = VT.TQueryCache[name];
 				if cache == nil then

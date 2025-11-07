@@ -11,6 +11,8 @@ local DT = __private.DT;
 --		upvalue
 	local wipe = table.wipe;
 	local format = string.format;
+	local strsub = string.sub;
+	local tonumber = tonumber;
 	local UnitName = UnitName;
 	local UnitLevel = UnitLevel;
 	local UnitClassBase = UnitClassBase;
@@ -27,10 +29,10 @@ local DT = __private.DT;
 	local Ambiguate = Ambiguate;
 	local GetMouseFocus = VT._comptb.GetMouseFocus;
 	local CreateFrame = CreateFrame;
-	local _G = _G;
 	local UIParent = UIParent;
 	local GameTooltip = GameTooltip;
 	local UISpecialFrames = UISpecialFrames;
+	local GetSpecializationInfoByID = GetSpecializationInfoByID;				--	(id)	--	id, name, description, icon, role, class, loc-class
 
 -->
 	local l10n = CT.l10n;
@@ -127,7 +129,7 @@ MT.BuildEnv('RAIDTOOL');
 							if loc ~= "INVTYPE_2HWEAPON" then
 								missItems = missItems + 1;
 							end
-						elseif slot == 18 and IGNORE_SLOT18[class] then
+						elseif slot == 18 and (CT.TOCVERSION >= 50000 or IGNORE_SLOT18[class]) then
 						else
 							missItems = missItems + 1;
 						end
@@ -225,30 +227,46 @@ MT.BuildEnv('RAIDTOOL');
 		Title:SetMaxLines(1);
 		Node.Title = Title;
 
-		local Specs = {  };
-		for TreeIndex = 1, 3 do
+		if CT.TOCVERSION < 50000 then
+			local Specs = {  };
+			for TreeIndex = 1, 3 do
+				local SpecIcon = Node:CreateTexture(nil, "OVERLAY");
+				SpecIcon:SetSize(buttonHeight - 4, buttonHeight - 4);
+				local SpecText = Node:CreateFontString(nil, "OVERLAY");
+				SpecText:SetFont(TUISTYLE.RaidToolUIFont, TUISTYLE.RaidToolUIFontSize, TUISTYLE.RaidToolUIFontOutline);
+				SpecText:SetPoint("LEFT", SpecIcon, "RIGHT", 4, 0);
+				SpecText:SetJustifyH("LEFT");
+				SpecIcon.Name = SpecText;
+				Specs[TreeIndex] = SpecIcon;
+			end
+			Specs[1]:SetPoint("LEFT", Node, "LEFT", 160, 0);
+			Specs[2]:SetPoint("LEFT", Specs[1], "RIGHT", 24, 0);
+			Specs[3]:SetPoint("LEFT", Specs[2], "RIGHT", 24, 0);
+			Node.Specs = Specs;
+		else
 			local SpecIcon = Node:CreateTexture(nil, "OVERLAY");
 			SpecIcon:SetSize(buttonHeight - 4, buttonHeight - 4);
+			SpecIcon:SetPoint("LEFT", Node, "LEFT", 160, 0);
 			local SpecText = Node:CreateFontString(nil, "OVERLAY");
 			SpecText:SetFont(TUISTYLE.RaidToolUIFont, TUISTYLE.RaidToolUIFontSize, TUISTYLE.RaidToolUIFontOutline);
 			SpecText:SetPoint("LEFT", SpecIcon, "RIGHT", 4, 0);
 			SpecText:SetJustifyH("LEFT");
 			SpecIcon.Name = SpecText;
-			Specs[TreeIndex] = SpecIcon;
+			Node.Specs = { SpecIcon, SpecText, };
 		end
-		Specs[1]:SetPoint("LEFT", Node, "LEFT", 160, 0);
-		Specs[2]:SetPoint("LEFT", Specs[1], "RIGHT", 24, 0);
-		Specs[3]:SetPoint("LEFT", Specs[2], "RIGHT", 24, 0);
-		Node.Specs = Specs;
 
 		local ItemLevel = Node:CreateFontString(nil, "OVERLAY");
 		ItemLevel:SetFont(TUISTYLE.RaidToolUIFont, TUISTYLE.RaidToolUIFontSize, TUISTYLE.RaidToolUIFontOutline);
-		ItemLevel:SetPoint("RIGHT", Specs[3], "RIGHT", 68, 0);
+		if CT.TOCVERSION < 50000 then
+			ItemLevel:SetPoint("RIGHT", Node.Specs[3], "RIGHT", 68, 0);
+		else
+			ItemLevel:SetPoint("RIGHT", Node.Specs[1], "RIGHT", 116, 0);
+		end
 		Node.ItemLevel = ItemLevel;
 
 		local ItemSummary = Node:CreateFontString(nil, "OVERLAY");
 		ItemSummary:SetFont(TUISTYLE.RaidToolUIFont, TUISTYLE.RaidToolUIFontSize, TUISTYLE.RaidToolUIFontOutline);
-		ItemSummary:SetPoint("LEFT", ItemLevel, "RIGHT", 4, 0);
+		ItemSummary:SetPoint("LEFT", ItemLevel, "LEFT", 36, 0);
 		Node.ItemSummary = ItemSummary;
 
 		local EnchantSummary = Node:CreateFontString(nil, "OVERLAY");
@@ -311,22 +329,33 @@ MT.BuildEnv('RAIDTOOL');
 			end
 			if class ~= nil and cache ~= nil then
 				local TalData = cache.TalData;
-				if TalData ~= nil then
-					local stats = MT.CountTreePoints(TalData[TalData.active], class);
-					local Specs = Node.Specs;
-					local SpecList = DT.ClassSpec[class];
-					for TreeIndex = 1, 3 do
-						local SpecIcon = Specs[TreeIndex];
-						local SpecID = SpecList[TreeIndex];
-						SpecIcon:SetTexture(DT.TalentSpecIcon[SpecID] or TTEXTURESET.UNK);
-						SpecIcon.Name:SetText(stats[TreeIndex]);
+				local SpecList = DT.ClassSpec[class];
+				local Specs = Node.Specs;
+				if CT.TOCVERSION < 50000 then
+					if TalData ~= nil then
+						local stats = MT.CountTreePoints(TalData[TalData.active], class);
+						for TreeIndex = 1, 3 do
+							local SpecIcon = Specs[TreeIndex];
+							local SpecID = SpecList[TreeIndex];
+							SpecIcon:SetTexture(DT.TalentSpecIcon[SpecID] or TTEXTURESET.UNK);
+							SpecIcon.Name:SetText(stats[TreeIndex]);
+						end
+					else
+						for TreeIndex = 1, 3 do
+							local SpecIcon = Specs[TreeIndex];
+							SpecIcon:SetTexture(TTEXTURESET.UNK);
+							SpecIcon.Name:SetText("*");
+						end
 					end
 				else
-					local Specs = Node.Specs;
-					for TreeIndex = 1, 3 do
-						local SpecIcon = Specs[TreeIndex];
-						SpecIcon:SetTexture(TTEXTURESET.UNK);
-						SpecIcon.Name:SetText("*");
+					if TalData ~= nil and TalData[TalData.active] then
+						local SpecID = DT.ClassSpec[class][tonumber(strsub(TalData[TalData.active], 1, 1))];
+						local _, name, _, icon = GetSpecializationInfoByID(SpecID);
+						Specs[1]:SetTexture(icon or TTEXTURESET.UNK);
+						Specs[2]:SetText(strsub(TalData[TalData.active], 2));
+					else
+						Specs[1]:SetTexture(TTEXTURESET.UNK);
+						Specs[2]:SetText("*");
 					end
 				end
 				if cache.EquData.AverageItemLevel then
@@ -365,10 +394,15 @@ MT.BuildEnv('RAIDTOOL');
 				end
 			else
 				local Specs = Node.Specs;
-				for TreeIndex = 1, 3 do
-					local SpecIcon = Specs[TreeIndex];
-					SpecIcon:SetTexture(TTEXTURESET.UNK);
-					SpecIcon.Name:SetText("*");
+				if CT.TOCVERSION < 50000 then
+					for TreeIndex = 1, 3 do
+						local SpecIcon = Specs[TreeIndex];
+						SpecIcon:SetTexture(TTEXTURESET.UNK);
+						SpecIcon.Name:SetText("*");
+					end
+				else
+					Specs[1]:SetTexture(TTEXTURESET.UNK);
+					Specs[2]:SetText("*");
 				end
 				Node.ItemLevel:SetText("");
 				Node.ItemSummary:SetText("");
@@ -445,7 +479,7 @@ MT.BuildEnv('RAIDTOOL');
 			info[1] = class;
 			info[2] = level;
 			info[3] = true;
-			info[4] = unit;
+			info[4] = 'player';
 			-- MT.SendQueryRequest(name, nil, force_update, false);
 		end
 		if IsInRaid() then
@@ -562,7 +596,11 @@ MT.BuildEnv('RAIDTOOL');
 			--	LAYERS
 				local RaidToolLableItemLevel = Frame:CreateFontString(nil, "OVERLAY");
 				RaidToolLableItemLevel:SetFont(TUISTYLE.RaidToolUIFont, TUISTYLE.RaidToolUIFontSize, TUISTYLE.RaidToolUIFontOutline);
-				RaidToolLableItemLevel:SetPoint("BOTTOMLEFT", ScrollList, "TOPLEFT", 164 + (TUISTYLE.RaidToolUIFrameButtonHeight - 4 + 24) * 3 + 12, 4);
+				if CT.TOCVERSION < 50000 then
+					RaidToolLableItemLevel:SetPoint("BOTTOMRIGHT", ScrollList, "TOPLEFT", 160 + (TUISTYLE.RaidToolUIFrameButtonHeight - 4 + 24) * 3 + 44, 4);
+				else
+					RaidToolLableItemLevel:SetPoint("BOTTOMRIGHT", ScrollList, "TOPLEFT", 160 + (TUISTYLE.RaidToolUIFrameButtonHeight - 4 + 72) + 44, 4);
+				end
 				RaidToolLableItemLevel:SetText(l10n.RaidTool_LableItemLevel);
 				Frame.LableItemLevel = RaidToolLableItemLevel;
 				local RaidToolLableItemSummary = Frame:CreateFontString(nil, "OVERLAY");

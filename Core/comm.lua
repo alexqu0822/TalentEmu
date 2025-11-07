@@ -511,6 +511,10 @@ MT.BuildEnv('COMM');
 	local function Hooked_SendChatMessage(text, ...)
 		__SendChatMessage(SendFilter(text, ...), ...);
 	end
+	local __C_ChatInfo_SendChatMessage = nil;
+	local function Hooked_C_ChatInfo_SendChatMessage(text, ...)
+		__C_ChatInfo_SendChatMessage(SendFilter(text, ...), ...);
+	end
 	local __BNSendWhisper = nil;
 	local function Hooked_BNSendWhisper(presenceID, text, ...)
 		__BNSendWhisper(presenceID, SendFilter(text, ...), ...);
@@ -557,12 +561,25 @@ MT.BuildEnv('COMM');
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT", ChatFilter_CHAT);
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT_LEADER", ChatFilter_CHAT);
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", ChatFilter_CHAT);
-		__SendChatMessage = _G.SendChatMessage;
-		_G.SendChatMessage = Hooked_SendChatMessage;
-		__BNSendWhisper = _G.BNSendWhisper;
-		_G.BNSendWhisper = Hooked_BNSendWhisper;
-		__BNSendConversationMessage = _G.BNSendConversationMessage;
-		_G.BNSendConversationMessage = Hooked_BNSendConversationMessage;
+		if _G.SendChatMessage then
+			__SendChatMessage = _G.SendChatMessage;
+			_G.SendChatMessage = Hooked_SendChatMessage;
+		end
+		local C_ChatInfo = _G.C_ChatInfo;
+		if C_ChatInfo then
+			if C_ChatInfo.SendChatMessage then
+				__C_ChatInfo_SendChatMessage = C_ChatInfo.SendChatMessage;
+				C_ChatInfo.SendChatMessage = Hooked_C_ChatInfo_SendChatMessage;
+			end
+		end
+		if _G.BNSendWhisper then
+			__BNSendWhisper = _G.BNSendWhisper;
+			_G.BNSendWhisper = Hooked_BNSendWhisper;
+		end
+		if _G.BNSendConversationMessage then
+			__BNSendConversationMessage = _G.BNSendConversationMessage;
+			_G.BNSendConversationMessage = Hooked_BNSendConversationMessage;
+		end
 	end);
 	MT.RegisterOnLogin('COMM', function(LoggedIn)
 	end);

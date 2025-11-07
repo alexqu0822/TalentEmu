@@ -19,7 +19,6 @@ local DT = __private.DT;
 	local SendAddonMessage = C_ChatInfo ~= nil and C_ChatInfo.SendAddonMessage or SendAddonMessage;
 	local Ambiguate = Ambiguate;
 	local GetClassInfo = C_CreatureInfo.GetClassInfo;
-	local _G = _G;
 
 -->
 	local l10n = CT.l10n;

@@ -137,8 +137,11 @@ l10n.CLASS = {
 	SHAMAN = "shaman",
 	WARLOCK = "warlock",
 	WARRIOR = "warrior",
+	MONK = "monk",
 };
 l10n.SPEC = {
+	[0] = "NoSpec",
+
 	[398] = "Blood",
 	[399] = "Frost",
 	[400] = "Unholy",

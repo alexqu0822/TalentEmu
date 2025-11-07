@@ -5,6 +5,7 @@
     <script file = "bcc.lua" />
     <script file = "wrath.lua" />
     <script file = "cata.lua" />
+    <script file = "mists.lua" />
 
 </Ui>
 

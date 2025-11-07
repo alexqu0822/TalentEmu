@@ -10,7 +10,6 @@ local DT = __private.DT;
 
 --		upvalue
 	local next = next;
-	local select = select;
 	local GetPlayerInfoByGUID = GetPlayerInfoByGUID;
 	local GetTalentInfo = GetTalentInfo;
 	local GetAddOnInfo, IsAddOnLoaded = GetAddOnInfo, IsAddOnLoaded;
@@ -178,7 +177,7 @@ MT.BuildEnv('MISC');
 	MT.RegisterOnInit('MISC', function(LoggedIn)
 	end);
 	MT.RegisterOnLogin('MISC', function(LoggedIn)
-		if CT.TOCVERSION >= 30000 then
+		if CT.TOCVERSION >= 30000 and CT.TOCVERSION < 50000 then
 			local Map = VT.__dep.__emulib.GetTalentMap(CT.SELFCLASS);
 			VT.MAP[CT.SELFCLASS] = { VMap = Map.VMap, RMap = Map.RMap, };
 		end
