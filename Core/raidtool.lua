@@ -266,7 +266,7 @@ MT.BuildEnv('RAIDTOOL');
 
 		local ItemSummary = Node:CreateFontString(nil, "OVERLAY");
 		ItemSummary:SetFont(TUISTYLE.RaidToolUIFont, TUISTYLE.RaidToolUIFontSize, TUISTYLE.RaidToolUIFontOutline);
-		ItemSummary:SetPoint("LEFT", ItemLevel, "LEFT", 36, 0);
+		ItemSummary:SetPoint("LEFT", ItemLevel, "RIGHT", 6, 0);
 		Node.ItemSummary = ItemSummary;
 
 		local EnchantSummary = Node:CreateFontString(nil, "OVERLAY");
@@ -605,7 +605,7 @@ MT.BuildEnv('RAIDTOOL');
 				Frame.LableItemLevel = RaidToolLableItemLevel;
 				local RaidToolLableItemSummary = Frame:CreateFontString(nil, "OVERLAY");
 				RaidToolLableItemSummary:SetFont(TUISTYLE.RaidToolUIFont, TUISTYLE.RaidToolUIFontSize, TUISTYLE.RaidToolUIFontOutline);
-				RaidToolLableItemSummary:SetPoint("LEFT", RaidToolLableItemLevel, "LEFT", 36, 0);
+				RaidToolLableItemSummary:SetPoint("LEFT", RaidToolLableItemLevel, "RIGHT", 6, 0);
 				RaidToolLableItemSummary:SetText(l10n.RaidTool_LableItemSummary);
 				Frame.LableItemSummary = RaidToolLableItemSummary;
 				local RaidToolLableEnchantSummary = Frame:CreateFontString(nil, "OVERLAY");

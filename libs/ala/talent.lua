@@ -2,7 +2,7 @@
 	by ALA
 --]]--
 
-local __version = 251106;
+local __version = 251107;
 
 local _G = _G;
 _G.__ala_meta__ = _G.__ala_meta__ or {  };
@@ -1539,7 +1539,7 @@ end
 					else
 						item = nil;
 					end
-					if DataTable[start + i] ~= item then
+					if DataTable[slot] ~= item then
 						DataTable[slot] = item;
 						changed = true;
 					end

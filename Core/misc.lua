@@ -50,6 +50,7 @@ MT.BuildEnv('MISC');
 		VT.__dep.__poplib:AddEntry("_BRFF_RAID_PLAYER", "QUERY_TALENT");
 		VT.__dep.__poplib:AddEntry("CHAT_ROSTER", "QUERY_TALENT");
 		VT.__dep.__poplib:AddEntry("GUILD", "QUERY_TALENT");
+		VT.__dep.__poplib:AddEntry("COMMUNITIES_GUILD_MEMBER", "QUERY_TALENT");
 
 	--
 	--	TalentFrameCall
