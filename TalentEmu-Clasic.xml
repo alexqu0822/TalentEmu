@@ -23,6 +23,7 @@
     <script file = "Core\comm.lua" />
     <script file = "Core\tooltip.lua" />
     <script file = "Core\misc.lua" />
+    <script file = "Core\fix.lua" />
     <script file = "Core\dev.lua" />
 
 </Ui>

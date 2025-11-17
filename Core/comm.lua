@@ -197,6 +197,10 @@ MT.BuildEnv('COMM');
 					MT.Debug("Ignore Talent", name, prefix);
 					return;
 				end
+				if TalData.source == __addon and TalData.Tick and Tick - TalData.Tick < CT.DATA_VALIDITY then
+					MT.Debug("Ignore Talent", name, prefix);
+					return;
+				end
 			end
 			local class, level, numGroup, activeGroup, data1, data2 = Decoder(code);
 			if class ~= nil then
@@ -226,7 +230,7 @@ MT.BuildEnv('COMM');
 				if addon ~= nil then
 					TalData.source = addon.addon or "External";
 				else
-					TalData.source = "TalentEmu";
+					TalData.source = __addon;
 				end
 				if not overheard then
 					MT._TriggerCallback("CALLBACK_DATA_RECV", name);

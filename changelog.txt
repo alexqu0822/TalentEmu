@@ -1,5 +1,6 @@
-2025-11-10
+2025-11-16
 More accurate ItemLevel.
+Fix blizzard's inspectui (Titan)
 
 2025-11-07
 Add entry in menu of guild frame.
