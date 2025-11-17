@@ -110,10 +110,10 @@ MT.BuildEnv('METHOD');
 	-->		ItemLevel
 		local _ItemTryTimes = {  };
 		function MT.CalcItemLevel(class, EquData)
-			local slots = { 1, 2, 3, 5, 6, 7, 8,9, 10, 11, 12, 13, 14, 15, };
-			if class ~= "DRUID" and class ~= "PALADIN" and class ~= "SHAMAN" then
-				slots[#slots + 1] = 18;
-			end
+			local slots = { 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, };
+			-- if class ~= "DRUID" and class ~= "PALADIN" and class ~= "SHAMAN" then
+			-- 	slots[#slots + 1] = 18;
+			-- end
 			slots[#slots + 1] = 16;
 			slots[#slots + 1] = 17;		--	make it the last in table
 			--	16MainHand, 17OffHand, 18Ranged

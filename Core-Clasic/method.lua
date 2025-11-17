@@ -16,7 +16,9 @@ local DT = __private.DT;
 	local strsplit = string.split;
 	local strfind = string.find;
 	local strtrim, strupper, strsub, strmatch, format, gsub = string.trim, string.upper, string.sub, string.match, string.format, string.gsub;
-	local min, max = math.min, math.max;
+	local min = math.min;
+	local max = math.max;
+	local abs = math.abs;
 	local band = bit.band;
 	local tonumber = tonumber;
 	local random = random;
@@ -58,7 +60,7 @@ MT.BuildEnv('METHOD');
 	-->		ItemLevel
 		local _ItemTryTimes = {  };
 		function MT.CalcItemLevel(class, EquData)
-			local slots = { 1, 2, 3, 5, 6, 7, 8,9, 10, 11, 12, 13, 14, 15, };
+			local slots = { 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, };
 			if class ~= "DRUID" and class ~= "PALADIN" and class ~= "SHAMAN" then
 				slots[#slots + 1] = 18;
 			end

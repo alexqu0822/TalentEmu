@@ -1,4 +1,4 @@
-## Interface: 30405
+## Interface: 38000
 ## Title: Talent Emu Wrath
 ## Title-zhCN: ala天赋模拟器
 ## Title-zhTW: ala天賦模擬器
@@ -12,6 +12,6 @@
 ## Author: |cff00ff00ALA|r
 ## Author-zhCN: |cff00ff00ALA|r
 ## Author-zhTW: |cff00ff00ALA|r
-## Version: 304r.251107
+## Version: 304r.251110
 
 TalentEmu-Clasic.xml
