@@ -1,3 +1,6 @@
+2025-11-25
+Fix an error occured when saving talents.
+
 2025-11-16
 More accurate ItemLevel.
 Fix blizzard's inspectui (Titan)

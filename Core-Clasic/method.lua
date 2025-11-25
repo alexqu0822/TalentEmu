@@ -15,7 +15,11 @@ local DT = __private.DT;
 	local tremove, concat = table.remove, table.concat;
 	local strsplit = string.split;
 	local strfind = string.find;
-	local strtrim, strupper, strsub, strmatch, format, gsub = string.trim, string.upper, string.sub, string.match, string.format, string.gsub;
+	local strupper = string.upper;
+	local strsub = string.sub;
+	local strmatch = string.match;
+	local format = string.format;
+	local gsub = string.gsub;
 	local min = math.min;
 	local max = math.max;
 	local abs = math.abs;
@@ -46,6 +50,9 @@ local DT = __private.DT;
 -->
 MT.BuildEnv('METHOD');
 -->		predef
+	local function __table_sub(T, index, index2)
+		return T[index];
+	end;
 -->		METHOD
 	--
 	-->		Touch Item Tooltip
@@ -625,6 +632,7 @@ MT.BuildEnv('METHOD');
 		return ref[level] or 0;
 	end
 	function MT.CountTreePoints(data, class)
+		local sub = type(data) == 'table' and __table_sub or strsub;
 		local ClassTDB = DT.TalentDB[class];
 		local SpecList = DT.ClassSpec[class];
 		local pos = 1;
@@ -636,7 +644,7 @@ MT.BuildEnv('METHOD');
 				if pos > len then
 					break;
 				end
-				local val = data:sub(pos, pos);
+				local val = sub(data, pos, pos);
 				total = total + tonumber(val);
 				pos = pos + 1;
 			end
@@ -756,6 +764,7 @@ MT.BuildEnv('METHOD');
 		if CT.TOCVERSION < 30000 then
 			return class, level, numGroup, activeGroup, data1, data2;
 		end
+		local sub = type(data1) == 'table' and __table_sub or strsub;
 		local ClassTDB = DT.TalentDB[class];
 		local SpecList = DT.ClassSpec[class];
 		local Map = VT.__dep.__emulib.GetTalentMap(class) or VT.MAP[class] or (DT.TalentMap ~= nil and DT.TalentMap[class]) or nil;
@@ -765,7 +774,7 @@ MT.BuildEnv('METHOD');
 				local TreeTDB = ClassTDB[SpecList[SpecIndex]];
 				local num = #TreeTDB;
 				for TalentSeq = 1, num do
-					local val = tonumber(data1:sub(ofs + TalentSeq, ofs + TalentSeq)) or 0;
+					local val = tonumber(sub(data1, ofs + TalentSeq, ofs + TalentSeq)) or 0;
 					if val > TreeTDB[TalentSeq][4] then
 						return nil;
 					end
@@ -785,7 +794,7 @@ MT.BuildEnv('METHOD');
 			local num = #VM;
 			for TalentSeq = 1, num do
 				local TalentIndex = VM[TalentSeq];
-				local val = tonumber(data1:sub(ofs + TalentIndex, ofs + TalentIndex)) or 0;
+				local val = tonumber(sub(data1, ofs + TalentIndex, ofs + TalentIndex)) or 0;
 				if val > TreeTDB[TalentSeq][4] then
 					return class, level, 1, 1, data1;
 				end
