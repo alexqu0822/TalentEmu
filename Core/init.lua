@@ -107,6 +107,9 @@ local DT = {  }; __private.DT = DT;		--	data
 		CT.BUILD = "BCC";
 	elseif CT.TOCVERSION < 40000 then
 		CT.BUILD = "WRATH";
+		if CT.TOCVERSION >= 38000 then
+			CT.IsWotLKTitan = true;
+		end
 	elseif CT.TOCVERSION < 50000 then
 		CT.BUILD = "CATA"
 	elseif CT.TOCVERSION < 60000 then
