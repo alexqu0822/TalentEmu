@@ -725,7 +725,6 @@ MT.BuildEnv('METHOD');
 					else
 						line = line .. "  |cffbfbfff" .. l10n.SPEC[SpecID] .. format(":%2d|r", stats[TreeIndex]);
 					end
-					line = line .. "  |cffbfbfff" .. l10n.SPEC[SpecID] .. format(":%2d|r", stats[TreeIndex]);
 				end
 			end
 		end

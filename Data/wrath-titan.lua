@@ -8,7 +8,7 @@ local CT = __private.CT;
 local VT = __private.VT;
 local DT = __private.DT;
 
-if CT.TOCVERSION >= 38000 or CT.TOCVERSION < 30400 then
+if CT.TOCVERSION >= 40000 or CT.TOCVERSION < 38000 then
 	return;
 end
 -- if WOW_PROJECT_ID ~= WOW_PROJECT_WRATH_CLASSIC then
@@ -292,13 +292,13 @@ DT.TalentDB = {
 			{  6, 0, 1800, 3, nil, nil,  nil, { 34455, 34459, 34460,   nil,   nil, }, 'TEXTURE', },
 			{  6, 1, 1386, 1,   4,   1, 1387, { 19574,   nil,   nil,   nil,   nil, }, 'TEXTURE', },
 			{  6, 2, 1801, 3, nil, nil,  nil, { 34462, 34464, 34465,   nil,   nil, }, 'TEXTURE', },
-			{  7, 0, 2136, 2,   6,   0, 1800, { 53252, 53253,   nil,   nil,   nil, }, 'TEXTURE', },
+			{  7, 0, 2136, 1,   6, nil, 1800, { 1284199,   nil,   nil,   nil,   nil, }, 'TEXTURE', },
 			{  7, 2, 1802, 5, nil, nil,  nil, { 34466, 34467, 34468, 34469, 34470, }, 'TEXTURE', },
-			{  8, 0, 2140, 3, nil, nil,  nil, { 53262, 53263, 53264,   nil,   nil, }, 'TEXTURE', },
 			{  8, 1, 1803, 1,   6,   1, 1386, { 34692,   nil,   nil,   nil,   nil, }, 'TEXTURE', },
 			{  8, 2, 2137, 3,   7,   2, 1802, { 53256, 53259, 53260,   nil,   nil, }, 'TEXTURE', },
 			{  9, 1, 2227, 5, nil, nil,  nil, { 56314, 56315, 56316, 56317, 56318, }, 'TEXTURE', },
-			{ 10, 1, 2139, 1, nil, nil,  nil, { 53270,   nil,   nil,   nil,   nil, }, 'TEXTURE', },
+			{  9, 2, 2139, 1,   9,   1, 2227, { 53270,   nil,   nil,   nil,   nil, }, 'TEXTURE', },
+			{ 10, 1, 2140, 1, nil, nil,  nil, { 1284198,   nil,   nil,   nil,   nil, }, 'TEXTURE', },
 		},
 		[362] = {
 			{  0, 0, 1623, 5, nil, nil,  nil, { 52783, 52785, 52786, 52787, 52788, }, 'TEXTURE', },
@@ -713,9 +713,11 @@ DT.TalentDB = {
 			{  6, 0, 1711, 3, nil, nil,  nil, { 31211, 31212, 31213,   nil,   nil, }, 'TEXTURE', },
 			{  6, 1,  381, 1,   4,   1,  284, { 14183,   nil,   nil,   nil,   nil, }, 'TEXTURE', },
 			{  6, 2, 1722, 3, nil, nil,  nil, { 31228, 31229, 31230,   nil,   nil, }, 'TEXTURE', },
+			{  6, 3, 23707, 1, nil, nil,  nil, { 1284398,   nil,   nil,   nil,   nil, }, 'TEXTURE', },
 			{  7, 1, 1712, 5,   6,   1,  381, { 31216, 31217, 31218, 31219, 31220, }, 'TEXTURE', },
 			{  7, 2, 2077, 2, nil, nil,  nil, { 51692, 51696,   nil,   nil,   nil, }, 'TEXTURE', },
-			{  8, 0, 2078, 3, nil, nil,  nil, { 51698, 51700, 51701,   nil,   nil, }, 'TEXTURE', },
+			{  7, 3, 23708, 1,   6,   3, 23707, { 1284400,   nil,   nil,   nil,   nil, }, 'TEXTURE', },
+			{  8, 0, 2078, 1, nil, nil,  nil, { 51701,   nil,   nil,   nil,   nil, }, 'TEXTURE', },
 			{  8, 1, 1714, 1, nil, nil,  nil, { 36554,   nil,   nil,   nil,   nil, }, 'TEXTURE', },
 			{  8, 2, 2079, 2, nil, nil,  nil, { 58414, 58415,   nil,   nil,   nil, }, 'TEXTURE', },
 			{  9, 1, 2080, 5, nil, nil,  nil, { 51708, 51709, 51710, 51711, 51712, }, 'TEXTURE', },
@@ -772,10 +774,11 @@ DT.TalentDB = {
 			{  5, 3, 2263, 2, nil, nil,  nil, { 63373, 63374,   nil,   nil,   nil, }, 'TEXTURE', },
 			{  6, 0, 1692, 3,   6,   1, 1690, { 30816, 30818, 30819,   nil,   nil, }, 'TEXTURE', },
 			{  6, 1, 1690, 1,   4,   1,  616, { 30798,   nil,   nil,   nil,   nil, }, 'TEXTURE', },
-			{  6, 2,  901, 1, nil, nil,  nil, { 17364,   nil,   nil,   nil,   nil, }, 'TEXTURE', },
+			{  6, 2, 23706, 3,   6,   1,  616, { 1283508, 1283509, 1283510,   nil,   nil, }, 'TEXTURE', },--	WoTLK Titan特有
+			{  6, 3,  901, 1, nil, nil,  nil, { 17364,   nil,   nil,   nil,   nil, }, 'TEXTURE', },	--	右移一格
 			{  7, 0, 2055, 3, nil, nil,  nil, { 51525, 51526, 51527,   nil,   nil, }, 'TEXTURE', },
 			{  7, 1, 2249, 1,   6,   1, 1690, { 60103,   nil,   nil,   nil,   nil, }, 'TEXTURE', },
-			{  7, 2, 2054, 2,   6,   2,  901, { 51521, 51522,   nil,   nil,   nil, }, 'TEXTURE', },
+			{  7, 3, 2054, 2,   6,   3,  901, { 51521, 51522,   nil,   nil,   nil, }, 'TEXTURE', },	--	右移一格
 			{  8, 0, 1691, 3, nil, nil,  nil, { 30812, 30813, 30814,   nil,   nil, }, 'TEXTURE', },
 			{  8, 1, 1693, 1, nil, nil,  nil, { 30823,   nil,   nil,   nil,   nil, }, 'TEXTURE', },
 			{  8, 2, 2056, 2, nil, nil,  nil, { 51523, 51524,   nil,   nil,   nil, }, 'TEXTURE', },
