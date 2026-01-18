@@ -10,7 +10,8 @@ local DT = __private.DT;
 
 --		upvalue
 	local next = next;
-	local GetAddOnInfo, IsAddOnLoaded = GetAddOnInfo, IsAddOnLoaded;
+	local GetAddOnInfo = C_AddOns and C_AddOns.GetAddOnInfo or GetAddOnInfo;
+	local IsAddOnLoaded = C_AddOns and C_AddOns.IsAddOnLoaded or IsAddOnLoaded;
 	local CreateFrame = CreateFrame;
 	local _G = _G;
 

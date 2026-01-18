@@ -1,4 +1,4 @@
-## Interface: 20504
+## Interface: 20505
 ## Title: Talent Emu TBC
 ## Title-zhCN: ala天赋模拟器
 ## Title-zhTW: ala天賦模擬器
@@ -12,6 +12,6 @@
 ## Author: |cff00ff00ALA|r
 ## Author-zhCN: |cff00ff00ALA|r
 ## Author-zhTW: |cff00ff00ALA|r
-## Version: 205r.260110
+## Version: 205r.260115
 
 TalentEmu-Clasic.xml

@@ -24,6 +24,7 @@ local DT = {  }; __private.DT = DT;		--	data
 	local UnitInBattleground = UnitInBattleground;
 	local GetBestMapForUnit = C_Map.GetBestMapForUnit;
 	local CreateFrame = CreateFrame;
+	local GetAddOnMetadata = C_AddOns and C_AddOns.GetAddOnMetadata or GetAddOnMetadata;
 	local _G = _G;
 
 -->

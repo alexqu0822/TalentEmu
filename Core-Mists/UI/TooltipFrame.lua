@@ -79,7 +79,7 @@ MT.BuildEnv('UI-TooltipFrame');
 					return false;
 				end
 			end
-			if _G.IsAddOnLoaded("WoWeuCN_Tooltips") and OnEvent(TooltipFrame, "ADDON_LOADED", "WoWeuCN_Tooltips") then
+			if C_AddOns.IsAddOnLoaded("WoWeuCN_Tooltips") and OnEvent(TooltipFrame, "ADDON_LOADED", "WoWeuCN_Tooltips") then
 			else
 				TooltipFrame:RegisterEvent("ADDON_LOADED");
 				TooltipFrame:SetScript("OnEvent", OnEvent);
