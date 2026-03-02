@@ -78,6 +78,7 @@ MT.BuildEnv('COMM');
 	end
 	--	name, realm, force_update, auto_popup, update_talent(nil means true), update_glyph(nil means true), update_equipment(nil means true)
 	function MT.SendQueryRequest(name, realm, force_update, auto_popup, update_talent, update_glyph, update_equipment)
+		MT.Print(name, realm)
 		if name ~= nil then
 			local Tick = MT.GetUnifiedTime();
 			local shortname, r2 = strsplit("-", name);
@@ -87,7 +88,7 @@ MT.BuildEnv('COMM');
 			elseif realm == nil or realm == "" then
 				realm = CT.SELFREALM;
 			end
-			if realm ~= CT.SELFREALM then
+			if realm ~= CT.SELFREALM and realm ~= CT.SELFREALMSTRIP and realm ~= CT.SELFREALMSHORT then
 				name = name .. "-" .. realm;
 			end
 			VT.QuerySent[name] = auto_popup and Tick or VT.QuerySent[name] or nil;

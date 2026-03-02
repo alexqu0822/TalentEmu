@@ -96,6 +96,8 @@ local DT = {  }; __private.DT = DT;		--	data
 	CT.LOCALE = GetLocale();
 	CT.BNTAG = select(2, BNGetInfo());
 	CT.SELFREALM = GetRealmName();
+	CT.SELFREALMSTRIP = gsub(CT.SELFREALM, " %- ", "");
+	CT.SELFREALMSHORT = gsub(CT.SELFREALM, " %- .+", "");
 	CT.SELFGUID = UnitGUID('player');
 	CT.SELFLCLASS, CT.SELFCLASS, CT.SELFCLASSINDEX = UnitClass('player');
 	CT.SELFNAME = UnitName('player');

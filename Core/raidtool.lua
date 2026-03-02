@@ -487,7 +487,7 @@ MT.BuildEnv('RAIDTOOL');
 				local unit = TRaidUnit[i];
 				if UnitExists(unit) and not UnitIsUnit(unit, 'player') then
 					local name, realm = UnitName(unit);
-					if realm ~= nil and realm ~= "" and realm ~= CT.SELFREALM then
+					if realm ~= nil and realm ~= "" and realm ~= CT.SELFREALM and realm ~= CT.SELFREALMSTRIP and realm ~= CT.SELFREALMSHORT then
 						name = name .. "-" .. realm;
 					end
 					local level = UnitLevel(unit);
@@ -511,7 +511,7 @@ MT.BuildEnv('RAIDTOOL');
 				local unit = TPartyUnit[i];
 				if UnitExists(unit) and unit ~= 'player' then
 					local name, realm = UnitName(unit);
-					if realm ~= nil and realm ~= "" and realm ~= CT.SELFREALM then
+					if realm ~= nil and realm ~= "" and realm ~= CT.SELFREALM and realm ~= CT.SELFREALMSTRIP and realm ~= CT.SELFREALMSHORT then
 						name = name .. "-" .. realm;
 					end
 					local level = UnitLevel(unit);
