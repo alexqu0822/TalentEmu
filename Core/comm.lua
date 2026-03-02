@@ -78,7 +78,6 @@ MT.BuildEnv('COMM');
 	end
 	--	name, realm, force_update, auto_popup, update_talent(nil means true), update_glyph(nil means true), update_equipment(nil means true)
 	function MT.SendQueryRequest(name, realm, force_update, auto_popup, update_talent, update_glyph, update_equipment)
-		MT.Print(name, realm)
 		if name ~= nil then
 			local Tick = MT.GetUnifiedTime();
 			local shortname, r2 = strsplit("-", name);
