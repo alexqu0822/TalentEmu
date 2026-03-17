@@ -10,7 +10,7 @@
 	Scroll:CallButtonFuncByDataIndex(index, FuncName, ...)		Button:func(...)
 	Button:GetDataIndex()
 ]]
-local __version = 260306;
+local __version = 260316;
 
 local _G = _G;
 _G.__ala_meta__ = _G.__ala_meta__ or {  };
