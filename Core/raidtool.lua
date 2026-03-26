@@ -166,9 +166,9 @@ MT.BuildEnv('RAIDTOOL');
 							local A, T, M, R, Y, B, gstr = MT.ScanGemInfo(item, true);
 							if enchantable == nil then
 								if gstr ~= "" then
-									GameTooltip:AddDoubleLine(l10n.SLOT[slot] .. " " .. item .. " " .. gstr, enchanted and estr or l10n.RaidTool_MissingEnchant);
+									GameTooltip:AddDoubleLine(l10n.SLOT[slot] .. " " .. link .. " " .. gstr, enchanted and estr or l10n.RaidTool_MissingEnchant);
 								else
-									GameTooltip:AddDoubleLine(l10n.SLOT[slot] .. " " .. item, enchanted and estr or l10n.RaidTool_MissingEnchant);
+									GameTooltip:AddDoubleLine(l10n.SLOT[slot] .. " " .. link, enchanted and estr or l10n.RaidTool_MissingEnchant);
 								end
 							elseif enchantable then
 								if gstr ~= "" then
