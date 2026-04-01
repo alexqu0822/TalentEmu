@@ -513,19 +513,19 @@ MT.BuildEnv('COMM');
 
 	local __SendChatMessage = nil;
 	local function Hooked_SendChatMessage(text, ...)
-		__SendChatMessage(SendFilter(text, ...), ...);
+		return __SendChatMessage(SendFilter(text, ...), ...);
 	end
 	local __C_ChatInfo_SendChatMessage = nil;
 	local function Hooked_C_ChatInfo_SendChatMessage(text, ...)
-		__C_ChatInfo_SendChatMessage(SendFilter(text, ...), ...);
+		return __C_ChatInfo_SendChatMessage(SendFilter(text, ...), ...);
 	end
 	local __BNSendWhisper = nil;
 	local function Hooked_BNSendWhisper(presenceID, text, ...)
-		__BNSendWhisper(presenceID, SendFilter(text, ...), ...);
+		return __BNSendWhisper(presenceID, SendFilter(text, ...), ...);
 	end
 	local __BNSendConversationMessage = nil;
 	local function Hooked_BNSendConversationMessage(target, text, ...)
-		__BNSendConversationMessage(target, SendFilter(text, ...), ...);
+		return __BNSendConversationMessage(target, SendFilter(text, ...), ...);
 	end
 
 	MT.RegisterOnInit('COMM', function(LoggedIn)

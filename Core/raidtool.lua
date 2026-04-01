@@ -179,7 +179,7 @@ MT.BuildEnv('RAIDTOOL');
 							end
 						else
 							if slot == 17 and EquData[16] then
-								local _, _, _, _, loc = GetItemInfoInstant(EquData[16]);
+								local _, _, _, loc = GetItemInfoInstant(EquData[16]);
 								if loc == "INVTYPE_2HWEAPON" then
 									GameTooltip:AddLine(l10n.SLOT[slot] .. " -");
 								else
