@@ -148,9 +148,12 @@ local DT = {  }; __private.DT = DT;		--	data
 		},
 		{
 			__index = function(tbl, key)
-				local str = strrep("0", key);
-				tbl[key] = str;
-				return str;
+				if type(key) == 'number' then
+					local str = strrep("0", key);
+					tbl[key] = str;
+					return str;
+				end
+				return nil;
 			end,
 		}
 	);

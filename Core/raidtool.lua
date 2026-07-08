@@ -45,7 +45,7 @@ local DT = __private.DT;
 		RaidToolUIFrameButtonHeight = 24,
 		RaidToolUIFont = SystemFont_Shadow_Med1:GetFont(),--=="Fonts\ARKai_T.ttf"
 		RaidToolUIFontSize = 14,
-		RaidToolUIFontOutline = "NORMAL",
+		RaidToolUIFontOutline = "",
 	};
 	local TTEXTURESET = {
 		UNK = CT.TEXTUREUNK,

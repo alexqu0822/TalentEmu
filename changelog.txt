@@ -1,8 +1,11 @@
+2026-07-08
+[WotLK Titan] Shadow Prest & Balance Druid talents update.
+
 2026-05-07
-WotLK Titan Paladin talents update.
+[WotLK Titan] Paladin talents update.
 
 2026-04-28
-WotLK Titan Warlock talents update.
+[WotLK Titan] Warlock talents update.
 
 2026-03-25
 Libs update
@@ -12,16 +15,16 @@ Add settings to customize background.
 Fix.
 
 2026-01-16
-TBC update.
+[TBC] update.
 
 2026-01-15
-WotLK Titan Mage talents update. thx to 俏俏 and his buddies.
+[WotLK Titan] Mage talents update. thx to 俏俏 and his buddies.
 
 2026-01-10
-WotLK Titan Rogue & Hunter talents update.
+[WotLK Titan] Rogue & Hunter talents update.
 
 2025-12-18
-WotLK Titan Shaman talents update.
+[WotLK Titan] Shaman talents update.
 
 2025-11-25
 Fix an error occured when saving talents.
@@ -35,7 +38,7 @@ Add entry in menu of guild frame.
 Fix
 
 2025-11-05
-MOP Update. All features.
+[MOP] Update. All features.
 
 2025-06-01
 Fix SettingUI error.
