@@ -201,7 +201,7 @@ MT.BuildEnv('TOOLTIP');
 	local function TipAddSpellInfo(self, SpellID)
 		local class, TreeIndex, SpecID, TalentSeq, row, col, rank = MT.QueryTalentInfoBySpellID(SpellID);
 		if class ~= nil then
-			local color = CT.RAID_CLASS_COLORS[class];
+			local color = CT.CLASS_COLORS[class] or CT.UNK_CLASS_COLOR;
 			self:AddDoubleLine(l10n.TALENT, l10n.CLASS[class] .. "-" .. l10n.SPEC[SpecID] .. " R" .. (row + 1) .. "-C" .. (col + 1) .. "-L" .. rank, 1.0, 1.0, 1.0, color.r, color.g, color.b);
 			self:Show();
 		end

@@ -679,7 +679,8 @@ MT.BuildEnv('METHOD');
 		if uncolored then
 			title = "[" .. l10n.CLASS[class] .. "] ";
 		else
-			title = "[|c" .. CT.RAID_CLASS_COLORS[class].colorStr .. l10n.CLASS[class] .. "|r] ";
+			local color = CT.CLASS_COLORS[class] or CT.UNK_CLASS_COLOR;
+			title = "[|c" .. color.colorStr .. l10n.CLASS[class] .. "|r] ";
 		end
 		local SpecList = DT.ClassSpec[class];
 		if SpecList then
@@ -705,7 +706,8 @@ MT.BuildEnv('METHOD');
 		end
 	end
 	function MT.GenerateLink(title, class, code)
-		return "|Hemu:" .. code .. "|h|c" .. CT.RAID_CLASS_COLORS[class].colorStr .. "[" .. title .. "]|r|h";
+		local color = CT.CLASS_COLORS[class] or CT.UNK_CLASS_COLOR;
+		return "|Hemu:" .. code .. "|h|c" .. color.colorStr .. "[" .. title .. "]|r|h";
 	end
 	function MT.GenerateTalentTipString(class, data)
 		local SpecIndex = tonumber(strsub(data, 1, 1));

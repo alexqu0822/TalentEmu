@@ -89,7 +89,18 @@ local DT = {  }; __private.DT = DT;		--	data
 
 -->		constant
 	CT.RAID_CLASS_COLORS = RAID_CLASS_COLORS;
-	CT.UNK_CLASS_COLORS = { r = 1.0, g = 0.5, b = 0.5, a = 1.0, };
+	CT.UNK_CLASS_COLOR = { r = 1.0, g = 0.5, b = 0.5, a = 1.0, colorStr = "ffffffff", };
+	--//RAID_CLASS_COLORS[class].colorStr sometimes nil
+	CT.CLASS_COLORS = {  };
+	for class, color in next, RAID_CLASS_COLORS do
+		if type(color) == 'table' then
+			local def = { r = color.r or 1.0, g = color.g or 1.0, b = color.b or 1.0, colorStr = color.colorStr, };
+			if not def.colorStr then
+				def.colorStr = format("ff%.2x%.2x%.2x", def.r * 255, def.g * 255, def.b * 255);
+			end
+			CT.CLASS_COLORS[class] = def;
+		end
+	end
 	CT.CLASS_ICON_TCOORDS = CLASS_ICON_TCOORDS;
 	CT.UNK_CLASS_COORDS = { 0.75, 1.0, 0.75, 1.0, };
 	CT.ITEM_QUALITY_COLORS = ITEM_QUALITY_COLORS;

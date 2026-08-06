@@ -244,7 +244,7 @@ MT.BuildEnv('UI-Method');
 				end
 			end
 
-			local color = CT.RAID_CLASS_COLORS[class];
+			local color = CT.CLASS_COLORS[class] or CT.UNK_CLASS_COLOR;
 			Frame.objects.Name:SetTextColor(color.r, color.g, color.b, 1.0);
 			Frame.objects.Label:SetTextColor(color.r, color.g, color.b, 1.0);
 			if VT.SET.frame_background_style == 1 then

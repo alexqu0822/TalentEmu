@@ -662,7 +662,8 @@ MT.BuildEnv('METHOD');
 			end
 			return title;
 		else
-			local title = "[|c" .. CT.RAID_CLASS_COLORS[class].colorStr .. l10n.CLASS[class] .. "|r] -";
+			local color = CT.CLASS_COLORS[class] or CT.UNK_CLASS_COLOR;
+			local title = "[|c" .. color.colorStr .. l10n.CLASS[class] .. "|r] -";
 			local temp = max(stats[1], stats[2], stats[3]);
 			if temp == stats[1] and temp == stats[2] and temp == stats[3] then
 				temp = temp + 1023;
@@ -686,7 +687,8 @@ MT.BuildEnv('METHOD');
 		end
 	end
 	function MT.GenerateLink(title, class, code)
-		return "|Hemu:" .. code .. "|h|c" .. CT.RAID_CLASS_COLORS[class].colorStr .. "[" .. title .. "]|r|h";
+		local color = CT.CLASS_COLORS[class] or CT.UNK_CLASS_COLOR;
+		return "|Hemu:" .. code .. "|h|c" .. color.colorStr .. "[" .. title .. "]|r|h";
 	end
 	function MT.GenerateTalentTipString(class, data)
 		local line = nil;

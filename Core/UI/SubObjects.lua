@@ -614,7 +614,8 @@ MT.BuildEnv('UI-SubObjects');
 			ClassButton.id = index;
 			ClassButton.class = class;
 			ClassButton.Frame = Frame;
-			ClassButton.information = "|c" .. CT.RAID_CLASS_COLORS[class].colorStr .. l10n.CLASS[class] .. "|r" .. l10n.ClassButton;
+			local color = CT.CLASS_COLORS[class] or CT.UNK_CLASS_COLOR;
+			ClassButton.information = "|c" .. color.colorStr .. l10n.CLASS[class] .. "|r" .. l10n.ClassButton;
 			ClassButtons[index] = ClassButton;
 		end
 		Frame.ClassButtons = ClassButtons;
