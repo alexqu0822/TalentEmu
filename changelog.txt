@@ -1,5 +1,8 @@
+2026-08-30.3
+[WotLK Titan] Discipline Paladin talents fix.
+
 2026-08-30.2
-[WotLK Titan] Frost DeathKnight talents update.
+[WotLK Titan] Frost DeathKnight talents fix.
 
 2026-08-30
 Actually nothing. To force the external platform to perform a single update.
@@ -11,10 +14,10 @@ Actually nothing. To force the external platform to perform a single update.
 [WotLK Titan] Shadow Prest & Balance Druid talents update.
 
 2026-05-07
-[WotLK Titan] Paladin talents update.
+[WotLK Titan] Discipline Paladin talents update.
 
 2026-04-28
-[WotLK Titan] Warlock talents update.
+[WotLK Titan] Destruction Warlock talents update.
 
 2026-03-25
 Libs update
@@ -27,13 +30,13 @@ Fix.
 [TBC] update.
 
 2026-01-15
-[WotLK Titan] Mage talents update. thx to 俏俏 and his buddies.
+[WotLK Titan] Frost Mage talents update. thx to 俏俏 and his buddies.
 
 2026-01-10
-[WotLK Titan] Rogue & Hunter talents update.
+[WotLK Titan] Subtlety Rogue & BeastMastery Hunter talents update.
 
 2025-12-18
-[WotLK Titan] Shaman talents update.
+[WotLK Titan] Enhancement Shaman talents update.
 
 2025-11-25
 Fix an error occured when saving talents.
