@@ -1,3 +1,6 @@
+2026-08-30.2
+[WotLK Titan] Frost DeathKnight talents update.
+
 2026-08-30
 Actually nothing. To force the external platform to perform a single update.
 

@@ -138,6 +138,7 @@ DT.TalentDB = {
 			{  7, 0, 2284, 3, nil, nil,  nil, { 65661, 66191, 66192,   nil,   nil, }, 'TEXTURE', },
 			{  7, 1, 2210, 3, nil, nil,  nil, { 54639, 54638, 54637,   nil,   nil, }, 'TEXTURE', },
 			{  7, 2, 1979, 1, nil, nil,  nil, { 51271,   nil,   nil,   nil,   nil, }, 'TEXTURE', },
+			{  7, 3, 23722, 3, nil, nil,  nil, { 1316343, 1316344, 1316345, nil,   nil, }, 'TEXTURE', },
 			{  8, 0, 1997, 3, nil, nil,  nil, { 49200, 50151, 50152,   nil,   nil, }, 'TEXTURE', },
 			{  8, 1, 1975, 1, nil, nil,  nil, { 49143,   nil,   nil,   nil,   nil, }, 'TEXTURE', },
 			{  8, 2, 23720, 1,   7,   2,  nil, { 1314540,   nil,   nil,   nil,   nil, }, 'TEXTURE', },
