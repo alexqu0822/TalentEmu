@@ -1839,6 +1839,9 @@ DT.SpecBackground = {
 		[161] = "Interface\\TalentFrame\\WarriorArms-TopLeft",
 		[164] = "Interface\\TalentFrame\\WarriorFury-TopLeft",
 		[163] = "Interface\\TalentFrame\\WarriorProtection-TopLeft",
+		[398] = "Interface\\TalentFrame\\DeathKnightBlood-TopLeft",
+		[399] = "Interface\\TalentFrame\\DeathKnightFrost-TopLeft",
+		[400] = "Interface\\TalentFrame\\DeathKnightUnholy-TopLeft",
 };
 
 DT.PresetTalents = {

@@ -124,6 +124,8 @@ MT.BuildEnv('UI-TreeFrame');
 
 		return TreeNodes;
 	end
+	function MT._TreeFunc.TreeNodes_SetMask(TreeFrame, masked)
+	end
 	function MT.UI.CreateTreeFrames(Frame)
 		local TreeFrames = {  };
 

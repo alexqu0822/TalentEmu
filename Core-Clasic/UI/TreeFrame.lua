@@ -52,6 +52,25 @@ MT.BuildEnv('UI-TreeFrame');
 			end
 		end
 	end
+	function MT._TreeFunc.Node_SetMask(Node, masked)
+		if masked then
+			Node.RoundMask:Show();
+			Node.RoundBorder:Show();
+			Node:GetNormalTexture():AddMaskTexture(Node.RoundMask);
+			Node:GetPushedTexture():AddMaskTexture(Node.RoundMask);
+			-- Node:GetHighlightTexture():AddMaskTexture(Node.RoundMask);
+			MT._TextureFunc.SetHighlightTexture(Node, nil, CT.TEXTUREPATH .. [[RoundSquareBorder]]);
+			Node.Border:Hide();
+		else
+			Node.RoundMask:Hide();
+			Node.RoundBorder:Hide();
+			Node:GetNormalTexture():RemoveMaskTexture(Node.RoundMask);
+			Node:GetPushedTexture():RemoveMaskTexture(Node.RoundMask);
+			-- Node:GetHighlightTexture():RemoveMaskTexture(Node.RoundMask);
+			MT._TextureFunc.SetHighlightTexture(Node, CT.TTEXTURESET.ICON_HIGHLIGHT, CT.TTEXTURESET.SQUARE_HIGHLIGHT);
+			Node.Border:Show();
+		end
+	end
 	function MT._TreeFunc.CreateNode(TreeFrame, id)
 		local Node = CreateFrame('BUTTON', nil, TreeFrame);	--	TreeFrame:GetName() .. "TreeNode" .. id
 		Node:SetSize(CT.TUISTYLE.TreeNodeXSize, CT.TUISTYLE.TreeNodeYSize);
@@ -62,6 +81,16 @@ MT.BuildEnv('UI-TreeFrame');
 		Node:SetScript("OnClick", MT._TreeFunc.Node_OnClick);
 		Node:SetScript("OnEnter", MT._TreeFunc.Node_OnEnter);
 		Node:SetScript("OnLeave", MT._TreeFunc.Node_OnLeave);
+
+		local RoundMask = Node:CreateMaskTexture(nil, "OVERLAY", nil, 0);
+		RoundMask:SetAllPoints();
+		RoundMask:SetTexture(CT.TEXTUREPATH .. [[RoundSquareMask]], "CLAMPTOBLACKADDITIVE", "CLAMPTOBLACKADDITIVE");
+		Node.RoundMask = RoundMask;
+		local RoundBorder = Node:CreateTexture(nil, "OVERLAY", nil, 7);
+		RoundBorder:SetAllPoints();
+		RoundBorder:SetTexture(CT.TEXTUREPATH .. [[RoundSquareThickBorder]]);
+		RoundBorder:SetVertexColor(0.0, 0.0, 0.0, 1.0);
+		Node.RoundBorder = RoundBorder;
 
 		Node:SetNormalTexture(CT.TTEXTURESET.UNK);
 		Node:SetPushedTexture(CT.TTEXTURESET.UNK);
@@ -101,6 +130,8 @@ MT.BuildEnv('UI-TreeFrame');
 		Overlay:SetBlendMode("ADD");
 		Node.Overlay = Overlay;
 
+		MT._TreeFunc.Node_SetMask(Node, VT.SET.node_roundsquare);
+
 		Node.Parent = TreeFrame;
 		Node.id = id;
 		Node.active = true;
@@ -138,6 +169,11 @@ MT.BuildEnv('UI-TreeFrame');
 	end
 	function MT._TreeFunc.OnDragStop(TreeFrame, button)
 		TreeFrame.Frame:StopMovingOrSizing();
+	end
+	function MT._TreeFunc.TreeNodes_SetMask(TreeFrame, masked)
+		for id = 1, DT.MAX_NUM_TALENTS do
+			MT._TreeFunc.Node_SetMask(TreeFrame.TreeNodes[id], masked);
+		end
 	end
 	function MT.UI.CreateTreeFrames(Frame)
 		local TreeFrames = {  };
@@ -201,7 +237,7 @@ MT.BuildEnv('UI-TreeFrame');
 			TreeFrame.TreeNodes = MT._TreeFunc.CreateNodes(TreeFrame);
 
 			local ResetTreeButtonBackgroud = TreeFrame:CreateTexture(nil, "ARTWORK");
-			ResetTreeButtonBackgroud:SetSize(CT.TUISTYLE.TreeNodeXSize, CT.TUISTYLE.TreeNodeXSize);
+			ResetTreeButtonBackgroud:SetSize(CT.TUISTYLE.TreeResetXSize, CT.TUISTYLE.TreeResetYSize);
 			ResetTreeButtonBackgroud:SetPoint("CENTER", TreeFrame.TreeNodes[DT.MAX_NUM_TALENTS]);
 			MT._TextureFunc.SetTexture(ResetTreeButtonBackgroud, CT.TTEXTURESET.RESETTREE.Backgroud);
 			TreeFrame.ResetTreeButtonBackgroud = ResetTreeButtonBackgroud;
@@ -212,7 +248,7 @@ MT.BuildEnv('UI-TreeFrame');
 			MT._TextureFunc.SetHighlightTexture(ResetTreeButton, CT.TTEXTURESET.RESETTREE.Highlight);
 			ResetTreeButton:GetHighlightTexture():ClearAllPoints();
 			ResetTreeButton:GetHighlightTexture():SetPoint("CENTER");
-			ResetTreeButton:GetHighlightTexture():SetSize(CT.TUISTYLE.TreeNodeXSize, CT.TUISTYLE.TreeNodeXSize);
+			ResetTreeButton:GetHighlightTexture():SetSize(CT.TUISTYLE.TreeResetXSize, CT.TUISTYLE.TreeResetYSize);
 			ResetTreeButton:SetScript("OnClick", MT._TreeFunc.ResetTreeButton_OnClick);
 			ResetTreeButton:SetScript("OnEnter", MT.GeneralOnEnter);
 			ResetTreeButton:SetScript("OnLeave", MT.GeneralOnLeave);

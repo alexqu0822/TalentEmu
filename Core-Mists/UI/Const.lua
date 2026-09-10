@@ -196,18 +196,6 @@ local DT = __private.DT;
 			Blend = "ADD",
 		},
 
-		RESETTREE = {
-			Backgroud = {
-				Path = CT.TEXTUREPATH .. [[Arcane_Circular_Frame]],
-				Coord = { 12 / 128, 118 / 128, 12 / 128, 118 / 128, },
-				Color = { 0.25, 0.25, 0.25, },
-			},
-			Highlight = {
-				Path = CT.TEXTUREPATH .. [[Arcane_Circular_Flash]],
-				Coord = { 12 / 128, 118 / 128, 12 / 128, 118 / 128, },
-			},
-		},
-
 		CLOSE = {
 			Path = CT.TEXTUREPATH .. [[Close]],
 		},

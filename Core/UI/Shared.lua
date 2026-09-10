@@ -80,16 +80,22 @@ MT.BuildEnv('UI-Shared');
 		if Path then
 			Texture:SetTexture(Path);
 			if Color then
-				Texture:SetVertexColor(Color[1] or 0.0, Color[2] or 0.0, Color[3] or 0.0, Color[4] or 1.0);
+				Texture:SetVertexColor(Color[1] or 1.0, Color[2] or 1.0, Color[3] or 1.0, Color[4] or 1.0);
+			else
+				Texture:SetVertexColor(1.0, 1.0, 1.0, 1.0);
 			end
 			if Blend then
 				Texture:SetBlendMode(Blend);
 			end
 		elseif Color then
-			Texture:SetColorTexture(Color[1] or 0.0, Color[2] or 0.0, Color[3] or 0.0, Color[4] or 1.0);
+			Texture:SetColorTexture(Color[1] or 1.0, Color[2] or 1.0, Color[3] or 1.0, Color[4] or 1.0);
+		else
+			Texture:SetVertexColor(1.0, 1.0, 1.0, 1.0);
 		end
 		if Coord then
 			Texture:SetTexCoord(unpack(Coord));
+		else
+			Texture:SetTexCoord(0.0, 1.0, 0.0, 1.0);
 		end
 		return Texture;
 	end

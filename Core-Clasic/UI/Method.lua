@@ -1853,6 +1853,8 @@ MT.BuildEnv('UI-Method');
 	function MT.CALLBACK.tree_background_alpha(val)
 		MT.UI.IteratorFrames(SetTreeBGAlpha, val);
 	end
-
+	function MT.CALLBACK.node_roundsquare(val)
+		MT.UI.IteratorFrames(MT._FrameFunc.FrameNodes_SetMask, val);
+	end
 
 -->

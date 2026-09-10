@@ -43,6 +43,9 @@ local DT = __private.DT;
 		TreeNodeNumberFontSize = 16,
 		TreeNodeNumberFontOutline = "OUTLINE",
 
+		TreeResetXSize = 28,
+		TreeResetYSize = 28,
+
 		TalentDepArrowXSize = 16,
 		TalentDepArrowYSize = 20,
 		TalentDepBranchXSize = 8,
@@ -174,13 +177,14 @@ local DT = __private.DT;
 
 		RESETTREE = {
 			Backgroud = {
-				Path = CT.TEXTUREPATH .. [[Arcane_Circular_Frame]],
-				Coord = { 12 / 128, 118 / 128, 12 / 128, 118 / 128, },
-				Color = { 0.25, 0.25, 0.25, },
+				Path = CT.TEXTUREPATH .. [[Reset2]],
+				-- Coord = { 12 / 128, 118 / 128, 12 / 128, 118 / 128, },
+				Color = { 1.0, 1.0, 1.0, 0.0625, },
 			},
 			Highlight = {
-				Path = CT.TEXTUREPATH .. [[Arcane_Circular_Flash]],
-				Coord = { 12 / 128, 118 / 128, 12 / 128, 118 / 128, },
+				Path = CT.TEXTUREPATH .. [[Reset2]],
+				-- Coord = { 12 / 128, 118 / 128, 12 / 128, 118 / 128, },
+				Color = { 1.0, 1.0, 1.0, 0.5, },
 			},
 		},
 

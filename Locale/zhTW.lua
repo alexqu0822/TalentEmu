@@ -106,6 +106,7 @@ l10n.Setting_TreeBackgroundStyle = "單列背景風格";
 l10n.Setting_TreeBackgroundTexture = "圖片";
 l10n.Setting_TreeBackgroundSolid = "純色";
 l10n.Setting_TreeBackgroundAlpha = "單列背景透明度";
+l10n.Setting_NodeRoundSquare = "圓角圖標";
 l10n.Setting_Style = "風格";
 l10n.Setting_TripleTrees = "三列天賦";
 l10n.Setting_SingleTree = "單列天賦";

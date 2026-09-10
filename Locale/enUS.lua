@@ -106,6 +106,7 @@ l10n.Setting_TreeBackgroundStyle = "Tree BG Style";
 l10n.Setting_TreeBackgroundTexture = "Picture";
 l10n.Setting_TreeBackgroundSolid = "Solid Color";
 l10n.Setting_TreeBackgroundAlpha = "Tree BG Alpha";
+l10n.Setting_NodeRoundSquare = "Node RoundSquare";
 l10n.Setting_Style = "Style";
 l10n.Setting_TripleTrees = "Triple talent trees";
 l10n.Setting_SingleTree = "Single talent tree";

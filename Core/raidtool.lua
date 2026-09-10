@@ -171,7 +171,7 @@ MT.BuildEnv('RAIDTOOL');
 								else
 									GameTooltip:AddDoubleLine(l10n.SLOT[slot] .. " " .. link .. " |cffffffff(" .. level .. ")|r", enchanted and estr or l10n.RaidTool_MissingEnchant);
 								end
-							else
+							elseif link then
 								if gstr ~= "" then
 									GameTooltip:AddLine(l10n.SLOT[slot] .. " " .. link .. " |cffffffff(" .. level .. ")|r " .. gstr);
 								else

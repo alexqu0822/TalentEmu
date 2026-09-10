@@ -134,6 +134,12 @@ MT.BuildEnv('UI-Frame');
 		end
 	end
 
+	function MT._FrameFunc.FrameNodes_SetMask(Frame, masked)
+		for TreeIndex = 1, 3 do
+			MT._TreeFunc.TreeNodes_SetMask(Frame.TreeFrames[TreeIndex], masked);
+		end
+		MT._LeftFunc.EquipmentNodes_SetMask(Frame.EquipmentFrameContainer, masked);
+	end
 	local temp_id = 0;
 	function MT.UI.CreateFrame()
 		temp_id = temp_id + 1;

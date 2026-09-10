@@ -1,3 +1,6 @@
+2026-09-09
+Trivial UI update.
+
 2026-08-30.3
 [WotLK Titan] Discipline Paladin talents fix.
 

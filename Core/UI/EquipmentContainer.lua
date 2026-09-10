@@ -55,6 +55,19 @@ MT.BuildEnv('UI-EquipmentContainer');
 			end
 		end
 	end
+	function MT._LeftFunc.Node_SetMask(Node, masked)
+		if masked then
+			Node.RoundMask:Show();
+			Node:GetNormalTexture():AddMaskTexture(Node.RoundMask);
+			Node.Glow:AddMaskTexture(Node.RoundMask);
+			MT._TextureFunc.SetHighlightTexture(Node, nil, CT.TEXTUREPATH .. [[RoundSquareBorder]]);
+		else
+			Node.RoundMask:Hide();
+			Node:GetNormalTexture():RemoveMaskTexture(Node.RoundMask);
+			Node.Glow:RemoveMaskTexture(Node.RoundMask);
+			MT._TextureFunc.SetHighlightTexture(Node, CT.TTEXTURESET.EQUIPMENT.Highlight);
+		end
+	end
 	function MT._LeftFunc.Container_OnShow(EquipmentFrameContainer)
 		local Frame = EquipmentFrameContainer.Frame;
 		if Frame.name ~= nil then
@@ -102,6 +115,12 @@ MT.BuildEnv('UI-EquipmentContainer');
 		-- 	end
 		-- end
 	end
+	function MT._LeftFunc.EquipmentNodes_SetMask(Container, masked)
+		local Nodes = Container.EquipmentContainer.EquipmentNodes;
+		for slot = 0, 19 do
+			MT._LeftFunc.Node_SetMask(Nodes[slot], masked)
+		end
+	end
 	function MT.UI.CreateEquipmentFrame(Frame)
 		local EquipmentFrameContainer = CreateFrame('FRAME', nil, Frame);
 		EquipmentFrameContainer:SetPoint("TOPRIGHT", Frame, "TOPLEFT", 0, 0);
@@ -142,6 +161,11 @@ MT.BuildEnv('UI-EquipmentContainer');
 			Node:SetScript("OnLeave", MT._LeftFunc.Node_OnLeave);
 			Node:SetScript("OnClick", MT._LeftFunc.Node_OnClick);
 
+			local RoundMask = Node:CreateMaskTexture(nil, "OVERLAY", nil, 0);
+			RoundMask:SetAllPoints();
+			RoundMask:SetTexture(CT.TEXTUREPATH .. [[RoundSquareMask]], "CLAMPTOBLACKADDITIVE", "CLAMPTOBLACKADDITIVE");
+			Node.RoundMask = RoundMask;
+
 			Node:SetNormalTexture(CT.TTEXTURESET.UNK);
 			MT._TextureFunc.SetHighlightTexture(Node, CT.TTEXTURESET.EQUIPMENT.Highlight);
 
@@ -170,6 +194,8 @@ MT.BuildEnv('UI-EquipmentContainer');
 			local Gem = Node:CreateFontString(nil, "OVERLAY");
 			Gem:SetFont(CT.TUISTYLE.FrameFont, CT.TUISTYLE.FrameFontSizeMedium, CT.TUISTYLE.FrameFontOutline);
 			Node.Gem = Gem;
+
+			MT._LeftFunc.Node_SetMask(Node, VT.SET.node_roundsquare);
 
 			Node.EquipmentContainer = EquipmentContainer;
 			Node.slot = slot;
