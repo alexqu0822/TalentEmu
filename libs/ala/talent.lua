@@ -1187,7 +1187,7 @@ end
 			local data = {  };
 			for index = 1, NUMGLYPHSOCKETS do
 				local str = list[index + 1];
-				if str ~= "" then
+				if str ~= nil and str ~= "" then
 					local val = { strsplit(":", str) };
 					local v = DecodeNumber(val[1]);
 					local Enabled = v % 8;

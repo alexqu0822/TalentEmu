@@ -78,8 +78,7 @@ DT.ClassSpec = {
 --
 DT.TalentDB = {
 	DRUID = {
-		[281] =
-		{
+		[281] = {
 			{ 0, 1,  796, 5, nil, nil,  nil, { 16934, 16935, 16936, 16937, 16938, }, "Interface\\icons\\ability_hunter_pet_hyena", },
 			{ 0, 2,  795, 5, nil, nil,  nil, { 16858, 16859, 16860, 16861, 16862, }, "Interface\\icons\\ability_druid_demoralizingroar", },
 			{ 1, 0,  799, 5, nil, nil,  nil, { 16947, 16948, 16949, 16950, 16951, }, "Interface\\icons\\ability_ambush", },
@@ -97,8 +96,7 @@ DT.TalentDB = {
 			{ 5, 1,  808, 5,   3,   1,  803, { 17003, 17004, 17005, 17006, 24894, }, "Interface\\icons\\spell_holy_blessingofagility", },
 			{ 6, 1,  809, 1, nil, nil,  nil, { 17007,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_unyeildingstamina", },
 		},
-		[282] =
-		{
+		[282] = {
 			{ 0, 1,  821, 5, nil, nil,  nil, { 17050, 17051, 17053, 17054, 17055, }, "Interface\\icons\\spell_nature_regeneration", },
 			{ 0, 2,  822, 5, nil, nil,  nil, { 17056, 17058, 17059, 17060, 17061, }, "Interface\\icons\\spell_holy_blessingofstamina", },
 			{ 1, 0,  824, 5, nil, nil,  nil, { 17069, 17070, 17071, 17072, 17073, }, "Interface\\icons\\spell_nature_healingtouch", },
@@ -115,8 +113,7 @@ DT.TalentDB = {
 			{ 5, 2,  825, 5, nil, nil,  nil, { 17074, 17075, 17076, 17077, 17078, }, "Interface\\icons\\spell_nature_resistnature", },
 			{ 6, 1,  844, 1,   3,   1,  843, { 18562,   nil,   nil,   nil,   nil, }, "Interface\\icons\\inv_relics_idolofrejuvenation", },
 		},
-		[283] =
-		{
+		[283] = {
 			{ 0, 0,  762, 5, nil, nil,  nil, { 16814, 16815, 16816, 16817, 16818, }, "Interface\\icons\\spell_nature_abolishmagic", },
 			{ 0, 1,  761, 1, nil, nil,  nil, { 16689,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_natureswrath", },
 			{ 0, 2,  921, 4,   0,   1,  761, { 17245, 17247, 17248, 17249,   nil, }, "Interface\\icons\\spell_nature_natureswrath", },
@@ -136,8 +133,7 @@ DT.TalentDB = {
 		},
 	},
 	HUNTER = {
-		[361] =
-		{
+		[361] = {
 			{ 0, 1, 1382, 5, nil, nil,  nil, { 19552, 19553, 19554, 19555, 19556, }, "Interface\\icons\\spell_nature_ravenform", },
 			{ 0, 2, 1389, 5, nil, nil,  nil, { 19583, 19584, 19585, 19586, 19587, }, "Interface\\icons\\spell_nature_reincarnation", },
 			{ 1, 0, 1624, 2, nil, nil,  nil, { 19557, 19558,   nil,   nil,   nil, }, "Interface\\icons\\ability_eyeoftheowl", },
@@ -155,8 +151,7 @@ DT.TalentDB = {
 			{ 5, 2, 1397, 5,   3,   2, 1393, { 19621, 19622, 19623, 19624, 19625, }, "Interface\\icons\\inv_misc_monsterclaw_03", },
 			{ 6, 1, 1386, 1,   4,   1, 1387, { 19574,   nil,   nil,   nil,   nil, }, "Interface\\icons\\ability_druid_ferociousbite", },
 		},
-		[362] =
-		{
+		[362] = {
 			{ 0, 0, 1623, 3, nil, nil,  nil, { 24293, 24294, 24295,   nil,   nil, }, "Interface\\icons\\inv_misc_head_dragon_black", },
 			{ 0, 1, 1301, 3, nil, nil,  nil, { 19151, 19152, 19153,   nil,   nil, }, "Interface\\icons\\spell_holy_prayerofhealing", },
 			{ 0, 2, 1311, 5, nil, nil,  nil, { 19295, 19297, 19298, 19301, 19300, }, "Interface\\icons\\ability_parry", },
@@ -174,8 +169,7 @@ DT.TalentDB = {
 			{ 5, 2, 1303, 5, nil, nil,  nil, { 19168, 19180, 19181, 24296, 24297, }, "Interface\\icons\\spell_nature_invisibilty", },
 			{ 6, 1, 1325, 1,   4,   1, 1321, { 19386,   nil,   nil,   nil,   nil, }, "Interface\\icons\\inv_spear_02", },
 		},
-		[363] =
-		{
+		[363] = {
 			{ 0, 1, 1341, 5, nil, nil,  nil, { 19407, 19412, 19413, 19414, 19415, }, "Interface\\icons\\spell_frost_stun", },
 			{ 0, 2, 1342, 5, nil, nil,  nil, { 19416, 19417, 19418, 19419, 19420, }, "Interface\\icons\\spell_frost_wizardmark", },
 			{ 1, 1, 1343, 5, nil, nil,  nil, { 19421, 19422, 19423, 19424, 19425, }, "Interface\\icons\\ability_hunter_snipershot", },
@@ -193,8 +187,7 @@ DT.TalentDB = {
 		},
 	},
 	MAGE = {
-		[41] =
-		{
+		[41] = {
 			{ 0, 1,   26, 5, nil, nil,  nil, { 11069, 12338, 12339, 12340, 12341, }, "Interface\\icons\\spell_fire_flamebolt", },
 			{ 0, 2,   30, 5, nil, nil,  nil, { 11103, 12357, 12358, 12359, 12360, }, "Interface\\icons\\spell_fire_meteorstorm", },
 			{ 1, 0,   34, 5, nil, nil,  nil, { 11119, 11120, 12846, 12847, 12848, }, "Interface\\icons\\spell_fire_incinerate", },
@@ -212,8 +205,7 @@ DT.TalentDB = {
 			{ 5, 2,   35, 5, nil, nil,  nil, { 11124, 12378, 12398, 12399, 12400, }, "Interface\\icons\\spell_fire_immolation", },
 			{ 6, 1,   36, 1,   4,   1,   33, { 11129,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_fire_sealoffire", },
 		},
-		[61] =
-		{
+		[61] = {
 			{ 0, 0,   70, 2, nil, nil,  nil, { 11189, 28332,   nil,   nil,   nil, }, "Interface\\icons\\spell_frost_frostward", },
 			{ 0, 1,   37, 5, nil, nil,  nil, { 11070, 12473, 16763, 16765, 16766, }, "Interface\\icons\\spell_frost_frostbolt02", },
 			{ 0, 2, 1649, 3, nil, nil,  nil, { 29438, 29439, 29440,   nil,   nil, }, "Interface\\icons\\spell_ice_magicdamage", },
@@ -232,8 +224,7 @@ DT.TalentDB = {
 			{ 5, 2,   68, 5, nil, nil,  nil, { 11180, 28592, 28593, 28594, 28595, }, "Interface\\icons\\spell_frost_chillingblast", },
 			{ 6, 1,   71, 1,   4,   1,   72, { 11426,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_ice_lament", },
 		},
-		[81] =
-		{
+		[81] = {
 			--{ 0, 0,   74, 2, nil, nil,  nil, {    66,    66,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_dispelmagic", },	--testing
 			{ 0, 0,   74, 2, nil, nil,  nil, { 11210, 12592,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_dispelmagic", },
 			{ 0, 1,   76, 5, nil, nil,  nil, { 11222, 12839, 12840, 12841, 12842, }, "Interface\\icons\\spell_holy_devotion", },
@@ -254,8 +245,7 @@ DT.TalentDB = {
 		},
 	},
 	PALADIN = {
-		[381] =
-		{
+		[381] = {
 			{ 0, 1, 1401, 5, nil, nil,  nil, { 20042, 20045, 20046, 20047, 20048, }, "Interface\\icons\\spell_holy_fistofjustice", },
 			{ 0, 2, 1407, 5, nil, nil,  nil, { 20101, 20102, 20103, 20104, 20105, }, "Interface\\icons\\spell_frost_windwalkon", },
 			{ 1, 0, 1631, 2, nil, nil,  nil, { 25956, 25957,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_righteousfury", },
@@ -272,8 +262,7 @@ DT.TalentDB = {
 			{ 5, 1, 1402, 5,   2,   1, 1411, { 20049, 20056, 20057, 20058, 20059, }, "Interface\\icons\\ability_racial_avatar", },
 			{ 6, 1, 1441, 1, nil, nil,  nil, { 20066,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_prayerofhealing", },
 		},
-		[382] =
-		{
+		[382] = {
 			{ 0, 1, 1450, 5, nil, nil,  nil, { 20262, 20263, 20264, 20265, 20266, }, "Interface\\icons\\ability_golemthunderclap", },
 			{ 0, 2, 1449, 5, nil, nil,  nil, { 20257, 20258, 20259, 20260, 20261, }, "Interface\\icons\\spell_nature_sleep", },
 			{ 1, 1, 1432, 5, nil, nil,  nil, { 20205, 20206, 20207, 20209, 20208, }, "Interface\\icons\\spell_arcane_blink", },
@@ -289,8 +278,7 @@ DT.TalentDB = {
 			{ 5, 2, 1627, 5, nil, nil,  nil, {  5923,  5924,  5925,  5926, 25829, }, "Interface\\icons\\spell_holy_power", },
 			{ 6, 1, 1502, 1,   4,   1, 1433, { 20473,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_searinglight", },
 		},
-		[383] =
-		{
+		[383] = {
 			{ 0, 1, 1422, 5, nil, nil,  nil, { 20138, 20139, 20140, 20141, 20142, }, "Interface\\icons\\spell_holy_devotionaura", },
 			{ 0, 2, 1421, 5, nil, nil,  nil, { 20127, 20130, 20135, 20136, 20137, }, "Interface\\icons\\ability_defend", },
 			{ 1, 0, 1630, 3, nil, nil,  nil, { 20189, 20192, 20193,   nil,   nil, }, "Interface\\icons\\ability_rogue_ambush", },
@@ -309,8 +297,7 @@ DT.TalentDB = {
 		},
 	},
 	PRIEST = {
-		[201] =
-		{
+		[201] = {
 			{ 0, 1,  342, 5, nil, nil,  nil, { 14522, 14788, 14789, 14790, 14791, }, "Interface\\icons\\spell_magic_magearmor", },
 			{ 0, 2,  345, 5, nil, nil,  nil, { 14524, 14525, 14526, 14527, 14528, }, "Interface\\icons\\inv_wand_01", },
 			{ 1, 0,  352, 5, nil, nil,  nil, { 14523, 14784, 14785, 14786, 14787, }, "Interface\\icons\\spell_nature_manaregentotem", },
@@ -327,8 +314,7 @@ DT.TalentDB = {
 			{ 5, 2, 1202, 5, nil, nil,  nil, { 18544, 18547, 18548, 18549, 18550, }, "Interface\\icons\\spell_nature_slowingtotem", },
 			{ 6, 1,  322, 1,   4,   1, 1201, { 10060,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_powerinfusion", },
 		},
-		[202] =
-		{
+		[202] = {
 			{ 0, 0,  410, 2, nil, nil,  nil, { 14913, 15012,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_healingfocus", },
 			{ 0, 1,  406, 3, nil, nil,  nil, { 14908, 15020, 17191,   nil,   nil, }, "Interface\\icons\\spell_holy_renew", },
 			{ 0, 2,  401, 5, nil, nil,  nil, { 14889, 15008, 15009, 15010, 15011, }, "Interface\\icons\\spell_holy_sealofsalvation", },
@@ -346,8 +332,7 @@ DT.TalentDB = {
 			{ 5, 2,  404, 5, nil, nil,  nil, { 14898, 15349, 15354, 15355, 15356, }, "Interface\\icons\\spell_nature_moonglow", },
 			{ 6, 1, 1637, 1,   4,   1, 1561, { 724,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_holy_summonlightwell", },
 		},
-		[203] =
-		{
+		[203] = {
 			{ 0, 1,  465, 5, nil, nil,  nil, { 15270, 15335, 15336, 15337, 15338, }, "Interface\\icons\\spell_shadow_requiem", },
 			{ 0, 2,  464, 5, nil, nil,  nil, { 15268, 15323, 15324, 15325, 15326, }, "Interface\\icons\\spell_shadow_gathershadows", },
 			{ 1, 0,  466, 3, nil, nil,  nil, { 15318, 15272, 15320,   nil,   nil, }, "Interface\\icons\\spell_shadow_shadowward", },
@@ -367,8 +352,7 @@ DT.TalentDB = {
 		},
 	},
 	ROGUE = {
-		[181] =
-		{
+		[181] = {
 			{ 0, 0,  203, 3, nil, nil,  nil, { 13741, 13793, 13792,   nil,   nil, }, "Interface\\icons\\ability_gouge", },
 			{ 0, 1,  201, 2, nil, nil,  nil, { 13732, 13863,   nil,   nil,   nil, }, "Interface\\icons\\spell_shadow_ritualofsacrifice", },
 			{ 0, 2,  186, 5, nil, nil,  nil, { 13712, 13788, 13789, 13790, 13791, }, "Interface\\icons\\spell_nature_invisibilty", },
@@ -389,8 +373,7 @@ DT.TalentDB = {
 			{ 5, 2, 1122, 3, nil, nil,  nil, { 18427, 18428, 18429,   nil,   nil, }, "Interface\\icons\\ability_racial_avatar", },
 			{ 6, 1,  205, 1, nil, nil,  nil, { 13750,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_shadow_shadowworddominate", },
 		},
-		[182] =
-		{
+		[182] = {
 			{ 0, 0,  276, 3, nil, nil,  nil, { 14162, 14163, 14164,   nil,   nil, }, "Interface\\icons\\ability_rogue_eviscerate", },
 			{ 0, 1,  272, 2, nil, nil,  nil, { 14144, 14148,   nil,   nil,   nil, }, "Interface\\icons\\ability_fiegndead", },
 			{ 0, 2,  270, 5, nil, nil,  nil, { 14138, 14139, 14140, 14141, 14142, }, "Interface\\icons\\ability_racial_bloodrage", },
@@ -407,8 +390,7 @@ DT.TalentDB = {
 			{ 5, 1,  283, 5,   4,   1,  280, { 14186, 14190, 14193, 14194, 14195, }, "Interface\\icons\\spell_shadow_chilltouch", },
 			{ 6, 1,  382, 1, nil, nil,  nil, { 14983,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_earthbindtotem", },
 		},
-		[183] =
-		{
+		[183] = {
 			{ 0, 1,  241, 5, nil, nil,  nil, { 13958, 13970, 13971, 13972, 13973, }, "Interface\\icons\\spell_shadow_charm", },
 			{ 0, 2,  261, 5, nil, nil,  nil, { 14057, 14072, 14073, 14074, 14075, }, "Interface\\icons\\ability_warrior_warcry", },
 			{ 1, 0, 1700, 2, nil, nil,  nil, { 30892, 30893,   nil,   nil,   nil, }, "Interface\\icons\\ability_rogue_feint", },
@@ -429,8 +411,7 @@ DT.TalentDB = {
 		},
 	},
 	SHAMAN = {
-		[261] =
-		{
+		[261] = {
 			{ 0, 1,  564, 5, nil, nil,  nil, { 16039, 16109, 16110, 16111, 16112, }, "Interface\\icons\\spell_nature_wispsplode", },
 			{ 0, 2,  563, 5, nil, nil,  nil, { 16035, 16105, 16106, 16107, 16108, }, "Interface\\icons\\spell_fire_fireball", },
 			{ 1, 0,  572, 2, nil, nil,  nil, { 16043, 16130,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_stoneclawtotem", },
@@ -447,8 +428,7 @@ DT.TalentDB = {
 			{ 5, 2,  721, 5,   2,   2,  562, { 16578, 16579, 16580, 16581, 16582, }, "Interface\\icons\\spell_lightning_lightningbolt01", },
 			{ 6, 1,  573, 1,   4,   1,  565, { 16166,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_wispheal", },
 		},
-		[262] =
-		{
+		[262] = {
 			{ 0, 1,  586, 5, nil, nil,  nil, { 16182, 16226, 16227, 16228, 16229, }, "Interface\\icons\\spell_nature_magicimmunity", },
 			{ 0, 2,  593, 5, nil, nil,  nil, { 16179, 16214, 16215, 16216, 16217, }, "Interface\\icons\\spell_frost_manarecharge", },
 			{ 1, 0,  589, 2, nil, nil,  nil, { 16184, 16209,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_reincarnation", },
@@ -465,8 +445,7 @@ DT.TalentDB = {
 			{ 5, 2,  592, 5, nil, nil,  nil, { 16178, 16210, 16211, 16212, 16213, }, "Interface\\icons\\spell_frost_wizardmark", },
 			{ 6, 1,  590, 1,   3,   1,  588, { 16190,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_frost_summonwaterelemental", },
 		},
-		[263] =
-		{
+		[263] = {
 			{ 0, 1,  614, 5, nil, nil,  nil, { 17485, 17486, 17487, 17488, 17489, }, "Interface\\icons\\spell_shadow_grimward", },
 			{ 0, 2,  612, 5, nil, nil,  nil, { 16253, 16298, 16299, 16300, 16301, }, "Interface\\icons\\inv_shield_06", },
 			{ 1, 0,  609, 2, nil, nil,  nil, { 16258, 16293,   nil,   nil,   nil, }, "Interface\\icons\\spell_nature_stoneskintotem", },
@@ -486,8 +465,7 @@ DT.TalentDB = {
 		},
 	},
 	WARLOCK = {
-		[301] =
-		{
+		[301] = {
 			{ 0, 1,  944, 5, nil, nil,  nil, { 17793, 17796, 17801, 17802, 17803, }, "Interface\\icons\\spell_shadow_shadowbolt", },
 			{ 0, 2,  941, 5, nil, nil,  nil, { 17778, 17779, 17780, 17781, 17782, }, "Interface\\icons\\spell_fire_windsofwoe", },
 			{ 1, 1,  943, 5, nil, nil,  nil, { 17788, 17789, 17790, 17791, 17792, }, "Interface\\icons\\spell_shadow_deathpact", },
@@ -505,8 +483,7 @@ DT.TalentDB = {
 			{ 5, 2,  966, 5, nil, nil,  nil, { 17954, 17955, 17956, 17957, 17958, }, "Interface\\icons\\spell_fire_selfdestruct", },
 			{ 6, 1,  968, 1,   4,   1,  961, { 17962,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_fire_fireball", },
 		},
-		[302] =
-		{
+		[302] = {
 			{ 0, 1, 1005, 5, nil, nil,  nil, { 18174, 18175, 18176, 18177, 18178, }, "Interface\\icons\\spell_shadow_unsummonbuilding", },
 			{ 0, 2, 1003, 5, nil, nil,  nil, { 17810, 17811, 17812, 17813, 17814, }, "Interface\\icons\\spell_shadow_abominationexplosion", },
 			{ 1, 0, 1006, 3, nil, nil,  nil, { 18179, 18180, 18181,   nil,   nil, }, "Interface\\icons\\spell_shadow_curseofmannoroth", },
@@ -525,8 +502,7 @@ DT.TalentDB = {
 			{ 5, 1, 1042, 5,   4,   1, 1041, { 18271, 18272, 18273, 18274, 18275, }, "Interface\\icons\\spell_shadow_shadetruesight", },
 			{ 6, 1, 1022, 1, nil, nil,  nil, { 18220,   nil,   nil,   nil,   nil, }, "Interface\\icons\\spell_shadow_darkritual", },
 		},
-		[303] =
-		{
+		[303] = {
 			{ 0, 0, 1221, 2, nil, nil,  nil, { 18692, 18693,   nil,   nil,   nil, }, "Interface\\icons\\inv_stone_04", },
 			{ 0, 1, 1222, 3, nil, nil,  nil, { 18694, 18695, 18696,   nil,   nil, }, "Interface\\icons\\spell_shadow_summonimp", },
 			{ 0, 2, 1223, 5, nil, nil,  nil, { 18697, 18698, 18699, 18700, 18701, }, "Interface\\icons\\spell_shadow_metamorphosis", },
@@ -547,8 +523,7 @@ DT.TalentDB = {
 		},
 	},
 	WARRIOR = {
-		[161] =
-		{
+		[161] = {
 			{ 0, 0,  124, 3, nil, nil,  nil, { 12282, 12663, 12664,   nil,   nil, }, "Interface\\icons\\ability_rogue_ambush", },
 			{ 0, 1,  130, 5, nil, nil,  nil, { 16462, 16463, 16464, 16465, 16466, }, "Interface\\icons\\ability_parry", },
 			{ 0, 2,  127, 3, nil, nil,  nil, { 12286, 12658, 12659,   nil,   nil, }, "Interface\\icons\\ability_gouge", },
@@ -568,8 +543,7 @@ DT.TalentDB = {
 			{ 5, 2,  129, 3, nil, nil,  nil, { 12289, 12668, 23695,   nil,   nil, }, "Interface\\icons\\ability_shockwave", },
 			{ 6, 1,  135, 1,   4,   1,  133, { 12294,   nil,   nil,   nil,   nil, }, "Interface\\icons\\ability_warrior_savageblow", },
 		},
-		[163] =
-		{
+		[163] = {
 			{ 0, 1, 1601, 5, nil, nil,  nil, { 12298, 12724, 12725, 12726, 12727, }, "Interface\\icons\\inv_shield_06", },
 			{ 0, 2,  138, 5, nil, nil,  nil, { 12297, 12750, 12751, 12752, 12753, }, "Interface\\icons\\spell_nature_mirrorimage", },
 			{ 1, 0,  142, 2, nil, nil,  nil, { 12301, 12818,   nil,   nil,   nil, }, "Interface\\icons\\ability_racial_bloodrage", },
@@ -588,8 +562,7 @@ DT.TalentDB = {
 			{ 5, 2,  702, 5, nil, nil,  nil, { 16538, 16539, 16540, 16541, 16542, }, "Interface\\icons\\inv_sword_20", },
 			{ 6, 1,  148, 1,   4,   1,  152, { 23922,   nil,   nil,   nil,   nil, }, "Interface\\icons\\inv_shield_05", },
 		},
-		[164] =
-		{
+		[164] = {
 			{ 0, 1,  158, 5, nil, nil,  nil, { 12321, 12835, 12836, 12837, 12838, }, "Interface\\icons\\spell_nature_purge", },
 			{ 0, 2,  157, 5, nil, nil,  nil, { 12320, 12852, 12853, 12855, 12856, }, "Interface\\icons\\ability_rogue_eviscerate", },
 			{ 1, 1,  161, 5, nil, nil,  nil, { 12324, 12876, 12877, 12878, 12879, }, "Interface\\icons\\ability_warrior_warcry", },
