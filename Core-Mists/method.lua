@@ -24,13 +24,8 @@ local DT = __private.DT;
 	local random = random;
 	local UnitLevel = UnitLevel;
 	local UnitIsDeadOrGhost = UnitIsDeadOrGhost;
-	local GetSpellInfo = GetSpellInfo;
 	local GetTalentTabInfo, GetNumTalents, GetTalentInfo, LearnTalent = GetTalentTabInfo, GetNumTalents, GetTalentInfo, LearnTalent;
 	local GetPrimaryTalentTree, SetPrimaryTalentTree = GetPrimaryTalentTree, SetPrimaryTalentTree;
-	local GetItemInfoInstant = GetItemInfoInstant;
-	local GetItemInfo = GetItemInfo;
-	local GetItemInventoryTypeByID = C_Item and C_Item.GetItemInventoryTypeByID;
-	local GetItemSetInfo = C_Item and C_Item.GetItemSetInfo or GetItemSetInfo;
 	local InCombatLockdown = InCombatLockdown;
 	local CheckInteractDistance = CheckInteractDistance;
 	local CanInspect = CanInspect;
@@ -125,7 +120,7 @@ MT.BuildEnv('METHOD');
 				local slot = slots[index];
 				local item = EquData[slot];
 				if item ~= nil and item ~= "" then
-					local _, _, _, level, _, _, _, _, loc = GetItemInfo(item);
+					local _, _, _, level, _, _, _, _, loc = VT._comptb.GetItemInfo(item);
 					if level ~= nil then
 						total = total + level;
 						num2 = num2 + 1;
@@ -219,11 +214,11 @@ MT.BuildEnv('METHOD');
 		local pattern_threshold_grey = gsub(gsub(ITEM_SET_BONUS_GRAY, "%(%%d%)", "%%((%%d+)%%)"), "%%s", "(.+)");
 		local pattern_threshold = gsub(ITEM_SET_BONUS, "%%s", "(.+)");
 		function MT.ColorItemSet(Node, Tooltip)
-			local _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, setID = GetItemInfo(Node.link);
+			local _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, setID = VT._comptb.GetItemInfo(Node.link);
 			if not setID then
 				return;
 			end
-			local setName = GetItemSetInfo(setID);
+			local setName = VT._comptb.GetItemSetInfo(setID);
 			if not setName then
 				return
 			end
@@ -255,7 +250,7 @@ MT.BuildEnv('METHOD');
 								for slot = 1, 18 do
 									local item = EquData[slot];
 									if item then
-										local _, link, _, _, _, _, _, _, loc, _, _, _, _, _, _, set = GetItemInfo(item);
+										local _, link, _, _, _, _, _, _, loc, _, _, _, _, _, _, set = VT._comptb.GetItemInfo(item);
 										if set == setID and SetInfo[loc] then
 											local Line = List[index + SetInfo[loc]];
 											if Line then
@@ -264,7 +259,7 @@ MT.BuildEnv('METHOD');
 											local id = SetInfo[SetInfo[loc]];
 											hash[id] = nil;
 										else
-											local id = GetItemInfoInstant(item);
+											local id = VT._comptb.GetItemInfoInstant(item);
 											if id and hash[id] then
 												local Line = List[index + hash[id]];
 												if Line then
@@ -330,9 +325,9 @@ MT.BuildEnv('METHOD');
 			end
 		--]]
 		function MT.GetEnchantInfo(class, slot, item)
-			-- local itemID, class, subClass, loc, icon, classID, subClassID = GetItemInfoInstant(item);
-			-- local itemName, link, quality, level, _, class, subClass, stack, loc, icon, price, classID, subClassID, bindType, _, set, isReagent = GetItemInfo(item);
-			local _, link, _, level, _, _, _, _, loc, _, _, classID, subClassID = GetItemInfo(item);
+			-- local itemID, class, subClass, loc, icon, classID, subClassID = VT._comptb.GetItemInfoInstant(item);
+			-- local itemName, link, quality, level, _, class, subClass, stack, loc, icon, price, classID, subClassID, bindType, _, set, isReagent = VT._comptb.GetItemInfo(item);
+			local _, link, _, level, _, _, _, _, loc, _, _, classID, subClassID = VT._comptb.GetItemInfo(item);
 			if link == nil then
 				return;
 			end
@@ -351,7 +346,7 @@ MT.BuildEnv('METHOD');
 				return enchantable, false, link or item, level or 0;
 			end
 			enchantID = tonumber(enchantID);
-			local invType = GetItemInventoryTypeByID(item);
+			local invType = VT._comptb.GetItemInventoryTypeByID(item);
 			local D = DT.EnchantDB[classID];
 			if D == nil then
 				return enchantable, true, link or item, level or 0, "Enchant: " .. enchantID;
@@ -364,9 +359,9 @@ MT.BuildEnv('METHOD');
 				local d = D[i];
 				if (d[1] == nil or band(d[1], subClassID * 2)) and (d[2] == nil or band(d[2], invType * 2)) then
 					if d[4] then
-						return true, true, link or item, level or 0, GetItemInfo(d[4]) or (d[3] and GetSpellInfo(d[3])) or ("Item: " .. d[4]);
+						return true, true, link or item, level or 0, VT._comptb.GetItemInfo(d[4]) or (d[3] and VT._comptb.GetSpellName(d[3])) or ("Item: " .. d[4]);
 					elseif d[3] then
-						return true, true, link or item, level or 0, GetSpellInfo(d[3]) or ("Spell:: " .. d[3]);
+						return true, true, link or item, level or 0, VT._comptb.GetSpellName(d[3]) or ("Spell:: " .. d[3]);
 					else
 						return true, true, link or item, level or 0, "Enchant: " .. enchantID;
 					end
@@ -417,7 +412,7 @@ MT.BuildEnv('METHOD');
 			for index = 1, 4 do
 				local v = S[index];
 				if v ~= "" and v ~= nil then
-					local id, class, subClass, _, icon, classID, subClassID = GetItemInfoInstant(v);
+					local id, class, subClass, _, icon, classID, subClassID = VT._comptb.GetItemInfoInstant(v);
 					if classID == CLASSID_GEM then
 						if subClassID == ItemGemSubclass.Red then
 							S[index] = l10n.EquipmentList_Gem.Red;
@@ -516,7 +511,7 @@ MT.BuildEnv('METHOD');
 					for index = 1, 4 do
 						local v = S[index];
 						if v ~= "" and v ~= nil then
-							local id, _, _, _, _, classID, subClassID = GetItemInfoInstant(v);
+							local id, _, _, _, _, classID, subClassID = VT._comptb.GetItemInfoInstant(v);
 							if classID == CLASSID_GEM then
 								if subClassID == ItemGemSubclass.Red then
 									GemStat[ItemGemSubclass.Red] = GemStat[ItemGemSubclass.Red] + 1;
@@ -578,7 +573,7 @@ MT.BuildEnv('METHOD');
 			return false;
 		end
 		function MT.ColorMetaGem(Node, Tooltip)
-			local _, _, _, loc = GetItemInfoInstant(Node.link);
+			local _, _, _, loc = VT._comptb.GetItemInfoInstant(Node.link);
 			if loc ~= "INVTYPE_HEAD" then
 				return;
 			end

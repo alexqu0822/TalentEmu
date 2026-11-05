@@ -11,7 +11,6 @@ local DT = __private.DT;
 -->		upvalue
 	local next = next;
 	local tremove = table.remove;
-	local RequestLoadSpellData = C_Spell.RequestLoadSpellData;
 
 -->
 	local l10n = CT.l10n;
@@ -82,7 +81,7 @@ MT.BuildEnv('DATA');
 			for TalentSeq = 1, #ClassTDB do
 				local TalentDef = ClassTDB[TalentSeq];
 				for Level = 1, TalentDef[4] do
-					RequestLoadSpellData(TalentDef[8][Level]);
+					VT._comptb.RequestLoadSpellData(TalentDef[8][Level]);
 				end
 			end
 		end
@@ -91,7 +90,7 @@ MT.BuildEnv('DATA');
 			for index = 1, #ClassSDB do
 				local SpellDef = ClassSDB[index];
 				for Level = 1, #SpellDef do
-					RequestLoadSpellData(SpellDef[Level][2]);
+					VT._comptb.RequestLoadSpellData(SpellDef[Level][2]);
 				end
 			end
 		end

@@ -42,7 +42,7 @@ MT.BuildEnv('UI-TreeFrame');
 			local Frame = TreeFrame.Frame;
 			local ClassTDB = DT.TalentDB[Frame.class];
 			if ClassTDB then
-				local link = VT._comptb._GetSpellLink(ClassTDB[Node.TalentSeq][8]);
+				local link = VT._comptb.GetSpellLink(ClassTDB[Node.TalentSeq][8]);
 				if link then
 					local editBox = ChatEdit_ChooseBoxForSend();
 					editBox:Show();

@@ -13,11 +13,9 @@ local DT = __private.DT;
 	local select = select;
 	local strsplit = string.split;
 	local format = string.format;
-	local GetSpellInfo = GetSpellInfo;
 	local FindSpellBookSlotBySpellID, PickupSpell = FindSpellBookSlotBySpellID, PickupSpell;
 	local IsShiftKeyDown = IsShiftKeyDown;
 	local CreateFrame = CreateFrame;
-	local GetMouseFocus = VT._comptb.GetMouseFocus;
 	local SetPortraitToTexture = SetPortraitToTexture;
 	local ChatEdit_ChooseBoxForSend = ChatEdit_ChooseBoxForSend;
 	local GameTooltip = GameTooltip;
@@ -91,7 +89,7 @@ MT.BuildEnv('UI-SpellListFrame');
 		if IsShiftKeyDown() then
 			local index = Node:GetDataIndex();
 			local data = Node.list[index];
-			local link = VT._comptb._GetSpellLink(data[2]);
+			local link = VT._comptb.GetSpellLink(data[2]);
 			if link then
 				local editBox = ChatEdit_ChooseBoxForSend();
 				editBox:Show();
@@ -145,12 +143,12 @@ MT.BuildEnv('UI-SpellListFrame');
 	function MT._SpellListFrameFunc.SetNode(Node, data_index)
 		local list = Node.list;
 		if data_index <= #list then
-			local name, _, texture = GetSpellInfo(list[data_index][2]);
+			local name, _, texture = VT._comptb.GetSpellInfo(list[data_index][2]);
 			SetPortraitToTexture(Node.Icon, texture);
 			-- Node.Icon:SetTexture(texture);
 			Node.Title:SetText(name);
 			Node:Show();
-			if GetMouseFocus() == Node then
+			if VT._comptb.GetMouseFocus() == Node then
 				MT._SpellListFrameFunc.Node_OnEnter(Node);
 			end
 		else

@@ -175,17 +175,96 @@ local DT = {  }; __private.DT = DT;		--	data
 -->		Compatible
 	local _comptb = {  };
 	VT._comptb = _comptb;
-	if _G.GetMouseFocus then
-		_comptb.GetMouseFocus = _G.GetMouseFocus;
-	elseif _G.GetMouseFoci then
-		local GetMouseFoci = _G.GetMouseFoci;
+	local Noop = function() end;
+
+	if GetMouseFoci then
+		local GetMouseFoci = GetMouseFoci;
 		_comptb.GetMouseFocus = function()
 			return GetMouseFoci()[1];
 		end
 	else
-		_comptb.GetMouseFocus = function()
+		_comptb.GetMouseFocus = VT._comptb.GetMouseFocus or Noop;
+	end
+
+	if C_Spell then
+		if C_Spell.GetSpellInfo then
+			local GetSpellInfo_ = C_Spell.GetSpellInfo;
+			_comptb.GetSpellInfo = function(id)
+				local info = GetSpellInfo_(id)
+				if info then
+					return info.name, nil, info.iconID, info.castTime, info.minRange, info.maxRange, info.spellID, info.originalIconID;
+				end
+			end
+		else
+			_comptb.GetSpellInfo = GetSpellInfo or Noop;
+		end
+		_comptb.GetSpellName = C_Spell.GetSpellName or _comptb.GetSpellInfo or Noop;
+		if C_Spell.GetSpellCooldown then
+			local GetSpellCooldown_ = C_Spell.GetSpellCooldown;
+			_comptb.GetSpellCooldown = function(id)
+				local info = GetSpellCooldown_(id);
+				return info.startTime, info.duration, info.enabled, info.modRate;
+			end
+		else
+			_comptb.GetSpellCooldown = GetSpellCooldown or Noop;
+		end
+		_comptb.GetSpellLevelLearned = C_Spell.GetSpellLevelLearned or GetSpellLevelLearned or Noop;
+		_comptb.RequestLoadSpellData = C_Spell.RequestLoadSpellData or RequestLoadSpellData or Noop;
+		_comptb.GetSpellLink = C_Spell.GetSpellLink or GetSpellLink or Noop;
+	else
+		_comptb.GetSpellInfo = GetSpellInfo or Noop;
+		_comptb.GetSpellName = _comptb.GetSpellInfo or Noop;
+		_comptb.GetSpellCooldown = GetSpellCooldown or Noop;
+		_comptb.GetSpellLevelLearned = GetSpellLevelLearned or Noop;
+		_comptb.RequestLoadSpellData = RequestLoadSpellData or Noop;
+		_comptb.GetSpellLink = GetSpellLink or Noop;
+		if CT.TOCVERSION < 20000 then
+			_comptb.GetSpellLink = GetSpellLink or function(id, name)
+				--|cff71d5ff|Hspell:id|h[name]|h|r
+				name = name or VT._comptb.GetSpellName(id);
+				if name then
+					if __ala_meta__.chat and __ala_meta__.chat.alac_hyperLink and __ala_meta__.chat.alac_hyperLink() then
+						return "|cff71d5ff|Hspell:" .. id .. "|h[" .. name .. "]|h|r";
+					else
+						return name;
+					end
+				else
+					return nil;
+				end
+			end
+		elseif CT.TOCVERSION < 50000 then
+			_comptb.GetSpellLink = GetSpellLink or function(id, name)
+				--|cff71d5ff|Hspell:id|h[name]|h|r
+				name = name or VT._comptb.GetSpellName(id);
+				if name then
+					return "|cff71d5ff|Hspell:" .. id .. "|h[" .. name .. "]|h|r";
+				else
+					return nil;
+				end
+			end
 		end
 	end
+
+	if C_Item then
+		_comptb.GetItemInfoInstant = C_Item.GetItemInfoInstant or GetItemInfoInstant or Noop;
+		_comptb.GetItemInfo = C_Item.GetItemInfo or GetItemInfo or Noop;
+		_comptb.GetItemNameByID = C_Item.GetItemNameByID or GetItemNameByID or Noop;
+		_comptb.GetItemCount = C_Item.GetItemCount or GetItemCount or Noop;
+		_comptb.GetItemQualityColor = C_Item.GetItemQualityColor or GetItemQualityColor or Noop;
+		_comptb.GetItemSetInfo = C_Item.GetItemSetInfo or GetItemSetInfo or Noop;
+		_comptb.GetItemInventoryTypeByID = C_Item.GetItemInventoryTypeByID or GetItemInventoryTypeByID or Noop;
+		_comptb.RequestLoadItemDataByID = C_Item.RequestLoadItemDataByID or RequestLoadItemDataByID or Noop;
+	else
+		_comptb.GetItemInfoInstant = GetItemInfoInstant or Noop;
+		_comptb.GetItemInfo = GetItemInfo or Noop;
+		_comptb.GetItemNameByID = GetItemNameByID or _comptb.GetItemInfo or Noop;
+		_comptb.GetItemCount = GetItemCount or Noop;
+		_comptb.GetItemQualityColor = GetItemQualityColor or Noop;
+		_comptb.GetItemSetInfo = GetItemSetInfo or Noop;
+		_comptb.GetItemInventoryTypeByID = GetItemInventoryTypeByID or Noop;
+		_comptb.RequestLoadItemDataByID = RequestLoadItemDataByID or Noop;
+	end
+
 	local GetTalentTabInfo = _G.GetTalentTabInfo;
 	-- if CT.TOCVERSION >= 20000 and CT.TOCVERSION < 40000 then
 		-- _comptb.GetTreeNumPoints = function(index) return select(3, GetTalentTabInfo(index)) or 0 end
@@ -193,38 +272,6 @@ local DT = {  }; __private.DT = DT;		--	data
 		-- _comptb.GetTreeNumPoints = function(index) return select(5, GetTalentTabInfo(index)) or 0 end
 	-- end
 	_comptb.GetTreeNumPoints = function(index) return select(5, GetTalentTabInfo(index)) or 0 end
-	if _G.GetSpellLink then
-		local GetSpellLink = _G.GetSpellLink;
-		_comptb._GetSpellLink = function(id, name)
-			return GetSpellLink(id);
-		end
-	elseif CT.TOCVERSION < 20000 then
-		local GetSpellInfo = _G.GetSpellInfo;
-		_comptb._GetSpellLink = function(id, name)
-			--|cff71d5ff|Hspell:id|h[name]|h|r
-			name = name or GetSpellInfo(id);
-			if name then
-				if __ala_meta__.chat and __ala_meta__.chat.alac_hyperLink and __ala_meta__.chat.alac_hyperLink() then
-					return "|cff71d5ff|Hspell:" .. id .. "|h[" .. name .. "]|h|r";
-				else
-					return name;
-				end
-			else
-				return nil;
-			end
-		end
-	elseif CT.TOCVERSION < 50000 then
-		local GetSpellInfo = _G.GetSpellInfo;
-		_comptb._GetSpellLink = function(id, name)
-			--|cff71d5ff|Hspell:id|h[name]|h|r
-			name = name or GetSpellInfo(id);
-			if name then
-				return "|cff71d5ff|Hspell:" .. id .. "|h[" .. name .. "]|h|r";
-			else
-				return nil;
-			end
-		end
-	end
 
 -->
 MT.BuildEnv('INIT');

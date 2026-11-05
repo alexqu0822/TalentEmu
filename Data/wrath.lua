@@ -5269,11 +5269,10 @@ DT.ItemSetThreshold = {
 	[900] = { 2, 4, },
 	[901] = { 2, 4, },
 };
-local GetItemInfoInstant = GetItemInfoInstant;
 for setID, set in next, DT.ItemSet do
 	local h = {  };
 	for i, id in next, set do
-		local _, _, _, loc, icon = GetItemInfoInstant(id);
+		local _, _, _, loc, icon = VT._comptb.GetItemInfoInstant(id);
 		if h[loc] then
 			h = false;
 			break;

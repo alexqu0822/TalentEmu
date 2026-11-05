@@ -9,8 +9,6 @@ local VT = __private.VT;
 local DT = __private.DT;
 
 --		upvalue
-	local GetSpellInfo = GetSpellInfo;
-	local GetSpellLevelLearned = C_Spell.GetSpellLevelLearned;
 	local IsShiftKeyDown = IsShiftKeyDown;
 	local CreateFrame = CreateFrame;
 	local SetPortraitToTexture = SetPortraitToTexture;
@@ -41,7 +39,7 @@ MT.BuildEnv('UI-SpecSpellFrame');
 	end
 	function MT._SpecSpellFunc.Node_OnClick(Node, button)
 		if IsShiftKeyDown() then
-			local link = VT._comptb._GetSpellLink(Node.SpellID);
+			local link = VT._comptb.GetSpellLink(Node.SpellID);
 			if link then
 				local editBox = ChatEdit_ChooseBoxForSend();
 				editBox:Show();
@@ -115,8 +113,8 @@ MT.BuildEnv('UI-SpecSpellFrame');
 			Node:SetPoint("TOP", SpecSpellFrame, "TOP", (CT.TUISTYLE.SpecSpellNodeXSize + CT.TUISTYLE.SpecSpellNodeXGap) * (x - DT.MAX_NUM_COL * 0.5 + 0.5), -CT.TUISTYLE.SpecSpellFrameHeaderYSize - CT.TUISTYLE.SpecSpellNodeYToTop - (CT.TUISTYLE.SpecSpellNodeYSize + CT.TUISTYLE.SpecSpellNodeYGap) * (y - 1));
 			Node:Show();
 			Node.SpellID = SpellID;
-			local name, _, texture = GetSpellInfo(SpellID);
-			local level = GetSpellLevelLearned(SpellID);
+			local name, _, texture = VT._comptb.GetSpellInfo(SpellID);
+			local level = VT._comptb.GetSpellLevelLearned(SpellID);
 			if name ~= nil then
 				Node.Name:SetText(name);
 			else

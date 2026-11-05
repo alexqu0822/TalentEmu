@@ -25,9 +25,7 @@ local DT = __private.DT;
 	local GuildRoster = C_GuildInfo.GuildRoster;
 	local GetNumGuildMembers = GetNumGuildMembers;
 	local GetGuildRosterInfo = GetGuildRosterInfo;
-	local GetItemInfoInstant = GetItemInfoInstant;
 	local Ambiguate = Ambiguate;
-	local GetMouseFocus = VT._comptb.GetMouseFocus;
 	local CreateFrame = CreateFrame;
 	local UIParent = UIParent;
 	local GameTooltip = GameTooltip;
@@ -125,7 +123,7 @@ MT.BuildEnv('RAIDTOOL');
 						end
 					else
 						if slot == 17 and EquData[16] then
-							local _, _, _, loc = GetItemInfoInstant(EquData[16]);
+							local _, _, _, loc = VT._comptb.GetItemInfoInstant(EquData[16]);
 							if loc ~= "INVTYPE_2HWEAPON" then
 								missItems = missItems + 1;
 							end
@@ -180,7 +178,7 @@ MT.BuildEnv('RAIDTOOL');
 							end
 						else
 							if slot == 17 and EquData[16] then
-								local _, _, _, loc = GetItemInfoInstant(EquData[16]);
+								local _, _, _, loc = VT._comptb.GetItemInfoInstant(EquData[16]);
 								if loc == "INVTYPE_2HWEAPON" then
 									GameTooltip:AddLine(l10n.SLOT[slot] .. " -");
 								else
@@ -419,7 +417,7 @@ MT.BuildEnv('RAIDTOOL');
 				Node.BossModInfo:SetText("");
 			end
 			Node:Show();
-			if GetMouseFocus() == Node then
+			if VT._comptb.GetMouseFocus() == Node then
 				RaidNode_OnEnter(Node);
 			end
 		else

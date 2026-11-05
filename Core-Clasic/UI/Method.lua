@@ -23,9 +23,6 @@ local DT = __private.DT;
 	local max = math.max;
 	local floor = math.floor;
 	local random = math.random;
-	local GetItemInfo = GetItemInfo;
-	local GetSpellInfo = GetSpellInfo;
-	local GetMouseFocus = VT._comptb.GetMouseFocus;
 	local SetPortraitToTexture = SetPortraitToTexture;
 	local UIParent = UIParent;
 
@@ -210,7 +207,7 @@ MT.BuildEnv('UI-Method');
 						local Node = TreeNodes[TalentDef[10]];
 						Node.TalentSeq = TalentSeq;
 						Node:Show();
-						local _, _, texture = GetSpellInfo(TalentDef[8][1]);
+						local _, _, texture = VT._comptb.GetSpellInfo(TalentDef[8][1]);
 						if texture ~= nil then
 							Node:SetNormalTexture(texture);
 							Node:SetPushedTexture(texture);
@@ -751,7 +748,7 @@ MT.BuildEnv('UI-Method');
 			end
 
 			MT.UI.FrameUpdateLabelText(Frame);
-			if GetMouseFocus() == Node then
+			if VT._comptb.GetMouseFocus() == Node then
 				MT.UI.TooltipFrameSetTalent(VT.TooltipFrame, Node, TreeFrame.SpecID, TalentDef[1] * 5, TreeFrame.TalentSet.Total, TalentDef[8], TalentSet[TalentSeq], TalentDef[4])
 			end
 
@@ -1510,7 +1507,7 @@ MT.BuildEnv('UI-Method');
 					local NumLevel = #SpellDef;
 					for Level = 1, NumLevel do
 						local v = SpellDef[Level];
-						if search == nil or strmatch(GetSpellInfo(v[2]), search) or strmatch(tostring(v[2]), search) then
+						if search == nil or strmatch(VT._comptb.GetSpellName(v[2]), search) or strmatch(tostring(v[2]), search) then
 							if v[1] <= level then
 								if showAll then
 									pos = pos + 1;
@@ -1612,7 +1609,7 @@ MT.BuildEnv('UI-Method');
 			local item = EquData[slot];
 			Node.item = item;
 			if item ~= nil then
-				local name, link, quality, level, _, _, _, _, _, texture, _, _, _, _, _, setID = GetItemInfo(item);
+				local name, link, quality, level, _, _, _, _, _, texture, _, _, _, _, _, setID = VT._comptb.GetItemInfo(item);
 				if link ~= nil then
 					Node:SetNormalTexture(texture);
 					local color = CT.ITEM_QUALITY_COLORS[quality];
@@ -1680,7 +1677,7 @@ MT.BuildEnv('UI-Method');
 			if info ~= nil and info[1] ~= nil then
 				Node:Show();
 				Node.id = info[1];
-				Node:SetNormalTexture(info[2] or select(3, GetSpellInfo(info[1])) or CT.TTEXTURESET.ENGRAVING_UNK);
+				Node:SetNormalTexture(info[2] or select(3, VT._comptb.GetSpellInfo(info[1])) or CT.TTEXTURESET.ENGRAVING_UNK);
 			else
 				Node:Hide();
 			end

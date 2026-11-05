@@ -8,7 +8,7 @@ local CT = __private.CT;
 local VT = __private.VT;
 local DT = __private.DT;
 
-if CT.TOCVERSION >= 20000 or CT.TOCVERSION < 11400 then
+if CT.TOCVERSION >= 16000 or CT.TOCVERSION < 11400 then
 	return;
 end
 -- if WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC then
@@ -2702,11 +2702,10 @@ DT.ItemSetThreshold = {
 	[1956] = { 2, },
 	[1959] = { 2, },
 };
-local GetItemInfoInstant = GetItemInfoInstant;
 for setID, set in next, DT.ItemSet do
 	local h = {  };
 	for i, id in next, set do
-		local _, _, _, loc, icon = GetItemInfoInstant(id);
+		local _, _, _, loc, icon = VT._comptb.GetItemInfoInstant(id);
 		if h[loc] then
 			h = false;
 			break;
