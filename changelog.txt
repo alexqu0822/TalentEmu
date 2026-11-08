@@ -1,3 +1,6 @@
+2026-11-09
+[Forerve] Update. Spell list and Depend tree todo.
+
 2026-09-17
 [WotLK Titan] Elemental Shaman talents update.
 

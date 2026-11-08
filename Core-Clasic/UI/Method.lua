@@ -1365,6 +1365,138 @@ MT.BuildEnv('UI-Method');
 			TooltipFrame:SetPoint("BOTTOMRIGHT", Node, "TOPLEFT", -4, 4);
 			TooltipFrame:Show();
 			TooltipFrame:SetAlpha(0.0);
+
+			if CurRank == 0 then
+				Tooltip1LabelLeft:Show();
+				Tooltip1LabelLeft:SetText(l10n.NextRank);
+				if Node.active then
+					Tooltip1LabelLeft:SetTextColor(CT.TUISTYLE.IconToolTipNextRankColor[1], CT.TUISTYLE.IconToolTipNextRankColor[2], CT.TUISTYLE.IconToolTipNextRankColor[3], CT.TUISTYLE.IconToolTipNextRankColor[4]);
+					Tooltip1LabelRight:Hide();
+				else
+					Tooltip1LabelLeft:SetTextColor(CT.TUISTYLE.IconToolTipNextRankDisabledColor[1], CT.TUISTYLE.IconToolTipNextRankDisabledColor[2], CT.TUISTYLE.IconToolTipNextRankDisabledColor[3], CT.TUISTYLE.IconToolTipNextRankDisabledColor[4]);
+					if reqPts > pts then
+						Tooltip1LabelRight:SetTextColor(CT.TUISTYLE.IconToolTipNextRankDisabledColor[1], CT.TUISTYLE.IconToolTipNextRankDisabledColor[2], CT.TUISTYLE.IconToolTipNextRankDisabledColor[3], CT.TUISTYLE.IconToolTipNextRankDisabledColor[4]);
+						Tooltip1LabelRight:Show();
+						Tooltip1LabelRight:SetText(format(l10n.ReqPoints, pts, reqPts, l10n.SPEC[SpecID] or SpecID));
+					end
+				end
+				--Tooltip1:Show();
+				Tooltip1:SetOwner(TooltipFrame, "ANCHOR_NONE");
+				Tooltip1:SetPoint("TOPLEFT", Tooltip1LabelLeft, "BOTTOMLEFT", 0, 6);
+				Tooltip1:SetTraitEntry(spellTable[2], CurRank);
+				Tooltip1:SetAlpha(0.0);
+				Tooltip1.SpellID = spellTable[1];
+				Tooltip1FooterLeft:Show();
+				Tooltip1FooterRight:Show();
+				Tooltip1FooterRight:SetText(tostring(spellTable[1]));
+
+				Tooltip2LabelLeft:Hide();
+				Tooltip2LabelRight:Hide();
+				Tooltip2:Hide();
+				Tooltip2FooterLeft:Hide();
+				Tooltip2FooterRight:Hide();
+
+				TooltipFrame.delay = CT.TOOLTIP_UPDATE_DELAY;
+				TooltipFrame:SetScript("OnUpdate", TooltipFrame_OnUpdate_Tooltip1);
+			elseif CurRank == MaxRank then
+				Tooltip1LabelLeft:Show();
+				Tooltip1LabelLeft:SetText(l10n.MaxRank);
+				Tooltip1LabelLeft:SetTextColor(CT.TUISTYLE.IconToolTipMaxRankColor[1], CT.TUISTYLE.IconToolTipMaxRankColor[2], CT.TUISTYLE.IconToolTipMaxRankColor[3], CT.TUISTYLE.IconToolTipMaxRankColor[4]);
+				Tooltip1LabelRight:Show();
+				Tooltip1LabelRight:SetText(CurRank .. "/" .. MaxRank);
+				Tooltip1LabelRight:SetTextColor(CT.TUISTYLE.IconToolTipMaxRankColor[1], CT.TUISTYLE.IconToolTipMaxRankColor[2], CT.TUISTYLE.IconToolTipMaxRankColor[3], CT.TUISTYLE.IconToolTipMaxRankColor[4]);
+				--Tooltip1:Show();
+				Tooltip1:SetOwner(TooltipFrame, "ANCHOR_NONE");
+				Tooltip1:SetPoint("TOPLEFT", Tooltip1LabelLeft, "BOTTOMLEFT", 0, 6);
+				Tooltip1:SetTraitEntry(spellTable[2], CurRank);
+				Tooltip1:SetAlpha(0.0);
+				Tooltip1.SpellID = spellTable[1];
+				Tooltip1FooterLeft:Show();
+				Tooltip1FooterRight:Show();
+				Tooltip1FooterRight:SetText(tostring(spellTable[1]));
+
+				Tooltip2LabelLeft:Hide();
+				Tooltip2LabelRight:Hide();
+				Tooltip2:Hide();
+				Tooltip2FooterLeft:Hide();
+				Tooltip2FooterRight:Hide();
+
+				TooltipFrame.delay = CT.TOOLTIP_UPDATE_DELAY;
+				TooltipFrame:SetScript("OnUpdate", TooltipFrame_OnUpdate_Tooltip1);
+			else
+				Tooltip1LabelLeft:Show();
+				Tooltip1LabelLeft:SetText(l10n.CurRank);
+				Tooltip1LabelLeft:SetTextColor(CT.TUISTYLE.IconToolTipCurRankColor[1], CT.TUISTYLE.IconToolTipCurRankColor[2], CT.TUISTYLE.IconToolTipCurRankColor[3], CT.TUISTYLE.IconToolTipCurRankColor[4]);
+				Tooltip1LabelRight:Show();
+				Tooltip1LabelRight:SetText(CurRank .. "/" .. MaxRank);
+				Tooltip1LabelRight:SetTextColor(CT.TUISTYLE.IconToolTipCurRankColor[1], CT.TUISTYLE.IconToolTipCurRankColor[2], CT.TUISTYLE.IconToolTipCurRankColor[3], CT.TUISTYLE.IconToolTipCurRankColor[4]);
+				--Tooltip1:Show();
+				Tooltip1:SetOwner(TooltipFrame, "ANCHOR_NONE");
+				Tooltip1:SetPoint("TOPLEFT", Tooltip1LabelLeft, "BOTTOMLEFT", 0, 6);
+				Tooltip1:SetTraitEntry(spellTable[2], CurRank);
+				Tooltip1:SetAlpha(0.0);
+				Tooltip1.SpellID = spellTable[1];
+				Tooltip1FooterLeft:Show();
+				Tooltip1FooterRight:Show();
+				Tooltip1FooterRight:SetText(tostring(spellTable[1]));
+
+				Tooltip2LabelLeft:Show();
+				Tooltip2LabelLeft:SetText(l10n.NextRank);
+				if Node.active then
+					if CurRank + 1 == MaxRank then
+						Tooltip2LabelLeft:SetTextColor(CT.TUISTYLE.IconToolTipMaxRankColor[1], CT.TUISTYLE.IconToolTipMaxRankColor[2], CT.TUISTYLE.IconToolTipMaxRankColor[3], CT.TUISTYLE.IconToolTipMaxRankColor[4]);
+					else
+						Tooltip2LabelLeft:SetTextColor(CT.TUISTYLE.IconToolTipNextRankColor[1], CT.TUISTYLE.IconToolTipNextRankColor[2], CT.TUISTYLE.IconToolTipNextRankColor[3], CT.TUISTYLE.IconToolTipNextRankColor[4]);
+					end
+				else
+					Tooltip2LabelLeft:SetTextColor(CT.TUISTYLE.IconToolTipNextRankDisabledColor[1], CT.TUISTYLE.IconToolTipNextRankDisabledColor[2], CT.TUISTYLE.IconToolTipNextRankDisabledColor[3], CT.TUISTYLE.IconToolTipNextRankDisabledColor[4]);
+				end
+				Tooltip2LabelRight:Show();
+				Tooltip2LabelRight:SetText((CurRank + 1) .. "/" .. MaxRank);
+				if Node.active then
+					if CurRank + 1 == MaxRank then
+						Tooltip2LabelRight:SetTextColor(CT.TUISTYLE.IconToolTipMaxRankColor[1], CT.TUISTYLE.IconToolTipMaxRankColor[2], CT.TUISTYLE.IconToolTipMaxRankColor[3], CT.TUISTYLE.IconToolTipMaxRankColor[4]);
+					else
+						Tooltip2LabelRight:SetTextColor(CT.TUISTYLE.IconToolTipNextRankColor[1], CT.TUISTYLE.IconToolTipNextRankColor[2], CT.TUISTYLE.IconToolTipNextRankColor[3], CT.TUISTYLE.IconToolTipNextRankColor[4]);
+					end
+				else
+					Tooltip2LabelRight:SetTextColor(CT.TUISTYLE.IconToolTipNextRankDisabledColor[1], CT.TUISTYLE.IconToolTipNextRankDisabledColor[2], CT.TUISTYLE.IconToolTipNextRankDisabledColor[3], CT.TUISTYLE.IconToolTipNextRankDisabledColor[4]);
+				end
+				--Tooltip2:Show();
+				Tooltip2:SetOwner(TooltipFrame, "ANCHOR_NONE");
+				Tooltip2:SetPoint("TOPLEFT", Tooltip2LabelLeft, "BOTTOMLEFT", 0, 6);
+				Tooltip2:SetTraitEntry(spellTable[2], CurRank + 1);
+				Tooltip2:SetAlpha(0.0);
+				Tooltip2.SpellID = spellTable[1];
+				Tooltip2FooterLeft:Show();
+				Tooltip2FooterRight:Show();
+				Tooltip2FooterRight:SetText(tostring(spellTable[1]));
+
+				TooltipFrame.delay = CT.TOOLTIP_UPDATE_DELAY;
+				TooltipFrame:SetScript("OnUpdate", TooltipFrame_OnUpdate_Tooltip12);
+			end
+		end
+	else
+		function MT.UI.TooltipFrameSetTalent(TooltipFrame, Node, SpecID, reqPts, pts, spellTable, CurRank, MaxRank)
+			local Tooltip1LabelLeft = TooltipFrame.Tooltip1LabelLeft;
+			local Tooltip1LabelRight = TooltipFrame.Tooltip1LabelRight;
+			local Tooltip1 = TooltipFrame.Tooltip1;
+
+			local Tooltip1FooterLeft = TooltipFrame.Tooltip1FooterLeft;
+			local Tooltip1FooterRight = TooltipFrame.Tooltip1FooterRight;
+
+			local Tooltip2LabelLeft = TooltipFrame.Tooltip2LabelLeft;
+			local Tooltip2LabelRight = TooltipFrame.Tooltip2LabelRight;
+			local Tooltip2 = TooltipFrame.Tooltip2;
+
+			local Tooltip2FooterLeft = TooltipFrame.Tooltip2FooterLeft;
+			local Tooltip2FooterRight = TooltipFrame.Tooltip2FooterRight;
+
+			TooltipFrame.OwnerFrame = Node.Parent.Frame;
+			TooltipFrame:ClearAllPoints();
+			TooltipFrame:SetPoint("BOTTOMRIGHT", Node, "TOPLEFT", -4, 4);
+			TooltipFrame:Show();
+			TooltipFrame:SetAlpha(0.0);
 			if CurRank == 0 then
 				Tooltip1LabelLeft:Show();
 				Tooltip1LabelLeft:SetText(l10n.NextRank);
@@ -1474,38 +1606,6 @@ MT.BuildEnv('UI-Method');
 				TooltipFrame.delay = CT.TOOLTIP_UPDATE_DELAY;
 				TooltipFrame:SetScript("OnUpdate", TooltipFrame_OnUpdate_Tooltip12);
 			end
-		end
-	else
-		function MT.UI.TooltipFrameSetTalent(TooltipFrame, Node, SpecID, reqPts, pts, spellTable, CurRank, MaxRank)
-			local Tooltip1LabelLeft = TooltipFrame.Tooltip1LabelLeft;
-			local Tooltip1LabelRight = TooltipFrame.Tooltip1LabelRight;
-			local Tooltip1 = TooltipFrame.Tooltip1;
-
-			local Tooltip1FooterLeft = TooltipFrame.Tooltip1FooterLeft;
-			local Tooltip1FooterRight = TooltipFrame.Tooltip1FooterRight;
-
-			local Tooltip2LabelLeft = TooltipFrame.Tooltip2LabelLeft;
-			local Tooltip2LabelRight = TooltipFrame.Tooltip2LabelRight;
-			local Tooltip2 = TooltipFrame.Tooltip2;
-
-			local Tooltip2FooterLeft = TooltipFrame.Tooltip2FooterLeft;
-			local Tooltip2FooterRight = TooltipFrame.Tooltip2FooterRight;
-
-			TooltipFrame.OwnerFrame = Node.Parent.Frame;
-			TooltipFrame:ClearAllPoints();
-			TooltipFrame:SetPoint("BOTTOMRIGHT", Node, "TOPLEFT", -4, 4);
-			TooltipFrame:Show();
-			TooltipFrame:SetAlpha(0.0);
-
-			--Tooltip1:Show();
-			Tooltip1:SetOwner(TooltipFrame, "ANCHOR_NONE");
-			Tooltip1:SetPoint("TOPLEFT", Tooltip1LabelLeft, "BOTTOMLEFT", 0, 6);
-			Tooltip1:SetSpellByID(spellTable[1]);
-			Tooltip1:SetAlpha(0.0);
-			Tooltip1.SpellID = spellTable[1];
-
-			TooltipFrame.delay = CT.TOOLTIP_UPDATE_DELAY;
-			TooltipFrame:SetScript("OnUpdate", TooltipFrame_OnUpdate_Tooltip1);
 		end
 	end
 	function MT.UI.SetTooltip(Node)
