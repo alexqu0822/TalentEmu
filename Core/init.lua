@@ -262,8 +262,12 @@ local DT = {  }; __private.DT = DT;		--	data
 	if CT.ISFOREVER then
 		local UnitName = UnitName;
 		_comptb.UnitName = function(unit)
-			local name, surname, server = UnitName(unit);
-			return name .. " " .. surname, server;
+			local name, surname, realm = UnitName(unit);
+			if surname then
+				return name .. " " .. surname, realm;
+			else
+				return name, realm;
+			end
 		end
 	else
 		_comptb.UnitName = UnitName;
