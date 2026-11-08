@@ -2,7 +2,7 @@
 	by ALA
 --]]--
 
-local __version = 251107;
+local __version = 261108;
 
 local _G = _G;
 _G.__ala_meta__ = _G.__ala_meta__ or {  };
@@ -436,6 +436,19 @@ if CLIENT_MAJOR < 5 then
 		end
 		function __emulib.INSPECT_READY(GUID)
 		end
+		-- /run local spec = C_SpecializationInfo.GetSpecialization(); local specID = C_SpecializationInfo.GetSpecializationInfo(spec); local treeID = C_ClassTalents.GetTraitTreeForSpec(specID); print(spec, specID, treeID)
+		--[=[
+			法师		1482	1112
+			德鲁伊		1484	1089
+			猎人		1485	1091
+			圣骑士		1486	1100
+			牧师		1487	1114
+			潜行者		1488	1111
+			萨满		1489	1082
+			术士		1490	1116
+			战士		1491	1117
+			默认		1493	nil
+		--]=]
 		function __emulib.GetTalentData(class, inspect, group)
 			if not inspect then
 				local configID = C_ClassTalents.GetActiveConfigID();
@@ -459,10 +472,11 @@ if CLIENT_MAJOR < 5 then
 									Ds[#Ds + 1] = nodeInfo;
 									local X = nodeInfo.posX;
 									local Y = nodeInfo.posY;
+									-- DB2中的合法数据以600为间隔
 									f = false;
 									for j = 1, #Xs do
 										local x = Xs[j];
-										if X > x - 1 and X < x + 1 then
+										if X > x - 100 and X < x + 100 then
 											nodeInfo.posX = x;
 											f = true;
 											break;
@@ -474,7 +488,7 @@ if CLIENT_MAJOR < 5 then
 									f = false;
 									for j = 1, #Ys do
 										local y = Ys[j];
-										if Y > y - 1 and Y < y + 1 then
+										if Y > y - 100 and Y < y + 100 then
 											nodeInfo.posY = y;
 											f = true;
 											break;
@@ -504,22 +518,20 @@ if CLIENT_MAJOR < 5 then
 							-- .totalMaxRanks
 							-- .entryIDs: 如果是选择节点，这里是可选项的ID列表
 							-- .subTreeID
-							local X = nodeInfo.posX;
-							local Y = nodeInfo.posY;
-							local x = Xr[X];
-							local y = Yr[Y];
+							local x = Xr[nodeInfo.posX];
+							local y = Yr[nodeInfo.posY];
 							local v = 1 + (x - 1) % 4;
 							local t = 1 + (x - v) / 4;
-							print(x, t, v)
-							T[t][v] = nodeInfo.activeRank;
+							T[t][v + (y - 1) * 4] = nodeInfo.activeRank;
 						end
 						local data = "";
 						local len = 0;
 						for i = 1, 3 do
 							local t = T[i];
-							for j = 1, MAX_NUM_TIER do
+							for j = 1, MAX_NUM_TIER * 4 do
 								if t[j] then
 									data = data .. t[j];
+									len = len + 1;
 								end
 							end
 						end
@@ -1856,8 +1868,10 @@ function __emulib._SendQueryRequest(shortname, realm, talent, glyph, equipment)
 	if talent or glyph or equipment then
 		if UnitInBattleground('player') and realm ~= SELFREALM then
 			SendAddonMessage(COMM_PREFIX, COMM_QUERY_PREFIX .. (talent and "T" or "") .. ((glyph and SUPPORT_GLYPH) and "G" or "") .. (equipment and "E" or "") .. "#" .. shortname .. "-" .. realm, "INSTANCE_CHAT");
-		else
+		elseif realm ~= SELFREALM then
 			SendAddonMessage(COMM_PREFIX, COMM_QUERY_PREFIX .. (talent and "T" or "") .. ((glyph and SUPPORT_GLYPH) and "G" or "") .. (equipment and "E" or ""), "WHISPER", shortname .. "-" .. realm);
+		else
+			SendAddonMessage(COMM_PREFIX, COMM_QUERY_PREFIX .. (talent and "T" or "") .. ((glyph and SUPPORT_GLYPH) and "G" or "") .. (equipment and "E" or ""), "WHISPER", shortname);
 		end
 	end
 end

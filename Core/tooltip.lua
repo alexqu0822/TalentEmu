@@ -14,7 +14,6 @@ local DT = __private.DT;
 	local max = math.max;
 	local concat = table.concat;
 	local tonumber = tonumber;
-	local UnitName = UnitName;
 	local UnitIsPlayer, UnitFactionGroup, UnitIsConnected = UnitIsPlayer, UnitFactionGroup, UnitIsConnected;
 	local NotifyInspect = NotifyInspect;
 	local GetSpellBookItemName = GetSpellBookItemName;
@@ -122,7 +121,7 @@ MT.BuildEnv('TOOLTIP');
 	local function TipAddInfo(Tooltip, _name)
 		local _, unit = Tooltip:GetUnit();
 		if unit ~= nil then
-			local name, realm = UnitName(unit);
+			local name, realm = VT._comptb.UnitName(unit);
 			if realm ~= nil and realm ~= "" and realm ~= CT.SELFREALM and realm ~= CT.SELFREALMSTRIP and realm ~= CT.SELFREALMSHORT then
 				name = name .. "-" .. realm;
 			end
@@ -155,7 +154,7 @@ MT.BuildEnv('TOOLTIP');
 			elseif unit ~= nil and UnitIsPlayer(unit) and UnitIsConnected(unit) and UnitFactionGroup(unit) == CT.SELFFACTION then
 				AddReservedLines(Tooltip);
 				--
-				local name, realm = UnitName(unit);
+				local name, realm = VT._comptb.UnitName(unit);
 				if realm ~= nil and realm ~= "" and realm ~= CT.SELFREALM and realm ~= CT.SELFREALMSTRIP and realm ~= CT.SELFREALMSHORT then
 					name = name .. "-" .. realm;
 				end
@@ -183,7 +182,7 @@ MT.BuildEnv('TOOLTIP');
 			elseif unit ~= nil and UnitIsPlayer(unit) and UnitIsConnected(unit) then
 				AddReservedLines(Tooltip);
 				--
-				local name, realm = UnitName(unit);
+				local name, realm = VT._comptb.UnitName(unit);
 				if realm ~= nil and realm ~= "" and realm ~= CT.SELFREALM and realm ~= CT.SELFREALMSTRIP and realm ~= CT.SELFREALMSHORT then
 					name = name .. "-" .. realm;
 				end
@@ -248,7 +247,7 @@ MT.BuildEnv('TOOLTIP');
 				UpdateFrame.wait = 0.0;
 				local _, unit = UpdateFrame.Tooltip:GetUnit();
 				if unit ~= nil and UnitIsPlayer(unit) and UnitIsConnected(unit) then
-					local name, realm = UnitName(unit);
+					local name, realm = VT._comptb.UnitName(unit);
 					if realm ~= nil and realm ~= "" and realm ~= CT.SELFREALM and realm ~= CT.SELFREALMSTRIP and realm ~= CT.SELFREALMSHORT then
 						name = name .. "-" .. realm;
 					end

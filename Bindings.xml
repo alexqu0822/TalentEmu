@@ -5,7 +5,7 @@
    <Binding name = "ALARAIDTOOL_QUERY" category = "BINDING_CATEGORY_ALATALENTEMU" >
       unit = unit or 'target';
       if UnitIsPlayer('target') and UnitIsConnected('target') and UnitFactionGroup('target') == UnitFactionGroup('player') then
-         local name, realm = UnitName('target');
+         local name, realm = GetUnitName('target');
          if name then
             __ala_meta__.emu.MT.SendQueryRequest(name, realm, true, true, true, true);
          end

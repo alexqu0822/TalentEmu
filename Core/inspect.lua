@@ -10,7 +10,7 @@ local DT = __private.DT;
 
 -->		upvalue
 	local hooksecurefunc = hooksecurefunc;
-	local UnitGUID, UnitName, UnitLevel, UnitClassBase = UnitGUID, UnitName, UnitLevel, UnitClassBase;
+	local UnitGUID, UnitLevel, UnitClassBase = UnitGUID, UnitLevel, UnitClassBase;
 	local CreateFrame = CreateFrame;
 	local UIParent = UIParent;
 
@@ -37,7 +37,7 @@ MT.BuildEnv('INSPECT');
 			for i = 1, #UnitList do
 				local unit = UnitList[i];
 				if GUID == UnitGUID(unit) then
-					local name, realm = UnitName(unit);
+					local name, realm = VT._comptb.UnitName(unit);
 					if realm ~= nil and realm ~= "" and realm ~= CT.SELFREALM and realm ~= CT.SELFREALMSTRIP and realm ~= CT.SELFREALMSHORT then
 						name = name .. "-" .. realm;
 					end
@@ -107,7 +107,7 @@ MT.BuildEnv('INSPECT');
 		hooksecurefunc("NotifyInspect", function(unit)
 			local GUID = UnitGUID(unit);
 			if GUID ~= nil then
-				local name, realm = UnitName(unit);
+				local name, realm = VT._comptb.UnitName(unit);
 				if realm ~= nil and realm ~= "" and realm ~= CT.SELFREALM and realm ~= CT.SELFREALMSTRIP and realm ~= CT.SELFREALMSHORT then
 					name = name .. "-" .. realm;
 				end

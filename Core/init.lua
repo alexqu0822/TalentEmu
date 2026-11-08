@@ -88,6 +88,26 @@ local DT = {  }; __private.DT = DT;		--	data
 	end
 
 -->		constant
+	CT.CLIENTVERSION, CT.BUILDNUMBER, CT.BUILDDATE, CT.TOCVERSION = GetBuildInfo();
+	if CT.TOCVERSION < 20000 then
+		CT.BUILD = "CLASSIC";
+		if CT.TOCVERSION >= 16000 then
+			CT.ISFOREVER = true;
+		end
+	elseif CT.TOCVERSION < 30000 then
+		CT.BUILD = "BCC";
+	elseif CT.TOCVERSION < 40000 then
+		CT.BUILD = "WRATH";
+		if CT.TOCVERSION >= 38000 then
+			CT.IsWotLKTitan = true;
+		end
+	elseif CT.TOCVERSION < 50000 then
+		CT.BUILD = "CATA"
+	elseif CT.TOCVERSION < 60000 then
+		CT.BUILD = "MISTS";
+	else
+	end
+	CT.ADDONVERSION = GetAddOnMetadata(__addon, "version");
 	CT.RAID_CLASS_COLORS = RAID_CLASS_COLORS;
 	CT.UNK_CLASS_COLOR = { r = 1.0, g = 0.5, b = 0.5, a = 1.0, colorStr = "ffffffff", };
 	--//RAID_CLASS_COLORS[class].colorStr sometimes nil
@@ -105,32 +125,6 @@ local DT = {  }; __private.DT = DT;		--	data
 	CT.UNK_CLASS_COORDS = { 0.75, 1.0, 0.75, 1.0, };
 	CT.ITEM_QUALITY_COLORS = ITEM_QUALITY_COLORS;
 	CT.LOCALE = GetLocale();
-	CT.BNTAG = select(2, BNGetInfo());
-	CT.SELFREALM = GetRealmName();
-	CT.SELFREALMSTRIP = gsub(CT.SELFREALM, " %- ", "");
-	CT.SELFREALMSHORT = gsub(CT.SELFREALM, " %- .+", "");
-	CT.SELFGUID = UnitGUID('player');
-	CT.SELFLCLASS, CT.SELFCLASS, CT.SELFCLASSINDEX = UnitClass('player');
-	CT.SELFNAME = UnitName('player');
-	CT.SELFFULLNAME = CT.SELFNAME .. "-" .. CT.SELFREALM;
-	CT.SELFFACTION = UnitFactionGroup('player');
-	CT.CLIENTVERSION, CT.BUILDNUMBER, CT.BUILDDATE, CT.TOCVERSION = GetBuildInfo();
-	if CT.TOCVERSION < 20000 then
-		CT.BUILD = "CLASSIC";
-	elseif CT.TOCVERSION < 30000 then
-		CT.BUILD = "BCC";
-	elseif CT.TOCVERSION < 40000 then
-		CT.BUILD = "WRATH";
-		if CT.TOCVERSION >= 38000 then
-			CT.IsWotLKTitan = true;
-		end
-	elseif CT.TOCVERSION < 50000 then
-		CT.BUILD = "CATA"
-	elseif CT.TOCVERSION < 60000 then
-		CT.BUILD = "MISTS";
-	else
-	end
-	CT.ADDONVERSION = GetAddOnMetadata(__addon, "version");
 	CT.MEDIAPATH =  [[Interface\AddOns\]] .. __addon .. [[\Media\]];
 	CT.TEXTUREPATH =  CT.MEDIAPATH .. [[Textures\]];
 	CT.NUM_POINTS_NEXT_TIER = 5;
@@ -265,6 +259,16 @@ local DT = {  }; __private.DT = DT;		--	data
 		_comptb.RequestLoadItemDataByID = RequestLoadItemDataByID or Noop;
 	end
 
+	if CT.ISFOREVER then
+		local UnitName = UnitName;
+		_comptb.UnitName = function(unit)
+			local name, surname, server = UnitName(unit);
+			return name .. " " .. surname, server;
+		end
+	else
+		_comptb.UnitName = UnitName;
+	end
+
 	local GetTalentTabInfo = _G.GetTalentTabInfo;
 	-- if CT.TOCVERSION >= 20000 and CT.TOCVERSION < 40000 then
 		-- _comptb.GetTreeNumPoints = function(index) return select(3, GetTalentTabInfo(index)) or 0 end
@@ -272,6 +276,17 @@ local DT = {  }; __private.DT = DT;		--	data
 		-- _comptb.GetTreeNumPoints = function(index) return select(5, GetTalentTabInfo(index)) or 0 end
 	-- end
 	_comptb.GetTreeNumPoints = function(index) return select(5, GetTalentTabInfo(index)) or 0 end
+
+-->
+	CT.BNTAG = select(2, BNGetInfo());
+	CT.SELFREALM = GetRealmName();
+	CT.SELFREALMSTRIP = gsub(CT.SELFREALM, " %- ", "");
+	CT.SELFREALMSHORT = gsub(CT.SELFREALM, " %- .+", "");
+	CT.SELFGUID = UnitGUID('player');
+	CT.SELFLCLASS, CT.SELFCLASS, CT.SELFCLASSINDEX = UnitClass('player');
+	CT.SELFNAME = _comptb.UnitName('player');
+	CT.SELFFULLNAME = CT.SELFNAME .. "-" .. CT.SELFREALM;
+	CT.SELFFACTION = UnitFactionGroup('player');
 
 -->
 MT.BuildEnv('INIT');

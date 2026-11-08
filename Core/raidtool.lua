@@ -13,7 +13,6 @@ local DT = __private.DT;
 	local format = string.format;
 	local strsub = string.sub;
 	local tonumber = tonumber;
-	local UnitName = UnitName;
 	local UnitLevel = UnitLevel;
 	local UnitClassBase = UnitClassBase;
 	local UnitIsUnit = UnitIsUnit;
@@ -468,7 +467,7 @@ MT.BuildEnv('RAIDTOOL');
 		wipe(RosterList);
 		local num = 0;
 		do	--	player on top
-			local name = UnitName('player');
+			local name = VT._comptb.UnitName('player');
 			local level = UnitLevel('player');
 			local class = UnitClassBase('player');
 			num = num + 1;
@@ -485,7 +484,7 @@ MT.BuildEnv('RAIDTOOL');
 			for i = 1, 40 do
 				local unit = TRaidUnit[i];
 				if UnitExists(unit) and not UnitIsUnit(unit, 'player') then
-					local name, realm = UnitName(unit);
+					local name, realm = VT._comptb.UnitName(unit);
 					if realm ~= nil and realm ~= "" and realm ~= CT.SELFREALM and realm ~= CT.SELFREALMSTRIP and realm ~= CT.SELFREALMSHORT then
 						name = name .. "-" .. realm;
 					end
@@ -509,7 +508,7 @@ MT.BuildEnv('RAIDTOOL');
 			for i = 1, 5 do
 				local unit = TPartyUnit[i];
 				if UnitExists(unit) and unit ~= 'player' then
-					local name, realm = UnitName(unit);
+					local name, realm = VT._comptb.UnitName(unit);
 					if realm ~= nil and realm ~= "" and realm ~= CT.SELFREALM and realm ~= CT.SELFREALMSTRIP and realm ~= CT.SELFREALMSHORT then
 						name = name .. "-" .. realm;
 					end

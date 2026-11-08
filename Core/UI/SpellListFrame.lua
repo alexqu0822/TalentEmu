@@ -124,7 +124,7 @@ MT.BuildEnv('UI-SpellListFrame');
 		local IconRoundMask = Node:CreateMaskTexture(nil, "OVERLAY", nil, 0);
 		IconRoundMask:SetAllPoints();
 		IconRoundMask:SetTexture(CT.TEXTUREPATH .. [[RoundSquareMask]], "CLAMPTOBLACKADDITIVE", "CLAMPTOBLACKADDITIVE");
-		Icon = IconRoundMask;
+		Node.IconRoundMask = IconRoundMask;
 		Icon:AddMaskTexture(IconRoundMask);
 
 		local Title = Node:CreateFontString(nil, "OVERLAY");
