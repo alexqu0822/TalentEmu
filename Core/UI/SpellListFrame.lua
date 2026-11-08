@@ -16,7 +16,7 @@ local DT = __private.DT;
 	local FindSpellBookSlotBySpellID, PickupSpell = FindSpellBookSlotBySpellID, PickupSpell;
 	local IsShiftKeyDown = IsShiftKeyDown;
 	local CreateFrame = CreateFrame;
-	local SetPortraitToTexture = SetPortraitToTexture;
+	-- local SetPortraitToTexture = SetPortraitToTexture;
 	local ChatEdit_ChooseBoxForSend = ChatEdit_ChooseBoxForSend;
 	local GameTooltip = GameTooltip;
 
@@ -121,6 +121,11 @@ MT.BuildEnv('UI-SpellListFrame');
 		Icon:SetSize(buttonHeight - 4, buttonHeight - 4);
 		Icon:SetPoint("LEFT", 4, 0);
 		Node.Icon = Icon;
+		local IconRoundMask = Node:CreateMaskTexture(nil, "OVERLAY", nil, 0);
+		IconRoundMask:SetAllPoints();
+		IconRoundMask:SetTexture(CT.TEXTUREPATH .. [[RoundSquareMask]], "CLAMPTOBLACKADDITIVE", "CLAMPTOBLACKADDITIVE");
+		Icon = IconRoundMask;
+		Icon:AddMaskTexture(IconRoundMask);
 
 		local Title = Node:CreateFontString(nil, "OVERLAY");
 		Title:SetFont(CT.TUISTYLE.SpellListFrameFont, CT.TUISTYLE.SpellListFrameFontSize, CT.TUISTYLE.SpellListFrameFontOutline);

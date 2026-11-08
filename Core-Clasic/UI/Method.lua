@@ -23,7 +23,7 @@ local DT = __private.DT;
 	local max = math.max;
 	local floor = math.floor;
 	local random = math.random;
-	local SetPortraitToTexture = SetPortraitToTexture;
+	-- local SetPortraitToTexture = SetPortraitToTexture;
 	local UIParent = UIParent;
 
 -->
@@ -199,8 +199,8 @@ MT.BuildEnv('UI-Method');
 					TreeFrame.Background:SetColorTexture(0.0, 0.0, 0.0, 1.0);
 				end
 				TreeFrame.TreeLabel:SetText(l10n.SPEC[SpecID]);
-				-- TreeFrame.TreeLabelBackground:SetTexture(SpecTexture);
-				SetPortraitToTexture(TreeFrame.TreeLabelBackground, SpecTexture)
+				TreeFrame.TreeLabelBackground:SetTexture(SpecTexture);
+				-- SetPortraitToTexture(TreeFrame.TreeLabelBackground, SpecTexture);
 				for TalentSeq = 1, #TreeTDB do
 					local TalentDef = TreeTDB[TalentSeq];
 					if TalentDef[1] ~= nil then

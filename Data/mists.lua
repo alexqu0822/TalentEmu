@@ -2533,11 +2533,13 @@ for setID, set in next, DT.ItemSet do
 	local h = {  };
 	for i, id in next, set do
 		local _, _, _, loc, icon = VT._comptb.GetItemInfoInstant(id);
-		if h[loc] then
-			h = false;
-			break;
+		if loc then
+			if h[loc] then
+				h = false;
+				break;
+			end
+			h[loc] = i;
 		end
-		h[loc] = i;
 	end
 	if h then
 		for loc, i in next, h do

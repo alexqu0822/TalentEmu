@@ -2,6 +2,7 @@
 ..\FrameXML\UI.xsd">
 
     <script file = "classic.lua" />
+    <script file = "classic-forever.lua" />
     <script file = "bcc.lua" />
     <script file = "wrath.lua" />
     <script file = "wrath-titan.lua" />

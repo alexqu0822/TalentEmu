@@ -275,6 +275,11 @@ MT.BuildEnv('UI-TreeFrame');
 			TreeLabelBackground:SetPoint("RIGHT", TreeLabel, "LEFT", -4, 0);
 			TreeLabelBackground:SetTexCoord(CT.TUISTYLE.TreeFrameLabelBackgroundTexCoord[1], CT.TUISTYLE.TreeFrameLabelBackgroundTexCoord[2], CT.TUISTYLE.TreeFrameLabelBackgroundTexCoord[3], CT.TUISTYLE.TreeFrameLabelBackgroundTexCoord[4]);
 			TreeFrame.TreeLabelBackground = TreeLabelBackground;
+			local TreeLabelBackgroundRoundMask = TreeFrame:CreateMaskTexture(nil, "OVERLAY", nil, 0);
+			TreeLabelBackgroundRoundMask:SetAllPoints();
+			TreeLabelBackgroundRoundMask:SetTexture(CT.TEXTUREPATH .. [[RoundSquareMask]], "CLAMPTOBLACKADDITIVE", "CLAMPTOBLACKADDITIVE");
+			TreeFrame.TreeLabelBackgroundRoundMask = TreeLabelBackgroundRoundMask;
+			TreeLabelBackground:AddMaskTexture(TreeLabelBackgroundRoundMask);
 
 			TreeFrame.Frame = Frame;
 			TreeFrame.id = TreeIndex;

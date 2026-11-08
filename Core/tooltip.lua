@@ -282,7 +282,15 @@ MT.BuildEnv('TOOLTIP');
 
 	local function HookTooltip(Tooltip, OnTooltipSetUnit)
 		--	hooksecurefunc(Tooltip, "SetUnit", OnTooltipSetUnit);
-		Tooltip:HookScript("OnTooltipSetUnit", OnTooltipSetUnit);
+		if Tooltip:HasScript("OnTooltipSetUnit") then
+			Tooltip:HookScript("OnTooltipSetUnit", OnTooltipSetUnit);
+		else
+			TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, function(Tip, ...)
+				if Tip == Tooltip and Tip.GetUnit then
+					return OnTooltipSetUnit(Tip);
+				end
+			end);
+		end
 		--
 		hooksecurefunc(Tooltip, "SetHyperlink", HookSetHyperlink);
 		hooksecurefunc(Tooltip, "SetSpellBookItem", HookSetSpellBookItem);
