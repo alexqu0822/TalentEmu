@@ -92,14 +92,14 @@ MT.BuildEnv('COMM');
 			end
 			VT.QuerySent[name] = auto_popup and Tick or VT.QuerySent[name] or nil;
 			VT.AutoShowEquipmentFrameOnComm[name] = auto_popup and update_equipment ~= false and Tick or VT.AutoShowEquipmentFrameOnComm[name];
-			-- if name == CT.SELFNAME then
-			-- 	VT.PrevQueryRequestSentTime[name] = Tick;
-			-- 	local code = VT.VAR[CT.SELFGUID];
-			-- 	if code ~= nil then
-			-- 		VT.__dep.__emulib.CHAT_MSG_ADDON(VT.__dep.__emulib.CT.COMM_PREFIX, code, "WHISPER", name);
-			-- 		return;
-			-- 	end
-			-- end
+			if name == CT.SELFNAME then
+				VT.PrevQueryRequestSentTime[name] = Tick;
+				local code = VT.VAR[CT.SELFGUID];
+				if code ~= nil then
+					VT.__dep.__emulib.CHAT_MSG_ADDON(VT.__dep.__emulib.CT.COMM_PREFIX, code, "WHISPER", name);
+					return;
+				end
+			end
 			-- if VT.__is_inbattleground then
 			-- 	local v = VT.TBattlegroundComm[name];
 			-- end

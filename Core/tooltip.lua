@@ -16,7 +16,6 @@ local DT = __private.DT;
 	local tonumber = tonumber;
 	local UnitIsPlayer, UnitFactionGroup, UnitIsConnected = UnitIsPlayer, UnitFactionGroup, UnitIsConnected;
 	local NotifyInspect = NotifyInspect;
-	local GetSpellBookItemName = GetSpellBookItemName;
 	local GetActionInfo = GetActionInfo;
 	local GetMacroSpell = GetMacroSpell;
 	local CreateFrame = CreateFrame;
@@ -213,7 +212,7 @@ MT.BuildEnv('TOOLTIP');
 		end
 	end
 	local function HookSetSpellBookItem(self, spellBookId, bookType)
-		local _, _, SpellID = GetSpellBookItemName(spellBookId, bookType);
+		local _, _, SpellID = VT._comptb.GetSpellBookItemName(spellBookId, bookType);
 		SpellID = tonumber(SpellID);
 		if SpellID ~= nil then
 			TipAddSpellInfo(self, SpellID);

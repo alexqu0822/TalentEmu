@@ -1335,7 +1335,7 @@ MT.BuildEnv('METHOD');
 			local Frames = VT.ImportTargetFrame[name] or MT.UI.FrameGetNameBinding(name);
 			if Frames ~= nil and Frames[1] ~= nil then
 				local popup = (iscomm or ascomm) and VT.SET.autoShowEquipmentFrame;
-				MT.Debug("EquipFrame", "CALLBACK-G", popup, iscomm, ascomm, VT.SET.autoShowEquipmentFrame);
+				MT.Debug("MT.CALLBACK.OnGlyphDataRecv", popup, iscomm, ascomm, VT.SET.autoShowEquipmentFrame);
 				if popup then
 					local T = VT.AutoShowEquipmentFrameOnComm[name];
 					if T ~= nil and MT.GetUnifiedTime() - T < 10 then
@@ -1360,7 +1360,7 @@ MT.BuildEnv('METHOD');
 			local Frames = VT.ImportTargetFrame[name] or MT.UI.FrameGetNameBinding(name);
 			if Frames ~= nil and Frames[1] ~= nil then
 				local popup = (iscomm or ascomm) and VT.SET.autoShowEquipmentFrame;
-				MT.Debug("EquipFrame", "CALLBACK-E", popup, iscomm, ascomm, VT.SET.autoShowEquipmentFrame);
+				MT.Debug("MT.CALLBACK.OnInventoryDataRecv", popup, iscomm, ascomm, VT.SET.autoShowEquipmentFrame);
 				if popup then
 					local T = VT.AutoShowEquipmentFrameOnComm[name];
 					if T ~= nil and MT.GetUnifiedTime() - T < 10 then
@@ -1386,7 +1386,7 @@ MT.BuildEnv('METHOD');
 			local Frames = VT.ImportTargetFrame[name] or MT.UI.FrameGetNameBinding(name);
 			if Frames ~= nil and Frames[1] ~= nil then
 				local popup = (iscomm or ascomm) and VT.SET.autoShowEquipmentFrame;
-				MT.Debug("EquipFrame", "CALLBACK-E", popup, iscomm, ascomm, VT.SET.autoShowEquipmentFrame);
+				MT.Debug("MT.CALLBACK.OnEngravingDataRecv", popup, iscomm, ascomm, VT.SET.autoShowEquipmentFrame);
 				if popup then
 					local T = VT.AutoShowEquipmentFrameOnComm[name];
 					if T ~= nil and MT.GetUnifiedTime() - T < 10 then

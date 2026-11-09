@@ -258,12 +258,17 @@ local DT = {  }; __private.DT = DT;		--	data
 		_comptb.GetItemInventoryTypeByID = GetItemInventoryTypeByID or Noop;
 		_comptb.RequestLoadItemDataByID = RequestLoadItemDataByID or Noop;
 	end
+	if C_SpellBook then
+		_comptb.GetSpellBookItemName = C_SpellBook.GetSpellBookItemName or GetSpellBookItemName;
+	else
+		_comptb.GetSpellBookItemName = GetSpellBookItemName or Noop;
+	end
 
 	if CT.ISFOREVER then
 		local UnitName = UnitName;
 		_comptb.UnitName = function(unit)
 			local name, surname, realm = UnitName(unit);
-			if surname then
+			if surname and surname ~= "" then
 				return name .. " " .. surname, realm;
 			else
 				return name, realm;

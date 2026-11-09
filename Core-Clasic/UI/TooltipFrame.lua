@@ -34,10 +34,22 @@ MT.BuildEnv('UI-TooltipFrame');
 		TooltipFrame:Hide();
 		TooltipFrame:Show();
 
-		local Tooltip1LabelLeft = TooltipFrame:CreateFontString(nil, "ARTWORK", "GameTooltipHeaderText");
-		Tooltip1LabelLeft:SetPoint("TOPLEFT", 6, -6);
-		local Tooltip1LabelRight = TooltipFrame:CreateFontString(nil, "ARTWORK", "GameTooltipHeaderText");
-		Tooltip1LabelRight:SetPoint("TOPRIGHT", -6, -6);
+		if CT.ISFOREVER then
+			local TooltipLabel = TooltipFrame:CreateFontString(nil, "ARTWORK", "GameTooltipHeaderText");
+			TooltipLabel:SetPoint("TOPLEFT", 6, -6);
+			TooltipLabel:Show();
+			TooltipFrame.TooltipLabel = TooltipLabel;
+		end
+		local Tooltip1LabelLeft = TooltipFrame:CreateFontString(nil, "ARTWORK", CT.ISFOREVER and "GameTooltipText" or "GameTooltipHeaderText");
+		local Tooltip1LabelRight = TooltipFrame:CreateFontString(nil, "ARTWORK", CT.ISFOREVER and "GameTooltipText" or "GameTooltipHeaderText");
+		if CT.ISFOREVER then
+			Tooltip1LabelLeft:SetPoint("TOPLEFT", TooltipFrame.TooltipLabel, "BOTTOMLEFT", 0, -6);
+			Tooltip1LabelRight:SetPoint("TOP", TooltipFrame.TooltipLabel, "BOTTOM", 0, -6);
+			Tooltip1LabelRight:SetPoint("RIGHT", -6, 0);
+		else
+			Tooltip1LabelLeft:SetPoint("TOPLEFT", 6, -6);
+			Tooltip1LabelRight:SetPoint("TOPRIGHT", -6, -6);
+		end
 		local Tooltip1Name = "Emu_Tooltip1" .. (MT.GetUnifiedTime() + 1) .. random(1000000, 10000000);
 		local Tooltip1 = CreateFrame('GAMETOOLTIP', Tooltip1Name, UIParent, "GameTooltipTemplate");
 		Tooltip1:SetPoint("TOPLEFT", Tooltip1LabelLeft, "BOTTOMLEFT", 0, 6);
@@ -62,9 +74,9 @@ MT.BuildEnv('UI-TooltipFrame');
 		Tooltip1FooterRight:SetPoint("TOP", Tooltip1, "BOTTOM", 0, 6);
 		Tooltip1FooterRight:SetPoint("RIGHT", TooltipFrame, "RIGHT", -6, 0);
 
-		local Tooltip2LabelLeft = TooltipFrame:CreateFontString(nil, "ARTWORK", "GameTooltipHeaderText");
+		local Tooltip2LabelLeft = TooltipFrame:CreateFontString(nil, "ARTWORK", CT.ISFOREVER and "GameTooltipText" or"GameTooltipHeaderText");
 		Tooltip2LabelLeft:SetPoint("TOPLEFT", Tooltip1FooterLeft, "BOTTOMLEFT", -12, -4);
-		local Tooltip2LabelRight = TooltipFrame:CreateFontString(nil, "ARTWORK", "GameTooltipHeaderText");
+		local Tooltip2LabelRight = TooltipFrame:CreateFontString(nil, "ARTWORK", CT.ISFOREVER and "GameTooltipText" or"GameTooltipHeaderText");
 		-- Tooltip2LabelRight:SetPoint("TOPRIGHT", Tooltip1FooterRight, "BOTTOMRIGHT", 0, -4);
 		Tooltip2LabelRight:SetPoint("TOP", Tooltip1FooterRight, "BOTTOM", 0, -4);
 		Tooltip2LabelRight:SetPoint("RIGHT", TooltipFrame, "RIGHT", -6, 0);

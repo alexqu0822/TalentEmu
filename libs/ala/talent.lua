@@ -428,8 +428,8 @@ if CLIENT_MAJOR < 5 then
 		local C_ClassTalents = C_ClassTalents;
 		local C_Traits = C_Traits;
 		local sort = table.sort;
-		Private.GetNumTalentGroups = function() return 1; end;
-		Private.GetActiveTalentGroup = function() return 1; end;
+		Private.GetNumTalentGroups = GetNumSpecGroups;
+		Private.GetActiveTalentGroup = C_SpecializationInfo.GetActiveSpecGroup;
 		function Private.PeriodicGeneratePlayerTalentMap()
 		end
 		function __emulib.GetTalentMap(class)
@@ -449,10 +449,16 @@ if CLIENT_MAJOR < 5 then
 			战士		1491	1117
 			默认		1493	nil
 		--]=]
+		-- 虽然语法上有isInspect字段，但实际只能读取自己的信息
+		-- group = C_SpecializationInfo.GetActiveSpecGroup(isInspect, isPet)
+		-- specIndex = C_SpecializationInfo.GetSpecialization(isInspect, isPet, group)
+		-- C_SpecializationInfo.GetSpecializationInfo(specIndex, isInspect, isPet, inspectTarget, sex, group, classID)
+		--C_Traits.GetConfigInfo(C_ClassTalents.GetActiveConfigID())
+		--local configID = C_Traits.GetConfigIDByTreeID(traitTreeID);
 		function __emulib.GetTalentData(class, inspect, group)
 			if not inspect then
 				local configID = C_ClassTalents.GetActiveConfigID();
-				local specIndex = C_SpecializationInfo.GetSpecialization();
+				local specIndex = C_SpecializationInfo.GetSpecialization(false, false, group);
 				if specIndex then
 					local specID = C_SpecializationInfo.GetSpecializationInfo(specIndex);
 					local treeID = C_ClassTalents.GetTraitTreeForSpec(specID);
@@ -511,18 +517,18 @@ if CLIENT_MAJOR < 5 then
 						local T = { {}, {}, {}, };
 						for i = 1, #Ds do
 							local nodeInfo = Ds[i];
-							-- .ranksPurchased
-							-- .activeRank: 该天赋当前已点（预览）的等级
+							-- .ranksPurchased	当前实际应用的点数
+							-- .activeRank		该天赋当前已点（预览）的等级
 							-- .currentRank
-							-- .maxRanks: 该天赋的最大等级
+							-- .maxRanks		该天赋的最大等级
 							-- .totalMaxRanks
-							-- .entryIDs: 如果是选择节点，这里是可选项的ID列表
+							-- .entryIDs		如果是选择节点，这里是可选项的ID列表
 							-- .subTreeID
 							local x = Xr[nodeInfo.posX];
 							local y = Yr[nodeInfo.posY];
 							local v = 1 + (x - 1) % 4;
 							local t = 1 + (x - v) / 4;
-							T[t][v + (y - 1) * 4] = nodeInfo.activeRank;
+							T[t][v + (y - 1) * 4] = nodeInfo.ranksPurchased;
 						end
 						local data = "";
 						local len = 0;

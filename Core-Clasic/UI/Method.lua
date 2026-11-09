@@ -1313,7 +1313,11 @@ MT.BuildEnv('UI-Method');
 			end
 			--Tooltip1:Show();
 			TooltipFrame:SetWidth(Tooltip1:GetWidth());
-			TooltipFrame:SetHeight(TooltipFrame.Tooltip1LabelLeft:GetHeight() + Tooltip1:GetHeight() + TooltipFrame.Tooltip1FooterRight:GetHeight());
+			if CT.ISFOREVER then
+				TooltipFrame:SetHeight(TooltipFrame.TooltipLabel:GetHeight() + 6 + TooltipFrame.Tooltip1LabelLeft:GetHeight() + Tooltip1:GetHeight() + TooltipFrame.Tooltip1FooterRight:GetHeight());
+			else
+				TooltipFrame:SetHeight(TooltipFrame.Tooltip1LabelLeft:GetHeight() + Tooltip1:GetHeight() + TooltipFrame.Tooltip1FooterRight:GetHeight());
+			end
 			TooltipFrame:SetAlpha(1.0);
 			Tooltip1:SetAlpha(1.0);
 		else
@@ -1336,7 +1340,11 @@ MT.BuildEnv('UI-Method');
 			--Tooltip1:Show();
 			--Tooltip2:Show();
 			TooltipFrame:SetWidth(max(Tooltip1:GetWidth(), Tooltip2:GetWidth()));
-			TooltipFrame:SetHeight(TooltipFrame.Tooltip1LabelLeft:GetHeight() + Tooltip1:GetHeight() + TooltipFrame.Tooltip1FooterLeft:GetHeight() + TooltipFrame.Tooltip2LabelLeft:GetHeight() + Tooltip2:GetHeight() + TooltipFrame.Tooltip2FooterLeft:GetHeight() - 8);
+			if CT.ISFOREVER then
+				TooltipFrame:SetHeight(TooltipFrame.TooltipLabel:GetHeight() + 6 + TooltipFrame.Tooltip1LabelLeft:GetHeight() + Tooltip1:GetHeight() + TooltipFrame.Tooltip1FooterLeft:GetHeight() + TooltipFrame.Tooltip2LabelLeft:GetHeight() + Tooltip2:GetHeight() + TooltipFrame.Tooltip2FooterLeft:GetHeight() - 8);
+			else
+				TooltipFrame:SetHeight(TooltipFrame.Tooltip1LabelLeft:GetHeight() + Tooltip1:GetHeight() + TooltipFrame.Tooltip1FooterLeft:GetHeight() + TooltipFrame.Tooltip2LabelLeft:GetHeight() + Tooltip2:GetHeight() + TooltipFrame.Tooltip2FooterLeft:GetHeight() - 8);
+			end
 			TooltipFrame:SetAlpha(1.0);
 			Tooltip1:SetAlpha(1.0);
 			Tooltip2:SetAlpha(1.0);
@@ -1346,6 +1354,7 @@ MT.BuildEnv('UI-Method');
 	end
 	if CT.ISFOREVER then
 		function MT.UI.TooltipFrameSetTalent(TooltipFrame, Node, SpecID, reqPts, pts, spellTable, CurRank, MaxRank)
+			local TooltipLabel = TooltipFrame.TooltipLabel;
 			local Tooltip1LabelLeft = TooltipFrame.Tooltip1LabelLeft;
 			local Tooltip1LabelRight = TooltipFrame.Tooltip1LabelRight;
 			local Tooltip1 = TooltipFrame.Tooltip1;
@@ -1366,6 +1375,7 @@ MT.BuildEnv('UI-Method');
 			TooltipFrame:Show();
 			TooltipFrame:SetAlpha(0.0);
 
+			TooltipLabel:SetText(VT._comptb.GetSpellName(spellTable[1]));
 			if CurRank == 0 then
 				Tooltip1LabelLeft:Show();
 				Tooltip1LabelLeft:SetText(l10n.NextRank);

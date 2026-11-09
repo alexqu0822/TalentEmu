@@ -46,9 +46,9 @@ local DT = __private.DT;
 		TreeResetXSize = 28,
 		TreeResetYSize = 28,
 
-		TalentDepArrowXSize = 16,
-		TalentDepArrowYSize = 20,
-		TalentDepBranchXSize = 8,
+		TalentDepArrowXSize = 12,
+		TalentDepArrowYSize = 15,
+		TalentDepBranchXSize = 4,
 
 		SpellListFrameXSize = 200,
 		SpellListFrameFont = SystemFont_Shadow_Med1:GetFont(),--=="Fonts\ARKai_T.ttf"
