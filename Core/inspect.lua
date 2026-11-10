@@ -105,6 +105,9 @@ MT.BuildEnv('INSPECT');
 		Driver:RegisterEvent("INSPECT_READY");
 		Driver:SetScript("OnEvent", Driver.OnEvent);
 		hooksecurefunc("NotifyInspect", function(unit)
+			if VT._comptb.issecretvalue(unit) then
+				return;
+			end
 			local GUID = UnitGUID(unit);
 			if GUID ~= nil then
 				local name, realm = VT._comptb.UnitName(unit);

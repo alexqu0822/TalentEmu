@@ -171,6 +171,7 @@ local DT = {  }; __private.DT = DT;		--	data
 	VT._comptb = _comptb;
 	local Noop = function() end;
 
+	_comptb.issecretvalue = issecretvalue or function() return false; end
 	if GetMouseFoci then
 		local GetMouseFoci = GetMouseFoci;
 		_comptb.GetMouseFocus = function()

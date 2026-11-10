@@ -174,6 +174,9 @@ MT.BuildEnv('TOOLTIP');
 		if VT.SET.talents_in_tip or VT.SET.itemlevel_in_tip then
 			PrevTipUnitName[Tooltip] = nil;
 			local _, unit = Tooltip:GetUnit();
+			if VT._comptb.issecretvalue(unit) then
+				return;
+			end
 			if unit == 'player' then
 				AddReservedLines(Tooltip);
 				--
@@ -245,7 +248,7 @@ MT.BuildEnv('TOOLTIP');
 				end
 				UpdateFrame.wait = 0.0;
 				local _, unit = UpdateFrame.Tooltip:GetUnit();
-				if unit ~= nil and UnitIsPlayer(unit) and UnitIsConnected(unit) then
+				if unit ~= nil and not VT._comptb.issecretvalue(unit) and UnitIsPlayer(unit) and UnitIsConnected(unit) then
 					local name, realm = VT._comptb.UnitName(unit);
 					if realm ~= nil and realm ~= "" and realm ~= CT.SELFREALM and realm ~= CT.SELFREALMSTRIP and realm ~= CT.SELFREALMSHORT then
 						name = name .. "-" .. realm;
