@@ -163,9 +163,9 @@ MT.BuildEnv('TOOLTIP');
 					if UnitFactionGroup(unit) == CT.SELFFACTION then
 						MT.SendQueryRequest(name, realm, false, false, not tal, not inv, not inv and not gly);
 					end
-					if MT.CanInspect(unit) then
-						NotifyInspect(unit);
-					end
+					-- if MT.CanInspect(unit) then
+					-- 	NotifyInspect(unit);
+					-- end
 				end
 			end
 		end
@@ -191,9 +191,9 @@ MT.BuildEnv('TOOLTIP');
 				local _, tal, gly, inv = MT.CacheEmulateComm(name, realm, false, VT.SET.talents_in_tip, VT.SET.itemlevel_in_tip, VT.SET.itemlevel_in_tip);
 				if not tal or not inv then
 					TooltipUpdateFrame[Tooltip]:Waiting(name, realm);
-					if MT.CanInspect(unit) then
-						NotifyInspect(unit);
-					end
+					-- if MT.CanInspect(unit) then
+					-- 	NotifyInspect(unit);
+					-- end
 				end
 			end
 		end
@@ -259,9 +259,9 @@ MT.BuildEnv('TOOLTIP');
 							if UnitFactionGroup(unit) == CT.SELFFACTION then
 								MT.SendQueryRequest(name, realm, false, false, not tal, not inv, not inv and not gly);
 							end
-							if MT.CanInspect(unit) then
-								NotifyInspect(unit);
-							end
+							-- if MT.CanInspect(unit) then
+							-- 	NotifyInspect(unit);
+							-- end
 						else
 							UpdateFrame:Hide();
 						end
