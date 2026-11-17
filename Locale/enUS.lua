@@ -235,6 +235,7 @@ l10n.RACE = {
 	["TAUREN"] = "Tauren",
 	["TROLL"] = "Troll",
 	["BLOODELF"] = "BloodElf",
+	["SKYBORNE"] = "Skyborne",
 };
 l10n.SLOT = {
 	[0] = "Ammo",

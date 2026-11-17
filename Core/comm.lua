@@ -421,16 +421,21 @@ MT.BuildEnv('COMM');
 	end
 	function MT.SendTalents(Frame)
 		local code = MT.EncodeTalent(Frame);
-		local class, level, numGroup, activeGroup, data1, data2 = MT.DecodeTalent(code);
-		local title = MT.GenerateTitleFromRawData(data1, class, true);
-		if title ~= nil then
-			local link = MT.GenerateLink(title, class, code);
-			if link ~= nil then
-				local editBox = ChatEdit_ChooseBoxForSend();
-				editBox:Show();
-				editBox:SetFocus();
-				editBox:Insert(link);
+		local link = nil;
+		if CT.ISFOREVER then
+			link = "[emu:" .. code .. "]";
+		else
+			local class, level, numGroup, activeGroup, data1, data2 = MT.DecodeTalent(code);
+			local title = MT.GenerateTitleFromRawData(data1, class, true);
+			if title ~= nil then
+				link = MT.GenerateLink(title, class, code);
 			end
+		end
+		if link ~= nil then
+			local editBox = ChatEdit_ChooseBoxForSend();
+			editBox:Show();
+			editBox:SetFocus();
+			editBox:Insert(link);
 		end
 	end
 	local _SetHyperlink = ItemRefTooltip.SetHyperlink;
@@ -565,24 +570,26 @@ MT.BuildEnv('COMM');
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT", ChatFilter_CHAT);
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_INSTANCE_CHAT_LEADER", ChatFilter_CHAT);
 		ChatFrame_AddMessageEventFilter("CHAT_MSG_CHANNEL", ChatFilter_CHAT);
-		if _G.SendChatMessage then
-			__SendChatMessage = _G.SendChatMessage;
-			_G.SendChatMessage = Hooked_SendChatMessage;
-		end
-		local C_ChatInfo = _G.C_ChatInfo;
-		if C_ChatInfo then
-			if C_ChatInfo.SendChatMessage then
-				__C_ChatInfo_SendChatMessage = C_ChatInfo.SendChatMessage;
-				C_ChatInfo.SendChatMessage = Hooked_C_ChatInfo_SendChatMessage;
+		if not CT.ISFOREVER then
+			if _G.SendChatMessage then
+				__SendChatMessage = _G.SendChatMessage;
+				_G.SendChatMessage = Hooked_SendChatMessage;
 			end
-		end
-		if _G.BNSendWhisper then
-			__BNSendWhisper = _G.BNSendWhisper;
-			_G.BNSendWhisper = Hooked_BNSendWhisper;
-		end
-		if _G.BNSendConversationMessage then
-			__BNSendConversationMessage = _G.BNSendConversationMessage;
-			_G.BNSendConversationMessage = Hooked_BNSendConversationMessage;
+			local C_ChatInfo = _G.C_ChatInfo;
+			if C_ChatInfo then
+				if C_ChatInfo.SendChatMessage then
+					__C_ChatInfo_SendChatMessage = C_ChatInfo.SendChatMessage;
+					C_ChatInfo.SendChatMessage = Hooked_C_ChatInfo_SendChatMessage;
+				end
+			end
+			if _G.BNSendWhisper then
+				__BNSendWhisper = _G.BNSendWhisper;
+				_G.BNSendWhisper = Hooked_BNSendWhisper;
+			end
+			if _G.BNSendConversationMessage then
+				__BNSendConversationMessage = _G.BNSendConversationMessage;
+				_G.BNSendConversationMessage = Hooked_BNSendConversationMessage;
+			end
 		end
 	end);
 	MT.RegisterOnLogin('COMM', function(LoggedIn)

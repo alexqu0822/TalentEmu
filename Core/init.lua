@@ -206,6 +206,7 @@ local DT = {  }; __private.DT = DT;		--	data
 		_comptb.GetSpellLevelLearned = C_Spell.GetSpellLevelLearned or GetSpellLevelLearned or Noop;
 		_comptb.RequestLoadSpellData = C_Spell.RequestLoadSpellData or RequestLoadSpellData or Noop;
 		_comptb.GetSpellLink = C_Spell.GetSpellLink or GetSpellLink or Noop;
+		_comptb.PickupSpell = C_Spell.PickupSpell or PickupSpell or Noop;
 	else
 		_comptb.GetSpellInfo = GetSpellInfo or Noop;
 		_comptb.GetSpellName = _comptb.GetSpellInfo or Noop;
@@ -238,6 +239,7 @@ local DT = {  }; __private.DT = DT;		--	data
 				end
 			end
 		end
+		_comptb.PickupSpell = PickupSpell or Noop;
 	end
 
 	if C_Item then

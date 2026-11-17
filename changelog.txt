@@ -1,8 +1,11 @@
+2026-11-16
+[Forever] Fix the chat tainting issue in combat.
+
 2026-11-11
 [Forever] Fix
 
 2026-11-09
-[Forevee] Update. Spell list and Depend tree todo.
+[Forever] Update. Spell list and Depend tree todo.
 
 2026-09-17
 [WotLK Titan] Elemental Shaman talents update.

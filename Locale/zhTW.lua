@@ -235,6 +235,7 @@ l10n.RACE = {
 	["TAUREN"] = "牛頭人",
 	["TROLL"] = "巨魔",
 	["BLOODELF"] = "血精靈",
+	["SKYBORNE"] = "Skyborne",
 };
 l10n.SLOT = {
 	[0] = "子彈",

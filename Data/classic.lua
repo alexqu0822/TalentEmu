@@ -660,13 +660,13 @@ DT.SpellDB = {
 		{ name = "猎人印记", { 6, 1130, 100, }, { 22, 14323, 6000, }, { 40, 14324, 18000, }, { 58, 14325, 48000, }, },
 		{ name = "震荡射击", { 8, 5116, 200, }, },
 		{ name = "招架", { 8, 3127, 200, }, passive = true, },
-		{ name = "复活宠物", { 10, 982, 0, }, },
 		{ name = "驯服野兽", { 10, 1515, 0, }, },
-		{ name = "追踪人型生物", { 10, 19883, 400, }, },
+		{ name = "复活宠物", { 10, 982, 0, }, },
 		{ name = "喂养宠物", { 10, 6991, 0, }, },
-		{ name = "雄鹰守护", { 10, 13165, 400, }, { 18, 14318, 2000, }, { 28, 14319, 8000, }, { 38, 14320, 16000, }, { 48, 14321, 32000, }, { 58, 14322, 48000, }, { 60, 25296, 0, 5, }, },
 		{ name = "解散野兽", { 10, 2641, 0, }, },
 		{ name = "召唤宠物", { 10, 883, 0, }, },
+		{ name = "追踪人型生物", { 10, 19883, 400, }, },
+		{ name = "雄鹰守护", { 10, 13165, 400, }, { 18, 14318, 2000, }, { 28, 14319, 8000, }, { 38, 14320, 16000, }, { 48, 14321, 32000, }, { 58, 14322, 48000, }, { 60, 25296, 0, 5, }, },
 		{ name = "摔绊", { 12, 2974, 600, }, { 38, 14267, 16000, }, { 60, 14268, 50000, }, },
 		{ name = "扰乱射击", { 12, 20736, 600, }, { 20, 14274, 2200, }, { 30, 15629, 8000, }, { 40, 15630, 18000, }, { 50, 15631, 36000, }, { 60, 15632, 50000, }, },
 		{ name = "治疗宠物", { 12, 136, 600, }, { 20, 3111, 2200, }, { 28, 3661, 8000, }, { 36, 3662, 14000, }, { 44, 13542, 26000, }, { 52, 13543, 40000, }, { 60, 13544, 50000, }, },
@@ -728,29 +728,29 @@ DT.SpellDB = {
 		{ name = "烈焰风暴", { 16, 2120, 1500, }, { 24, 2121, 4000, }, { 32, 8422, 10000, }, { 40, 8423, 15000, }, { 48, 10215, 28000, }, { 56, 10216, 38000, }, },
 		{ name = "解除次级诅咒", { 18, 475, 1800, }, },
 		{ name = "魔法增效", { 18, 1008, 1800, }, { 30, 8455, 8000, }, { 42, 10169, 18000, }, { 54, 10170, 36000, }, },
-		{ name = "传送：幽暗城", { 20, 3563, 2000, }, race = "ORC|SCOURGE|TAUREN|TROLL|BLOODELF", },
 		{ name = "法力护盾", { 20, 1463, 2000, }, { 28, 8494, 7000, }, { 36, 8495, 13000, }, { 44, 10191, 23000, }, { 52, 10192, 35000, }, { 60, 10193, 42000, }, },
 		{ name = "暴风雪", { 20, 10, 2000, }, { 28, 6141, 7000, }, { 36, 8427, 13000, }, { 44, 10185, 23000, }, { 52, 10186, 35000, }, { 60, 10187, 42000, }, },
 		{ name = "防护火焰结界", { 20, 543, 2000, }, { 30, 8457, 8000, }, { 40, 8458, 15000, }, { 50, 10223, 32000, }, { 60, 10225, 42000, }, },
 		{ name = "唤醒", { 20, 12051, 2000, }, },
-		{ name = "传送：奥格瑞玛", { 20, 3567, 2000, }, race = "ORC|SCOURGE|TAUREN|TROLL|BLOODELF", },
+		{ name = "闪现术", { 20, 1953, 2000, }, },
 		{ name = "传送：暴风城", { 20, 3561, 2000, }, race = "HUMAN|DWARF|NIGHTELF|GNOME|DRAENEI", },
 		{ name = "传送：铁炉堡", { 20, 3562, 2000, }, race = "HUMAN|DWARF|NIGHTELF|GNOME|DRAENEI", },
-		{ name = "闪现术", { 20, 1953, 2000, }, },
+		{ name = "传送：幽暗城", { 20, 3563, 2000, }, race = "ORC|SCOURGE|TAUREN|TROLL|BLOODELF", },
+		{ name = "传送：奥格瑞玛", { 20, 3567, 2000, }, race = "ORC|SCOURGE|TAUREN|TROLL|BLOODELF", },
 		{ name = "防护冰霜结界", { 22, 6143, 3000, }, { 32, 8461, 10000, }, { 42, 8462, 18000, }, { 52, 10177, 35000, }, { 60, 28609, 0, }, },
 		{ name = "灼烧", { 22, 2948, 3000, }, { 28, 8444, 7000, }, { 34, 8445, 12000, }, { 40, 8446, 15000, }, { 46, 10205, 26000, }, { 52, 10206, 35000, }, { 58, 10207, 40000, }, },
 		{ name = "法术反制", { 24, 2139, 4000, }, },
 		{ name = "冰锥术", { 26, 120, 5000, }, { 34, 8492, 12000, }, { 42, 10159, 18000, }, { 50, 10160, 32000, }, { 58, 10161, 40000, }, },
 		{ name = "制造魔法玛瑙", { 28, 759, 7000, }, },
-		{ name = "传送：雷霆崖", { 30, 3566, 8000, }, race = "ORC|SCOURGE|TAUREN|TROLL|BLOODELF", },
-		{ name = "传送：达纳苏斯", { 30, 3565, 8000, }, race = "HUMAN|DWARF|NIGHTELF|GNOME|DRAENEI", },
 		{ name = "冰甲术", { 30, 7302, 8000, }, { 40, 7320, 15000, }, { 50, 10219, 32000, }, { 60, 10220, 42000, }, },
+		{ name = "传送：达纳苏斯", { 30, 3565, 8000, }, race = "HUMAN|DWARF|NIGHTELF|GNOME|DRAENEI", },
+		{ name = "传送：雷霆崖", { 30, 3566, 8000, }, race = "ORC|SCOURGE|TAUREN|TROLL|BLOODELF", },
 		{ name = "魔甲术", { 34, 6117, 13000, }, { 46, 22782, 28000, }, { 58, 22783, 40000, }, },
 		{ name = "制造魔法翡翠", { 38, 3552, 14000, }, },
 		{ name = "传送门：暴风城", { 40, 10059, 15000, }, race = "HUMAN|DWARF|NIGHTELF|GNOME|DRAENEI", },
-		{ name = "传送门：幽暗城", { 40, 11418, 15000, }, race = "ORC|SCOURGE|TAUREN|TROLL|BLOODELF", },
-		{ name = "传送门：奥格瑞玛", { 40, 11417, 15000, }, race = "ORC|SCOURGE|TAUREN|TROLL|BLOODELF", },
 		{ name = "传送门：铁炉堡", { 40, 11416, 15000, }, race = "HUMAN|DWARF|NIGHTELF|GNOME|DRAENEI", },
+		{ name = "传送门：奥格瑞玛", { 40, 11417, 15000, }, race = "ORC|SCOURGE|TAUREN|TROLL|BLOODELF", },
+		{ name = "传送门：幽暗城", { 40, 11418, 15000, }, race = "ORC|SCOURGE|TAUREN|TROLL|BLOODELF", },
 		{ name = "制造魔法黄水晶", { 48, 10053, 28000, }, },
 		{ name = "传送门：达纳苏斯", { 50, 11419, 32000, }, race = "HUMAN|DWARF|NIGHTELF|GNOME|DRAENEI", },
 		{ name = "传送门：雷霆崖", { 50, 11420, 32000, }, race = "ORC|SCOURGE|TAUREN|TROLL|BLOODELF", },
@@ -1208,181 +1208,6 @@ DT.SpecBackground = {
 };
 
 DT.PresetTalents = {
-	DRUID = {
-		H = {
-			E = {
-				"https://classic.wowhead.com/talent-calc/druid/5140000302--505203105315051",
-				"https://classic.wowhead.com/talent-calc/druid/51000533120013--505103105115",
-				"https://classic.wowhead.com/talent-calc/druid/4140050312001--50510310501504",
-				"https://classic.wowhead.com/talent-calc/druid/-503050130302215-05501310501",
-			},
-			P = {
-				"https://classic.wowhead.com/talent-calc/druid/0140002-5002321-055103105315011",
-				"https://classic.wowhead.com/talent-calc/druid/-500242130320215-05501310231",
-			},
-		},
-		D = {
-			E = {
-				"https://classic.wowhead.com/talent-calc/druid/0142503002551351--5005031",
-				"https://classic.wowhead.com/talent-calc/druid/510050300250135--50502310131",
-				"https://classic.wowhead.com/talent-calc/druid/014005301-5500021323202151-05",
-			},
-			P = {
-				"https://classic.wowhead.com/talent-calc/druid/0143503002551351--5005021",
-			},
-		},
-		T = {
-			E = {
-				"https://classic.wowhead.com/talent-calc/druid/014005001-5050501303022151-05002",
-				"https://classic.wowhead.com/talent-calc/druid/014005001-5050301323222151-05",
-			},
-		},
-	},
-	HUNTER = {
-		D = {
-			E = {
-				"https://classic.wowhead.com/talent-calc/hunter/2-05251030513051-33202004103",
-				"https://classic.wowhead.com/talent-calc/hunter/55000000505-05251030513051",
-				"https://classic.wowhead.com/talent-calc/hunter/-05151030501-332020251030315",
-			},
-			P = {
-				"https://classic.wowhead.com/talent-calc/hunter/-5105103051-005025051030315",
-				"https://classic.wowhead.com/talent-calc/hunter/5300020150501-51051030513-005",
-			},
-		}
-	},
-	MAGE = {
-		D = {
-			E = {
-				"https://classic.wowhead.com/talent-calc/mage/2300450310031531--053500030013",
-				"https://classic.wowhead.com/talent-calc/mage/230045200003--05350013122301051",
-				"https://classic.wowhead.com/talent-calc/mage/230025-5052023123033151-003",
-			},
-			P = {
-				"https://classic.wowhead.com/talent-calc/mage/20500520102--05053232112051301",
-				"https://classic.wowhead.com/talent-calc/mage/-05520201230031-050132301120513",
-			},
-		},
-	},
-	PALADIN = {
-		H = {
-			E = {
-				"https://classic.wowhead.com/talent-calc/paladin/05503122521351-503201-5",
-				"https://classic.wowhead.com/talent-calc/paladin/05503122521051-50325100003",
-				"https://classic.wowhead.com/talent-calc/paladin/0550312152105-503251000131",
-			},
-			P = {
-				"https://classic.wowhead.com/talent-calc/paladin/05503122521051-5032510003",
-				"https://classic.wowhead.com/talent-calc/paladin/05503122521051-5002-05205",
-			},
-		},
-		D = {
-			E = {
-				"https://classic.wowhead.com/talent-calc/paladin/505001-503-542300512003151",
-				"https://classic.wowhead.com/talent-calc/paladin/5550010002--552300512003151",
-				"https://classic.wowhead.com/talent-calc/paladin/52-503201-552300512003151",
-			},
-			P = {
-				"https://classic.wowhead.com/talent-calc/paladin/505-5032-542000512203151",
-				"https://classic.wowhead.com/talent-calc/paladin/1-5032510013005-5420005122031",
-			},
-		},
-		T = {
-			E = {
-				"https://classic.wowhead.com/talent-calc/paladin/050501-553050335001001-05004",
-			},
-		},
-	},
-	PRIEST = {
-		H = {
-			E = {
-				"https://classic.wowhead.com/talent-calc/priest/5012301305001-025051031300055",
-				"https://classic.wowhead.com/talent-calc/priest/505230130505101-0250510313",
-			},
-			P = {
-				"https://classic.wowhead.com/talent-calc/priest/500232130515051-2150511003",
-				"https://classic.wowhead.com/talent-calc/priest/500232133101-225051132300105",
-			},
-		},
-		D = {
-			E = {
-				"https://classic.wowhead.com/talent-calc/priest/0512301305--5032500103501051",
-				"https://classic.wowhead.com/talent-calc/priest/50520013--5032504103501051",
-			},
-			P = {
-				"https://classic.wowhead.com/talent-calc/priest/5002321--0502525103511251",
-				"https://classic.wowhead.com/talent-calc/priest/500232132025151-00545100202",
-			},
-		},
-	},
-	ROGUE = {
-		D = {
-			E = {
-				"https://classic.wowhead.com/talent-calc/rogue/005323105-3210052020050150231",
-				"https://classic.wowhead.com/talent-calc/rogue/00532310505105-320305002001-05",
-			},
-			P = {
-				"https://classic.wowhead.com/talent-calc/rogue/305320115001-3-500253000332121",
-				"https://classic.wowhead.com/talent-calc/rogue/005320105-320302002-05024303030012",
-			},
-		},
-	},
-	SHAMAN = {
-		H = {
-			E = {
-				"https://classic.wowhead.com/talent-calc/shaman/-5-552350510553151",
-				"https://classic.wowhead.com/talent-calc/shaman/-5120202-550300510553151",
-			},
-			P = {
-				"https://classic.wowhead.com/talent-calc/shaman/5003215013001--05033301015315",
-				"https://classic.wowhead.com/talent-calc/shaman/5003-05002-05035351005315",
-			},
-		},
-		D = {
-			E = {
-				"https://classic.wowhead.com/talent-calc/shaman/550331050002151--05204301005",
-				"https://classic.wowhead.com/talent-calc/shaman/-5025002105023051-0510530105",
-			},
-			P = {
-				"https://classic.wowhead.com/talent-calc/shaman/55000135030215--0523031100501",
-				"https://classic.wowhead.com/talent-calc/shaman/05023140003-5015202105023151",
-			},
-		},
-	},
-	WARLOCK = {
-		D = {
-			E = {
-				"https://classic.wowhead.com/talent-calc/warlock/25002-2050300142301-52500051020001",
-				"https://classic.wowhead.com/talent-calc/warlock/5530203012201105--50502051020001",
-				"https://classic.wowhead.com/talent-calc/warlock/01-234035010250004-50502051020001",
-			},
-			P = {
-				"https://classic.wowhead.com/talent-calc/warlock/35000232122-2050310152501051",
-				"https://classic.wowhead.com/talent-calc/warlock/35-2050310152501051-50500011",
-				"https://classic.wowhead.com/talent-calc/warlock/3500023212201135--50520051020001",
-				"https://classic.wowhead.com/talent-calc/warlock/35000231122-001-5052005102005141",
-			},
-		},
-	},
-	WARRIOR = {
-		D = {
-			E = {
-				"https://classic.wowhead.com/talent-calc/warrior/20305011302-05050005525010051",
-				"https://classic.wowhead.com/talent-calc/warrior/20305011322-05050005005510051",
-				"https://classic.wowhead.com/talent-calc/warrior/20305011332-05052005025010051",
-			},
-			P = {
-				"https://classic.wowhead.com/talent-calc/warrior/023050213320105031-55000131005",
-
-			},
-		},
-		T = {
-			E = {
-				"https://classic.wowhead.com/talent-calc/warrior/05005001-05-50250113530211051",
-				"https://classic.wowhead.com/talent-calc/warrior/-05050105125010051-5023011053",
-			},
-		},
-	},
 };
 
 DT.LevelAvailablePointsTable = {  };

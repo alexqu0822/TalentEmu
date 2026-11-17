@@ -13,7 +13,7 @@ local DT = __private.DT;
 	local select = select;
 	local strsplit = string.split;
 	local format = string.format;
-	local FindSpellBookSlotBySpellID, PickupSpell = FindSpellBookSlotBySpellID, PickupSpell;
+	local FindSpellBookSlotBySpellID = FindSpellBookSlotBySpellID;
 	local IsShiftKeyDown = IsShiftKeyDown;
 	local CreateFrame = CreateFrame;
 	-- local SetPortraitToTexture = SetPortraitToTexture;
@@ -104,7 +104,7 @@ MT.BuildEnv('UI-SpellListFrame');
 		local index = Node:GetDataIndex();
 		local data = Node.list[index];
 		if not data[6] and FindSpellBookSlotBySpellID(data[2]) then
-			PickupSpell(data[2]);
+			MT._comptb.PickupSpell(data[2]);
 		end
 	end
 	function MT._SpellListFrameFunc.CreateNode(Parent, index, buttonHeight)
@@ -149,8 +149,8 @@ MT.BuildEnv('UI-SpellListFrame');
 		local list = Node.list;
 		if data_index <= #list then
 			local name, _, texture = VT._comptb.GetSpellInfo(list[data_index][2]);
-			SetPortraitToTexture(Node.Icon, texture);
-			-- Node.Icon:SetTexture(texture);
+			-- SetPortraitToTexture(Node.Icon, texture);
+			Node.Icon:SetTexture(texture);
 			Node.Title:SetText(name);
 			Node:Show();
 			if VT._comptb.GetMouseFocus() == Node then
