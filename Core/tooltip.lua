@@ -121,6 +121,9 @@ MT.BuildEnv('TOOLTIP');
 		local _, unit = Tooltip:GetUnit();
 		if unit ~= nil then
 			local name, realm = VT._comptb.UnitName(unit);
+			if VT._comptb.issecretvalue(name) then
+				return;
+			end
 			if realm ~= nil and realm ~= "" and realm ~= CT.SELFREALM and realm ~= CT.SELFREALMSTRIP and realm ~= CT.SELFREALMSHORT then
 				name = name .. "-" .. realm;
 			end
