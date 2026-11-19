@@ -205,7 +205,7 @@ if Menu and MenuUtil then
 					if __isdead then
 						return;
 					end
-					if issecretvalue(rootDescription) or issecretvalue(contextData) or issecretvalue(contextData.name) or issecretvalue(contextData.surname) or issecretvalue(contextData.server) then
+					if issecretvalue and (issecretvalue(rootDescription) or issecretvalue(contextData) or issecretvalue(contextData.name) or issecretvalue(contextData.surname) or issecretvalue(contextData.server)) then
 						return;
 					end
 					local category = nil;
