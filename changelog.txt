@@ -1,3 +1,6 @@
+2026-11-18
+[Forever] Fix more secret value tainting issues.
+
 2026-11-17
 [Forever] Fix a secret value tainting issue.
 

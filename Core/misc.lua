@@ -35,7 +35,7 @@ MT.BuildEnv('MISC');
 			GetText = function() return l10n.PopupQuery; end,
 			IsShown = function() return true; end,
 			OnClick = function(def, which, context)
-				_G.ctx = context;
+				-- _G.ctx = context;
 				if context.surname then
 					MT.SendQueryRequest(context.name .. " " .. context.surname, context.server, true, true);
 				else

@@ -29,6 +29,9 @@ MT.BuildEnv('INSPECT');
 	for i = 1, 4 do UnitList[#UnitList + 1] = 'party' .. i; end
 	for i = 1, 40 do UnitList[#UnitList + 1] = 'raid' .. i; end
 	function Driver:OnEvent(event, GUID)
+		if VT._comptb.issecretvalue(GUID) then
+			return;
+		end
 		local info = _InspectInfo[GUID];
 		if info ~= nil and UnitGUID(info[1]) ~= GUID then
 			info = nil;

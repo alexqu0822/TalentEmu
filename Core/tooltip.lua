@@ -54,14 +54,18 @@ MT.BuildEnv('TOOLTIP');
 			local Line = List[i];
 			if Line then
 				local Text = Line:GetText();
-				local index = ReservedLinePlaceHolder[Text];
-				if index then
-					ReservedLine[index][Tooltip] = Line;
+				if not VT._comptb.issecretvalue(Text) then
+					local index = ReservedLinePlaceHolder[Text];
+					if index then
+						ReservedLine[index][Tooltip] = Line;
+					end
 				end
 			end
 		end
 		for i = 1, NumReservedLines do
-			ReservedLine[i][Tooltip]:SetText(nil);
+			if ReservedLine[i][Tooltip] then
+				ReservedLine[i][Tooltip]:SetText(nil);
+			end
 		end
 		-- Tooltip:Show();
 	end
