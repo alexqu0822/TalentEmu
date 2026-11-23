@@ -90,6 +90,7 @@ MT.BuildEnv('UI-TreeFrame');
 		RoundBorder:SetAllPoints();
 		RoundBorder:SetTexture(CT.TEXTUREPATH .. [[RoundSquareThickBorder]]);
 		RoundBorder:SetVertexColor(0.0, 0.0, 0.0, 1.0);
+		RoundBorder:AddMaskTexture(Node.RoundMask);
 		Node.RoundBorder = RoundBorder;
 
 		Node:SetNormalTexture(CT.TTEXTURESET.UNK);

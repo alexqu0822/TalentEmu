@@ -110,6 +110,7 @@ MT.BuildEnv('MISC');
 					button:SetScript("OnLeave", MT.GeneralOnLeave);
 					button.information = l10n.TalentFrameCallButton;
 					_TalentFrame.__TalentEmuCall = button;
+					VT.__dep.autostyle:AddReskinObject(button);
 				elseif _G.PlayerTalentFrame ~= nil then
 					for i = 1, 999 do
 						local b = _G["PlayerTalentFrameTalent" .. i];
@@ -132,11 +133,34 @@ MT.BuildEnv('MISC');
 					_TalentFrame.__TalentEmuCall = button;
 					VT.__dep.autostyle:AddReskinObject(button);
 				end
+			elseif addon == "Blizzard_PlayerSpells" then
+				if self ~= nil then
+					self:UnregisterEvent("ADDON_LOADED");
+					self:SetScript("OnEvent", nil);
+				end
+
+				local PlayerSpellsFrame = _G.PlayerSpellsFrame;
+				_TalentFrame = PlayerSpellsFrame and PlayerSpellsFrame.TalentsFrame;
+				if _TalentFrame ~= nil then
+					local button = CreateFrame('BUTTON', nil, _TalentFrame, "UIPanelButtonTemplate");
+					button:SetSize(80, 20);
+					button:SetPoint("RIGHT", PlayerSpellsFrame.CloseButton, "LEFT", -2, 0);
+					button:SetFrameLevel(PlayerSpellsFrame.TitleContainer:GetFrameLevel() + 1);
+					button:SetText(l10n.TalentFrameCallButtonString);
+					button:SetScript("OnClick", function() MT.CreateEmulator(); end);
+					button:SetScript("OnEnter", MT.GeneralOnEnter);
+					button:SetScript("OnLeave", MT.GeneralOnLeave);
+					button.information = l10n.TalentFrameCallButton;
+					_TalentFrame.__TalentEmuCall = button;
+					VT.__dep.autostyle:AddReskinObject(button);
+				end
 			end
 		end
 
 		if IsAddOnLoaded("Blizzard_TalentUI") then
 			HookTalentFrame(nil, nil, "Blizzard_TalentUI");
+		elseif IsAddOnLoaded("Blizzard_PlayerSpells") then
+			HookTalentFrame(nil, nil, "Blizzard_PlayerSpells");
 		else
 			local Agent = CreateFrame('FRAME');
 			Agent:RegisterEvent("ADDON_LOADED");
